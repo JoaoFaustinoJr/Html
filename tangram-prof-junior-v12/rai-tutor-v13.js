@@ -27,3 +27,147 @@ let lastTitle='',lastMsg='',lastAuto=0;const intro=()=>{const t=title();if(!pref
 const te=root.querySelector('#title');if(te)new MutationObserver(()=>setTimeout(intro,50)).observe(te,{subtree:true,childList:true,characterData:true});const me=root.querySelector('#msg');if(me)new MutationObserver(()=>setTimeout(inspect,70)).observe(me,{subtree:true,childList:true,characterData:true,attributes:true});
 root.addEventListener('click',e=>{const b=e.target?.closest?.('button');if(!b)return;const l=((b.textContent||'')+' '+(b.id||'')).toLowerCase();if(/dica/.test(l))setTimeout(()=>show(hint()),140);else if(/verificar|check/.test(l)&&prefs.auto)setTimeout(()=>{if(Date.now()-lastAuto>1700){lastAuto=Date.now();show(analyse())}},520);else if(/amostra|sample/.test(l))show('A amostra é apoio visual. Compare a organização e depois tente reconstruir com sua própria estratégia.')});intro();
 })();
+/* RAI_ENHANCE_SHAPES_DRAG */
+(()=>{
+  const root=document.getElementById('tangram-levels');
+  const fab=document.querySelector('.rai-tutor-fab');
+  const bubble=document.querySelector('.rai-tutor-bubble');
+  const panel=document.querySelector('.rai-tutor-overlay');
+  if(!root||!fab||!bubble||!panel)return;
+
+  const POS='tangram_rai_fab_position_v13';
+  let moved=false,start=null,lastPos=null;
+
+  const clamp=(x,y)=>{
+    const r=fab.getBoundingClientRect(),w=r.width||54,h=r.height||54;
+    return {
+      x:Math.max(6,Math.min(window.innerWidth-w-6,x)),
+      y:Math.max(6,Math.min(window.innerHeight-h-6,y))
+    };
+  };
+  const apply=(x,y)=>{
+    const p=clamp(x,y);
+    fab.style.left=p.x+'px';fab.style.top=p.y+'px';
+    fab.style.right='auto';fab.style.bottom='auto';
+    lastPos=p;
+  };
+  const savePos=()=>{if(lastPos)try{localStorage.setItem(POS,JSON.stringify(lastPos))}catch(e){}};
+  try{
+    const p=JSON.parse(localStorage.getItem(POS)||'null');
+    if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))apply(p.x,p.y);
+  }catch(e){}
+
+  const placeBubble=()=>{
+    if(!bubble.classList.contains('show'))return;
+    requestAnimationFrame(()=>{
+      const fr=fab.getBoundingClientRect(),br=bubble.getBoundingClientRect();
+      let x=fr.left;
+      if(x+br.width>window.innerWidth-8)x=window.innerWidth-br.width-8;
+      if(x<8)x=8;
+      let y=fr.top-br.height-10;
+      if(y<8)y=Math.min(window.innerHeight-br.height-8,fr.bottom+10);
+      bubble.style.left=x+'px';bubble.style.top=y+'px';
+      bubble.style.right='auto';bubble.style.bottom='auto';
+    });
+  };
+  new MutationObserver(placeBubble).observe(bubble,{attributes:true,attributeFilter:['class']});
+
+  fab.style.touchAction='none';
+  fab.addEventListener('pointerdown',e=>{
+    if(e.button!=null&&e.button!==0)return;
+    const r=fab.getBoundingClientRect();
+    start={id:e.pointerId,dx:e.clientX-r.left,dy:e.clientY-r.top,x:e.clientX,y:e.clientY};
+    moved=false;
+    try{fab.setPointerCapture(e.pointerId)}catch(err){}
+  });
+  fab.addEventListener('pointermove',e=>{
+    if(!start||e.pointerId!==start.id)return;
+    if(Math.hypot(e.clientX-start.x,e.clientY-start.y)>7)moved=true;
+    if(!moved)return;
+    e.preventDefault();bubble.classList.remove('show');
+    apply(e.clientX-start.dx,e.clientY-start.dy);
+  });
+  fab.addEventListener('pointerup',e=>{
+    if(!start||e.pointerId!==start.id)return;
+    if(moved){
+      const r=fab.getBoundingClientRect();
+      const x=(r.left+r.width/2)<window.innerWidth/2?8:window.innerWidth-r.width-8;
+      apply(x,r.top);savePos();
+      fab.dataset.dragged='1';
+      setTimeout(()=>delete fab.dataset.dragged,250);
+    }
+    start=null;
+  });
+  fab.addEventListener('pointercancel',()=>{start=null});
+  fab.addEventListener('click',e=>{
+    if(fab.dataset.dragged==='1'){e.preventDefault();e.stopImmediatePropagation()}
+  },true);
+  window.addEventListener('resize',()=>{
+    if(lastPos)apply(lastPos.x,lastPos.y);
+  });
+
+  const map=[
+    {id:'L1',name:'Triângulo grande',frac:'1/4',area:'25%',text:'É um triângulo retângulo isósceles: possui um ângulo de 90° e dois de 45°. Cada triângulo grande ocupa 1/4 da área total do Tangram.'},
+    {id:'L2',name:'Triângulo grande',frac:'1/4',area:'25%',text:'É um triângulo retângulo isósceles: possui um ângulo de 90° e dois de 45°. Cada triângulo grande ocupa 1/4 da área total do Tangram.'},
+    {id:'M',name:'Triângulo médio',frac:'1/8',area:'12,5%',text:'Também é um triângulo retângulo isósceles, com ângulos de 45°, 45° e 90°. Sua área é 1/8 do Tangram, igual à área do quadrado e do paralelogramo.'},
+    {id:'S1',name:'Triângulo pequeno',frac:'1/16',area:'6,25%',text:'É um triângulo retângulo isósceles de 45°, 45° e 90°. Cada pequeno ocupa 1/16 da área total. Dois pequenos juntos têm a mesma área do triângulo médio.'},
+    {id:'S2',name:'Triângulo pequeno',frac:'1/16',area:'6,25%',text:'É um triângulo retângulo isósceles de 45°, 45° e 90°. Cada pequeno ocupa 1/16 da área total. Quatro pequenos equivalem à área de um triângulo grande.'},
+    {id:'Q',name:'Quadrado',frac:'1/8',area:'12,5%',text:'O quadrado possui quatro lados iguais e quatro ângulos retos de 90°. Sua área corresponde a 1/8 do Tangram.'},
+    {id:'P',name:'Paralelogramo',frac:'1/8',area:'12,5%',text:'O paralelogramo possui dois pares de lados opostos paralelos. Nesta peça aparecem ângulos de 45° e 135°. Em algumas montagens é preciso espelhá-lo, não apenas girá-lo.'}
+  ];
+  const currentPiece=()=>{
+    const arr=[...root.querySelectorAll('#board .piece')];
+    if(!arr.length)return null;
+    const el=root.querySelector('#board .piece.selected')||arr[0];
+    const i=arr.indexOf(el);
+    return map[i]||null;
+  };
+  const speak=t=>{
+    try{
+      const prefs=JSON.parse(localStorage.getItem('tangram_rai_tutora_v13')||'{}');
+      if(!prefs.voice||!('speechSynthesis'in window))return;
+      speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.rate=.98;speechSynthesis.speak(u);
+    }catch(e){}
+  };
+  const showShape=()=>{
+    const p=currentPiece();
+    if(!p){bubble.innerHTML='<b>🤖 R.A.I.</b><br>Selecione uma peça do Tangram e tente novamente.'}
+    else{
+      const extra=p.id==='Q'?' Fórmula de área: lado × lado.':p.id==='P'?' Fórmula de área: base × altura.':' Fórmula de área: base × altura ÷ 2.';
+      const msg=p.name+'. '+p.text+extra;
+      bubble.innerHTML='<b>🤖 R.A.I. • '+p.name+'</b><br>'+msg;
+      speak(msg);
+    }
+    bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),7600);placeBubble();
+  };
+
+  const grid=panel.querySelector('.rai-tutor-grid');
+  if(grid&&!panel.querySelector('#raiShape')){
+    const b=document.createElement('button');
+    b.id='raiShape';b.type='button';
+    b.innerHTML='<b>📐 Peça selecionada</b><small>Conheça a forma, ângulos e área</small>';
+    const fb=panel.querySelector('#raiFeedback');
+    if(fb)grid.insertBefore(b,fb);else grid.appendChild(b);
+    b.addEventListener('click',()=>{panel.classList.remove('show');showShape()});
+  }
+
+  const seen=new Set();
+  root.addEventListener('click',e=>{
+    const b=e.target?.closest?.('button');if(!b)return;
+    const id=b.id||'';
+    if((id==='left'||id==='right'||id==='mLeft'||id==='mRight')&&!seen.has('rot')){
+      seen.add('rot');
+      setTimeout(()=>{
+        bubble.innerHTML='<b>🤖 R.A.I. • Geometria</b><br>Você realizou uma <b>rotação de 45°</b>. A peça mudou de orientação, mas conservou sua forma e seu tamanho.';
+        bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),6200);placeBubble();
+      },180);
+    }
+    if((id==='flip'||id==='mFlip')&&!seen.has('flip')){
+      seen.add('flip');
+      setTimeout(()=>{
+        bubble.innerHTML='<b>🤖 R.A.I. • Geometria</b><br>Isso é uma <b>reflexão ou espelhamento</b>: a orientação da figura foi invertida. Observe especialmente o paralelogramo.';
+        bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),6500);placeBubble();
+      },180);
+    }
+  });
+})();
