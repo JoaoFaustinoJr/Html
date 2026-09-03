@@ -1,0 +1,12 @@
+/* zoom real do modo Ampliar no celular; apenas apresentação */
+@media (max-width:640px){
+  #tangram-levels.tl-focus .tl-board-scroll{padding:max(6px,env(safe-area-inset-top)) 0 2px!important;align-items:center!important;justify-content:center!important;overflow:hidden!important}
+  #tangram-levels.tl-focus .tl-board-scroll svg{width:120vw!important;height:calc(100% + 52px)!important;max-width:none!important;max-height:none!important;min-width:120vw!important;flex:0 0 auto!important}
+  #tangram-levels.tl-focus .tl-mobile-controls{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important;padding:4px 5px calc(4px + env(safe-area-inset-bottom))!important}
+  #tangram-levels.tl-focus .tl-mobile-controls #mFull{display:none!important}
+  #tangram-levels.tl-focus .tl-mobile-controls button{min-width:0!important;min-height:48px!important;padding:4px 2px!important;font-size:19px!important}
+  #tangram-levels.tl-focus .tl-mobile-controls button span{display:none!important}
+  #tangram-levels.tl-focus .tl-focus-back{top:max(6px,env(safe-area-inset-top))!important;left:7px!important;padding:9px 11px!important}
+  #tangram-levels.tl-focus .tl-focus-back span{display:none!important}
+}
+@media (max-width:390px){#tangram-levels.tl-focus .tl-board-scroll svg{width:124vw!important;min-width:124vw!important;height:calc(100% + 64px)!important}}
