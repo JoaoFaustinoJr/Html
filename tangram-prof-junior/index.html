@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Tangram Educativo — Prof. João Faustino Junior">
 <meta property="og:title" content="Tangram Educativo — Prof. João Faustino Junior">
 <meta property="og:description" content="Desafie sua lógica! Geometria, estratégia e criatividade em missões interativas.">
-<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/?v=6">
+<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/?v=7">
 <meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
 <meta property="og:image:secure_url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
 <meta property="og:image:type" content="image/png">
@@ -59,27 +59,35 @@
       .tl-board-scroll{min-height:330px}
       .tl-mobile-controls{grid-template-columns:repeat(4,1fr)!important}
     }
-    #tangram-levels.tl-focus{max-width:none!important;width:100%!important;height:100vh!important;min-height:100vh!important;margin:0!important;padding:4px!important;border-radius:0!important}
+    .tl-focus-back{display:none;position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;z-index:2147483647;border:1px solid #69e7ff;background:rgba(7,27,40,.96);color:#fff;border-radius:999px;padding:10px 14px;font:800 14px system-ui;box-shadow:0 6px 20px rgba(0,0,0,.4);touch-action:manipulation}
+    #tangram-levels.tl-focus{position:fixed!important;inset:0!important;z-index:2147483000!important;max-width:none!important;width:100vw!important;height:100dvh!important;min-height:100dvh!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#050f18!important;overflow:hidden!important}
+    #tangram-levels.tl-focus .tl-focus-back{display:flex!important;align-items:center;gap:6px}
     #tangram-levels.tl-focus .tl-head,
     #tangram-levels.tl-focus .tl-side,
     #tangram-levels.tl-focus .tl-math,
-    #tangram-levels.tl-focus .tl-legend{display:none!important}
-    #tangram-levels.tl-focus .tl-layout{display:block!important}
-    #tangram-levels.tl-focus .tl-stage{height:100vh!important;border-radius:0!important}
-    #tangram-levels.tl-focus .tl-board-scroll{height:calc(100vh - 126px)!important;min-height:0!important}
-    #tangram-levels.tl-focus .tl-board-scroll svg{width:100%!important;height:100%!important;max-height:none!important}
-    #tangram-levels.tl-focus .tl-mobile-controls{display:grid!important;grid-template-columns:repeat(4,1fr)!important;position:sticky;bottom:0;z-index:20}
+    #tangram-levels.tl-focus .tl-legend,
+    #tangram-levels.tl-focus .tl-toolbar,
+    #tangram-levels.tl-focus .tl-meter,
+    #tangram-levels.tl-focus .tl-metertext,
+    #tangram-levels.tl-focus .tl-msg{display:none!important}
+    #tangram-levels.tl-focus .tl-layout,
+    #tangram-levels.tl-focus .tl-game{display:block!important;width:100%!important;height:100%!important}
+    #tangram-levels.tl-focus .tl-stage{display:flex!important;flex-direction:column!important;width:100%!important;height:100dvh!important;border:0!important;border-radius:0!important;background:#050f18!important}
+    #tangram-levels.tl-focus .tl-board-scroll{flex:1 1 auto!important;height:auto!important;min-height:0!important;width:100%!important;padding:42px 2px 4px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:radial-gradient(circle at center,#0b2131,#050f18 72%)!important}
+    #tangram-levels.tl-focus .tl-board-scroll svg{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-width:0!important;object-fit:contain!important}
+    #tangram-levels.tl-focus .tl-mobile-controls{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:5px!important;flex:0 0 auto!important;position:relative!important;bottom:auto!important;z-index:20!important;padding:6px!important;background:#071824!important}
+    #tangram-levels.tl-focus .tl-mobile-controls button{min-height:46px!important;padding:5px 2px!important}
   </style>`;
 
   page=page.replace('</head>',extraCss+'</head>');
 
   page=page.replace(
     '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>',
-    '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="fullscreen" type="button" style="width:100%;margin-top:8px">⛶ Tela cheia</button>'
+    '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="fullscreen" type="button" style="width:100%;margin-top:8px">🔍 Ampliar jogo</button>'
   );
   page=page.replace(
     '<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>',
-    '<button type="button" id="mFull" aria-label="Tela cheia">⛶<span>Tela cheia</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>'
+    '<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>'
   );
 
   const focusScript=`<script>
@@ -87,33 +95,42 @@
     const root=document.getElementById('tangram-levels');
     const buttons=[document.getElementById('fullscreen'),document.getElementById('mFull')].filter(Boolean);
     if(!root||!buttons.length)return;
+
+    const back=document.createElement('button');
+    back.type='button';
+    back.className='tl-focus-back';
+    back.setAttribute('aria-label','Voltar ao aplicativo');
+    back.innerHTML='← <span>Voltar</span>';
+    root.appendChild(back);
+
+    let savedY=0;
     const update=()=>{
-      const on=root.classList.contains('tl-focus')||document.fullscreenElement===root;
+      const on=root.classList.contains('tl-focus');
       const a=document.getElementById('fullscreen');
       const b=document.getElementById('mFull');
-      if(a)a.textContent=on?'🗗 Sair da tela cheia':'⛶ Tela cheia';
-      if(b)b.innerHTML=on?'🗗<span>Sair</span>':'⛶<span>Tela cheia</span>';
+      if(a)a.textContent=on?'← Voltar ao app':'🔍 Ampliar jogo';
+      if(b)b.innerHTML=on?'←<span>Voltar</span>':'🔍<span>Ampliar</span>';
     };
-    const toggle=async()=>{
-      if(root.classList.contains('tl-focus')||document.fullscreenElement===root){
-        root.classList.remove('tl-focus');
-        if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}
-        if(screen.orientation&&screen.orientation.unlock){try{screen.orientation.unlock()}catch(e){}}
-        update(); return;
-      }
-      let native=false;
-      if(root.requestFullscreen){
-        try{await root.requestFullscreen({navigationUI:'hide'});native=true}catch(e){}
-      }
-      if(!native)root.classList.add('tl-focus');
-      if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock('landscape')}catch(e){}}
+    const enter=()=>{
+      if(root.classList.contains('tl-focus'))return;
+      savedY=window.scrollY||0;
+      root.classList.add('tl-focus');
+      document.documentElement.style.overflow='hidden';
+      document.body.style.overflow='hidden';
       update();
     };
+    const exit=()=>{
+      if(!root.classList.contains('tl-focus'))return;
+      root.classList.remove('tl-focus');
+      document.documentElement.style.overflow='';
+      document.body.style.overflow='';
+      update();
+      requestAnimationFrame(()=>window.scrollTo(0,savedY));
+    };
+    const toggle=()=>root.classList.contains('tl-focus')?exit():enter();
     buttons.forEach(b=>b.addEventListener('click',toggle));
-    document.addEventListener('fullscreenchange',()=>{
-      if(!document.fullscreenElement)root.classList.remove('tl-focus');
-      update();
-    });
+    back.addEventListener('click',exit);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')exit()});
     update();
   })();
   <\/script>`;
