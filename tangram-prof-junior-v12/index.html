@@ -4,21 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07131f">
-<meta name="application-name" content="Tangram R.A.I. v12">
-<title>Tangram R.A.I. v12 — Prof. João Faustino Junior</title>
-<meta name="description" content="Versão experimental com memória de desempenho, conquistas e cinco novos desafios avançados.">
+<meta name="application-name" content="Tangram Educativo">
+<title>Tangram Educativo — Prof. João Faustino Junior</title>
+<meta name="description" content="Jogo educativo de Tangram com 10 desafios de lógica, geometria, percepção espacial e estratégia.">
 <meta name="author" content="Prof. João Faustino Junior">
-<meta property="og:type" content="website"><meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="Tangram R.A.I. v12 — Desempenho & Desafios">
-<meta property="og:description" content="10 missões, memória de desempenho, recordes pessoais e desafios avançados de Tangram.">
-<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/">
-<meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
-<link rel="manifest" href="manifest.webmanifest?v=install3">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta property="og:description" content="10 desafios interativos para desenvolver lógica, geometria, percepção espacial e estratégia.">
+<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/?share=1">
+<meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/tangram-whatsapp-card-v12.jpg">
+<meta property="og:image:secure_url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/tangram-whatsapp-card-v12.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta name="twitter:description" content="10 desafios interativos de lógica, geometria e percepção espacial.">
+<meta name="twitter:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/tangram-whatsapp-card-v12.jpg">
+<link rel="manifest" href="manifest.webmanifest?v=install4">
 <link rel="icon" href="icon-192.png?v=rai3" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=rai3">
 <style>html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:system-ui}#loading{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px}</style>
 </head><body>
-<div id="loading"><div><h1>🧩 Tangram R.A.I. v12</h1><p>Preparando 10 desafios...</p></div></div>
+<div id="loading"><div><h1>🧩 Tangram Educativo</h1><p>Preparando 10 desafios...</p></div></div>
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(err=>console.warn('SW',err));
@@ -35,11 +45,11 @@ if('serviceWorker' in navigator){
   page=page.replace(/screen\.orientation\.lock\s*\([^;]*?\)/g,'Promise.resolve()').replace(/document\.exitFullscreen\s*\([^;]*?\)/g,'Promise.resolve()').replaceAll('Prof. Júnior','Prof. João Faustino Junior').replaceAll('Prof. Junior','Prof. João Faustino Junior');
   const raiImg='rai-icon.svg?v=rai2';
   page=page.replace(/<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,`<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior • v12 experimental</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="experienceApp">🔊 <span>Som</span></button><button type="button" class="tl-mini-action" id="comfortApp">♿ <span>Conforto</span></button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ <span>Sobre</span></button></div></div>`);
-  page=page.replace('</head>','<link rel="manifest" href="manifest.webmanifest?v=install3"><link rel="icon" href="icon-192.png?v=rai3" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=rai3"><link rel="stylesheet" href="v10.css?v=12a"><link rel="stylesheet" href="comfort-v11.css?v=12a"><link rel="stylesheet" href="focus-v11.css?v=12a"><link rel="stylesheet" href="performance-v12.css?v=12a"><meta name="theme-color" content="#07131f"></head>');
+  page=page.replace('</head>','<link rel="manifest" href="manifest.webmanifest?v=install4"><link rel="icon" href="icon-192.png?v=rai3" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=rai3"><link rel="stylesheet" href="v10.css?v=12a"><link rel="stylesheet" href="comfort-v11.css?v=12a"><link rel="stylesheet" href="focus-v11.css?v=12a"><link rel="stylesheet" href="performance-v12.css?v=12a"><meta name="theme-color" content="#07131f"></head>');
   page=page.replace('<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>','<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="focusZoom" type="button" style="width:100%;margin-top:8px">🔍 Ampliar área de jogo</button>');
   page=page.replace('<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>','<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>');
   const bioFix='<script>(()=>{const fix=()=>{const b=document.querySelector(".tl-about-body");if(!b)return false;b.innerHTML=b.innerHTML.replace(" Seus trabalhos já foram premiados em iniciativas como <b>Agrinho</b> e <b>GeniusCon</b>.","");return true};if(!fix()){const o=new MutationObserver(()=>{if(fix())o.disconnect()});o.observe(document.documentElement,{childList:true,subtree:true})}})();<\/script>';
   page=page.replace('</body>','<script src="app-v10.js?v=12a"><\/script>'+bioFix+'<script src="comfort-v11.js?v=12a"><\/script><script src="performance-v12.js?v=12a"><\/script></body>');document.open();document.write(page);document.close();
- }catch(e){const el=document.getElementById('loading');if(el)el.innerHTML='<div><h1>🧩 Tangram R.A.I. v12</h1><p>Não foi possível carregar a versão experimental. Atualize a página.</p></div>';console.error(e)}
+ }catch(e){const el=document.getElementById('loading');if(el)el.innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o aplicativo. Atualize a página.</p></div>';console.error(e)}
 })();
 </script></body></html>
