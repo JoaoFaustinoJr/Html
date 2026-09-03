@@ -1,7 +1,7 @@
 {
   "name": "Tangram Educativo",
   "short_name": "Tangram",
-  "description": "Jogo educativo de Tangram com 10 desafios, desempenho e acessibilidade.",
+  "description": "Jogo educativo de Tangram com 10 desafios, R.A.I. tutora, desempenho e acessibilidade.",
   "id": "/Html/tangram-prof-junior-v12/",
   "start_url": "./",
   "scope": "./",
