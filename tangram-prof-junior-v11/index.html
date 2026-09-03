@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v11/">
 <meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="icon" href="rai-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:system-ui}#loading{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px}</style>
 </head>
@@ -42,13 +42,13 @@
     page=page.replaceAll('Prof. Júnior','Prof. João Faustino Junior');
     page=page.replaceAll('Prof. Junior','Prof. João Faustino Junior');
 
-    const raiImg='../tangram-prof-junior/rai-chalk.webp?v=11b';
+    const raiImg='rai-icon.svg?v=rai2';
     page=page.replace(/<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,
       `<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior • v11 experimental</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="experienceApp">🔊 <span>Som</span></button><button type="button" class="tl-mini-action" id="comfortApp">♿ <span>Conforto</span></button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ <span>Sobre</span></button></div></div>`);
 
     page=page.replace('</head>',
       '<link rel="manifest" href="manifest.webmanifest">'+
-      '<link rel="icon" href="icon-192.png" type="image/png">'+
+      '<link rel="icon" href="rai-icon.svg" type="image/svg+xml">'+
       '<link rel="apple-touch-icon" href="apple-touch-icon.png">'+
       '<link rel="stylesheet" href="v10.css?v=11b">'+
       '<link rel="stylesheet" href="comfort-v11.css?v=11b">'+
