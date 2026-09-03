@@ -3,7 +3,7 @@
   if(!root)return;
 
   const STORE='tangram_v10_experience';
-  const defaults={sound:true,haptic:true};
+  const defaults={sound:true,haptic:true,smart:true};
   let prefs={...defaults};
   try{prefs={...defaults,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
   const savePrefs=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
@@ -50,6 +50,8 @@
     hint:()=>{tone(523.25,0.07,0.025,'sine');tone(659.25,0.08,0.025,'sine',0.075)},
     check:()=>{tone(392,0.05,0.022,'triangle');tone(493.88,0.05,0.02,'triangle',0.045)},
     warn:()=>{tone(220,0.09,0.018,'triangle');tone(196,0.09,0.014,'triangle',0.07)},
+    near:()=>{tone(659.25,0.07,0.024,'sine');tone(783.99,0.08,0.026,'sine',0.055)},
+    nearStrong:()=>{tone(659.25,0.07,0.026,'sine');tone(783.99,0.08,0.029,'sine',0.055);tone(987.77,0.10,0.027,'sine',0.115)},
     success:()=>{[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,0.13,0.034,'sine',i*0.085))},
     level:()=>{tone(440,0.045,0.018,'sine');tone(587.33,0.055,0.019,'sine',0.04)}
   };
@@ -96,14 +98,15 @@
   }
 
   if(expBtn){
-    const overlay=makeOverlay('tl-exp-overlay',`<div class="tl-exp-card" role="dialog" aria-modal="true" aria-labelledby="expTitle"><div class="tl-exp-head"><div><div class="tl-about-title" id="expTitle">🎧 Experiência v10</div><div class="tl-about-sub">Feedback discreto, sem música contínua</div></div><button class="tl-about-close" type="button" aria-label="Fechar">×</button></div><div class="tl-exp-body"><p>Os efeitos foram pensados para reforçar ações do jogo sem competir com a concentração. Você pode desligá-los a qualquer momento.</p><button class="tl-pref-row" id="soundToggle" type="button"><span><b>🔊 Efeitos sonoros</b><small>seleção, rotação, dicas e conclusão</small></span><span class="tl-pref-state"></span></button><button class="tl-pref-row" id="hapticToggle" type="button"><span><b>📳 Vibração tátil</b><small>toques curtos em ações importantes</small></span><span class="tl-pref-state"></span></button><div class="tl-exp-actions"><button class="tl-about-btn primary" id="testSound" type="button">▶ Testar experiência</button><button class="tl-about-btn" id="resetExperience" type="button">Restaurar padrão</button></div><p class="tl-exp-note">As preferências ficam salvas somente neste aparelho.</p></div></div>`);
+    const overlay=makeOverlay('tl-exp-overlay',`<div class="tl-exp-card" role="dialog" aria-modal="true" aria-labelledby="expTitle"><div class="tl-exp-head"><div><div class="tl-about-title" id="expTitle">🎧 Experiência v10</div><div class="tl-about-sub">Feedback discreto, sem música contínua</div></div><button class="tl-about-close" type="button" aria-label="Fechar">×</button></div><div class="tl-exp-body"><p>Os efeitos reforçam ações do jogo sem competir com a concentração. O <b>Encaixe inteligente</b> percebe quando uma jogada melhora de forma relevante a montagem e responde de modo sutil — sem mostrar a posição correta.</p><button class="tl-pref-row" id="soundToggle" type="button"><span><b>🔊 Efeitos sonoros</b><small>seleção, rotação, dicas e conclusão</small></span><span class="tl-pref-state"></span></button><button class="tl-pref-row" id="hapticToggle" type="button"><span><b>📳 Vibração tátil</b><small>toques curtos em ações importantes</small></span><span class="tl-pref-state"></span></button><button class="tl-pref-row" id="smartToggle" type="button"><span><b>✨ Encaixe inteligente</b><small>reforço sutil quando a montagem avança</small></span><span class="tl-pref-state"></span></button><div class="tl-exp-actions"><button class="tl-about-btn primary" id="testSound" type="button">▶ Testar experiência</button><button class="tl-about-btn" id="resetExperience" type="button">Restaurar padrão</button></div><p class="tl-exp-note">As preferências ficam salvas somente neste aparelho.</p></div></div>`);
     const close=()=>overlay.classList.remove('show');
-    const soundToggle=overlay.querySelector('#soundToggle'), hapticToggle=overlay.querySelector('#hapticToggle');
-    const renderPrefs=()=>{soundToggle.querySelector('.tl-pref-state').textContent=prefs.sound?'Ligado':'Desligado';hapticToggle.querySelector('.tl-pref-state').textContent=prefs.haptic?'Ligado':'Desligado';soundToggle.classList.toggle('on',prefs.sound);hapticToggle.classList.toggle('on',prefs.haptic);expBtn.innerHTML=prefs.sound?'🔊 <span>Som</span>':'🔇 <span>Som</span>'};
+    const soundToggle=overlay.querySelector('#soundToggle'), hapticToggle=overlay.querySelector('#hapticToggle'), smartToggle=overlay.querySelector('#smartToggle');
+    const renderPrefs=()=>{soundToggle.querySelector('.tl-pref-state').textContent=prefs.sound?'Ligado':'Desligado';hapticToggle.querySelector('.tl-pref-state').textContent=prefs.haptic?'Ligado':'Desligado';smartToggle.querySelector('.tl-pref-state').textContent=prefs.smart?'Ligado':'Desligado';soundToggle.classList.toggle('on',prefs.sound);hapticToggle.classList.toggle('on',prefs.haptic);smartToggle.classList.toggle('on',prefs.smart);expBtn.innerHTML=prefs.sound?'🔊 <span>Som</span>':'🔇 <span>Som</span>'};
     expBtn.addEventListener('click',()=>{overlay.classList.add('show');renderPrefs();sfx.tap()}); overlay.querySelector('.tl-about-close').addEventListener('click',close); overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
     soundToggle.addEventListener('click',()=>{prefs.sound=!prefs.sound;savePrefs();renderPrefs();if(prefs.sound){sfx.level();toast('Som ativado')}else toast('Som desativado')});
     hapticToggle.addEventListener('click',()=>{prefs.haptic=!prefs.haptic;savePrefs();renderPrefs();if(prefs.haptic){haptic([12,35,12]);toast('Vibração ativada')}else toast('Vibração desativada')});
-    overlay.querySelector('#testSound').addEventListener('click',()=>{sfx.tap();setTimeout(sfx.rotate,110);setTimeout(()=>{sfx.success();haptic([15,45,20])},250)});
+    smartToggle.addEventListener('click',()=>{prefs.smart=!prefs.smart;savePrefs();renderPrefs();if(prefs.smart){sfx.near();haptic([7,20,9]);toast('Encaixe inteligente ativado')}else toast('Encaixe inteligente desativado')});
+    overlay.querySelector('#testSound').addEventListener('click',()=>{sfx.tap();setTimeout(sfx.rotate,110);setTimeout(()=>{sfx.near();haptic([7,20,9])},230);setTimeout(()=>{sfx.success();haptic([15,45,20])},470)});
     overlay.querySelector('#resetExperience').addEventListener('click',()=>{prefs={...defaults};savePrefs();renderPrefs();sfx.level();haptic(10);toast('Preferências restauradas')});
     renderPrefs();
   }
@@ -111,21 +114,88 @@
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(installBtn)installBtn.style.display='inline-flex';if(aboutInstall&&!isStandalone()){aboutInstall.disabled=false;aboutInstall.textContent='⬇ Instalar aplicativo'}if(installHelp)installHelp.innerHTML='<b>Pronto para instalar.</b> Toque em “Instalar aplicativo” e confirme a janela do Chrome.'});
   window.addEventListener('appinstalled',()=>{deferredPrompt=null;if(installBtn)installBtn.style.display='none';if(aboutInstall){aboutInstall.textContent='✓ Aplicativo instalado';aboutInstall.disabled=true}if(installHelp)installHelp.innerHTML='<b>✓ Tangram R.A.I. instalado com sucesso.</b>'});
 
-  let activePointer=null;
+  const parsePct=v=>v==null?null:Number(String(v).replace(',','.'));
+  const readGeometryQuality=()=>{
+    const text=[...root.querySelectorAll('.tl-metertext,.tl-msg,.tl-meter')].map(x=>x.textContent||'').join(' ').replace(/\s+/g,' ').trim();
+    const findPct=res=>{for(const re of res){const m=text.match(re);if(m)return parsePct(m[1])}return null};
+    let coverage=findPct([
+      /(?:cobertura|coberto|preenchimento|preenchido|progresso|encaixe)[^0-9]{0,24}(\d+(?:[.,]\d+)?)\s*%/i,
+      /(\d+(?:[.,]\d+)?)\s*%[^a-záéíóúãõç]{0,12}(?:cobertura|coberto|preenchimento|progresso)/i
+    ]);
+    const outside=findPct([
+      /(?:fora(?:\s+da\s+silhueta)?|extern[oa])[^0-9]{0,24}(\d+(?:[.,]\d+)?)\s*%/i
+    ]);
+    const overlap=findPct([
+      /(?:sobreposi(?:ção|cao)|sobreposto|overlap)[^0-9]{0,24}(\d+(?:[.,]\d+)?)\s*%/i
+    ]);
+    const gap=findPct([
+      /(?:lacuna|vazio|faltante|falta)[^0-9]{0,24}(\d+(?:[.,]\d+)?)\s*%/i
+    ]);
+    if(coverage==null){
+      const bar=[...root.querySelectorAll('.tl-meter *')].find(el=>el.style&&/%/.test(el.style.width||''));
+      if(bar)coverage=parsePct((bar.style.width||'').replace('%',''));
+    }
+    if(coverage==null){
+      const all=[...text.matchAll(/(\d+(?:[.,]\d+)?)\s*%/g)].map(m=>parsePct(m[1])).filter(Number.isFinite);
+      if(all.length)coverage=all[0];
+    }
+    if(!Number.isFinite(coverage))return null;
+    const penalty=(Number.isFinite(outside)?outside:0)+(Number.isFinite(overlap)?overlap*1.15:0);
+    const score=coverage-penalty;
+    return {coverage,outside:Number.isFinite(outside)?outside:null,overlap:Number.isFinite(overlap)?overlap:null,gap:Number.isFinite(gap)?gap:null,penalty,score,text};
+  };
+
+  let lastSmartAt=0;
+  const pulseSmart=strong=>{
+    const stage=root.querySelector('.tl-stage'); if(!stage)return;
+    const cls=strong?'tl-v10-near-strong':'tl-v10-near';
+    stage.classList.remove('tl-v10-near','tl-v10-near-strong');
+    void stage.offsetWidth;
+    stage.classList.add(cls);
+    setTimeout(()=>stage.classList.remove(cls),strong?650:480);
+  };
+  const applySmartFeedback=before=>{
+    if(!prefs.smart||!before)return false;
+    const after=readGeometryQuality(); if(!after)return false;
+    const delta=after.score-before.score;
+    const coverageGain=after.coverage-before.coverage;
+    const penaltyOk=after.penalty<=before.penalty+1.2;
+    if(!penaltyOk)return false;
+    const strong=delta>=6||coverageGain>=7||(after.coverage>=92&&delta>=2.5);
+    const soft=!strong&&(delta>=2.2||coverageGain>=3);
+    if(!strong&&!soft)return false;
+    const now=Date.now(); if(now-lastSmartAt<420)return true; lastSmartAt=now;
+    if(strong){sfx.nearStrong();haptic([7,20,10]);pulseSmart(true)}
+    else{sfx.near();haptic(7);pulseSmart(false)}
+    return true;
+  };
+
+  let activePointer=null,actionBaseline=null;
   root.addEventListener('pointerdown',e=>{
+    const b=e.target&&e.target.closest?e.target.closest('button'):null;
+    if(b){
+      const label=((b.getAttribute('aria-label')||'')+' '+(b.textContent||'')+' '+(b.id||'')).toLowerCase();
+      if(/girar|rotacion|45|↺|↻|rotate/.test(label))actionBaseline={button:b,metric:readGeometryQuality()};
+    }
     const shape=e.target&&e.target.closest?e.target.closest('svg polygon,svg path,svg rect'):null;
-    if(shape){activePointer={x:e.clientX,y:e.clientY,moved:false};sfx.tap();haptic(5)}
+    if(shape){activePointer={x:e.clientX,y:e.clientY,moved:false,metric:readGeometryQuality()};sfx.tap();haptic(5)}
   },{passive:true});
   root.addEventListener('pointermove',e=>{if(activePointer&&Math.hypot(e.clientX-activePointer.x,e.clientY-activePointer.y)>7)activePointer.moved=true},{passive:true});
-  root.addEventListener('pointerup',()=>{if(activePointer&&activePointer.moved){sfx.drop();haptic(6)}activePointer=null},{passive:true});
-  root.addEventListener('pointercancel',()=>{activePointer=null},{passive:true});
+  root.addEventListener('pointerup',()=>{
+    if(activePointer&&activePointer.moved){
+      const before=activePointer.metric;
+      setTimeout(()=>{if(!applySmartFeedback(before)){sfx.drop();haptic(6)}},90);
+    }
+    activePointer=null;
+  },{passive:true});
+  root.addEventListener('pointercancel',()=>{activePointer=null;actionBaseline=null},{passive:true});
 
   root.addEventListener('click',e=>{
     const b=e.target&&e.target.closest?e.target.closest('button'):null; if(!b)return;
     if([aboutBtn,expBtn,installBtn].includes(b)||b.closest('.tl-about-overlay'))return;
     b.classList.add('tl-v10-pop');setTimeout(()=>b.classList.remove('tl-v10-pop'),180);
     const label=((b.getAttribute('aria-label')||'')+' '+(b.textContent||'')+' '+(b.id||'')).toLowerCase();
-    if(/girar|rotacion|45|↺|↻|rotate/.test(label)){sfx.rotate();haptic(8)}
+    if(/girar|rotacion|45|↺|↻|rotate/.test(label)){const before=actionBaseline&&actionBaseline.button===b?actionBaseline.metric:null;sfx.rotate();haptic(8);setTimeout(()=>applySmartFeedback(before),100);actionBaseline=null}
     else if(/amostra|dica|hint|sample/.test(label)){sfx.hint();haptic([8,25,8])}
     else if(/verificar|check/.test(label)){sfx.check();haptic(10)}
     else if(/nível|nivel|miss[aã]o|level/.test(label)){sfx.level()}
