@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07131f">
+<meta name="application-name" content="Tangram R.A.I. v11">
+<title>Tangram R.A.I. v11 — Prof. João Faustino Junior</title>
+<meta name="description" content="Versão experimental com Modo Relaxar e recursos de acessibilidade.">
+<meta name="author" content="Prof. João Faustino Junior">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Tangram R.A.I. v11 — Conforto & Acessibilidade">
+<meta property="og:description" content="A mesma lógica, no seu ritmo: Tangram Educativo com Modo Relaxar e acessibilidade.">
+<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v11/">
+<meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:system-ui}#loading{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px}</style>
+</head>
+<body>
+<div id="loading"><div><h1>🧩 Tangram R.A.I. v11</h1><p>Carregando desafio...</p></div></div>
+<script>
+(async()=>{
+  try{
+    const files=[
+      '../tangram-prof-junior/chunk01.txt?v=11a',
+      '../tangram-prof-junior/chunk02-03.txt?v=11a',
+      '../tangram-prof-junior/chunk04-05.txt?v=11a',
+      '../tangram-prof-junior/chunk06-07.txt?v=11a',
+      '../tangram-prof-junior/chunk08-09.txt?v=11a'
+    ];
+    const parts=await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Falha ao carregar '+f);return r.text()})));
+    const b64=parts.join('').replace(/\s+/g,'');
+    const bin=atob(b64);
+    const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+    let page=new TextDecoder('utf-8').decode(bytes);
+
+    page=page.replace(/screen\.orientation\.lock\s*\([^;]*?\)/g,'Promise.resolve()');
+    page=page.replace(/document\.exitFullscreen\s*\([^;]*?\)/g,'Promise.resolve()');
+    page=page.replaceAll('Prof. Júnior','Prof. João Faustino Junior');
+    page=page.replaceAll('Prof. Junior','Prof. João Faustino Junior');
+
+    const raiImg='../tangram-prof-junior/rai-chalk.webp?v=11a';
+    page=page.replace(/<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,
+      `<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior • v11 experimental</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="experienceApp">🔊 <span>Som</span></button><button type="button" class="tl-mini-action" id="comfortApp">♿ <span>Conforto</span></button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ <span>Sobre</span></button></div></div>`);
+
+    page=page.replace('</head>',
+      '<link rel="manifest" href="manifest.webmanifest">'+
+      '<link rel="icon" href="icon-192.png" type="image/png">'+
+      '<link rel="apple-touch-icon" href="apple-touch-icon.png">'+
+      '<link rel="stylesheet" href="v10.css?v=11a">'+
+      '<link rel="stylesheet" href="comfort-v11.css?v=11a">'+
+      '<meta name="theme-color" content="#07131f">'+
+      '</head>');
+
+    page=page.replace('<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>',
+      '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="focusZoom" type="button" style="width:100%;margin-top:8px">🔍 Ampliar área de jogo</button>');
+    page=page.replace('<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>',
+      '<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>');
+
+    page=page.replace('</body>','<script src="app-v10.js?v=11a"><\/script><script src="comfort-v11.js?v=11a"><\/script></body>');
+    document.open();document.write(page);document.close();
+  }catch(e){
+    const el=document.getElementById('loading');
+    if(el)el.innerHTML='<div><h1>🧩 Tangram R.A.I. v11</h1><p>Não foi possível carregar o jogo. Atualize a página.</p></div>';
+    console.error(e);
+  }
+})();
+</script>
+</body>
+</html>
