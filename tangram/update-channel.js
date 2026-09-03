@@ -1,6 +1,6 @@
 (()=>{
   const CHANNEL='stable';
-  const VERSION='1.0.0';
+  const VERSION='1.1.0';
   let refreshing=false;
 
   const style=document.createElement('style');
