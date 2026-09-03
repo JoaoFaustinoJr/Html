@@ -1,4 +1,4 @@
-const CACHE='tangram-rai-v9-3';
+const CACHE='tangram-rai-v9-4';
 const ASSETS=[
   './','./index.html','./manifest.webmanifest','./v9.css','./app-v9.js','./icon-192.png','./icon-512.png','./apple-touch-icon.png',
   '../tangram-prof-junior/rai-chalk.webp','../tangram-prof-junior/chunk01.txt','../tangram-prof-junior/chunk02-03.txt','../tangram-prof-junior/chunk04-05.txt','../tangram-prof-junior/chunk06-07.txt','../tangram-prof-junior/chunk08-09.txt'
