@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07131f">
-<title>Tangram Educativo — Prof. Júnior</title>
+<title>Tangram Educativo — Prof. João Faustino Junior</title>
 <meta name="description" content="Desafie sua lógica com geometria, estratégia e criatividade em missões interativas de Tangram.">
-<meta name="author" content="Prof. Júnior">
+<meta name="author" content="Prof. João Faustino Junior">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:site_name" content="Tangram Educativo — Prof. Júnior">
-<meta property="og:title" content="Tangram Educativo — Prof. Júnior">
+<meta property="og:site_name" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta property="og:title" content="Tangram Educativo — Prof. João Faustino Junior">
 <meta property="og:description" content="Desafie sua lógica! Geometria, estratégia e criatividade em missões interativas.">
-<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/?v=5">
+<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/?v=6">
 <meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
 <meta property="og:image:secure_url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Tangram Educativo — Prof. Júnior — Desafie sua lógica">
+<meta property="og:image:alt" content="Tangram Educativo — Prof. João Faustino Junior">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tangram Educativo — Prof. Júnior">
+<meta name="twitter:title" content="Tangram Educativo — Prof. João Faustino Junior">
 <meta name="twitter:description" content="Desafie sua lógica! Geometria, estratégia e criatividade em missões interativas.">
 <meta name="twitter:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -36,7 +36,89 @@
   const b64=parts.join('').replace(/\s+/g,'');
   const bin=atob(b64);
   const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
-  const page=new TextDecoder('utf-8').decode(bytes);
+  let page=new TextDecoder('utf-8').decode(bytes);
+
+  page=page.replaceAll('Prof. Júnior','Prof. João Faustino Junior');
+  page=page.replaceAll('Prof. Junior','Prof. João Faustino Junior');
+
+  page=page.replace(
+    /<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,
+    `<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="rai-chalk.webp" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior</div></div></div>`
+  );
+
+  const extraCss=`<style>
+    .tl-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .tl-rai-brand{width:74px;height:74px;object-fit:cover;border-radius:17px;border:1px solid #376b80;box-shadow:0 6px 16px rgba(0,0,0,.28);flex:0 0 auto}
+    .tl-brand h1{margin:0}
+    @media(max-width:640px){
+      #tangram-levels{padding:7px!important}
+      .tl-head{align-items:center!important;gap:8px!important}
+      .tl-rai-brand{width:58px;height:58px;border-radius:14px}
+      .tl-brand h1{font-size:19px!important;line-height:1.12}
+      .tl-brand .tl-sub{font-size:12px!important}
+      .tl-board-scroll{min-height:330px}
+      .tl-mobile-controls{grid-template-columns:repeat(4,1fr)!important}
+    }
+    #tangram-levels.tl-focus{max-width:none!important;width:100%!important;height:100vh!important;min-height:100vh!important;margin:0!important;padding:4px!important;border-radius:0!important}
+    #tangram-levels.tl-focus .tl-head,
+    #tangram-levels.tl-focus .tl-side,
+    #tangram-levels.tl-focus .tl-math,
+    #tangram-levels.tl-focus .tl-legend{display:none!important}
+    #tangram-levels.tl-focus .tl-layout{display:block!important}
+    #tangram-levels.tl-focus .tl-stage{height:100vh!important;border-radius:0!important}
+    #tangram-levels.tl-focus .tl-board-scroll{height:calc(100vh - 126px)!important;min-height:0!important}
+    #tangram-levels.tl-focus .tl-board-scroll svg{width:100%!important;height:100%!important;max-height:none!important}
+    #tangram-levels.tl-focus .tl-mobile-controls{display:grid!important;grid-template-columns:repeat(4,1fr)!important;position:sticky;bottom:0;z-index:20}
+  </style>`;
+
+  page=page.replace('</head>',extraCss+'</head>');
+
+  page=page.replace(
+    '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>',
+    '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="fullscreen" type="button" style="width:100%;margin-top:8px">⛶ Tela cheia</button>'
+  );
+  page=page.replace(
+    '<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>',
+    '<button type="button" id="mFull" aria-label="Tela cheia">⛶<span>Tela cheia</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>'
+  );
+
+  const focusScript=`<script>
+  (()=>{
+    const root=document.getElementById('tangram-levels');
+    const buttons=[document.getElementById('fullscreen'),document.getElementById('mFull')].filter(Boolean);
+    if(!root||!buttons.length)return;
+    const update=()=>{
+      const on=root.classList.contains('tl-focus')||document.fullscreenElement===root;
+      const a=document.getElementById('fullscreen');
+      const b=document.getElementById('mFull');
+      if(a)a.textContent=on?'🗗 Sair da tela cheia':'⛶ Tela cheia';
+      if(b)b.innerHTML=on?'🗗<span>Sair</span>':'⛶<span>Tela cheia</span>';
+    };
+    const toggle=async()=>{
+      if(root.classList.contains('tl-focus')||document.fullscreenElement===root){
+        root.classList.remove('tl-focus');
+        if(document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}
+        if(screen.orientation&&screen.orientation.unlock){try{screen.orientation.unlock()}catch(e){}}
+        update(); return;
+      }
+      let native=false;
+      if(root.requestFullscreen){
+        try{await root.requestFullscreen({navigationUI:'hide'});native=true}catch(e){}
+      }
+      if(!native)root.classList.add('tl-focus');
+      if(screen.orientation&&screen.orientation.lock){try{await screen.orientation.lock('landscape')}catch(e){}}
+      update();
+    };
+    buttons.forEach(b=>b.addEventListener('click',toggle));
+    document.addEventListener('fullscreenchange',()=>{
+      if(!document.fullscreenElement)root.classList.remove('tl-focus');
+      update();
+    });
+    update();
+  })();
+  <\/script>`;
+
+  page=page.replace('</body>',focusScript+'</body>');
   document.open();document.write(page);document.close();
  }catch(e){document.getElementById('loading').innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o jogo. Atualize a página.</p></div>'}
 })();
