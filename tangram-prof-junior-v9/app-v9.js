@@ -42,7 +42,7 @@
     update();
   }
 
-  const rai='../tangram-prof-junior/rai-chalk.webp?v=9c';
+  const rai='../tangram-prof-junior/rai-chalk.webp?v=9d';
   const aboutBtn=document.getElementById('aboutApp');
   const installBtn=document.getElementById('installApp');
   let deferredPrompt=null;
@@ -59,7 +59,8 @@
         </div>
         <p><b>Prof. João Faustino Junior</b> é Farmacêutico e Bioquímico por formação e educador por vocação. Depois de mais de duas décadas de atuação em análises clínicas, aproximou sua experiência científica da sala de aula, onde ensina <b>Química, Programação e Robótica</b> e desenvolve projetos de educação tecnológica e cultura maker.</p>
         <p>Possui <b>Formação Pedagógica com Habilitação em Química pela UTFPR</b> e especializações em <b>Tecnologias Digitais e Inovação na Educação</b> e <b>Metodologias Ativas e Tecnologias Educacionais</b>.</p>
-        <p>Entre seus projetos estão <b>RunnBot – Uma Aventura STEAM</b>, <b>LoRa – AgroAlerta</b> e <b>R.A.I. – Robô Assistente Interativo</b>, entre outros. Seus trabalhos já foram reconhecidos e premiados em iniciativas como <b>Agrinho</b> e <b>GeniusCon</b>, além da classificação do RunnBot no <b>Prêmio LED – Luz na Educação, da Globo</b>.</p>
+        <p>Sua trajetória inclui também <b>experiência pedagógica internacional na University of Texas Rio Grande Valley (UTRGV), no Texas</b>, com vivência em atividades de <b>Human Genetics</b> e contato com metodologias de ensino como <b>Problem-Based Learning (PBL)</b> e <b>sala de aula invertida</b>.</p>
+        <p>Entre seus projetos estão <b>RunnBot – Uma Aventura STEAM</b>, <b>LoRa – AgroAlerta</b> e <b>R.A.I. – Robô Assistente Interativo</b>, entre outros. Seus trabalhos já foram premiados em iniciativas como <b>Agrinho</b> e <b>GeniusCon</b>. O RunnBot também alcançou a <b>segunda fase do Prêmio LED – Luz na Educação</b>, iniciativa da Globo voltada à valorização de projetos transformadores na educação.</p>
         <p>Mais do que utilizar tecnologia em sala de aula, seu trabalho busca transformá-la em ferramenta de curiosidade, autoria, criatividade e aprendizagem significativa.</p>
         <hr>
         <p><b>Sobre o projeto.</b> O Tangram Educativo foi concebido para desenvolver raciocínio lógico, percepção espacial, estratégia e conceitos de geometria por meio de desafios interativos.</p>
