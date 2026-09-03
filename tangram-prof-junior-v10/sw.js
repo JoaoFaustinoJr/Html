@@ -1,6 +1,6 @@
-const CACHE='tangram-rai-v10-3';
+const CACHE='tangram-rai-v10-4';
 const ASSETS=[
-  './','./index.html','./manifest.webmanifest','./v10.css','./app-v10.js','./icon-192.png','./icon-512.png','./apple-touch-icon.png',
+  './','./index.html','./manifest.webmanifest','./v10.css','./app-v10.js','./rai-icon.svg','./icon-192.png','./icon-512.png','./apple-touch-icon.png',
   '../tangram-prof-junior/rai-chalk.webp','../tangram-prof-junior/chunk01.txt','../tangram-prof-junior/chunk02-03.txt','../tangram-prof-junior/chunk04-05.txt','../tangram-prof-junior/chunk06-07.txt','../tangram-prof-junior/chunk08-09.txt'
 ];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(ASSETS.map(u=>cache.add(u).catch(()=>null)))).then(()=>self.skipWaiting()))});
