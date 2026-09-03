@@ -27,11 +27,11 @@ html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:
 (async()=>{
   try{
     const files=[
-      '../tangram-prof-junior/chunk01.txt?v=9b',
-      '../tangram-prof-junior/chunk02-03.txt?v=9b',
-      '../tangram-prof-junior/chunk04-05.txt?v=9b',
-      '../tangram-prof-junior/chunk06-07.txt?v=9b',
-      '../tangram-prof-junior/chunk08-09.txt?v=9b'
+      '../tangram-prof-junior/chunk01.txt?v=9e',
+      '../tangram-prof-junior/chunk02-03.txt?v=9e',
+      '../tangram-prof-junior/chunk04-05.txt?v=9e',
+      '../tangram-prof-junior/chunk06-07.txt?v=9e',
+      '../tangram-prof-junior/chunk08-09.txt?v=9e'
     ];
     const parts=await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{
       if(!r.ok)throw new Error('Falha ao carregar '+f);
@@ -47,7 +47,7 @@ html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:
     page=page.replaceAll('Prof. Júnior','Prof. João Faustino Junior');
     page=page.replaceAll('Prof. Junior','Prof. João Faustino Junior');
 
-    const raiImg='../tangram-prof-junior/rai-chalk.webp?v=9b';
+    const raiImg='../tangram-prof-junior/rai-chalk.webp?v=9e';
     page=page.replace(
       /<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,
       `<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ Sobre</button></div></div>`
@@ -57,7 +57,7 @@ html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:
       '<link rel="manifest" href="manifest.webmanifest">'+
       '<link rel="icon" href="icon-192.png" type="image/png">'+
       '<link rel="apple-touch-icon" href="apple-touch-icon.png">'+
-      '<link rel="stylesheet" href="v9.css?v=2">'+
+      '<link rel="stylesheet" href="v9.css?v=5">'+
       '<meta name="theme-color" content="#07131f">'+
       '</head>'
     );
@@ -71,7 +71,7 @@ html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:
       '<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>'
     );
 
-    page=page.replace('</body>','<script src="app-v9.js?v=2"><\/script></body>');
+    page=page.replace('</body>','<script src="app-v9.js?v=5"><\/script></body>');
     document.open();
     document.write(page);
     document.close();
