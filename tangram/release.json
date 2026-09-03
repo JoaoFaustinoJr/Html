@@ -1,0 +1,15 @@
+{
+  "channel": "stable",
+  "version": "1.0.0",
+  "based_on": "v10 estável",
+  "date": "2026-09-03",
+  "title": "Primeira edição oficial do Tangram R.A.I.",
+  "notes": [
+    "Cinco missões de Tangram com geometria exata",
+    "Experiência sonora discreta",
+    "Vibração tátil opcional",
+    "Modo ampliar sem rotação de tela",
+    "Biografia e identidade visual R.A.I.",
+    "Instalação como PWA e canal de atualizações"
+  ]
+}
