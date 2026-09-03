@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07131f">
+<title>Tangram Educativo — Prof. João Faustino Junior</title>
+<meta name="description" content="Desafie sua lógica com geometria, estratégia e criatividade em missões interativas de Tangram.">
+<meta name="author" content="Prof. João Faustino Junior">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta property="og:title" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta property="og:description" content="Desafie sua lógica! Geometria, estratégia e criatividade em missões interativas.">
+<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v9/">
+<meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
+<meta property="og:image:secure_url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tangram Educativo — Prof. João Faustino Junior">
+<meta name="twitter:description" content="Desafie sua lógica! Geometria, estratégia e criatividade em missões interativas.">
+<meta name="twitter:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.svg" type="image/svg+xml">
+<style>html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:system-ui}#loading{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px}</style>
+</head>
+<body>
+<div id="loading"><div><h1>🧩 Tangram Educativo</h1><p>Carregando desafio...</p></div></div>
+<script>
+(async()=>{
+ try{
+  const files=['../tangram-prof-junior/chunk01.txt?v=9','../tangram-prof-junior/chunk02-03.txt?v=9','../tangram-prof-junior/chunk04-05.txt?v=9','../tangram-prof-junior/chunk06-07.txt?v=9','../tangram-prof-junior/chunk08-09.txt?v=9'];
+  const parts=await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(f);return r.text()})));
+  const b64=parts.join('').replace(/\s+/g,'');
+  const bin=atob(b64);
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  let page=new TextDecoder('utf-8').decode(bytes);
+  page=page.replace(/screen\.orientation\.lock\s*\([^;]*?\)/g,"Promise.resolve()");
+  page=page.replace(/\.requestFullscreen\s*\([^;]*?\)/g,".closest('body')");
+  page=page.replace(/document\.exitFullscreen\s*\([^;]*?\)/g,"Promise.resolve()");
+  page=page.replaceAll('Prof. Júnior','Prof. João Faustino Junior');
+  page=page.replaceAll('Prof. Junior','Prof. João Faustino Junior');
+  const raiImg='../tangram-prof-junior/rai-chalk.webp?v=9';
+  page=page.replace(/<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,`<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ Sobre</button></div></div>`);
+  const pwaHead=`<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.svg" type="image/svg+xml"><meta name="theme-color" content="#07131f">`;
+  page=page.replace('</head>',pwaHead+'</head>');
+  const extraCss=`<style>
+    .tl-brand{display:flex;align-items:center;gap:12px;min-width:0}.tl-rai-brand{width:74px;height:74px;object-fit:cover;border-radius:17px;border:1px solid #376b80;box-shadow:0 6px 16px rgba(0,0,0,.28);flex:0 0 auto}.tl-brand h1{margin:0}
+    @media(max-width:640px){#tangram-levels{padding:7px!important}.tl-head{align-items:center!important;gap:8px!important}.tl-rai-brand{width:58px;height:58px;border-radius:14px}.tl-brand h1{font-size:19px!important;line-height:1.12}.tl-brand .tl-sub{font-size:12px!important}.tl-board-scroll{min-height:330px}.tl-mobile-controls{grid-template-columns:repeat(4,1fr)!important}}
+    .tl-focus-back{display:none;position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;z-index:2147483647;border:1px solid #69e7ff;background:rgba(7,27,40,.96);color:#fff;border-radius:999px;padding:10px 14px;font:800 14px system-ui;box-shadow:0 6px 20px rgba(0,0,0,.4);touch-action:manipulation}
+    #tangram-levels.tl-focus{position:fixed!important;inset:0!important;z-index:2147483000!important;max-width:none!important;width:100vw!important;height:100dvh!important;min-height:100dvh!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#050f18!important;overflow:hidden!important}#tangram-levels.tl-focus .tl-focus-back{display:flex!important;align-items:center;gap:6px}
+    #tangram-levels.tl-focus .tl-head,#tangram-levels.tl-focus .tl-side,#tangram-levels.tl-focus .tl-math,#tangram-levels.tl-focus .tl-legend,#tangram-levels.tl-focus .tl-toolbar,#tangram-levels.tl-focus .tl-meter,#tangram-levels.tl-focus .tl-metertext,#tangram-levels.tl-focus .tl-msg{display:none!important}
+    #tangram-levels.tl-focus .tl-layout,#tangram-levels.tl-focus .tl-game{display:block!important;width:100%!important;height:100%!important}#tangram-levels.tl-focus .tl-stage{display:flex!important;flex-direction:column!important;width:100%!important;height:100dvh!important;border:0!important;border-radius:0!important;background:#050f18!important}#tangram-levels.tl-focus .tl-board-scroll{flex:1 1 auto!important;height:auto!important;min-height:0!important;width:100%!important;padding:42px 2px 4px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:radial-gradient(circle at center,#0b2131,#050f18 72%)!important}#tangram-levels.tl-focus .tl-board-scroll svg{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-width:0!important;object-fit:contain!important}#tangram-levels.tl-focus .tl-mobile-controls{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:5px!important;flex:0 0 auto!important;position:relative!important;bottom:auto!important;z-index:20!important;padding:6px!important;background:#071824!important}#tangram-levels.tl-focus .tl-mobile-controls button{min-height:46px!important;padding:5px 2px!important}
+    .tl-brand-tools{display:flex;gap:6px;align-items:center;margin-left:8px}.tl-mini-action{border:1px solid #315d74;background:#0a2030;color:#dff7ff;border-radius:999px;padding:7px 10px;font:800 11px system-ui;cursor:pointer;white-space:nowrap;touch-action:manipulation}.tl-install-action{display:none;border-color:#55d9bd;color:#baffee}
+    .tl-about-overlay{display:none;position:fixed;inset:0;z-index:2147483646;background:rgba(1,9,15,.78);backdrop-filter:blur(5px);padding:18px;align-items:center;justify-content:center}.tl-about-overlay.show{display:flex}.tl-about-card{width:min(520px,100%);max-height:min(80dvh,720px);overflow:auto;background:linear-gradient(145deg,#081b29,#0b2a3d);border:1px solid #3a718a;border-radius:20px;padding:18px;box-shadow:0 24px 60px rgba(0,0,0,.5);color:#eafaff}.tl-about-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.tl-about-top img{width:68px;height:68px;object-fit:cover;border-radius:16px;border:1px solid #3e7288}.tl-about-title{font-size:20px;font-weight:900;margin:0;color:#8eeaff}.tl-about-sub{font-size:12px;color:#9fcbd9;margin-top:3px}.tl-about-card p{font-size:13.5px;line-height:1.55;color:#d5edf4;margin:10px 0}.tl-about-card hr{border:0;border-top:1px solid #285066;margin:14px 0}.tl-about-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.tl-about-btn{border:1px solid #3f7188;background:#12374c;color:#fff;border-radius:11px;padding:10px 12px;font-weight:850;cursor:pointer}.tl-about-btn.primary{background:linear-gradient(135deg,#0a9bb8,#0b806f);border-color:#74f0d4}.tl-about-close{margin-left:auto;border:1px solid #416b7d;background:#0d2634;color:#fff;width:38px;height:38px;border-radius:50%;font-size:20px;cursor:pointer}.tl-install-help{font-size:12px!important;color:#a9d3df!important;background:#071a26;border:1px solid #284b5e;border-radius:12px;padding:10px}@media(max-width:640px){.tl-brand-tools{margin-left:0;gap:4px}.tl-mini-action{padding:6px 8px;font-size:10px}.tl-about-overlay{padding:10px}.tl-about-card{padding:14px;border-radius:16px}}
+  </style>`;
+  page=page.replace('</head>',extraCss+'</head>');
+  page=page.replace('<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>','<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="focusZoom" type="button" style="width:100%;margin-top:8px">🔍 Ampliar área de jogo</button>');
+  page=page.replace('<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>','<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>');
+  const focusScript=`<script>
+  (()=>{const root=document.getElementById('tangram-levels');const buttons=[document.getElementById('focusZoom'),document.getElementById('mFull')].filter(Boolean);if(!root||!buttons.length)return;const back=document.createElement('button');back.type='button';back.className='tl-focus-back';back.setAttribute('aria-label','Voltar ao aplicativo');back.innerHTML='← <span>Voltar</span>';back.title='Voltar ao aplicativo';root.appendChild(back);let savedY=0;const update=()=>{const on=root.classList.contains('tl-focus');const a=document.getElementById('focusZoom');const b=document.getElementById('mFull');if(a)a.textContent=on?'← Voltar ao app':'🔍 Ampliar jogo';if(b)b.innerHTML=on?'←<span>Voltar</span>':'🔍<span>Ampliar</span>'};const enter=()=>{if(root.classList.contains('tl-focus'))return;savedY=window.scrollY||0;root.classList.add('tl-focus');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';update()};const exit=()=>{if(!root.classList.contains('tl-focus'))return;root.classList.remove('tl-focus');document.documentElement.style.overflow='';document.body.style.overflow='';update();requestAnimationFrame(()=>window.scrollTo(0,savedY))};const toggle=()=>root.classList.contains('tl-focus')?exit():enter();buttons.forEach(b=>b.addEventListener('click',toggle));back.addEventListener('click',exit);document.addEventListener('keydown',e=>{if(e.key==='Escape')exit()});update()})();
+  (()=>{const rai='../tangram-prof-junior/rai-chalk.webp?v=9';const aboutBtn=document.getElementById('aboutApp');const installBtn=document.getElementById('installApp');if(!aboutBtn)return;const overlay=document.createElement('div');overlay.className='tl-about-overlay';overlay.innerHTML=`<div class="tl-about-card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><div class="tl-about-top"><img src="${rai}" alt="R.A.I."><div><div class="tl-about-title" id="aboutTitle">Tangram Educativo</div><div class="tl-about-sub">Prof. João Faustino Junior</div></div><button class="tl-about-close" type="button" aria-label="Fechar">×</button></div><p><b>Prof. João Faustino Junior</b> é farmacêutico e bioquímico, professor de Química, Programação e Robótica. Desenvolve projetos de educação tecnológica e cultura maker, integrando lógica, ciência, criatividade e aprendizagem baseada em desafios.</p><hr><p><b>Sobre o projeto.</b> O Tangram Educativo foi concebido para desenvolver raciocínio lógico, percepção espacial, estratégia e conceitos de geometria por meio de desafios interativos.</p><p class="tl-install-help" id="installHelp"><b>Instalar no celular:</b> no Android, use o botão “Instalar” quando disponível ou o menu do navegador → “Adicionar à tela inicial”. No iPhone, use Safari → Compartilhar → “Adicionar à Tela de Início”.</p><div class="tl-about-actions"><button type="button" class="tl-about-btn primary" id="aboutInstall">⬇ Instalar aplicativo</button><button type="button" class="tl-about-btn" id="aboutClose">Fechar</button></div><p style="font-size:11px;color:#7faaba;margin-top:14px">Desenvolvido por Prof. João Faustino Junior • Jaboti–PR</p></div>`;document.body.appendChild(overlay);const close=()=>overlay.classList.remove('show');aboutBtn.addEventListener('click',()=>overlay.classList.add('show'));overlay.querySelector('.tl-about-close').addEventListener('click',close);overlay.querySelector('#aboutClose').addEventListener('click',close);overlay.addEventListener('click',e=>{if(e.target===overlay)close()});let deferredPrompt=null;const aboutInstall=overlay.querySelector('#aboutInstall');const installHelp=overlay.querySelector('#installHelp');const doInstall=async()=>{if(deferredPrompt){deferredPrompt.prompt();try{await deferredPrompt.userChoice}catch(e){}deferredPrompt=null;if(installBtn)installBtn.style.display='none';return}overlay.classList.add('show');installHelp.scrollIntoView({behavior:'smooth',block:'center'})};window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(installBtn)installBtn.style.display='inline-flex'});if(installBtn)installBtn.addEventListener('click',doInstall);aboutInstall.addEventListener('click',doInstall);window.addEventListener('appinstalled',()=>{deferredPrompt=null;if(installBtn)installBtn.style.display='none';close()})})();
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}));}
+  <\/script>`;
+  page=page.replace('</body>',focusScript+'</body>');document.open();document.write(page);document.close();
+ }catch(e){document.getElementById('loading').innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o jogo. Atualize a página.</p></div>'}
+})();
+</script>
+</body>
+</html>
