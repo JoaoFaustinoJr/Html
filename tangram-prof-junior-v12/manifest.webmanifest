@@ -1,7 +1,7 @@
 {
-  "name": "Tangram R.A.I. v12 — Experimental",
-  "short_name": "Tangram R.A.I.",
-  "description": "Tangram Educativo com 10 missões, desempenho e acessibilidade.",
+  "name": "Tangram Educativo",
+  "short_name": "Tangram",
+  "description": "Jogo educativo de Tangram com 10 desafios, desempenho e acessibilidade.",
   "id": "/Html/tangram-prof-junior-v12/",
   "start_url": "./",
   "scope": "./",
