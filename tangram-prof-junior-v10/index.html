@@ -58,7 +58,8 @@
     page=page.replace('<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>',
       '<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>');
 
-    page=page.replace('</body>','<script src="app-v10.js?v=3"><\/script></body>');
+    const bioFix='<script>(()=>{const fix=()=>{const b=document.querySelector(".tl-about-body");if(!b)return false;b.innerHTML=b.innerHTML.replace(" Seus trabalhos já foram premiados em iniciativas como <b>Agrinho</b> e <b>GeniusCon</b>.","");return true};if(!fix()){const o=new MutationObserver(()=>{if(fix())o.disconnect()});o.observe(document.documentElement,{childList:true,subtree:true})}})();<\/script>';
+    page=page.replace('</body>','<script src="app-v10.js?v=3"><\/script>'+bioFix+'</body>');
     document.open();document.write(page);document.close();
   }catch(e){
     const el=document.getElementById('loading');
