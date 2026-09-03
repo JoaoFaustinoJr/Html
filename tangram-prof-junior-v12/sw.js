@@ -8,7 +8,7 @@ self.addEventListener('fetch',event=>{
     event.respondWith(fetch(event.request,{cache:'no-store'}).then(resp=>{if(resp&&resp.ok){const clone=resp.clone();caches.open(CACHE).then(c=>c.put('./index.html',clone))}return resp}).catch(()=>caches.match('./index.html')));return;
   }
   const u=new URL(event.request.url);
-  const live=/\/(app-v10\.js|comfort-v11\.js|performance-v12\.js|v10\.css|comfort-v11\.css|focus-v11\.css|performance-v12\.css|content-v12\.json|manifest\.webmanifest|icon-192\.png|icon-512\.png|apple-touch-icon\.png)$/.test(u.pathname);
+  const live=/\/(app-v10\.js|comfort-v11\.js|performance-v12\.js|rai-tutor-v13\.js|v10\.css|comfort-v11\.css|focus-v11\.css|performance-v12\.css|rai-tutor-v13\.css|content-v12\.json|manifest\.webmanifest|icon-192\.png|icon-512\.png|apple-touch-icon\.png)$/.test(u.pathname);
   if(live){
     event.respondWith(fetch(event.request,{cache:'no-store'}).then(resp=>{if(resp&&resp.ok){const clone=resp.clone();caches.open(CACHE).then(c=>c.put(event.request,clone))}return resp}).catch(()=>caches.match(event.request,{ignoreSearch:true})));
     return;
