@@ -1,15 +1,18 @@
 {
   "channel": "stable",
-  "version": "1.0.0",
-  "based_on": "v10 estável",
+  "version": "1.1.0",
+  "based_on": "v12 validada",
   "date": "2026-09-03",
-  "title": "Primeira edição oficial do Tangram R.A.I.",
+  "title": "Desempenho, Conforto e Desafios Avançados",
   "notes": [
-    "Cinco missões de Tangram com geometria exata",
-    "Experiência sonora discreta",
-    "Vibração tátil opcional",
-    "Modo ampliar sem rotação de tela",
-    "Biografia e identidade visual R.A.I.",
-    "Instalação como PWA e canal de atualizações"
+    "Dez missões de Tangram com geometria exata",
+    "Cinco novos desafios: Gato Angular, Corredor, Cisne, Foguete e Dragão R.A.I.",
+    "Memória local de desempenho, melhores tempos e histórico recente",
+    "Conquistas e comparação com o próprio desempenho",
+    "Modo Mestre para acesso aos desafios avançados respeitando a progressão",
+    "Modo Relaxar, texto maior, controles maiores, alto contraste e movimento reduzido",
+    "Zoom móvel aprimorado no modo Ampliar",
+    "Sons e vibração tátil preservados",
+    "Atualização compatível com o progresso já salvo"
   ]
 }
