@@ -42,7 +42,7 @@
     update();
   }
 
-  const rai='../tangram-prof-junior/rai-chalk.webp?v=9b';
+  const rai='../tangram-prof-junior/rai-chalk.webp?v=9c';
   const aboutBtn=document.getElementById('aboutApp');
   const installBtn=document.getElementById('installApp');
   let deferredPrompt=null;
@@ -57,8 +57,10 @@
           <div><div class="tl-about-title" id="aboutTitle">Tangram Educativo</div><div class="tl-about-sub">Prof. João Faustino Junior</div></div>
           <button class="tl-about-close" type="button" aria-label="Fechar">×</button>
         </div>
-        <p><b>Prof. João Faustino Junior</b> é Farmacêutico e Bioquímico, com mais de 20 anos de experiência em análises clínicas. Possui Formação Pedagógica em Química pela UTFPR, equivalente à Licenciatura Plena, e pós-graduações na área de tecnologia.</p>
-        <p>Atua como professor de <b>Química, Programação e Robótica</b>, com experiência em educação digital, cultura maker, Arduino, projetos STEAM, robótica educacional e aplicação pedagógica de inteligência artificial. Desenvolve projetos autorais de tecnologia educacional, entre eles o <b>LoRa AgroAlerta</b>, vencedor estadual do Agrinho, e o <b>RunnBot</b>.</p>
+        <p><b>Prof. João Faustino Junior</b> é Farmacêutico e Bioquímico por formação e educador por vocação. Depois de mais de duas décadas de atuação em análises clínicas, aproximou sua experiência científica da sala de aula, onde ensina <b>Química, Programação e Robótica</b> e desenvolve projetos de educação tecnológica e cultura maker.</p>
+        <p>Possui <b>Formação Pedagógica com Habilitação em Química pela UTFPR</b> e especializações em <b>Tecnologias Digitais e Inovação na Educação</b> e <b>Metodologias Ativas e Tecnologias Educacionais</b>.</p>
+        <p>Entre seus projetos estão <b>RunnBot – Uma Aventura STEAM</b>, <b>LoRa – AgroAlerta</b> e <b>R.A.I. – Robô Assistente Interativo</b>, entre outros. Seus trabalhos já foram reconhecidos e premiados em iniciativas como <b>Agrinho</b> e <b>GeniusCon</b>, além da classificação do RunnBot no <b>Prêmio LED – Luz na Educação, da Globo</b>.</p>
+        <p>Mais do que utilizar tecnologia em sala de aula, seu trabalho busca transformá-la em ferramenta de curiosidade, autoria, criatividade e aprendizagem significativa.</p>
         <hr>
         <p><b>Sobre o projeto.</b> O Tangram Educativo foi concebido para desenvolver raciocínio lógico, percepção espacial, estratégia e conceitos de geometria por meio de desafios interativos.</p>
         <p class="tl-install-help" id="installHelp"><b>Instalar no celular:</b> no Android, use o botão “Instalar” quando disponível ou o menu do navegador → “Adicionar à tela inicial”. No iPhone, use Safari → Compartilhar → “Adicionar à Tela de Início”.</p>
