@@ -1,0 +1,5 @@
+.tl-v10-near{animation:tlV10Near .46s ease}
+.tl-v10-near-strong{animation:tlV10NearStrong .64s ease}
+@keyframes tlV10Near{0%,100%{box-shadow:inherit}45%{box-shadow:0 0 0 1px rgba(105,231,255,.34),0 0 24px rgba(105,231,255,.16)}}
+@keyframes tlV10NearStrong{0%,100%{box-shadow:inherit}42%{box-shadow:0 0 0 2px rgba(92,238,196,.52),0 0 34px rgba(92,238,196,.24)}}
+@media(prefers-reduced-motion:reduce){.tl-v10-near,.tl-v10-near-strong{animation:none!important}}
