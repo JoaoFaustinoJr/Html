@@ -1,0 +1,1 @@
+Arquivos rai-pwa-*.png usam nomes novos para evitar cache antigo do navegador.
