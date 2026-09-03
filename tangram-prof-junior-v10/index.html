@@ -49,7 +49,7 @@
       '<link rel="manifest" href="manifest.webmanifest">'+
       '<link rel="icon" href="icon-192.png" type="image/png">'+
       '<link rel="apple-touch-icon" href="apple-touch-icon.png">'+
-      '<link rel="stylesheet" href="v10.css?v=1">'+
+      '<link rel="stylesheet" href="v10.css?v=2">'+'<link rel="stylesheet" href="smart-v10.css?v=2">'+
       '<meta name="theme-color" content="#07131f">'+
       '</head>');
 
@@ -58,7 +58,7 @@
     page=page.replace('<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>',
       '<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>');
 
-    page=page.replace('</body>','<script src="app-v10.js?v=1"><\/script></body>');
+    page=page.replace('</body>','<script src="app-v10.js?v=2"><\/script></body>');
     document.open();document.write(page);document.close();
   }catch(e){
     const el=document.getElementById('loading');
