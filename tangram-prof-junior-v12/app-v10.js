@@ -134,15 +134,24 @@
   let feedbackTimer=null,lastFeedback='',lastSuccessAt=0;
   const inspectFeedback=()=>{
     clearTimeout(feedbackTimer); feedbackTimer=setTimeout(()=>{
-      const parts=[...root.querySelectorAll('.tl-msg,.tl-metertext')].map(x=>x.textContent||'').join(' ').replace(/\s+/g,' ').trim();
-      if(!parts||parts===lastFeedback)return; lastFeedback=parts;
-      const t=parts.toLowerCase();
-      if(/parab[eé]ns|conclu[ií]d|encaixe perfeito|miss[aã]o completa|desafio conclu[ií]do|100%/.test(t)){
-        const now=Date.now();if(now-lastSuccessAt>1600){lastSuccessAt=now;sfx.success();haptic([18,40,25,40,35]);const stage=root.querySelector('.tl-stage');if(stage){stage.classList.add('tl-v10-success');setTimeout(()=>stage.classList.remove('tl-v10-success'),1000)}toast('✨ Desafio concluído!')}
+      const msgEl=root.querySelector('#msg');
+      const msgText=(msgEl?.textContent||'').replace(/\s+/g,' ').trim();
+      if(!msgText||msgText===lastFeedback)return; lastFeedback=msgText;
+      const t=msgText.toLowerCase();
+      if(/miss[aã]o conclu[ií]da/.test(t)){
+        const now=Date.now();
+        if(now-lastSuccessAt>1600){
+          lastSuccessAt=now;
+          haptic([18,40,25,40,35]);
+          const stage=root.querySelector('.tl-stage');
+          if(stage){stage.classList.add('tl-v10-success');setTimeout(()=>stage.classList.remove('tl-v10-success'),1000)}
+          toast('✨ Desafio concluído!');
+        }
       }else if(/sobrepos|fora da|lacuna|tente novamente|ainda n[aã]o/.test(t)){sfx.warn();haptic(14)}
     },60);
   };
-  new MutationObserver(inspectFeedback).observe(root,{subtree:true,childList:true,characterData:true});
+  const msgWatch=root.querySelector('#msg');
+  if(msgWatch)new MutationObserver(inspectFeedback).observe(msgWatch,{subtree:true,childList:true,characterData:true});
 
   document.addEventListener('pointerdown',ensureAudio,{once:true,passive:true});
   if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(err=>console.warn('SW',err))}
