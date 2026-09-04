@@ -152,6 +152,14 @@
   };
   const msgWatch=root.querySelector('#msg');
   if(msgWatch)new MutationObserver(inspectFeedback).observe(msgWatch,{subtree:true,childList:true,characterData:true});
+  const statusWatch=root.querySelector('#status');
+  const normalizeReadyStatus=()=>{
+    if(!statusWatch)return;
+    const done=/miss[aã]o conclu[ií]da/i.test(root.querySelector('#msg')?.textContent||'');
+    if(!done&&/miss[aã]o completa/i.test(statusWatch.textContent||''))statusWatch.textContent='✅ Encaixe pronto — toque em Verificar';
+  };
+  if(statusWatch)new MutationObserver(normalizeReadyStatus).observe(statusWatch,{subtree:true,childList:true,characterData:true});
+  normalizeReadyStatus();
 
   document.addEventListener('pointerdown',ensureAudio,{once:true,passive:true});
   if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(err=>console.warn('SW',err))}
