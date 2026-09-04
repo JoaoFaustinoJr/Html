@@ -2,7 +2,7 @@
   "name": "Maker Quest — R.A.I. Tutora",
   "short_name": "Maker Quest",
   "description": "Jornada STEAM com Code Arena, Variáveis, Robótica, Algoritmos, AgroTech, Dados, Cyber e Boss.",
-  "start_url": "./",
+  "start_url": "./?pwa=5",
   "scope": "./",
   "display": "standalone",
   "background_color": "#052c22",
@@ -22,6 +22,10 @@
       "purpose": "any maskable"
     }
   ],
-  "id": "./",
-  "prefer_related_applications": false
+  "id": "./maker-quest/",
+  "prefer_related_applications": false,
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ]
 }

@@ -188,14 +188,19 @@ function installHelp(){
  openModal();
 }
 function refreshInstallButton(){
+ const installed=isStandalone();
+ document.body.classList.toggle('pwa-standalone',installed);
  const b=$('#installApp');
- if(!b)return;
- b.style.display='inline-block';
- if(isStandalone()){b.innerHTML='✓ <span>Instalado</span>';b.classList.remove('install');}
- else b.innerHTML='⬇ <span>Instalar</span>';
+ if(b){
+   b.style.display='inline-flex';
+   if(installed){b.innerHTML='✓ <span>Instalado</span>';b.classList.remove('install');}
+   else b.innerHTML='⬇ <span>Instalar</span>';
+ }
+ const h=$('#installHero');
+ if(h) h.style.display=installed?'none':'flex';
 }
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;refreshInstallButton()});
-$('#installApp').onclick=async()=>{
+async function requestInstall(){
  if(isStandalone())return toast('O Maker Quest já está instalado neste aparelho.');
  if(deferredPrompt){
    deferredPrompt.prompt();
@@ -206,7 +211,10 @@ $('#installApp').onclick=async()=>{
    return;
  }
  installHelp();
-};
+}
+$('#installApp').onclick=requestInstall;
+const installHero=$('#installHero');
+if(installHero)installHero.onclick=requestInstall;
 window.addEventListener('appinstalled',()=>{toast('Maker Quest instalado!');refreshInstallButton()});
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).catch(()=>{}));
 $('#soundApp').innerHTML=(state.sound?'🔊':'🔇')+' <span>Som</span>';refreshInstallButton();renderHome();
