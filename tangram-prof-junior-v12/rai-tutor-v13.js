@@ -1,8 +1,19 @@
 (()=>{const root=document.getElementById('tangram-levels');if(!root)return;
-const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
+const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.1 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
 const rai='rai-icon.svg?v=rai3';const title=()=>((root.querySelector('#title')?.textContent||'Missão atual').replace(/\s+/g,' ').trim());const allText=()=>[...root.querySelectorAll('.tl-metertext,.tl-msg,#msg,.tl-chip,.tl-stats')].map(x=>x.textContent||'').join(' ').replace(/\s+/g,' ').trim();
 const metric=(t,n)=>{const m=t.match(new RegExp(n+'\\s*:?\\s*([0-9]+(?:[\\.,][0-9]+)?)','i'));return m?Number(m[1].replace(',','.')):null};const metrics=()=>{const t=allText();return{coverage:metric(t,'cobertura'),overlap:metric(t,'sobreposição'),outside:metric(t,'fora')}};
-const say=t=>{if(!prefs.voice||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.rate=.98;speechSynthesis.speak(u)}catch(e){}};
+let raiVoice=null;
+const pickRaiVoice=()=>{
+  if(!('speechSynthesis'in window))return null;
+  const voices=speechSynthesis.getVoices().filter(v=>/^pt(-|_)BR/i.test(v.lang)||/^pt/i.test(v.lang));
+  if(!voices.length)return null;
+  const preferred=[/luciana/i,/francisca/i,/camila/i,/vit[oó]ria/i,/maria/i,/let[ií]cia/i,/female/i,/google.*portugu/i,/portugu.*brasil/i];
+  for(const rx of preferred){const v=voices.find(x=>rx.test(x.name||''));if(v)return v}
+  return voices[0];
+};
+if('speechSynthesis'in window&&speechSynthesis.addEventListener)speechSynthesis.addEventListener('voiceschanged',()=>{raiVoice=pickRaiVoice()});
+const say=t=>{if(!prefs.voice||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.voice=raiVoice||pickRaiVoice();u.rate=1.03;u.pitch=1.24;u.volume=.96;speechSynthesis.speak(u)}catch(e){}};
+window.__raiSpeak=say;
 
 const fab=document.createElement('button');fab.type='button';fab.className='rai-tutor-fab';fab.setAttribute('aria-label','Abrir R.A.I.');fab.innerHTML='<img src="'+rai+'" alt="R.A.I.">';document.body.appendChild(fab);
 const bubble=document.createElement('div');bubble.className='rai-tutor-bubble';document.body.appendChild(bubble);const show=(msg,speak=false)=>{bubble.innerHTML='<b>🤖 R.A.I.</b><br>'+msg;bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),4700);if(speak)say(msg)};
@@ -21,7 +32,35 @@ panel.querySelector('#raiHint').addEventListener('click',()=>{closePanel();show(
 const FORM_URL='https://docs.google.com/forms/d/e/1FAIpQLSd1DGiUqz5kA-EmB3Y0a9WxFtqZ17Hq99L1up2E_yXmpjbanA/viewform?usp=publish-editor';
 panel.querySelector('#raiFeedback').addEventListener('click',()=>{closePanel();const w=window.open(FORM_URL,'_blank','noopener,noreferrer');if(!w)window.location.href=FORM_URL});
 
-let lastTitle='',lastMsg='',lastAuto=0;const intro=()=>{const t=title();if(!prefs.auto||!t||t===lastTitle)return;lastTitle=t;setTimeout(()=>{if(Date.now()-lastAuto<4500)return;lastAuto=Date.now();show('Nova missão! Observe primeiro a silhueta e imagine onde as peças maiores podem formar a estrutura.')},700)};const inspect=()=>{const msg=(root.querySelector('#msg')?.textContent||'').replace(/\s+/g,' ').trim();if(!prefs.auto||!msg||msg===lastMsg)return;lastMsg=msg;const low=msg.toLowerCase(),now=Date.now();if(now-lastAuto<1600)return;if(/miss[aã]o conclu[ií]da|miss[aã]o completa|parab[eé]ns|desafio conclu[ií]do|encaixe perfeito/.test(low)){lastAuto=now;show('Excelente! Missão concluída. As sete peças formaram uma nova figura sem se sobrepor.',true)}else if(/tente novamente|ainda n[aã]o|sobrepos|fora/.test(low)){lastAuto=now;show(analyse())}};
+const successLines=[
+  'Parabéns! É isso aí! Você conseguiu. Vamos para a próxima fase!',
+  'Muito bem! Mandou bem demais! Vamos encarar o próximo desafio?',
+  'Isso! Encaixe concluído! Bora para a próxima missão!',
+  'Oba! Você encontrou a solução. Agora vamos para a próxima fase!',
+  'Excelente! Mais uma missão vencida. Vamos continuar?',
+  'Aí sim! Ficou certinho. Próximo desafio, vamos lá!'
+];
+let successIx=-1;
+const successMessage=()=>{
+  if(/^\s*10\./.test(title()))return'Parabéns! Você concluiu todas as missões do Tangram! Missão cumprida!';
+  let i=Math.floor(Math.random()*successLines.length);
+  if(successLines.length>1&&i===successIx)i=(i+1)%successLines.length;
+  successIx=i;return successLines[i];
+};
+let lastTitle='',lastMsg='',lastAuto=0;
+const intro=()=>{const t=title();if(!prefs.auto||!t||t===lastTitle)return;lastTitle=t;setTimeout(()=>{if(Date.now()-lastAuto<4500)return;lastAuto=Date.now();show('Nova missão! Observe primeiro a silhueta e imagine onde as peças maiores podem formar a estrutura.')},700)};
+const inspect=()=>{
+  const msg=(root.querySelector('#msg')?.textContent||'').replace(/\s+/g,' ').trim();
+  if(!prefs.auto||!msg||msg===lastMsg)return;
+  lastMsg=msg;
+  const low=msg.toLowerCase(),now=Date.now();
+  if(now-lastAuto<1600)return;
+  if(/miss[aã]o conclu[ií]da/.test(low)){
+    const m=metrics();
+    const valid=(m.coverage==null||m.coverage>=99.7)&&(m.overlap==null||m.overlap<=0.12)&&(m.outside==null||m.outside<=0.12);
+    if(valid){lastAuto=now;show(successMessage(),true)}
+  }else if(/tente novamente|ainda n[aã]o|sobrepos|fora/.test(low)){lastAuto=now;show(analyse())}
+};
 const te=root.querySelector('#title');if(te)new MutationObserver(()=>setTimeout(intro,50)).observe(te,{subtree:true,childList:true,characterData:true});const me=root.querySelector('#msg');if(me)new MutationObserver(()=>setTimeout(inspect,70)).observe(me,{subtree:true,childList:true,characterData:true,attributes:true});
 root.addEventListener('click',e=>{const b=e.target?.closest?.('button');if(!b)return;const l=((b.textContent||'')+' '+(b.id||'')).toLowerCase();if(/dica/.test(l))setTimeout(()=>show(hint()),140);else if(/verificar|check/.test(l)&&prefs.auto)setTimeout(()=>{if(Date.now()-lastAuto>1700){lastAuto=Date.now();show(analyse())}},520);else if(/amostra|sample/.test(l))show('A amostra é apoio visual. Compare a organização e depois tente reconstruir com sua própria estratégia.')});intro();
 })();
@@ -120,13 +159,7 @@ root.addEventListener('click',e=>{const b=e.target?.closest?.('button');if(!b)re
     const i=arr.indexOf(el);
     return map[i]||null;
   };
-  const speak=t=>{
-    try{
-      const prefs=JSON.parse(localStorage.getItem('tangram_rai_tutora_v13')||'{}');
-      if(!prefs.voice||!('speechSynthesis'in window))return;
-      speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.rate=.98;speechSynthesis.speak(u);
-    }catch(e){}
-  };
+  const speak=t=>{try{if(window.__raiSpeak)window.__raiSpeak(t)}catch(e){}};
   const showShape=()=>{
     const p=currentPiece();
     if(!p){bubble.innerHTML='<b>🤖 R.A.I.</b><br>Selecione uma peça do Tangram e tente novamente.'}
