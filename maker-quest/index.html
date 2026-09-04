@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#073c2d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Maker Quest">
 <meta name="application-name" content="Maker Quest">
 <meta name="description" content="Maker Quest — Jornada STEAM com a R.A.I. Tutora. Programação, robótica, algoritmos, AgroTech, dados e segurança digital.">
 <meta name="author" content="Prof. João Faustino Junior">
@@ -23,20 +27,12 @@
 <meta name="twitter:description" content="Aprenda, experimente e conquiste com Programação, Robótica, Algoritmos, AgroTech, Dados e Cyber.">
 <meta name="twitter:image" content="https://joaofaustinojr.github.io/Html/maker-quest/maker-quest-share.jpg?v=3">
 <title>Maker Quest — R.A.I. Tutora</title>
-<link rel="manifest" href="manifest.webmanifest?v=5">
-<link rel="icon" href="icon-mq-192-v3.png" type="image/png">
-<link rel="apple-touch-icon" href="icon-mq-192-v3.png">
-<link rel="stylesheet" href="styles.css?v=5">
-<style>
-#installApp{display:inline-flex!important;align-items:center;gap:4px}
-#installHero{display:flex!important;width:100%;align-items:center;justify-content:center;gap:10px;
-margin:0 0 12px;padding:14px 16px;border:2px solid #ffd35a;border-radius:15px;
-background:linear-gradient(135deg,#f6a425,#d96c08);color:#1d1509;font-weight:1000;font-size:16px;
-box-shadow:0 6px 0 #8a3b00;cursor:pointer}
-#installHero:active{transform:translateY(3px);box-shadow:0 3px 0 #8a3b00}
-body.pwa-standalone #installHero{display:none!important}
-@media(max-width:560px){#installHero{font-size:15px;padding:13px 12px}}
-</style></head>
+<link rel="manifest" href="manifest.webmanifest?v=6">
+<link rel="icon" href="icon-mq-192-v6.png" sizes="192x192" type="image/png">
+<link rel="icon" href="icon-mq-512-v6.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-mq-192-v6.png">
+<link rel="stylesheet" href="styles.css?v=6">
+</head>
 <body>
 <div id="mq-app">
 <header class="mq-top">
@@ -62,10 +58,7 @@ body.pwa-standalone #installHero{display:none!important}
     <div class="mq-progress"><div id="xpBar"></div></div>
     <div class="mq-status-foot"><span>Campanha</span><span id="doneCount">0/8 missões</span></div>
   </div>
-
-  <button id="installHero" type="button">📲 Instalar Maker Quest no celular</button>
-
-  <div class="mq-welcome">
+<div class="mq-welcome">
     <div class="mq-rai-card">
       <img src="rai-icon.svg" alt="R.A.I.">
       <div class="mq-speech">
@@ -119,6 +112,6 @@ body.pwa-standalone #installHero{display:none!important}
 <div id="modal" class="mq-modal"><div id="modalCard" class="mq-modal-card"></div></div>
 <div id="toast" class="mq-toast"></div>
 </div>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

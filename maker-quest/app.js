@@ -180,11 +180,11 @@ function installHelp(){
  if(ios){
    steps='<p><b>No iPhone/iPad:</b></p><ol><li>Toque no botão <b>Compartilhar</b> do Safari.</li><li>Escolha <b>Adicionar à Tela de Início</b>.</li><li>Confirme em <b>Adicionar</b>.</li></ol>';
  }else if(android){
-   steps='<p><b>No Android:</b></p><ol><li>Abra o Maker Quest no <b>Chrome</b>.</li><li>Toque em <b>⋮</b> no canto superior.</li><li>Escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li><li>Confirme a instalação.</li></ol>';
+   steps='<p><b>No Android:</b></p><ol><li>Abra o Maker Quest no <b>Chrome</b>.</li><li>Aguarde alguns segundos na página.</li><li>Toque em <b>Instalar</b> no topo do Maker Quest ou em <b>⋮ → Instalar app</b>.</li><li>Confirme a instalação.</li></ol><p class="mq-note"><b>Importante:</b> se aparecer apenas “Adicionar à tela inicial” e o ícone vier com o símbolo do Chrome, isso é um atalho. Atualize a página e procure por <b>Instalar app</b>.</p>';
  }else{
    steps='<p>Abra o menu do navegador e procure por <b>Instalar app</b>, <b>Apps</b> ou <b>Adicionar à tela inicial</b>.</p>';
  }
- $('#modalCard').innerHTML='<div style="text-align:center"><img src="icon-mq-192-v3.png" style="width:96px;border-radius:22px"><h2>📲 Instalar Maker Quest</h2></div>'+steps+'<p class="mq-note">Depois de instalado, o Maker Quest abre como aplicativo e pode funcionar offline após o primeiro carregamento.</p><button id="modalClose" class="mq-primary" style="width:100%">Entendi</button>';
+ $('#modalCard').innerHTML='<div style="text-align:center"><img src="icon-mq-192-v6.png" style="width:96px;border-radius:22px"><h2>📲 Instalar Maker Quest</h2></div>'+steps+'<p class="mq-note">Depois de instalado, o Maker Quest abre como aplicativo e pode funcionar offline após o primeiro carregamento.</p><button id="modalClose" class="mq-primary" style="width:100%">Entendi</button>';
  openModal();
 }
 function refreshInstallButton(){
@@ -196,8 +196,6 @@ function refreshInstallButton(){
    if(installed){b.innerHTML='✓ <span>Instalado</span>';b.classList.remove('install');}
    else b.innerHTML='⬇ <span>Instalar</span>';
  }
- const h=$('#installHero');
- if(h) h.style.display=installed?'none':'flex';
 }
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;refreshInstallButton()});
 async function requestInstall(){
@@ -213,8 +211,6 @@ async function requestInstall(){
  installHelp();
 }
 $('#installApp').onclick=requestInstall;
-const installHero=$('#installHero');
-if(installHero)installHero.onclick=requestInstall;
 window.addEventListener('appinstalled',()=>{toast('Maker Quest instalado!');refreshInstallButton()});
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).catch(()=>{}));
 $('#soundApp').innerHTML=(state.sound?'🔊':'🔇')+' <span>Som</span>';refreshInstallButton();renderHome();
