@@ -22,5 +22,6 @@
       "purpose": "any maskable"
     }
   ],
-  "id": "./"
+  "id": "./",
+  "prefer_related_applications": false
 }
