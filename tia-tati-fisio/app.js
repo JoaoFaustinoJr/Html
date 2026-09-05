@@ -22,6 +22,15 @@ const ACT={
  physical:{n:'Estação física',i:'👣',d:'Integra o app ao circuito real.',g:'Agora é hora da estação física preparada pela fisioterapeuta.',h:'Siga a orientação da fisioterapeuta.'}
 };
 const PRESETS={motor:['stars','reach','hands','sequence','breathe'],sensorial:['colors','follow','sensory','breathe'],coordenacao:['stars','reach','hands','sequence'],relaxamento:['sensory','follow','breathe']};
+const BUNDLED_AUDIO={
+ welcome:'assets/audio/welcome.mp3',
+ guide:'assets/audio/guide.mp3',
+ success:'assets/audio/success.mp3',
+ retry:'assets/audio/retry.mp3',
+ relax:'assets/audio/relax.mp3',
+ celebrate:'assets/audio/celebrate.mp3'
+};
+const bundledAvailability={};
 const state={circuit:PRESETS.motor.slice(),last:PRESETS.motor.slice(),step:0,inter:0,assists:0,start:0,size:88,reach:'all',easy:true,reduced:false,projection:false,autoVoice:true,sound:true,haptic:true,context:'APAE',voices:[],voice:null,speech:'',mode:'guide',cleanup:null};
 const key='tiaTatiPrefsV9';
 const recordedIds=new Set();
@@ -34,6 +43,29 @@ function buzz(p=22){if(state.haptic&&navigator.vibrate)navigator.vibrate(p);}
 function stop(){if('speechSynthesis'in window)try{speechSynthesis.cancel();}catch(e){} if(window.tatiAudio){try{window.tatiAudio.pause();URL.revokeObjectURL(window.tatiAudio.src);}catch(e){}window.tatiAudio=null;}}
 const DB={db:null,open(){if(this.db)return Promise.resolve(this.db);return new Promise((ok,no)=>{if(!indexedDB)return no();const r=indexedDB.open('tiaTatiVoiceDB',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('clips'))r.result.createObjectStore('clips',{keyPath:'id'});};r.onsuccess=()=>{this.db=r.result;ok(this.db);};r.onerror=()=>no(r.error);});},async get(id){const d=await this.open();return new Promise((ok,no)=>{const r=d.transaction('clips').objectStore('clips').get(id);r.onsuccess=()=>ok(r.result);r.onerror=()=>no();});},async put(id,blob){const d=await this.open();return new Promise((ok,no)=>{const x=d.transaction('clips','readwrite');x.objectStore('clips').put({id,blob});x.oncomplete=ok;x.onerror=no;});},async del(id){const d=await this.open();return new Promise((ok,no)=>{const x=d.transaction('clips','readwrite');x.objectStore('clips').delete(id);x.oncomplete=ok;x.onerror=no;});}};
 async function recorded(id){if(!state.sound)return false;try{const r=await DB.get(id);if(!r||!r.blob)return false;stop();const u=URL.createObjectURL(r.blob),a=new Audio(u);window.tatiAudio=a;a.onended=a.onerror=()=>{URL.revokeObjectURL(u);if(window.tatiAudio===a)window.tatiAudio=null;};await a.play();return true;}catch(e){return false;}}
+async function bundled(id){
+  if(!state.sound||!BUNDLED_AUDIO[id])return false;
+  if(bundledAvailability[id]===false)return false;
+  try{
+    stop();
+    const a=new Audio(BUNDLED_AUDIO[id]+'?v=1');
+    a.preload='auto';window.tatiAudio=a;
+    await new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(new Error('timeout')),2500);
+      a.oncanplaythrough=()=>{clearTimeout(timer);resolve();};
+      a.onerror=()=>{clearTimeout(timer);reject(new Error('missing'));};
+      a.load();
+    });
+    await a.play();
+    bundledAvailability[id]=true;
+    a.onended=()=>{if(window.tatiAudio===a)window.tatiAudio=null;};
+    return true;
+  }catch(e){
+    bundledAvailability[id]=false;
+    if(window.tatiAudio){try{window.tatiAudio.pause();}catch(_){}window.tatiAudio=null;}
+    return false;
+  }
+}
 function systemSpeak(text){
   if(!state.sound||!('speechSynthesis'in window))return false;
   try{
@@ -51,6 +83,7 @@ function systemSpeak(text){
 async function speak(mode,text){
   state.mode=mode;state.speech=text;
   if(recordedIds.has(mode)){ if(await recorded(mode))return true; recordedIds.delete(mode); }
+  if(await bundled(mode))return true;
   return systemSpeak(text);
 }
 function loadVoices(){
