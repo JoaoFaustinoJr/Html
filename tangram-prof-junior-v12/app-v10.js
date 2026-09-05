@@ -145,15 +145,33 @@
     if(!target||target.disabled)return null;
     return{target,name:missionName(target),index:active+1};
   };
-  const highlightNextMission=(info,open=false)=>{
-    if(!info?.target)return;
+  let guideTimer=null,returnTimer=null;
+  const clearGuideTimers=()=>{clearTimeout(guideTimer);clearTimeout(returnTimer)};
+  const jumpTo=(el,block='center')=>{
+    if(!el)return;
+    try{el.scrollIntoView({behavior:'auto',block,inline:'nearest'})}catch(e){try{el.scrollIntoView()}catch(_){}}
+  };
+  const returnToWorkArea=()=>{
+    clearTimeout(returnTimer);
+    returnTimer=setTimeout(()=>{
+      const stage=root.querySelector('.tl-stage')||root.querySelector('.tl-game');
+      if(stage)jumpTo(stage,'start');
+    },90);
+  };
+  const highlightNextMission=info=>{
+    if(!info?.target||!document.body.contains(info.target))return;
     root.querySelectorAll('.tl-next-mission-guide').forEach(b=>{if(b!==info.target){b.classList.remove('tl-next-mission-guide');delete b.dataset.nextLabel}});
     info.target.classList.add('tl-next-mission-guide');
     info.target.dataset.nextLabel='✨ NOVA MISSÃO';
     const r=info.target.getBoundingClientRect();
     const visible=r.top>=12&&r.bottom<=window.innerHeight-12;
-    if(!visible)info.target.scrollIntoView({behavior:'smooth',block:'center'});
-    if(open)setTimeout(()=>{if(document.body.contains(info.target)&&!info.target.disabled)info.target.click()},visible?120:520);
+    if(!visible)jumpTo(info.target,'center');
+  };
+  const openNextMission=info=>{
+    if(!info?.target||info.target.disabled||!document.body.contains(info.target))return;
+    clearGuideTimers();
+    info.target.click();
+    requestAnimationFrame(()=>requestAnimationFrame(returnToWorkArea));
   };
   const addNextMissionAction=info=>{
     const msgEl=root.querySelector('#msg');
@@ -162,9 +180,15 @@
     b.type='button';b.className='tl-next-mission-action';
     b.innerHTML='▶ Ir para a próxima missão';
     b.setAttribute('aria-label','Ir para '+info.name);
-    b.addEventListener('click',()=>highlightNextMission(info,true));
+    b.addEventListener('click',()=>openNextMission(info));
     msgEl.appendChild(b);
   };
+  root.addEventListener('click',e=>{
+    const b=e.target?.closest?.('#levels button.tl-level');
+    if(!b||b.disabled)return;
+    clearGuideTimers();
+    requestAnimationFrame(()=>requestAnimationFrame(returnToWorkArea));
+  },true);
 
   let feedbackTimer=null,lastFeedback='',lastSuccessAt=0;
   const inspectFeedback=()=>{
@@ -184,7 +208,7 @@
           if(next){
             addNextMissionAction(next);
             toast('✨ '+next.name+' foi desbloqueada!');
-            setTimeout(()=>highlightNextMission(next,false),2100);
+            clearTimeout(guideTimer);guideTimer=setTimeout(()=>highlightNextMission(next),1650);
           }else{
             toast('🏆 Todas as missões concluídas!');
           }
