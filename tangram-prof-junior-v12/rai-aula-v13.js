@@ -1,7 +1,28 @@
 (()=>{
   const root=document.getElementById('tangram-levels');
-  const launch=document.getElementById('raiLesson');
-  if(!root||!launch)return;
+  if(!root)return;
+
+  const game=root.querySelector('.tl-game')||root.querySelector('.tl-stage');
+  if(!game)return;
+
+  let launch=document.getElementById('raiLessonDock');
+  if(!launch){
+    launch=document.createElement('button');
+    launch.type='button';
+    launch.id='raiLessonDock';
+    launch.className='rai-lesson-dock';
+    launch.setAttribute('aria-label','Abrir Aula da R.A.I. sobre a missão atual');
+    launch.innerHTML='<span class="rai-lesson-dock-icon">🎓</span><span class="rai-lesson-dock-text">Aula da R.A.I.</span>';
+    game.appendChild(launch);
+  }
+
+  const pulseLaunch=()=>{
+    launch.classList.remove('rai-lesson-dock-pulse');
+    void launch.offsetWidth;
+    launch.classList.add('rai-lesson-dock-pulse');
+    clearTimeout(launch._pulseTimer);
+    launch._pulseTimer=setTimeout(()=>launch.classList.remove('rai-lesson-dock-pulse'),2900);
+  };
 
   const lessons=[
     {
@@ -171,8 +192,21 @@
 
   launch.addEventListener('click',()=>{
     render();
+    launch.classList.remove('rai-lesson-dock-pulse');
     overlay.classList.add('show');
   });
+
+  let lastMissionTitle=(root.querySelector('#title')?.textContent||'').trim();
+  const titleEl=root.querySelector('#title');
+  if(titleEl){
+    new MutationObserver(()=>{
+      const now=(titleEl.textContent||'').trim();
+      if(!now||now===lastMissionTitle)return;
+      lastMissionTitle=now;
+      setTimeout(pulseLaunch,850);
+    }).observe(titleEl,{subtree:true,childList:true,characterData:true});
+  }
+  setTimeout(pulseLaunch,1200);
   overlay.querySelector('.rai-lesson-close').addEventListener('click',close);
   overlay.querySelector('#raiLessonClose').addEventListener('click',close);
   overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
