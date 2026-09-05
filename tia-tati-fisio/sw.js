@@ -1,4 +1,4 @@
-const CACHE='tia-tati-v9-20260905';
+const CACHE='tia-tati-v10-20260905';
 const CORE=['./','./index.html','./styles.css?v=9','./app.js?v=9','./manifest.webmanifest',
 './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
