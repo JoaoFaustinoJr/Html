@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2AAEA6">
+  <meta name="description" content="Tia Tati Fisio Sensorial — circuitos terapêuticos interativos com tutora visual e voz.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <title>Tia Tati — Fisio Sensorial</title>
+</head>
+<body>
+  <div id="app" class="app-shell" data-screen="home">
+    <header class="app-header">
+      <button class="brand" id="brandHome" type="button" aria-label="Voltar ao início">
+        <img src="" data-tati-avatar class="brand-avatar" alt="Tia Tati">
+        <span class="brand-copy">
+          <strong>Tia Tati</strong>
+          <small>Fisio Sensorial</small>
+        </span>
+      </button>
+      <div class="header-actions">
+        <button class="icon-btn" id="voiceQuickBtn" type="button" aria-label="Status da voz" title="Voz da Tia Tati">🔊</button>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="Abrir configurações" title="Configurações">⚙️</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="screen active" id="screen-home" aria-labelledby="homeTitle">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <div class="eyebrow">DRA. TATIANA • FISIOTERAPIA</div>
+            <h1 id="homeTitle">Movimento, estímulo e brincadeira.</h1>
+            <p>Um app para circuitos terapêuticos, sala sensorial e atividades motoras em APAE, clínica, escola, domicílio e outros contextos.</p>
+            <div class="hero-chips">
+              <span class="chip" id="contextChip">APAE e outros</span>
+              <span class="chip chip-soft">Toque facilitado</span>
+              <span class="chip chip-soft">Modo projeção</span>
+            </div>
+          </div>
+          <img src="" data-tati-card="welcome" alt="Tia Tati dando boas-vindas" class="hero-card-art">
+        </div>
+
+        <div class="voice-banner" id="voiceBanner">
+          <div>
+            <strong id="voiceBannerTitle">Voz da Tia Tati</strong>
+            <p id="voiceBannerText">Use uma voz PT-BR do aparelho ou grave a própria voz da Tatiana no Estúdio de Voz.</p>
+          </div>
+          <button class="btn btn-primary" id="openVoiceStudio" type="button">🎙️ Estúdio de voz</button>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">CIRCUITOS PRONTOS</span>
+            <h2>Escolha como começar</h2>
+          </div>
+          <button class="text-btn" id="builderBtn" type="button">Montar circuito</button>
+        </div>
+
+        <div class="circuit-grid">
+          <button class="circuit-card circuit-motor" data-circuit="motor" type="button">
+            <span class="circuit-icon">🏁</span>
+            <span class="circuit-title">Circuito Motor</span>
+            <span class="circuit-desc">Alcance, coordenação bilateral, sequência e pausa respiratória.</span>
+            <span class="circuit-meta">5 estações • 8–12 min</span>
+          </button>
+          <button class="circuit-card circuit-sensory" data-circuit="sensorial" type="button">
+            <span class="circuit-icon">🌈</span>
+            <span class="circuit-title">Circuito Sensorial</span>
+            <span class="circuit-desc">Cores, luz, causa e efeito e autorregulação.</span>
+            <span class="circuit-meta">4 estações • 6–10 min</span>
+          </button>
+          <button class="circuit-card circuit-coord" data-circuit="coordenacao" type="button">
+            <span class="circuit-icon">🤲</span>
+            <span class="circuit-title">Coordenação</span>
+            <span class="circuit-desc">Precisão, bilateralidade e planejamento motor.</span>
+            <span class="circuit-meta">4 estações • 6–9 min</span>
+          </button>
+          <button class="circuit-card circuit-calm" data-circuit="relaxamento" type="button">
+            <span class="circuit-icon">🌿</span>
+            <span class="circuit-title">Relaxamento</span>
+            <span class="circuit-desc">Respiração, toque suave e estímulos lentos.</span>
+            <span class="circuit-meta">3 estações • 4–7 min</span>
+          </button>
+        </div>
+
+        <div class="section-heading compact-heading">
+          <div>
+            <span class="eyebrow">TUTORA</span>
+            <h2>Todos os cards da Tia Tati</h2>
+          </div>
+          <button class="text-btn" id="cardsBtn" type="button">Ver cards</button>
+        </div>
+        <div class="tutor-strip" aria-label="Cards da Tia Tati">
+          <img src="" data-tati-card="welcome" alt="Boas-vindas">
+          <img src="" data-tati-card="guide" alt="Orientação">
+          <img src="" data-tati-card="success" alt="Incentivo">
+          <img src="" data-tati-card="retry" alt="Motivação">
+          <img src="" data-tati-card="relax" alt="Relaxamento">
+          <img src="" data-tati-card="celebrate" alt="Comemoração">
+        </div>
+      </section>
+
+      <section class="screen" id="screen-builder" aria-labelledby="builderTitle">
+        <div class="screen-topbar">
+          <button class="back-btn" data-back="home" type="button">←</button>
+          <div><span class="eyebrow">MODO FISIO</span><h2 id="builderTitle">Montar circuito</h2></div>
+        </div>
+        <form id="builderForm" class="builder-layout">
+          <div class="surface-block">
+            <h3>1. Estações</h3>
+            <p class="muted">Escolha pelo menos duas. A ordem pode ser ajustada antes de iniciar.</p>
+            <div class="station-picker" id="stationPicker"></div>
+          </div>
+          <div class="surface-block">
+            <h3>2. Adaptações</h3>
+            <div class="form-grid">
+              <label class="field">Tamanho do alvo
+                <select id="targetSize"><option value="104">Muito grande</option><option value="88" selected>Grande</option><option value="72">Médio</option></select>
+              </label>
+              <label class="field">Região de alcance
+                <select id="reachBias"><option value="all">Tela inteira</option><option value="left">Esquerda</option><option value="right">Direita</option><option value="top">Superior</option><option value="bottom">Inferior</option></select>
+              </label>
+              <label class="switch-row"><input id="easyTouch" type="checkbox" checked><span><strong>Toque facilitado</strong><small>Amplia a área útil dos alvos.</small></span></label>
+              <label class="switch-row"><input id="reducedMotion" type="checkbox"><span><strong>Reduzir movimento</strong><small>Diminui deslocamentos e animações.</small></span></label>
+              <label class="switch-row"><input id="projectionMode" type="checkbox"><span><strong>Modo projeção</strong><small>Elementos maiores para a sala sensorial.</small></span></label>
+              <label class="switch-row"><input id="autoVoice" type="checkbox" checked><span><strong>Tutora por voz</strong><small>Fala automaticamente quando possível.</small></span></label>
+            </div>
+          </div>
+          <div class="surface-block physical-config" id="physicalConfig" hidden>
+            <h3>3. Estação física</h3>
+            <label class="field">Orientação para o circuito real
+              <textarea id="physicalInstruction" maxlength="150" rows="3">Realize a estação física preparada pela fisioterapeuta e toque em “Concluído” quando terminar.</textarea>
+            </label>
+          </div>
+          <div id="builderMessage" class="inline-message" aria-live="polite"></div>
+          <button class="btn btn-primary btn-wide" type="submit">Começar circuito</button>
+        </form>
+      </section>
+
+      <section class="screen" id="screen-cards" aria-labelledby="cardsTitle">
+        <div class="screen-topbar">
+          <button class="back-btn" data-back="home" type="button">←</button>
+          <div><span class="eyebrow">TUTORA VISUAL</span><h2 id="cardsTitle">Cards da Tia Tati</h2></div>
+        </div>
+        <div class="cards-gallery" id="cardsGallery"></div>
+      </section>
+
+      <section class="screen" id="screen-voice" aria-labelledby="voiceTitle">
+        <div class="screen-topbar">
+          <button class="back-btn" data-back="home" type="button">←</button>
+          <div><span class="eyebrow">ÁUDIO</span><h2 id="voiceTitle">Estúdio de Voz</h2></div>
+        </div>
+        <div class="voice-intro surface-block">
+          <img src="" data-tati-card="guide" alt="Tia Tati orientando">
+          <div>
+            <h3>Voz adequada, sem surpresas</h3>
+            <p>O app nunca usa voz em outro idioma. Primeiro procura uma voz <strong>pt-BR</strong>. Para um resultado realmente pessoal, grave as falas da própria Tatiana neste aparelho.</p>
+          </div>
+        </div>
+        <div class="surface-block">
+          <div class="row-between wrap-gap">
+            <div><h3>Voz do aparelho</h3><p class="muted">Somente vozes em português do Brasil são aceitas.</p></div>
+            <select id="systemVoiceSelect" class="voice-select"><option value="">Procurando vozes…</option></select>
+          </div>
+          <div id="systemVoiceStatus" class="inline-message"></div>
+        </div>
+        <div class="surface-block">
+          <div class="row-between wrap-gap">
+            <div><h3>Falas gravadas</h3><p class="muted">As gravações ficam somente neste dispositivo.</p></div>
+            <button class="btn" id="refreshRecordings" type="button">Atualizar</button>
+          </div>
+          <div id="phraseRecorderList" class="phrase-list"></div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-settings" aria-labelledby="settingsTitle">
+        <div class="screen-topbar">
+          <button class="back-btn" data-back="home" type="button">←</button>
+          <div><span class="eyebrow">PREFERÊNCIAS</span><h2 id="settingsTitle">Configurações</h2></div>
+        </div>
+        <form id="settingsForm" class="surface-block form-grid">
+          <label class="field">Contexto de uso
+            <select id="contextSelect"><option>APAE</option><option>Clínica</option><option>Escola</option><option>Domicílio</option><option>Outro</option></select>
+          </label>
+          <label class="switch-row"><input id="soundEnabled" type="checkbox" checked><span><strong>Som e voz</strong><small>Permite orientação falada e efeitos suaves.</small></span></label>
+          <label class="switch-row"><input id="hapticEnabled" type="checkbox" checked><span><strong>Resposta tátil</strong><small>Usa vibração curta quando disponível.</small></span></label>
+          <button class="btn btn-primary btn-wide" type="submit">Salvar preferências</button>
+        </form>
+      </section>
+
+      <section class="screen" id="screen-game" aria-labelledby="stationTitle">
+        <div class="game-shell" id="gameShell">
+          <div class="game-topline">
+            <button class="back-btn" id="exitGameBtn" type="button">×</button>
+            <div class="progress-line"><span id="progressFill"></span></div>
+            <span class="progress-label" id="stationCounter">1/5</span>
+          </div>
+
+          <div class="tutor-panel" id="tutorPanel">
+            <img id="tutorCard" src="" data-tati-card="guide" alt="Tia Tati orientando">
+            <div class="tutor-copy">
+              <div class="tutor-label" id="tutorLabel">Orientação</div>
+              <h2 id="stationTitle">Estação</h2>
+              <div class="speech-bubble" id="speechBubble" aria-live="polite">Vamos começar?</div>
+              <div class="tutor-actions">
+                <button class="mini-btn" id="repeatSpeechBtn" type="button">🔊 Ouvir</button>
+                <button class="mini-btn" id="hintBtn" type="button">💡 Dica</button>
+                <button class="mini-btn" id="muteGameBtn" type="button">🔈 Voz</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="activityArea" class="activity-area"></div>
+          <div id="gameFeedback" class="game-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-done" aria-labelledby="doneTitle">
+        <div class="done-card">
+          <img src="" data-tati-card="celebrate" alt="Tia Tati comemorando" class="done-art">
+          <span class="eyebrow">CIRCUITO CONCLUÍDO</span>
+          <h1 id="doneTitle">Que esforço lindo!</h1>
+          <p id="doneSubtitle">Parabéns! O circuito de hoje foi concluído.</p>
+          <div class="session-summary" id="sessionSummary"></div>
+          <div class="done-actions">
+            <button class="btn btn-primary" id="repeatCircuitBtn" type="button">Fazer novamente</button>
+            <button class="btn" id="doneHomeBtn" type="button">Tela inicial</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="assets.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
