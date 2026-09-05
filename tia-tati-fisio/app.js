@@ -1,219 +1,76 @@
 (()=>{
-  const app=document.getElementById('app');
-  const $=(s,root=app)=>root.querySelector(s);
-  const $$=(s,root=app)=>[...root.querySelectorAll(s)];
-
-  const CARD_META={
-    welcome:{label:'Boas-vindas',text:'Olá! Eu sou a Tia Tati. Vamos juntos?',img:'assets/welcome.webp'},
-    guide:{label:'Orientação',text:'Olhe aqui… agora é a sua vez!',img:'assets/guide.webp'},
-    success:{label:'Incentivo',text:'Muito bem! Você conseguiu!',img:'assets/success.webp'},
-    retry:{label:'Motivação',text:'Mais uma vez? Você consegue!',img:'assets/retry.webp'},
-    relax:{label:'Relaxamento',text:'Respira comigo… isso, muito bem!',img:'assets/relax.webp'},
-    celebrate:{label:'Comemoração',text:'Que esforço lindo! Parabéns!',img:'assets/celebrate.webp'}
-  };
-
-  const ACTIVITIES={
-    stars:{name:'Toque nas estrelas',icon:'⭐',desc:'Coordenação olho-mão e alcance.',guide:'Vamos encontrar cinco estrelas. Toque em cada uma quando aparecer.',hint:'Procure a estrela brilhante na tela.',phrase:'guide_stars'},
-    reach:{name:'Alcance terapêutico',icon:'🎯',desc:'Alcance dirigido por regiões.',guide:'Vamos alcançar os alvos. Procure o círculo e toque nele.',hint:'Olhe com calma para a região indicada e procure o alvo redondo.',phrase:'guide_reach'},
-    hands:{name:'Duas mãos',icon:'🤲',desc:'Coordenação bilateral.',guide:'Agora vamos usar as duas mãos. Toque nos dois lados.',hint:'Uma mão em cada lado. Vamos juntos.',phrase:'guide_hands'},
-    sequence:{name:'Sequência motora',icon:'🔢',desc:'Atenção e planejamento motor.',guide:'Toque nos números na ordem: um, dois, três e quatro.',hint:'Comece pelo número um.',phrase:'guide_sequence'},
-    colors:{name:'Luzes e cores',icon:'🌈',desc:'Percepção visual e resposta ao estímulo.',guide:'Observe a cor e toque no círculo.',hint:'Observe o desenho e a cor no centro.',phrase:'guide_colors'},
-    follow:{name:'Siga a luz',icon:'✨',desc:'Rastreamento visual e precisão.',guide:'Acompanhe a luz e toque nela quando conseguir.',hint:'Acompanhe primeiro com os olhos e depois toque.',phrase:'guide_follow'},
-    sensory:{name:'Causa e efeito',icon:'🫧',desc:'Exploração sensorial por toque.',guide:'Toque na tela e veja o que acontece.',hint:'Experimente tocar em diferentes lugares.',phrase:'guide_sensory'},
-    breathe:{name:'Respiração guiada',icon:'🌿',desc:'Pausa e autorregulação.',guide:'Agora vamos fazer uma pausa. Respira comigo, devagar.',hint:'Inspire quando o círculo crescer e solte o ar quando ele diminuir.',phrase:'guide_breathe'},
-    physical:{name:'Estação física',icon:'👣',desc:'Integra o app ao circuito real.',guide:'Agora é hora da estação física preparada pela fisioterapeuta.',hint:'Siga a orientação da fisioterapeuta e depois toque em Concluído.',phrase:'guide_physical'}
-  };
-
-  const PRESETS={
-    motor:['stars','reach','hands','sequence','breathe'],
-    sensorial:['colors','follow','sensory','breathe'],
-    coordenacao:['stars','reach','hands','sequence'],
-    relaxamento:['sensory','follow','breathe']
-  };
-
-  const PHRASES=[
-    {id:'welcome',label:'Boas-vindas',text:CARD_META.welcome.text,group:'Cards'},
-    {id:'guide',label:'Orientação geral',text:CARD_META.guide.text,group:'Cards'},
-    {id:'success',label:'Incentivo',text:CARD_META.success.text,group:'Cards'},
-    {id:'retry',label:'Motivação',text:CARD_META.retry.text,group:'Cards'},
-    {id:'relax',label:'Relaxamento',text:CARD_META.relax.text,group:'Cards'},
-    {id:'celebrate',label:'Comemoração',text:CARD_META.celebrate.text,group:'Cards'},
-    ...Object.entries(ACTIVITIES).map(([id,a])=>({id:a.phrase,label:a.name,text:a.guide,group:'Estações'})),
-    {id:'inhale',label:'Respiração — inspire',text:'Inspire devagar.',group:'Respiração'},
-    {id:'exhale',label:'Respiração — solte',text:'Agora solte o ar devagar.',group:'Respiração'}
-  ];
-
-  const state={
-    currentScreen:'home',
-    circuit:PRESETS.motor.slice(),
-    step:0,
-    interactions:0,
-    assists:0,
-    startedAt:0,
-    lastCircuit:PRESETS.motor.slice(),
-    targetSize:88,
-    reachBias:'all',
-    easyTouch:true,
-    reducedMotion:false,
-    projectionMode:false,
-    autoVoice:true,
-    soundEnabled:true,
-    hapticEnabled:true,
-    context:'APAE',
-    systemVoice:null,
-    ptVoices:[],
-    currentPhraseId:'guide',
-    currentSpeech:CARD_META.guide.text,
-    activeCleanup:null,
-    toastTimer:null
-  };
-
-  function savePrefs(){
-    try{
-      localStorage.setItem('tiaTatiPrefs',JSON.stringify({
-        targetSize:state.targetSize,reachBias:state.reachBias,easyTouch:state.easyTouch,
-        reducedMotion:state.reducedMotion,projectionMode:state.projectionMode,autoVoice:state.autoVoice,
-        soundEnabled:state.soundEnabled,hapticEnabled:state.hapticEnabled,context:state.context,
-        systemVoiceName:state.systemVoice?.name||''
-      }));
-    }catch(e){}
-  }
-  function loadPrefs(){
-    try{
-      const p=JSON.parse(localStorage.getItem('tiaTatiPrefs')||'{}');
-      Object.keys(p).forEach(k=>{if(k in state&&k!=='systemVoiceName')state[k]=p[k]});
-      state._preferredVoiceName=p.systemVoiceName||'';
-    }catch(e){}
-  }
-  loadPrefs();
-
-  function showScreen(name){
-    if(state.activeCleanup){state.activeCleanup();state.activeCleanup=null;}
-    $$('.screen').forEach(s=>s.classList.remove('active'));
-    const target=$(`#screen-${name}`);
-    if(target)target.classList.add('active');
-    state.currentScreen=name;
-    app.dataset.screen=name;
-    if(name!=='game') stopSystemVoice();
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  function toast(message){
-    const el=$('#toast');
-    el.textContent=message;el.classList.add('show');
-    clearTimeout(state.toastTimer);
-    state.toastTimer=setTimeout(()=>el.classList.remove('show'),2400);
-  }
-
-  function haptic(pattern=25){
-    if(!state.hapticEnabled)return;
-    if(navigator.vibrate)navigator.vibrate(pattern);
-  }
-
-  function stopSystemVoice(){
-    if('speechSynthesis' in window){try{speechSynthesis.cancel()}catch(e){}}
-  }
-
-  function loadVoices(){
-    if(!('speechSynthesis' in window)){
-      state.ptVoices=[];renderSystemVoiceStatus();return;
-    }
-    const voices=speechSynthesis.getVoices();
-    state.ptVoices=voices.filter(v=>(v.lang||'').toLowerCase()==='pt-br');
-    if(!state.systemVoice&&state.ptVoices.length){
-      state.systemVoice=state.ptVoices.find(v=>v.name===state._preferredVoiceName)||state.ptVoices.find(v=>/maria|camila|francisca|fernanda|luciana|female|google/i.test(v.name))||state.ptVoices[0];
-    }
-    renderSystemVoiceSelect();
-    renderSystemVoiceStatus();
-    updateVoiceBanner();
-  }
-
-  function renderSystemVoiceSelect(){
-    const sel=$('#systemVoiceSelect');if(!sel)return;
-    sel.innerHTML='';
-    if(!state.ptVoices.length){
-      const o=document.createElement('option');o.value='';o.textContent='Nenhuma voz pt-BR disponível';sel.appendChild(o);sel.disabled=true;return;
-    }
-    sel.disabled=false;
-    state.ptVoices.forEach((v,i)=>{
-      const o=document.createElement('option');o.value=String(i);o.textContent=`${v.name} (${v.lang})`;
-      if(state.systemVoice?.name===v.name)o.selected=true;
-      sel.appendChild(o);
-    });
-  }
-
-  function renderSystemVoiceStatus(){
-    const el=$('#systemVoiceStatus');if(!el)return;
-    if(!('speechSynthesis' in window)){
-      el.className='inline-message error';el.textContent='Este navegador não oferece voz do sistema. As gravações locais continuam disponíveis.';return;
-    }
-    if(!state.ptVoices.length){
-      el.className='inline-message error';el.textContent='Nenhuma voz pt-BR foi encontrada. O app não usará voz estrangeira; grave a voz da Tatiana abaixo.';return;
-    }
-    el.className='inline-message success';el.textContent=`Voz pt-BR selecionada: ${state.systemVoice?.name||state.ptVoices[0].name}.`;
-  }
-
-  function systemSpeak(text){
-    if(!state.soundEnabled||!state.systemVoice||!('speechSynthesis' in window))return false;
-    try{
-      stopSystemVoice();
-      const u=new SpeechSynthesis.SpeechSynthesisUtterance(text);u.voice=state.systemVoice;u.lang='pt-BR';u.rate=.93;u.pitch=1;u.volume=1;speechSynthesis.speak(u);return true;
-    }catch(e){return false;}
-  }
-
-  // IndexedDB voice recordings
-  const VoiceDB={
-    db:null,
-    async open(){
-      if(this.db)return this.db;
-      return new Promise((resolve,reject)=>{
-        const req=indexedDB.open('tiaTatiVoiceDB',1);
-        req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('clips'))db.createObjectStore('clips',{keyPath:'id'})};
-        req.onsuccess=()=>{this.db=req.result;resolve(this.db)};req.onerror=()=>reject(req.error);
-      });
-    },
-    async get(id){const db=await this.open();return new Promise((resolve,reject)=>{const tx=db.transaction('clips','readonly');const r=tx.objectStore('clips').get(id);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error)});},
-    async put(id,blob){const db=await this.open();return new Promise((resolve,reject)=>{const tx=db.transaction('clips','readwrite');tx.objectStore('clips').put({id,blob,updatedAt:Date.now()});tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})},
-    async del(id){const db=await this.open();return new Promise((resolve,reject)=>{const tx=db.transaction('clips','readwrite');tx.objectStore('clips').delete(id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
-  };
-
-  let currentAudio=null;
-  async function playRecorded(id){
-    if(!state.soundEnabled)return false;
-    try{
-      const rec=await VoiceD.get(id);if(!rec?.blob)return false;
-      if(currentAudio){currentAudio.pause();URL.revokeObjectURL(currentAudio.src);currentAudio=null;}
-      stopSystemVoice();
-      const url=URL.createObjectURL(rec.blob);const a=new Audio(url);currentAudio=a;
-      a.onended=()=>{URL.revokeObjectURL(url);if(currentAudio===a)currentAudio=null};a.onerror=()=>{URL.revokeObjectURL(url);if(currentAudio===a)currentAudio=null};
-      await a.play();return true;
-    }catch(e){return false}
-  }
-
-  async function speakPhrase(id,text){
-    if(!state.soundEnabled)return;
-    const played=await playRecorded(id);
-    if(!played)systemSpeak(text);
-  }
-
-  function updateVoiceBanner(){
-    const title=$('#voiceBannerTitle'),text=$('#voiceBannerText');if(!title||!text)return;
-    title.textContent='Voz da Tia Tati';
-    if(state.systemVoice)text.textContent=`App em pt-BR. Voz selecionada: ${state.systemVoice.name}. A voz gravada da Tatiana temá prioridade.`;
-    else text.textContent='Nenhuma voz pt-BR foi encontrada. O app não usa voz estrangeira; grave a voz da Tatiana no Estúdio de Voz.';
-  }
-
-  function buildHome(){
-    $('#contextChip').textContent=state.context==='APAE'?'APAE e outros':state.context;
-    $('#targetSize').value=String(state.targetSize);$('#reachBias').value=state.reachBias;$('#easyTouch').checked=state.easyTouch;$('#reducedMotion').checked=state.reducedMotion;$('#projectionMode').checked=state.projectionMode;$('#autoVoice').checked=state.autoVoice;
-    $('#contextSelect').value=state.context;$('#soundEnabled').checked=state.soundEnabled;$('#hapticEnabled').checked=state.hapticEnabled;
-    $('#physicalConfig').hidden=!$('.station-check[value="physical"]').checked;
-    updateVoiceBanner();
-  }
-
-  function buildStationPicker(){
-    const root=$('#stationPicker');root.innerHTML='';
-    Object.entries(ACTIVITIES).forEach(([id,a],i=>{
-      const label=document.createElement('label');label.className='station-option';
-      const check=document.createElement('input');check.type='checkbox';check.className='station-check';check.value=id;check.checked=['ustars','reach','breathe'].includes(id);
-      check.addEventListener('change',()=>{if(id==='physical'))
+'use strict';
+const app=document.getElementById('app'); if(!app||app.dataset.ready)return; app.dataset.ready='1';
+const $=(s,r=app)=>r.querySelector(s), $$=(s,r=app)=>[...r.querySelectorAll(s)];
+const CARDS={
+ welcome:{label:'Boas-vindas',text:'Olá! Eu sou a Tia Tati. Vamos juntos?',img:'assets/welcome.webp'},
+ guide:{label:'Orientação',text:'Olhe aqui… agora é a sua vez!',img:'assets/guide.webp'},
+ success:{label:'Incentivo',text:'Muito bem! Você conseguiu!',img:'assets/success.webp'},
+ retry:{label:'Motivação',text:'Mais uma vez? Você consegue!',img:'assets/retry.webp'},
+ relax:{label:'Relaxamento',text:'Respira comigo… isso, muito bem!',img:'assets/relax.webp'},
+ celebrate:{label:'Comemoração',text:'Que esforço lindo! Parabéns!',img:'assets/celebrate.webp'}
+};
+const ACT={
+ stars:{n:'Toque nas estrelas',i:'⭐',d:'Coordenação olho-mão e alcance.',g:'Vamos encontrar cinco estrelas. Toque em cada uma quando ela aparecer.',h:'Procure a estrela brilhante na tela.'},
+ reach:{n:'Alcance terapêutico',i:'🎯',d:'Alcance dirigido por regiões.',g:'Vamos alcançar os alvos. Procure o círculo e toque nele.',h:'Olhe com calma para a região indicada.'},
+ hands:{n:'Duas mãos',i:'🤲',d:'Coordenação bilateral.',g:'Agora vamos usar as duas mãos. Toque nos dois lados.',h:'Uma mão em cada lado. Vamos juntos.'},
+ sequence:{n:'Sequência motora',i:'🔢',d:'Atenção e planejamento motor.',g:'Toque nos números na ordem: um, dois, três e quatro.',h:'Comece pelo número um.'},
+ colors:{n:'Luzes e cores',i:'🌈',d:'Percepção visual e resposta ao estímulo.',g:'Observe a cor e toque no círculo.',h:'Observe o desenho e a cor no centro.'},
+ follow:{n:'Siga a luz',i:'✨',d:'Rastreamento visual e precisão.',g:'Acompanhe a luz e toque nela quando conseguir.',h:'Acompanhe primeiro com os olhos e depois toque.'},
+ sensory:{n:'Causa e efeito',i:'🫧',d:'Exploração sensorial por toque.',g:'Toque na tela e veja o que acontece.',h:'Experimente tocar em diferentes lugares.'},
+ breathe:{n:'Respiração guiada',i:'🌿',d:'Pausa e autorregulação.',g:'Agora vamos fazer uma pausa. Respira comigo, devagar.',h:'Inspire quando o círculo crescer e solte quando diminuir.'},
+ physical:{n:'Estação física',i:'👣',d:'Integra o app ao circuito real.',g:'Agora é hora da estação física preparada pela fisioterapeuta.',h:'Siga a orientação da fisioterapeuta.'}
+};
+const PRESETS={motor:['stars','reach','hands','sequence','breathe'],sensorial:['colors','follow','sensory','breathe'],coordenacao:['stars','reach','hands','sequence'],relaxamento:['sensory','follow','breathe']};
+const state={circuit:PRESETS.motor.slice(),last:PRESETS.motor.slice(),step:0,inter:0,assists:0,start:0,size:88,reach:'all',easy:true,reduced:false,projection:false,autoVoice:true,sound:true,haptic:true,context:'APAE',voices:[],voice:null,speech:'',mode:'guide',cleanup:null};
+const key='tiaTatiPrefsV8';
+try{Object.assign(state,JSON.parse(localStorage.getItem(key)||'{}'));}catch(e){}
+function save(){try{localStorage.setItem(key,JSON.stringify({size:state.size,reach:state.reach,easy:state.easy,reduced:state.reduced,projection:state.projection,autoVoice:state.autoVoice,sound:state.sound,haptic:state.haptic,context:state.context,voiceName:state.voice&&state.voice.name}));}catch(e){}}
+function show(n){if(state.cleanup){state.cleanup();state.cleanup=null;}stop();$$('.screen').forEach(x=>x.classList.remove('active'));$('#screen-'+n)?.classList.add('active');app.dataset.screen=n;window.scrollTo({top:0,behavior:'smooth'});}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200);}
+function buzz(p=22){if(state.haptic&&navigator.vibrate)navigator.vibrate(p);}
+function stop(){if('speechSynthesis'in window)try{speechSynthesis.cancel();}catch(e){} if(window.tatiAudio){try{window.tatiAudio.pause();URL.revokeObjectURL(window.tatiAudio.src);}catch(e){}window.tatiAudio=null;}}
+const DB={db:null,open(){if(this.db)return Promise.resolve(this.db);return new Promise((ok,no)=>{if(!indexedDB)return no();const r=indexedDB.open('tiaTatiVoiceDB',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('clips'))r.result.createObjectStore('clips',{keyPath:'id'});};r.onsuccess=()=>{this.db=r.result;ok(this.db);};r.onerror=()=>no(r.error);});},async get(id){const d=await this.open();return new Promise((ok,no)=>{const r=d.transaction('clips').objectStore('clips').get(id);r.onsuccess=()=>ok(r.result);r.onerror=()=>no();});},async put(id,blob){const d=await this.open();return new Promise((ok,no)=>{const x=d.transaction('clips','readwrite');x.objectStore('clips').put({id,blob});x.oncomplete=ok;x.onerror=no;});},async del(id){const d=await this.open();return new Promise((ok,no)=>{const x=d.transaction('clips','readwrite');x.objectStore('clips').delete(id);x.oncomplete=ok;x.onerror=no;});}};
+async function recorded(id){if(!state.sound)return false;try{const r=await DB.get(id);if(!r||!r.blob)return false;stop();const u=URL.createObjectURL(r.blob),a=new Audio(u);window.tatiAudio=a;a.onended=a.onerror=()=>{URL.revokeObjectURL(u);if(window.tatiAudio===a)window.tatiAudio=null;};await a.play();return true;}catch(e){return false;}}
+function systemSpeak(text){if(!state.sound||!state.voice||!('speechSynthesis'in window))return;stop();const u=new SpeechSynthesisUtterance(text);u.voice=state.voice;u.lang='pt-BR';u.rate=.93;u.pitch=1;speechSynthesis.speak(u);}
+async function speak(mode,text){state.mode=mode;state.speech=text;if(await recorded(mode))return;systemSpeak(text);}
+function loadVoices(){if(!('speechSynthesis'in window)){state.voices=[];state.voice=null;voiceUI();return;}state.voices=speechSynthesis.getVoices().filter(v=>(v.lang||'').toLowerCase()==='pt-br');const pref=(()=>{try{return JSON.parse(localStorage.getItem(key)||'{}').voiceName||'';}catch(e){return'';}})();state.voice=state.voices.find(v=>v.name===pref)||state.voices.find(v=>/maria|camila|francisca|fernanda|luciana|female|google/i.test(v.name))||state.voices[0]||null;voiceUI();}
+function voiceUI(){const s=$('#systemVoiceSelect'),m=$('#systemVoiceStatus'),b=$('#voiceBannerText');if(s){s.innerHTML='';if(!state.voices.length){s.disabled=true;s.add(new Option('Nenhuma voz pt-BR disponível',''));}else{state.voices.forEach((v,i)=>s.add(new Option(v.name+' ('+v.lang+')',i,false,state.voice&&v.name===state.voice.name)));s.disabled=false;}}if(m){m.className='inline-message '+(state.voice?'success':'error');m.textContent=state.voice?'Voz pt-BR selecionada: '+state.voice.name+'.':'Nenhuma voz pt-BR encontrada. O app não usará voz estrangeira; grave a voz da Tatiana.';}if(b)b.textContent=state.voice?'Voz pt-BR: '+state.voice.name+'. Gravações da Tatiana têm prioridade.':'Sem voz pt-BR. O app não usa voz estrangeira; use o Estúdio de Voz.';$('#voiceQuickBtn').textContent=state.sound?'🔊':'🔇';}
+if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}else voiceUI();
+function tutor(mode,title,text,auto=true){const c=CARDS[mode]||CARDS.guide;$('#tutorCard').src=c.img;$('#tutorLabel').textContent=c.label;$('#stationTitle').textContent=title;$('#speechBubble').textContent=text;state.mode=mode;state.speech=text;if(auto&&state.autoVoice)speak(mode,text);}
+function stationPicker(){const r=$('#stationPicker');r.innerHTML='';Object.entries(ACT).forEach(([id,a])=>{const l=document.createElement('label');l.className='station-option';l.innerHTML='<input class="station-check" type="checkbox" value="'+id+'"><span class="station-icon">'+a.i+'</span><span><strong>'+a.n+'</strong><small>'+a.d+'</small></span>';const c=l.querySelector('input');c.checked=['stars','reach','breathe'].includes(id);c.onchange=()=>{if(id==='physical')$('#physicalConfig').hidden=!c.checked;};r.appendChild(l);});}
+function cardGallery(){const r=$('#cardsGallery');r.innerHTML='';Object.entries(CARDS).forEach(([id,c])=>{const x=document.createElement('article');x.className='tutor-card-tile';x.innerHTML='<img src="'+c.img+'" alt="'+c.label+'"><div class="tutor-card-body"><h3>'+c.label+'</h3><p>'+c.text+'</p><button class="btn card-play" type="button">🔊 Ouvir</button></div>';x.querySelector('button').onclick=()=>speak(id,c.text);r.appendChild(x);});}
+async function recorderList(){const r=$('#phraseRecorderList');r.innerHTML='';for(const [id,c] of Object.entries(CARDS)){let has=false;try{has=!!(await DB.get(id));}catch(e){}const row=document.createElement('div');row.className='phrase-row';row.innerHTML='<div><strong>'+c.label+'</strong><small>'+c.text+'</small></div><div class="phrase-actions"><button class="mini-action play" type="button">'+(has?'▶️ Ouvir':'🔊 Voz pt-BR')+'</button><button class="mini-action rec" type="button">🎙️ '+(has?'Regravar':'Gravar')+'</button>'+(has?'<button class="mini-action del" type="button">🗑️</button>':'')+'</div>';row.querySelector('.play').onclick=()=>speak(id,c.text);row.querySelector('.rec').onclick=()=>record(id,c,row);row.querySelector('.del')?.addEventListener('click',async()=>{await DB.del(id);recorderList();toast('Gravação removida.');});r.appendChild(row);}}
+async function record(id,c,row){if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){toast('Gravação indisponível neste navegador.');return;}let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch(e){toast('Permissão do microfone não concedida.');return;}const chunks=[],rec=new MediaRecorder(stream),btn=row.querySelector('.rec');btn.textContent='⏹️ Parar gravação';rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};rec.onstop=async()=>{stream.getTracks().forEach(t=>t.stop());if(chunks.length)await DB.put(id,new Blob(chunks,{type:rec.mimeType||'audio/webm'}));recorderList();toast('Fala '+c.label+' salva neste aparelho.');};btn.onclick=()=>{if(rec.state==='recording')rec.stop();};rec.start();}
+function sync(){const p=state.context==='APAE'?'APAE e outros':state.context;$('#contextChip').textContent=p;if($('#targetSize'))$('#targetSize').value=state.size;if($('#reachBias'))$('#reachBias').value=state.reach;if($('#easyTouch'))$('#easyTouch').checked=state.easy;if($('#reducedMotion'))$('#reducedMotion').checked=state.reduced;if($('#projectionMode'))$('#projectionMode').checked=state.projection;if($('#autoVoice'))$('#autoVoice').checked=state.autoVoice;if($('#contextSelect'))$('#contextSelect').value=state.context;if($('#soundEnabled'))$('#soundEnabled').checked=state.sound;if($('#hapticEnabled'))$('#hapticEnabled').checked=state.haptic;voiceUI();}
+function size(){return Math.max(64,Math.min(126,Number(state.size)+(state.easy?10:0)+(state.projection?8:0)));}
+function target(icon){const b=document.createElement('button');b.type='button';b.className='touch-target';b.textContent=icon;const s=size();b.style.width=s+'px';b.style.height=s+'px';return b;}
+function clear(){if(state.cleanup){state.cleanup();state.cleanup=null;}stop();$('#activityArea').innerHTML='';$('#gameFeedback').textContent='';}
+function progress(){const n=state.step+1,t=state.circuit.length;$('#stationCounter').textContent=Math.min(n,t)+'/'+t;$('#progressFill').style.width=Math.min(100,state.step/t*100)+'%';}
+function start(ids){state.circuit=ids.slice();state.last=ids.slice();state.step=0;state.inter=0;state.assists=0;state.start=Date.now();$('#gameShell').classList.toggle('projection-mode',state.projection);show('game');setTimeout(render,60);}
+function doneStation(){buzz([20,35,20]);tutor('success',ACT[state.circuit[state.step]]?.n||'Estação',CARDS.success.text,true);$('#gameFeedback').textContent='Estação concluída!';setTimeout(()=>{state.step++;state.step>=state.circuit.length?finish():render();},700);}
+function render(){clear();progress();const id=state.circuit[state.step],a=ACT[id];tutor(id==='breathe'?'relax':'guide',a.n,a.g,true);({stars,reach,hands,sequence,colors,follow,sensory,breathe,physical}[id]||doneStation)();}
+function stars(){const f=document.createElement('div');f.className='playfield';const b=target('⭐');f.appendChild(b);$('#activityArea').appendChild(f);let n=0;const move=()=>{const s=size();b.style.left=(6+Math.random()*Math.max(0,f.clientWidth-s-12))+'px';b.style.top=(6+Math.random()*Math.max(0,f.clientHeight-s-12))+'px';};requestAnimationFrame(move);b.onclick=()=>{state.inter++;n++;buzz();$('#gameFeedback').textContent='Muito bem! '+n+' de 5.';n>=5?doneStation():move();};}
+function reach(){const f=document.createElement('div');f.className='playfield';$('#activityArea').appendChild(f);const sets={all:[[12,18],[82,18],[50,46],[16,78],[82,78]],left:[[14,18],[28,38],[16,62],[31,78],[22,49]],right:[[72,18],[86,38],[70,62],[85,78],[78,49]],top:[[12,16],[32,13],[50,18],[68,13],[86,16]],bottom:[[12,78],[32,72],[50,82],[68,72],[86,78]]};let i=0,b=target('🎯');f.appendChild(b);const pos=()=>{const p=(sets[state.reach]||sets.all)[i];b.style.left=p[0]+'%';b.style.top=p[1]+'%';b.style.transform='translate(-50%,-50%)';};pos();b.onclick=()=>{state.inter++;i++;buzz();i>=5?doneStation():(pos(),$('#gameFeedback').textContent='Ótimo! Procure o próximo.');};}
+function hands(){const g=document.createElement('div');g.className='bilateral-grid';const a=document.createElement('button'),b=document.createElement('button');a.type=b.type='button';a.className=b.className='hand-pad';a.textContent='✋';b.textContent='🤚';g.append(a,b);$('#activityArea').appendChild(g);let ta=0,tb=0,x=false;const ck=()=>{if(!x&&ta&&tb&&Math.abs(ta-tb)<1700){x=true;state.inter+=2;doneStation();}};a.onpointerdown=()=>{ta=Date.now();ck();};b.onpointerdown=()=>{tb=Date.now();ck();};}
+function sequence(){const g=document.createElement('div');g.className='sequence-board';$('#activityArea').appendChild(g);let e=1;for(let i=1;i<=4;i++){const b=document.createElement('button');b.type='button';b.className='sequence-btn '+(i===1?'active':'');b.textContent=i;b.dataset.n=i;g.appendChild(b);b.onclick=()=>{state.inter++;if(+b.dataset.n!==e){tutor('retry',ACT.sequence.n,'Quase! Procure o número '+e+'.',true);return;}b.textContent='✓';b.classList.remove('active');e++;g.querySelector('[data-n="'+e+'"]')?.classList.add('active');e===5?doneStation():$('#gameFeedback').textContent='Agora o '+e+'.';};}}
+function colors(){const w=document.createElement('div');w.className='color-game';const x=document.createElement('div'),b=document.createElement('button'),c=document.createElement('div');b.type='button';b.className='color-target';c.className='color-caption';x.append(b,c);w.appendChild(x);$('#activityArea').appendChild(w);const v=[['🌞','#ffe58a','amarelo'],['💧','#b9e4ff','azul'],['🌸','#ffd3e4','rosa'],['🍃','#cfeecd','verde']];let i=0;const paint=()=>{b.textContent=v[i][0];b.style.background=v[i][1];c.textContent='Toque no '+v[i][2]+'.';};paint();b.onclick=()=>{state.inter++;i++;i>=v.length?doneStation():paint();};}
+function follow(){const f=document.createElement('div');f.className='playfield',b=target('✨');f.appendChild(b);$('#activityArea').appendChild(f);let n=0,t=null,p=false;const ctrl=document.createElement('div'),btn=document.createElement('button');ctrl.style='text-align:center;margin-top:10px';btn.type='button';btn.className='btn';btn.textContent='Pausar movimento';ctrl.appendChild(btn);$('#activityArea').appendChild(ctrl);const mv=()=>{if(p)return;const s=size();b.style.left=(6+Math.random()*Math.max(0,f.clientWidth-s-12))+'px';b.style.top=(6+Math.random()*Math.max(0,f.clientHeight-s-12))+'px';};requestAnimationFrame(mv);if(!state.reduced)t=setInterval(mv,1200);b.onclick=()=>{state.inter++;n++;n>=4?doneStation():(state.reduced&&mv(),$('#gameFeedback').textContent='Você encontrou a luz! '+n+' de 4.');};btn.onclick=()=>{p=!p;btn.textContent=p?'Continuar movimento':'Pausar movimento';};state.cleanup=()=>t&&clearInterval(t);}
+function sensory(){const c=document.createElement('div');c.className='sensory-canvas';$('#activityArea').appendChild(c);let n=0,cols=['#8fd9d0','#ffd3e4','#b9e4ff','#ffe58a','#d8c7ff'];c.onpointerdown=e=>{state.inter++;n++;const r=c.getBoundingClientRect(),d=document.createElement('span');d.className='sensory-dot';d.style.width=d.style.height=(60+Math.random()*42)+'px';d.style.left=e.clientX-r.left+'px';d.style.top=e.clientY-r.top+'px';d.style.background=cols[n%cols.length];c.appendChild(d);setTimeout(()=>d.remove(),850);$('#gameFeedback').textContent='Exploração '+n+' de 6.';n>=6&&setTimeout(doneStation,250);};}
+function breathe(){const s=document.createElement('div');s.className='breath-stage';const x=document.createElement('div'),c=document.createElement('div'),b=document.createElement('button');c.className='breath-circle';c.textContent='Respire comigo';b.type='button';b.className='btn btn-primary';b.textContent='Começar respiração';x.append(c,b);s.appendChild(x);$('#activityArea').appendChild(s);let timers=[];b.onclick=()=>{state.inter++;b.disabled=true;c.textContent='Inspire…';if(!state.reduced)c.classList.add('grow');systemSpeak('Inspire devagar.');timers.push(setTimeout(()=>{c.textContent='Solte…';c.classList.remove('grow');systemSpeak('Agora solte o ar devagar.');},3200));timers.push(setTimeout(doneStation,6500));};state.cleanup=()=>timers.forEach(clearTimeout);}
+function physical(){const s=document.createElement('div');s.className='physical-stage';s.innerHTML='<div class="big-icon">👣</div><p></p><button class="btn btn-primary" type="button">Concluído</button>';s.querySelector('p').textContent=$('#physicalInstruction')?.value.trim()||'Realize a estação física preparada pela fisioterapeuta.';s.querySelector('button').onclick=()=>{state.inter++;doneStation();};$('#activityArea').appendChild(s);}
+function finish(){clear();show('done');const min=Math.max(1,Math.round((Date.now()-state.start)/60000));$('#sessionSummary').innerHTML='<div class="summary-box"><strong>'+state.circuit.length+'</strong><small>estações</small></div><div class="summary-box"><strong>'+state.inter+'</strong><small>interações</small></div><div class="summary-box"><strong>'+min+' min</strong><small>duração aproximada</small></div>';speak('celebrate',CARDS.celebrate.text);}
+stationPicker();cardGallery();sync();recorderList().catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+$('#brandHome').onclick=()=>show('home');$$('[data-back]').forEach(b=>b.onclick=()=>show(b.dataset.back||'home'));
+$('#builderBtn').onclick=()=>{sync();show('builder');};$('#cardsBtn').onclick=()=>show('cards');$('#openVoiceStudio').onclick=$('#voiceQuickBtn').onclick=()=>{recorderList();show('voice');};$('#settingsBtn').onclick=()=>{sync();show('settings');};
+$$('[data-circuit]').forEach(b=>b.onclick=()=>start(PRESETS[b.dataset.circuit]||PRESETS.motor));
+$('#builderForm').onsubmit=e=>{e.preventDefault();const ids=$$('.station-check:checked').map(x=>x.value),m=$('#builderMessage');if(ids.length<2){m.className='inline-message error';m.textContent='Escolha pelo menos duas estações.';return;}m.textContent='';state.size=+$('#targetSize').value||88;state.reach=$('#reachBias').value;state.easy=$('#easyTouch').checked;state.reduced=$('#reducedMotion').checked;state.projection=$('#projectionMode').checked;state.autoVoice=$('#autoVoice').checked;save();start(ids);};
+$('#settingsForm').onsubmit=e=>{e.preventDefault();state.context=$('#contextSelect').value;state.sound=$('#soundEnabled').checked;state.haptic=$('#hapticEnabled').checked;save();sync();show('home');toast('Preferências salvas.');};
+$('#systemVoiceSelect').onchange=e=>{state.voice=state.voices[+e.target.value]||null;save();voiceUI();if(state.voice)systemSpeak('Olá! Esta é a voz selecionada para a Tia Tati.');};
+$('#refreshRecordings').onclick=()=>recorderList();$('#repeatSpeechBtn').onclick=()=>speak(state.mode,state.speech);
+$('#hintBtn').onclick=()=>{const a=ACT[state.circuit[state.step]];if(!a)return;state.assists++;tutor('guide',a.n,a.h,false);speak('guide',a.h);};
+$('#muteGameBtn').onclick=e=>{state.sound=!state.sound;e.currentTarget.textContent=state.sound?'🔈 Voz':'🔇 Voz';if(!state.sound)stop();save();voiceUI();};
+$('#exitGameBtn').onclick=()=>{clear();show('home');};$('#repeatCircuitBtn').onclick=()=>start(state.last);$('#doneHomeBtn').onclick=()=>show('home');
+document.addEventListener('visibilitychange',()=>document.hidden&&stop());
+})();
