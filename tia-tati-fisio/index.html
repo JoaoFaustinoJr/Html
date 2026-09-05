@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#2AAEA6">
   <meta name="description" content="Tia Tati Fisio Sensorial — circuitos terapêuticos interativos com tutora visual e voz.">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=9">
   <title>Tia Tati — Fisio Sensorial</title>
 </head>
 <body>
@@ -161,7 +161,7 @@
         <div class="surface-block">
           <div class="row-between wrap-gap">
             <div><h3>Voz do aparelho</h3><p class="muted">Somente vozes em português do Brasil são aceitas.</p></div>
-            <select id="systemVoiceSelect" class="voice-select"><option value="">Procurando vozes…</option></select>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="systemVoiceSelect" class="voice-select"><option value="">Procurando vozes…</option></select><button class="btn" id="testSystemVoice" type="button">🔊 Testar voz</button></div>
           </div>
           <div id="systemVoiceStatus" class="inline-message"></div>
         </div>
@@ -233,6 +233,6 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
-  <script src="app.js"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
