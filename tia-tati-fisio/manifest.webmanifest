@@ -1,0 +1,15 @@
+{
+  "name":"Tia Tati – Fisio Sensorial",
+  "short_name":"Tia Tati",
+  "description":"Circuitos terapêuticos interativos com tutora visual e voz pt-BR.",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f4f8f9",
+  "theme_color":"#2aaea6",
+  "lang":"pt-BR",
+  "icons":[
+    {"src":"assets/welcome.webp","sizes":"512x512","type":"image/webp","purpose":"any"},
+    {"src":"assets/welcome.webp","sizes":"512x512","type":"image/webp","purpose":"maskable"}
+  ]
+}
