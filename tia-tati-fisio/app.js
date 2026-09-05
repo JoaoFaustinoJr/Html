@@ -23,13 +23,16 @@ const ACT={
 };
 const PRESETS={motor:['stars','reach','hands','sequence','breathe'],sensorial:['colors','follow','sensory','breathe'],coordenacao:['stars','reach','hands','sequence'],relaxamento:['sensory','follow','breathe']};
 const BUNDLED_AUDIO={
- welcome:'assets/audio/welcome.mp3',
- guide:'assets/audio/guide.mp3',
- success:'assets/audio/success.mp3',
- retry:'assets/audio/retry.mp3',
- relax:'assets/audio/relax.mp3',
- celebrate:'assets/audio/celebrate.mp3'
+ welcome:'assets/audio/welcome.mp3',guide:'assets/audio/guide.mp3',success:'assets/audio/success.mp3',retry:'assets/audio/retry.mp3',relax:'assets/audio/relax.mp3',celebrate:'assets/audio/celebrate.mp3',
+ stars:'assets/audio/stars.mp3',reach:'assets/audio/reach.mp3',hands:'assets/audio/hands.mp3',sequence:'assets/audio/sequence.mp3',colors:'assets/audio/colors.mp3',follow:'assets/audio/follow.mp3',sensory:'assets/audio/sensory.mp3',breathe:'assets/audio/breathe.mp3',physical:'assets/audio/physical.mp3',
+ hint_stars:'assets/audio/hint_stars.mp3',hint_reach:'assets/audio/hint_reach.mp3',hint_hands:'assets/audio/hint_hands.mp3',hint_sequence:'assets/audio/hint_sequence.mp3',hint_colors:'assets/audio/hint_colors.mp3',hint_follow:'assets/audio/hint_follow.mp3',hint_sensory:'assets/audio/hint_sensory.mp3',hint_breathe:'assets/audio/hint_breathe.mp3',hint_physical:'assets/audio/hint_physical.mp3',
+ inhale:'assets/audio/inhale.mp3',exhale:'assets/audio/exhale.mp3'
 };
+const PHRASE_KEY_BY_TEXT={};
+Object.entries(CARDS).forEach(([id,c])=>PHRASE_KEY_BY_TEXT[c.text]=id);
+Object.entries(ACT).forEach(([id,a])=>{PHRASE_KEY_BY_TEXT[a.g]=id;PHRASE_KEY_BY_TEXT[a.h]='hint_'+id;});
+PHRASE_KEY_BY_TEXT['Inspire devagar.']='inhale';
+PHRASE_KEY_BY_TEXT['Agora solte o ar devagar.']='exhale';
 const bundledAvailability={};
 const state={circuit:PRESETS.motor.slice(),last:PRESETS.motor.slice(),step:0,inter:0,assists:0,start:0,size:88,reach:'all',easy:true,reduced:false,projection:false,autoVoice:true,sound:true,haptic:true,context:'APAE',voices:[],voice:null,speech:'',mode:'guide',cleanup:null};
 const key='tiaTatiPrefsV9';
@@ -82,8 +85,10 @@ function systemSpeak(text){
 }
 async function speak(mode,text){
   state.mode=mode;state.speech=text;
-  if(recordedIds.has(mode)){ if(await recorded(mode))return true; recordedIds.delete(mode); }
-  if(await bundled(mode))return true;
+  const isCardPhrase=CARDS[mode]&&CARDS[mode].text===text;
+  if(isCardPhrase&&recordedIds.has(mode)){ if(await recorded(mode))return true; recordedIds.delete(mode); }
+  const phraseKey=PHRASE_KEY_BY_TEXT[text]||((mode==='retry'||mode==='success'||mode==='celebrate')?mode:null);
+  if(phraseKey&&await bundled(phraseKey))return true;
   return systemSpeak(text);
 }
 function loadVoices(){
@@ -123,7 +128,7 @@ function sequence(){const g=document.createElement('div');g.className='sequence-
 function colors(){const w=document.createElement('div');w.className='color-game';const x=document.createElement('div'),b=document.createElement('button'),c=document.createElement('div');b.type='button';b.className='color-target';c.className='color-caption';x.append(b,c);w.appendChild(x);$('#activityArea').appendChild(w);const v=[['🌞','#ffe58a','amarelo'],['💧','#b9e4ff','azul'],['🌸','#ffd3e4','rosa'],['🍃','#cfeecd','verde']];let i=0;const paint=()=>{b.textContent=v[i][0];b.style.background=v[i][1];c.textContent='Toque no '+v[i][2]+'.';};paint();b.onclick=()=>{state.inter++;i++;i>=v.length?doneStation():paint();};}
 function follow(){const f=document.createElement('div');f.className='playfield',b=target('✨');f.appendChild(b);$('#activityArea').appendChild(f);let n=0,t=null,p=false;const ctrl=document.createElement('div'),btn=document.createElement('button');ctrl.style='text-align:center;margin-top:10px';btn.type='button';btn.className='btn';btn.textContent='Pausar movimento';ctrl.appendChild(btn);$('#activityArea').appendChild(ctrl);const mv=()=>{if(p)return;const s=size();b.style.left=(6+Math.random()*Math.max(0,f.clientWidth-s-12))+'px';b.style.top=(6+Math.random()*Math.max(0,f.clientHeight-s-12))+'px';};requestAnimationFrame(mv);if(!state.reduced)t=setInterval(mv,1200);b.onclick=()=>{state.inter++;n++;n>=4?doneStation():(state.reduced&&mv(),$('#gameFeedback').textContent='Você encontrou a luz! '+n+' de 4.');};btn.onclick=()=>{p=!p;btn.textContent=p?'Continuar movimento':'Pausar movimento';};state.cleanup=()=>t&&clearInterval(t);}
 function sensory(){const c=document.createElement('div');c.className='sensory-canvas';$('#activityArea').appendChild(c);let n=0,cols=['#8fd9d0','#ffd3e4','#b9e4ff','#ffe58a','#d8c7ff'];c.onpointerdown=e=>{state.inter++;n++;const r=c.getBoundingClientRect(),d=document.createElement('span');d.className='sensory-dot';d.style.width=d.style.height=(60+Math.random()*42)+'px';d.style.left=e.clientX-r.left+'px';d.style.top=e.clientY-r.top+'px';d.style.background=cols[n%cols.length];c.appendChild(d);setTimeout(()=>d.remove(),850);$('#gameFeedback').textContent='Exploração '+n+' de 6.';n>=6&&setTimeout(doneStation,250);};}
-function breathe(){const s=document.createElement('div');s.className='breath-stage';const x=document.createElement('div'),c=document.createElement('div'),b=document.createElement('button');c.className='breath-circle';c.textContent='Respire comigo';b.type='button';b.className='btn btn-primary';b.textContent='Começar respiração';x.append(c,b);s.appendChild(x);$('#activityArea').appendChild(s);let timers=[];b.onclick=()=>{state.inter++;b.disabled=true;c.textContent='Inspire…';if(!state.reduced)c.classList.add('grow');systemSpeak('Inspire devagar.');timers.push(setTimeout(()=>{c.textContent='Solte…';c.classList.remove('grow');systemSpeak('Agora solte o ar devagar.');},3200));timers.push(setTimeout(doneStation,6500));};state.cleanup=()=>timers.forEach(clearTimeout);}
+function breathe(){const s=document.createElement('div');s.className='breath-stage';const x=document.createElement('div'),c=document.createElement('div'),b=document.createElement('button');c.className='breath-circle';c.textContent='Respire comigo';b.type='button';b.className='btn btn-primary';b.textContent='Começar respiração';x.append(c,b);s.appendChild(x);$('#activityArea').appendChild(s);let timers=[];b.onclick=()=>{state.inter++;b.disabled=true;c.textContent='Inspire…';if(!state.reduced)c.classList.add('grow');speak('relax','Inspire devagar.');timers.push(setTimeout(()=>{c.textContent='Solte…';c.classList.remove('grow');speak('relax','Agora solte o ar devagar.');},3200));timers.push(setTimeout(doneStation,6500));};state.cleanup=()=>timers.forEach(clearTimeout);}
 function physical(){const s=document.createElement('div');s.className='physical-stage';s.innerHTML='<div class="big-icon">👣</div><p></p><button class="btn btn-primary" type="button">Concluído</button>';s.querySelector('p').textContent=$('#physicalInstruction')?.value.trim()||'Realize a estação física preparada pela fisioterapeuta.';s.querySelector('button').onclick=()=>{state.inter++;doneStation();};$('#activityArea').appendChild(s);}
 function finish(){clear();show('done');const min=Math.max(1,Math.round((Date.now()-state.start)/60000));$('#sessionSummary').innerHTML='<div class="summary-box"><strong>'+state.circuit.length+'</strong><small>estações</small></div><div class="summary-box"><strong>'+state.inter+'</strong><small>interações</small></div><div class="summary-box"><strong>'+min+' min</strong><small>duração aproximada</small></div>';speak('celebrate',CARDS.celebrate.text);}
 stationPicker();cardGallery();sync();recorderList().catch(()=>{});
