@@ -29,6 +29,8 @@
       topic:'Formas geométricas',
       concept:'O Tangram tem sete peças. Cinco são triângulos. Há também um quadrado e um paralelogramo.',
       formula:'Triângulo: A = (b × h) ÷ 2',
+      notation:'A = área • b = base • h = altura',
+      spokenFormula:'A área do triângulo é igual à base vezes a altura, dividido por dois.',
       use:'Áreas aparecem em plantas, pisos, terrenos e projetos.',
       challenge:'Escolha um triângulo. Procure nele um ângulo de 90 graus.',
       answer:'Os triângulos do Tangram são retângulos isósceles: têm um ângulo de 90° e dois de 45°.'
@@ -129,6 +131,7 @@
         <div class="rai-lesson-topic" id="raiLessonTopic"></div>
         <div class="rai-lesson-block"><span>💡 Ideia</span><p id="raiLessonConcept"></p></div>
         <div class="rai-lesson-formula" id="raiLessonFormula"></div>
+        <div class="rai-lesson-notation" id="raiLessonNotation"></div>
         <div class="rai-lesson-block"><span>🌍 Onde isso aparece?</span><p id="raiLessonUse"></p></div>
         <div class="rai-lesson-challenge">
           <span>🧠 Desafio rápido</span>
@@ -152,6 +155,7 @@
     topic:overlay.querySelector('#raiLessonTopic'),
     concept:overlay.querySelector('#raiLessonConcept'),
     formula:overlay.querySelector('#raiLessonFormula'),
+    notation:overlay.querySelector('#raiLessonNotation'),
     use:overlay.querySelector('#raiLessonUse'),
     challenge:overlay.querySelector('#raiLessonChallenge'),
     answer:overlay.querySelector('#raiLessonAnswerText'),
@@ -165,6 +169,8 @@
     els.topic.textContent=l.topic;
     els.concept.textContent=l.concept;
     els.formula.textContent=l.formula;
+    els.notation.textContent=l.notation||'';
+    els.notation.style.display=l.notation?'block':'none';
     els.use.textContent=l.use;
     els.challenge.textContent=l.challenge;
     els.answer.textContent=l.answer;
@@ -183,7 +189,8 @@
       'Oi! Vamos olhar a matemática desta missão.',
       l.concept,
       'Agora, uma ideia importante.',
-      l.formula.replace(/•/g,'.'),
+      l.spokenFormula||l.formula.replace(/•/g,'.'),
+      l.notation?'Na fórmula, a letra A quer dizer área. A letra b representa a base. E a letra h representa a altura.':'',
       l.use,
       'E aqui vai um desafio.',
       l.challenge
