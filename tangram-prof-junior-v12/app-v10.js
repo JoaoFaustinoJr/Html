@@ -67,8 +67,9 @@
     let savedY=0;
     const update=()=>{const on=root.classList.contains('tl-focus');const a=document.getElementById('focusZoom');const b=document.getElementById('mFull');if(a)a.textContent=on?'← Voltar ao app':'🔍 Ampliar área de jogo';if(b)b.innerHTML=on?'←<span>Voltar</span>':'🔍<span>Ampliar</span>'};
     const enter=()=>{if(root.classList.contains('tl-focus'))return;savedY=window.scrollY||0;root.classList.add('tl-focus');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';update()};
-    const exit=()=>{if(!root.classList.contains('tl-focus'))return;root.classList.remove('tl-focus');document.documentElement.style.overflow='';document.body.style.overflow='';update();requestAnimationFrame(()=>window.scrollTo(0,savedY))};
-    const toggle=()=>root.classList.contains('tl-focus')?exit():enter(); focusButtons.forEach(b=>b.addEventListener('click',toggle)); back.addEventListener('click',exit); document.addEventListener('keydown',e=>{if(e.key==='Escape')exit()}); update();
+    const exit=(restore=true)=>{if(!root.classList.contains('tl-focus'))return;root.classList.remove('tl-focus');document.documentElement.style.overflow='';document.body.style.overflow='';update();if(restore)requestAnimationFrame(()=>window.scrollTo(0,savedY))};
+    window.__tangramExitFocus=(restore=false)=>exit(restore);
+    const toggle=()=>root.classList.contains('tl-focus')?exit(true):enter(); focusButtons.forEach(b=>b.addEventListener('click',toggle)); back.addEventListener('click',()=>exit(true)); document.addEventListener('keydown',e=>{if(e.key==='Escape')exit(true)}); update();
   }
 
   const rai='../tangram-prof-junior/rai-chalk.webp?v=10a';
@@ -137,45 +138,90 @@
     const first=[...b.childNodes].find(n=>n.nodeType===Node.TEXT_NODE&&String(n.textContent||'').trim());
     return String(first?.textContent||b.textContent||'').replace(/^\s*🔒\s*/,'').replace(/\s+/g,' ').trim();
   };
-  const nextMission=()=>{
+  const currentMissionIndex=()=>{
     const buttons=missionButtons();
     const active=buttons.findIndex(b=>b.classList.contains('active'));
-    if(active<0||active>=buttons.length-1)return null;
-    const target=buttons[active+1];
-    if(!target||target.disabled)return null;
-    return{target,name:missionName(target),index:active+1};
+    if(active>=0)return active;
+    const m=String(root.querySelector('#title')?.textContent||'').match(/^\s*(\d+)\./);
+    return m?Math.max(0,Number(m[1])-1):-1;
   };
-  let guideTimer=null,returnTimer=null;
-  const clearGuideTimers=()=>{clearTimeout(guideTimer);clearTimeout(returnTimer)};
-  const jumpTo=(el,block='center')=>{
+  const nextMission=()=>{
+    const buttons=missionButtons(),active=currentMissionIndex(),index=active+1;
+    if(active<0||index>=buttons.length)return null;
+    const target=buttons[index];
+    if(!target||target.disabled)return null;
+    return{index,name:missionName(target)};
+  };
+  const resolveMissionButton=index=>missionButtons()[index]||null;
+
+  let guideTimer=null,focusTimer=null,returnTimer=null,transitionToken=0,lastCompletionSignature='',lastWarnText='';
+  const clearGuideTimers=()=>{clearTimeout(guideTimer);clearTimeout(focusTimer);clearTimeout(returnTimer)};
+  const stableMessageText=()=>{
+    const msgEl=root.querySelector('#msg');if(!msgEl)return'';
+    const clone=msgEl.cloneNode(true);
+    clone.querySelectorAll('.tl-next-mission-action').forEach(x=>x.remove());
+    return(clone.textContent||'').replace(/\s+/g,' ').trim();
+  };
+  const jumpTo=(el,block='center',smooth=false)=>{
     if(!el)return;
-    try{el.scrollIntoView({behavior:'auto',block,inline:'nearest'})}catch(e){try{el.scrollIntoView()}catch(_){}}
+    try{el.scrollIntoView({behavior:smooth?'smooth':'auto',block,inline:'nearest'})}
+    catch(e){try{el.scrollIntoView()}catch(_){}}
   };
   const returnToWorkArea=()=>{
     clearTimeout(returnTimer);
     returnTimer=setTimeout(()=>{
       const stage=root.querySelector('.tl-stage')||root.querySelector('.tl-game');
-      if(stage)jumpTo(stage,'start');
-    },90);
+      if(stage)jumpTo(stage,'start',false);
+    },170);
+  };
+  const exitFocusForProgression=()=>{
+    if(!root.classList.contains('tl-focus'))return false;
+    try{
+      if(typeof window.__tangramExitFocus==='function')window.__tangramExitFocus(false);
+      else{
+        root.classList.remove('tl-focus');
+        document.documentElement.style.overflow='';
+        document.body.style.overflow='';
+      }
+    }catch(e){}
+    return true;
   };
   const highlightNextMission=info=>{
-    if(!info?.target||!document.body.contains(info.target))return;
-    root.querySelectorAll('.tl-next-mission-guide').forEach(b=>{if(b!==info.target){b.classList.remove('tl-next-mission-guide');delete b.dataset.nextLabel}});
-    info.target.classList.add('tl-next-mission-guide');
-    info.target.dataset.nextLabel='✨ NOVA MISSÃO';
-    const r=info.target.getBoundingClientRect();
-    const visible=r.top>=12&&r.bottom<=window.innerHeight-12;
-    if(!visible)jumpTo(info.target,'center');
+    if(!info)return;
+    const target=resolveMissionButton(info.index);
+    if(!target||target.disabled)return;
+    root.querySelectorAll('.tl-next-mission-guide').forEach(b=>{if(b!==target){b.classList.remove('tl-next-mission-guide');delete b.dataset.nextLabel}});
+    target.classList.add('tl-next-mission-guide');
+    target.dataset.nextLabel='✨ NOVA MISSÃO';
+    const r=target.getBoundingClientRect(),visible=r.top>=16&&r.bottom<=window.innerHeight-16;
+    if(!visible)jumpTo(target,'center',true);
+  };
+  const guideNextMission=info=>{
+    if(!info)return;
+    const token=++transitionToken;
+    clearTimeout(guideTimer);clearTimeout(focusTimer);
+    // Tempo para a celebração e a fala da R.A.I. respirarem antes da mudança de tela.
+    guideTimer=setTimeout(()=>{
+      if(token!==transitionToken)return;
+      const leftFocus=exitFocusForProgression();
+      focusTimer=setTimeout(()=>{
+        if(token!==transitionToken)return;
+        highlightNextMission(info);
+      },leftFocus?420:0);
+    },2450);
   };
   const openNextMission=info=>{
-    if(!info?.target||info.target.disabled||!document.body.contains(info.target))return;
+    if(!info)return;
+    const target=resolveMissionButton(info.index);
+    if(!target||target.disabled)return;
+    transitionToken++;
     clearGuideTimers();
-    info.target.click();
+    target.click();
     requestAnimationFrame(()=>requestAnimationFrame(returnToWorkArea));
   };
   const addNextMissionAction=info=>{
     const msgEl=root.querySelector('#msg');
-    if(!msgEl||!info?.target||msgEl.querySelector('.tl-next-mission-action'))return;
+    if(!msgEl||!info||msgEl.querySelector('.tl-next-mission-action'))return;
     const b=document.createElement('button');
     b.type='button';b.className='tl-next-mission-action';
     b.innerHTML='▶ Ir para a próxima missão';
@@ -183,41 +229,50 @@
     b.addEventListener('click',()=>openNextMission(info));
     msgEl.appendChild(b);
   };
+
   root.addEventListener('click',e=>{
     const b=e.target?.closest?.('#levels button.tl-level');
     if(!b||b.disabled)return;
+    transitionToken++;
     clearGuideTimers();
+    root.querySelectorAll('.tl-next-mission-guide').forEach(x=>{x.classList.remove('tl-next-mission-guide');delete x.dataset.nextLabel});
     requestAnimationFrame(()=>requestAnimationFrame(returnToWorkArea));
   },true);
 
-  let feedbackTimer=null,lastFeedback='',lastSuccessAt=0;
+  let feedbackTimer=null;
   const inspectFeedback=()=>{
-    clearTimeout(feedbackTimer); feedbackTimer=setTimeout(()=>{
-      const msgEl=root.querySelector('#msg');
-      const msgText=(msgEl?.textContent||'').replace(/\s+/g,' ').trim();
-      if(!msgText||msgText===lastFeedback)return; lastFeedback=msgText;
+    clearTimeout(feedbackTimer);
+    feedbackTimer=setTimeout(()=>{
+      const msgEl=root.querySelector('#msg');if(!msgEl)return;
+      const msgText=stableMessageText();if(!msgText)return;
       const t=msgText.toLowerCase();
       if(/miss[aã]o conclu[ií]da/.test(t)){
-        const now=Date.now();
-        if(now-lastSuccessAt>1600){
-          lastSuccessAt=now;
-          haptic([18,40,25,40,35]);
-          const stage=root.querySelector('.tl-stage');
-          if(stage){stage.classList.add('tl-v10-success');setTimeout(()=>stage.classList.remove('tl-v10-success'),1000)}
-          const next=nextMission();
-          if(next){
-            addNextMissionAction(next);
-            toast('✨ '+next.name+' foi desbloqueada!');
-            clearTimeout(guideTimer);guideTimer=setTimeout(()=>highlightNextMission(next),1650);
-          }else{
-            toast('🏆 Todas as missões concluídas!');
-          }
+        const mission=currentMissionIndex();
+        const tm=msgText.match(/Tempo:\s*(\d+:\d{2})/i)?.[1]||'';
+        const attempts=msgText.match(/Tentativas:\s*(\d+)/i)?.[1]||'';
+        const signature=[mission,tm,attempts].join('|');
+        if(signature===lastCompletionSignature)return;
+        lastCompletionSignature=signature;
+        haptic([18,40,25,40,35]);
+        const stage=root.querySelector('.tl-stage');
+        if(stage){stage.classList.add('tl-v10-success');setTimeout(()=>stage.classList.remove('tl-v10-success'),1000)}
+        const next=nextMission();
+        if(next){
+          addNextMissionAction(next);
+          toast('✨ '+next.name+' foi desbloqueada!');
+          guideNextMission(next);
+        }else{
+          transitionToken++;clearGuideTimers();
+          toast('🏆 Todas as missões concluídas!');
         }
-      }else if(/sobrepos|fora da|lacuna|tente novamente|ainda n[aã]o/.test(t)){sfx.warn();haptic(14)}
-    },60);
+      }else if(/sobrepos|fora da|lacuna|tente novamente|ainda n[aã]o/.test(t)){
+        if(msgText!==lastWarnText){lastWarnText=msgText;sfx.warn();haptic(14)}
+      }
+    },80);
   };
   const msgWatch=root.querySelector('#msg');
   if(msgWatch)new MutationObserver(inspectFeedback).observe(msgWatch,{subtree:true,childList:true,characterData:true});
+
   const statusWatch=root.querySelector('#status');
   const normalizeReadyStatus=()=>{
     if(!statusWatch)return;
