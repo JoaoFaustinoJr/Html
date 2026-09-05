@@ -1,5 +1,5 @@
 (()=>{const root=document.getElementById('tangram-levels');if(!root)return;
-const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.1 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
+const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.3 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
 const rai='rai-icon.svg?v=rai3';const title=()=>((root.querySelector('#title')?.textContent||'Missão atual').replace(/\s+/g,' ').trim());const allText=()=>[...root.querySelectorAll('.tl-metertext,.tl-msg,#msg,.tl-chip,.tl-stats')].map(x=>x.textContent||'').join(' ').replace(/\s+/g,' ').trim();
 const metric=(t,n)=>{const m=t.match(new RegExp(n+'\\s*:?\\s*([0-9]+(?:[\\.,][0-9]+)?)','i'));return m?Number(m[1].replace(',','.')):null};const metrics=()=>{const t=allText();return{coverage:metric(t,'cobertura'),overlap:metric(t,'sobreposição'),outside:metric(t,'fora')}};
 let raiVoice=null;
@@ -33,19 +33,30 @@ const FORM_URL='https://docs.google.com/forms/d/e/1FAIpQLSd1DGiUqz5kA-EmB3Y0a9Wx
 panel.querySelector('#raiFeedback').addEventListener('click',()=>{closePanel();const w=window.open(FORM_URL,'_blank','noopener,noreferrer');if(!w)window.location.href=FORM_URL});
 
 const successLines=[
-  'Parabéns! É isso aí! Você conseguiu. Vamos para a próxima fase!',
-  'Muito bem! Mandou bem demais! Vamos encarar o próximo desafio?',
-  'Isso! Encaixe concluído! Bora para a próxima missão!',
-  'Oba! Você encontrou a solução. Agora vamos para a próxima fase!',
-  'Excelente! Mais uma missão vencida. Vamos continuar?',
-  'Aí sim! Ficou certinho. Próximo desafio, vamos lá!'
+  'Parabéns! É isso aí! Você conseguiu.',
+  'Muito bem! Mandou bem demais!',
+  'Isso! Encaixe concluído!',
+  'Oba! Você encontrou a solução.',
+  'Excelente! Mais uma missão vencida.',
+  'Aí sim! Ficou certinho.'
 ];
+const nextMissionName=()=>{
+  const buttons=[...root.querySelectorAll('#levels button.tl-level')];
+  const active=buttons.findIndex(b=>b.classList.contains('active'));
+  if(active<0||active>=buttons.length-1)return'';
+  const next=buttons[active+1];
+  if(!next||next.disabled)return'';
+  const first=[...next.childNodes].find(n=>n.nodeType===Node.TEXT_NODE&&String(n.textContent||'').trim());
+  return String(first?.textContent||next.textContent||'').replace(/^\s*🔒\s*/,'').replace(/\s+/g,' ').trim();
+};
 let successIx=-1;
 const successMessage=()=>{
   if(/^\s*10\./.test(title()))return'Parabéns! Você concluiu todas as missões do Tangram! Missão cumprida!';
   let i=Math.floor(Math.random()*successLines.length);
   if(successLines.length>1&&i===successIx)i=(i+1)%successLines.length;
-  successIx=i;return successLines[i];
+  successIx=i;
+  const next=nextMissionName();
+  return successLines[i]+(next?' A missão '+next+' foi desbloqueada. Vou mostrar onde ela está.':'');
 };
 let lastTitle='',lastMsg='',lastAuto=0;
 const intro=()=>{const t=title();if(!prefs.auto||!t||t===lastTitle)return;lastTitle=t;setTimeout(()=>{if(Date.now()-lastAuto<4500)return;lastAuto=Date.now();show('Nova missão! Observe primeiro a silhueta e imagine onde as peças maiores podem formar a estrutura.')},700)};
