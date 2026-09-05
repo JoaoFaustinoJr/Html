@@ -131,6 +131,41 @@
     else if(/nível|nivel|miss[aã]o|level/.test(label)){sfx.level()}
   });
 
+  const missionButtons=()=>[...root.querySelectorAll('#levels button.tl-level')];
+  const missionName=b=>{
+    if(!b)return '';
+    const first=[...b.childNodes].find(n=>n.nodeType===Node.TEXT_NODE&&String(n.textContent||'').trim());
+    return String(first?.textContent||b.textContent||'').replace(/^\s*🔒\s*/,'').replace(/\s+/g,' ').trim();
+  };
+  const nextMission=()=>{
+    const buttons=missionButtons();
+    const active=buttons.findIndex(b=>b.classList.contains('active'));
+    if(active<0||active>=buttons.length-1)return null;
+    const target=buttons[active+1];
+    if(!target||target.disabled)return null;
+    return{target,name:missionName(target),index:active+1};
+  };
+  const highlightNextMission=(info,open=false)=>{
+    if(!info?.target)return;
+    root.querySelectorAll('.tl-next-mission-guide').forEach(b=>{if(b!==info.target){b.classList.remove('tl-next-mission-guide');delete b.dataset.nextLabel}});
+    info.target.classList.add('tl-next-mission-guide');
+    info.target.dataset.nextLabel='✨ NOVA MISSÃO';
+    const r=info.target.getBoundingClientRect();
+    const visible=r.top>=12&&r.bottom<=window.innerHeight-12;
+    if(!visible)info.target.scrollIntoView({behavior:'smooth',block:'center'});
+    if(open)setTimeout(()=>{if(document.body.contains(info.target)&&!info.target.disabled)info.target.click()},visible?120:520);
+  };
+  const addNextMissionAction=info=>{
+    const msgEl=root.querySelector('#msg');
+    if(!msgEl||!info?.target||msgEl.querySelector('.tl-next-mission-action'))return;
+    const b=document.createElement('button');
+    b.type='button';b.className='tl-next-mission-action';
+    b.innerHTML='▶ Ir para a próxima missão';
+    b.setAttribute('aria-label','Ir para '+info.name);
+    b.addEventListener('click',()=>highlightNextMission(info,true));
+    msgEl.appendChild(b);
+  };
+
   let feedbackTimer=null,lastFeedback='',lastSuccessAt=0;
   const inspectFeedback=()=>{
     clearTimeout(feedbackTimer); feedbackTimer=setTimeout(()=>{
@@ -145,7 +180,14 @@
           haptic([18,40,25,40,35]);
           const stage=root.querySelector('.tl-stage');
           if(stage){stage.classList.add('tl-v10-success');setTimeout(()=>stage.classList.remove('tl-v10-success'),1000)}
-          toast('✨ Desafio concluído!');
+          const next=nextMission();
+          if(next){
+            addNextMissionAction(next);
+            toast('✨ '+next.name+' foi desbloqueada!');
+            setTimeout(()=>highlightNextMission(next,false),2100);
+          }else{
+            toast('🏆 Todas as missões concluídas!');
+          }
         }
       }else if(/sobrepos|fora da|lacuna|tente novamente|ainda n[aã]o/.test(t)){sfx.warn();haptic(14)}
     },60);
