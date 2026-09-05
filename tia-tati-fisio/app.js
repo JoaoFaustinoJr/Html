@@ -23,10 +23,32 @@ const ACT={
 };
 const PRESETS={motor:['stars','reach','hands','sequence','breathe'],sensorial:['colors','follow','sensory','breathe'],coordenacao:['stars','reach','hands','sequence'],relaxamento:['sensory','follow','breathe']};
 const BUNDLED_AUDIO={
- welcome:'assets/audio/welcome.mp3',guide:'assets/audio/guide.mp3',success:'assets/audio/success.mp3',retry:'assets/audio/retry.mp3',relax:'assets/audio/relax.mp3',celebrate:'assets/audio/celebrate.mp3',
- stars:'assets/audio/stars.mp3',reach:'assets/audio/reach.mp3',hands:'assets/audio/hands.mp3',sequence:'assets/audio/sequence.mp3',colors:'assets/audio/colors.mp3',follow:'assets/audio/follow.mp3',sensory:'assets/audio/sensory.mp3',breathe:'assets/audio/breathe.mp3',physical:'assets/audio/physical.mp3',
- hint_stars:'assets/audio/hint_stars.mp3',hint_reach:'assets/audio/hint_reach.mp3',hint_hands:'assets/audio/hint_hands.mp3',hint_sequence:'assets/audio/hint_sequence.mp3',hint_colors:'assets/audio/hint_colors.mp3',hint_follow:'assets/audio/hint_follow.mp3',hint_sensory:'assets/audio/hint_sensory.mp3',hint_breathe:'assets/audio/hint_breathe.mp3',hint_physical:'assets/audio/hint_physical.mp3',
- inhale:'assets/audio/inhale.mp3',exhale:'assets/audio/exhale.mp3'
+  "welcome": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/a0645d94-0350-4c51-a7e8-355d9a23b299.mp3",
+  "guide": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/9132191e-19f9-48af-8469-170fd0a8f9b6.mp3",
+  "success": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/7f9d5713-1871-448c-8603-f0c7d0473012.mp3",
+  "retry": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/f62ffcaa-b41c-4b06-9189-7b72e18cbdfa.mp3",
+  "relax": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/77a206ce-7de7-44e6-a094-fc2e40c03461.mp3",
+  "celebrate": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/1fecb04d-75f5-4d43-a3a7-c366f8711afe.mp3",
+  "stars": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/dd171f83-35c5-4814-ae10-dc8c6eac7190.mp3",
+  "reach": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/073e522f-7980-464f-89d5-f0a5d425b9f8.mp3",
+  "hands": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/59f2a55f-fb66-4b3c-82c1-34f358e2b590.mp3",
+  "sequence": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/d4fed52c-7be1-4f0c-b8c4-f956a19895aa.mp3",
+  "colors": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/6a6dda82-b6e8-4e59-92c8-44fc9d1b0f36.mp3",
+  "follow": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/2e168fab-d95b-4a37-93ee-d934f7f94b5d.mp3",
+  "sensory": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/62a3b692-994c-4da4-b37e-cffd673d7428.mp3",
+  "breathe": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/2b59498b-d0ca-4dd7-982f-39e50134626a.mp3",
+  "physical": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/9f9e72a2-ae36-472c-840d-de698c651e19.mp3",
+  "hint_stars": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/5a0a5874-e83d-4063-b60b-adf1b90d4f79.mp3",
+  "hint_reach": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/169c90b6-55a4-4920-a880-a8db35d1ec43.mp3",
+  "hint_hands": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/3ac6b0df-23d3-4049-9810-c94f4fe71108.mp3",
+  "hint_sequence": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/de980aba-2bd2-4d4d-9e5e-53d4e5c0797b.mp3",
+  "hint_colors": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/d6b0f8ac-3e4f-4732-83a4-91f95073701f.mp3",
+  "hint_follow": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/716b44a9-0ac0-4c0b-8b21-2f06be681f57.mp3",
+  "hint_sensory": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/b72b8b5f-9af7-4fb0-b202-0fe099df9b28.mp3",
+  "hint_breathe": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/d38dd414-3449-487a-a420-655d184cecea.mp3",
+  "hint_physical": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/3cdf3f39-79ca-43e5-bdd2-204cda2588a1.mp3",
+  "inhale": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/8e4808c0-1472-47e6-9d32-1207f3a9360b.mp3",
+  "exhale": "https://storage.googleapis.com/adm--audio-playback--7d--public/mcp-preview/26604002-eebe-45d7-9fb0-65976d81f9a6.mp3"
 };
 const PHRASE_KEY_BY_TEXT={};
 Object.entries(CARDS).forEach(([id,c])=>PHRASE_KEY_BY_TEXT[c.text]=id);
@@ -51,7 +73,7 @@ async function bundled(id){
   if(bundledAvailability[id]===false)return false;
   try{
     stop();
-    const a=new Audio(BUNDLED_AUDIO[id]+'?v=1');
+    const a=new Audio(BUNDLED_AUDIO[id]);
     a.preload='auto';window.tatiAudio=a;
     await new Promise((resolve,reject)=>{
       const timer=setTimeout(()=>reject(new Error('timeout')),2500);
