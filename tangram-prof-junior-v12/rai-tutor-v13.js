@@ -1,5 +1,5 @@
 (()=>{const root=document.getElementById('tangram-levels');if(!root)return;
-const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.5 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
+const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.6 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
 const rai='rai-icon.svg?v=rai3';const title=()=>((root.querySelector('#title')?.textContent||'Missão atual').replace(/\s+/g,' ').trim());const allText=()=>[...root.querySelectorAll('.tl-metertext,.tl-msg,#msg,.tl-chip,.tl-stats')].map(x=>x.textContent||'').join(' ').replace(/\s+/g,' ').trim();
 const metric=(t,n)=>{const m=t.match(new RegExp(n+'\\s*:?\\s*([0-9]+(?:[\\.,][0-9]+)?)','i'));return m?Number(m[1].replace(',','.')):null};const metrics=()=>{const t=allText();return{coverage:metric(t,'cobertura'),overlap:metric(t,'sobreposição'),outside:metric(t,'fora')}};
 let raiVoice=null;
@@ -12,8 +12,32 @@ const pickRaiVoice=()=>{
   return voices[0];
 };
 if('speechSynthesis'in window&&speechSynthesis.addEventListener)speechSynthesis.addEventListener('voiceschanged',()=>{raiVoice=pickRaiVoice()});
-const say=t=>{if(!prefs.voice||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.voice=raiVoice||pickRaiVoice();u.rate=1.03;u.pitch=1.24;u.volume=.96;speechSynthesis.speak(u)}catch(e){}};
+let speechToken=0,speechTimer=null;
+const speechParts=t=>{
+  const raw=Array.isArray(t)?t:[String(t||'')];
+  const out=[];
+  raw.forEach(x=>String(x||'').split(/(?<=[.!?])\s+/).forEach(p=>{p=p.trim();if(p)out.push(p)}));
+  return out;
+};
+const stopSay=()=>{speechToken++;clearTimeout(speechTimer);try{if('speechSynthesis'in window)speechSynthesis.cancel()}catch(e){}};
+const say=(t,opts={})=>{
+  const force=!!opts.force;
+  if((!prefs.voice&&!force)||!('speechSynthesis'in window))return;
+  const parts=speechParts(t);if(!parts.length)return;
+  stopSay();const token=speechToken,pause=Number.isFinite(opts.pause)?Math.max(180,opts.pause):300;
+  const next=i=>{
+    if(token!==speechToken||i>=parts.length)return;
+    try{
+      const u=new SpeechSynthesisUtterance(parts[i]);
+      u.lang='pt-BR';u.voice=raiVoice||pickRaiVoice();u.rate=1.01;u.pitch=1.22;u.volume=.96;
+      const go=()=>{if(token===speechToken)speechTimer=setTimeout(()=>next(i+1),pause)};
+      u.onend=go;u.onerror=go;speechSynthesis.speak(u);
+    }catch(e){speechTimer=setTimeout(()=>next(i+1),pause)}
+  };
+  speechTimer=setTimeout(()=>next(0),90);
+};
 window.__raiSpeak=say;
+window.__raiStopSpeak=stopSay;
 
 const fab=document.createElement('button');fab.type='button';fab.className='rai-tutor-fab';fab.setAttribute('aria-label','Abrir R.A.I.');fab.innerHTML='<img src="'+rai+'" alt="R.A.I.">';document.body.appendChild(fab);
 const bubble=document.createElement('div');bubble.className='rai-tutor-bubble';document.body.appendChild(bubble);const show=(msg,speak=false)=>{bubble.innerHTML='<b>🤖 R.A.I.</b><br>'+msg;bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),4700);if(speak)say(msg)};
