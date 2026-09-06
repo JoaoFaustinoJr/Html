@@ -124,7 +124,7 @@
     <div class="rai-lesson-card" role="dialog" aria-modal="true" aria-labelledby="raiLessonTitle">
       <div class="rai-lesson-head">
         <img src="rai-icon.svg?v=rai3" alt="R.A.I.">
-        <div><h3 id="raiLessonTitle">🎓 Aula da R.A.I.</h3><small id="raiLessonSub">Matemática e lógica da missão</small></div>
+        <div><h3 id="raiLessonTitle">🎓 Aula da R.A.I.</h3><small id="raiLessonSub">Cada missão tem sua própria aula</small><div class="rai-lesson-every">10 missões • 10 aulas contextuais</div></div>
         <button type="button" class="rai-lesson-close" aria-label="Fechar">×</button>
       </div>
       <div class="rai-lesson-body">
@@ -144,7 +144,7 @@
           <button type="button" id="raiLessonTry">🎯 Testar no Tangram</button>
           <button type="button" id="raiLessonClose">Continuar jogando</button>
         </div>
-        <p class="rai-lesson-note">Frases curtas e pequenas pausas ajudam a acompanhar a explicação com calma.</p>
+        
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -165,7 +165,7 @@
   const render=()=>{
     mission=currentMission();
     const l=lessons[mission-1]||lessons[0];
-    els.sub.textContent='Missão '+mission+' • Matemática e lógica';
+    els.sub.textContent='Missão '+mission+' de 10 • aula desta missão';
     els.topic.textContent=l.topic;
     els.concept.textContent=l.concept;
     els.formula.textContent=l.formula;
