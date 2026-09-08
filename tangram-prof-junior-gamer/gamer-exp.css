@@ -1,0 +1,30 @@
+
+.rai-gamer-button{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.rai-gamer-button span{font-weight:950}.rai-gamer-button small{padding:2px 5px;border-radius:999px;background:#f4c542;color:#10202c;font-size:9px;font-weight:950;letter-spacing:.06em}
+.rai-gamer-button.active small{background:#10202c;color:#f8da6c}
+.rai-gamer-button.active{background:#f4c542;color:#10202c;border-color:#f4c542}
+.rai-gamer-hud{position:fixed;z-index:10020;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);display:none;align-items:center;gap:9px;padding:7px 9px;border-radius:16px;background:rgba(4,18,28,.94);border:1px solid rgba(126,218,236,.3);box-shadow:0 10px 30px rgba(0,0,0,.38);backdrop-filter:blur(8px);color:#effcff;min-width:min(94vw,390px);justify-content:center}
+.rai-gamer-hud.show{display:flex}
+.rai-gamer-timer-wrap{text-align:center;min-width:104px}
+.rai-gamer-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8fd8e9;font-weight:900}
+.rai-gamer-time{font:950 25px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em;color:#fff}
+.rai-gamer-best{font-size:11px;color:#bce8f1;white-space:nowrap}.rai-gamer-best b{color:#f8da6c}
+.rai-gamer-status{font-size:11px;font-weight:900;color:#7ee1f0;min-width:58px;text-align:center}
+.rai-gamer-exit{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:#102f40;color:#fff;font-weight:900;cursor:pointer}
+.rai-gamer-countdown{position:fixed;inset:0;z-index:10060;display:none;place-items:center;background:rgba(2,10,16,.72);backdrop-filter:blur(4px);pointer-events:auto}
+.rai-gamer-countdown.show{display:grid}
+.rai-gamer-count{font:950 clamp(74px,24vw,150px)/1 system-ui;color:#fff;text-shadow:0 8px 30px rgba(0,0,0,.55);animation:raiGamerPop .72s ease both}
+.rai-gamer-count.go{font-size:clamp(54px,18vw,104px);color:#f8da6c}
+@keyframes raiGamerPop{0%{transform:scale(.5);opacity:0}45%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
+.rai-gamer-result{position:fixed;z-index:10055;left:50%;top:50%;transform:translate(-50%,-50%) scale(.94);display:none;width:min(88vw,360px);padding:20px;border-radius:20px;background:#071c29;border:1px solid rgba(126,218,236,.32);box-shadow:0 24px 80px rgba(0,0,0,.58);text-align:center;color:#effcff}
+.rai-gamer-result.show{display:block;animation:raiGamerResult .22s ease forwards}
+@keyframes raiGamerResult{to{transform:translate(-50%,-50%) scale(1)}}
+.rai-gamer-result .trophy{font-size:48px}.rai-gamer-result h3{margin:4px 0 8px;font-size:22px}.rai-gamer-result .final-time{font:950 34px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#f8da6c;margin:10px 0}.rai-gamer-result p{margin:6px 0;color:#bde6ef}
+.rai-gamer-result button{margin-top:12px;border:0;border-radius:12px;padding:10px 15px;background:#f4c542;color:#10202c;font-weight:900;cursor:pointer}
+.rai-gamer-running .rai-curr-hub{box-shadow:0 0 0 1px rgba(244,197,66,.28),0 10px 30px rgba(0,0,0,.18)}
+@media(max-width:680px){.rai-gamer-button{grid-column:1/-1;min-height:42px;font-size:14px}.rai-gamer-hud{top:max(5px,env(safe-area-inset-top));gap:6px;padding:6px 7px;min-width:94vw}.rai-gamer-time{font-size:22px}.rai-gamer-best{font-size:10px}.rai-gamer-status{font-size:10px;min-width:48px}.rai-gamer-exit{width:31px;height:31px}}
+
+.rai-gamer-launch{width:calc(100% - 4px);margin:10px 2px 12px;padding:10px 13px;border:1px solid rgba(248,218,108,.8);border-radius:15px;background:linear-gradient(135deg,#f4c542,#f8da6c);color:#10202c;display:flex;align-items:center;gap:10px;box-shadow:0 10px 24px rgba(0,0,0,.22);cursor:pointer;text-align:left;touch-action:manipulation}
+.rai-gamer-launch-icon{font-size:26px;line-height:1}.rai-gamer-launch>span:nth-child(2){display:flex;flex-direction:column;gap:1px}.rai-gamer-launch b{font-size:15px;line-height:1.05}.rai-gamer-launch small{font-size:10px;opacity:.78;font-weight:850;letter-spacing:.04em}.rai-gamer-launch em{margin-left:auto;font-style:normal;font-size:9px;font-weight:950;letter-spacing:.08em;padding:3px 6px;border-radius:999px;background:#10202c;color:#f8da6c}
+.rai-gamer-launch.active{background:linear-gradient(135deg,#173f50,#0d2b3a);color:#effcff;border-color:#65cde0}.rai-gamer-launch.active em{background:#f4c542;color:#10202c}
+@media(max-width:680px){.rai-gamer-launch{position:sticky;top:4px;z-index:10010;margin:6px 2px 10px;padding:10px 12px}.rai-gamer-launch b{font-size:16px}.rai-gamer-launch small{font-size:10px}}

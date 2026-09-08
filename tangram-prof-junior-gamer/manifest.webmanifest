@@ -1,0 +1,42 @@
+{
+  "name": "Tangram Educativo — EXP Currículo + Gamer",
+  "short_name": "Tangram Gamer",
+  "description": "Versão experimental com Missões R.A.I., trilhas curriculares, XP e Passaporte.",
+  "id": "/Html/tangram-prof-junior-gamer/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#050f18",
+  "theme_color": "#07131f",
+  "lang": "pt-BR",
+  "categories": [
+    "education",
+    "games"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-192.png?v=rai3",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png?v=rai3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png?v=rai3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

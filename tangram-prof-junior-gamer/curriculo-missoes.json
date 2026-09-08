@@ -1,0 +1,922 @@
+{
+  "version": "exp-curriculo-1.0",
+  "title": "Missões R.A.I. — BNCC",
+  "note": "Protótipo experimental. Códigos CO referem-se ao Complemento à BNCC de Computação; referências de Matemática aparecem por unidade temática para revisão pedagógica antes de eventual publicação definitiva.",
+  "tracks": [
+    {
+      "year": 6,
+      "name": "Explorador",
+      "focus": "Sequências, condições, decomposição, variáveis, ângulos e transformações."
+    },
+    {
+      "year": 7,
+      "name": "Inventor",
+      "focus": "Coleções, depuração, reúso, grafos, reflexão e coordenadas."
+    },
+    {
+      "year": 8,
+      "name": "Programador",
+      "focus": "Listas, recursão, eficiência, congruência, área e perímetro."
+    },
+    {
+      "year": 9,
+      "name": "Maker",
+      "focus": "Grafos, árvores, autômatos, eventos, projetos e integração geométrica."
+    }
+  ],
+  "missions": [
+    {
+      "id": "6-ALG-01",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Algoritmos",
+      "title": "Comandos em ordem",
+      "bncc": [
+        "EF06CO02"
+      ],
+      "objective": "Reconhecer sequência e repetição em um algoritmo simples.",
+      "prompt": "A peça precisa girar 45° quatro vezes. Qual comando deixa o algoritmo mais claro?",
+      "options": [
+        "MOVER 4",
+        "REPITA 4: GIRAR 45°",
+        "SE 4 ENTÃO GIRAR",
+        "GUARDE 45°"
+      ],
+      "answer": 1,
+      "explanation": "Uma estrutura de repetição evita escrever o mesmo comando quatro vezes.",
+      "xp": 30,
+      "tags": [
+        "logica",
+        "loop",
+        "programacao"
+      ]
+    },
+    {
+      "id": "6-ALG-02",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Condições",
+      "title": "Se não encaixar...",
+      "bncc": [
+        "EF06CO02"
+      ],
+      "objective": "Relacionar decisões no Tangram a estruturas de seleção.",
+      "prompt": "A R.A.I. quer testar uma peça e, se ela não couber, tentar outra orientação. Qual estrutura representa essa decisão?",
+      "options": [
+        "SE... ENTÃO... SENÃO",
+        "REPITA SEMPRE",
+        "LISTA",
+        "SOMENTE MOVER"
+      ],
+      "answer": 0,
+      "explanation": "A seleção escolhe caminhos diferentes conforme uma condição seja verdadeira ou falsa.",
+      "xp": 30,
+      "tags": [
+        "logica",
+        "condicao",
+        "programacao"
+      ]
+    },
+    {
+      "id": "6-DEC-01",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Decomposição",
+      "title": "Quebre o problema",
+      "bncc": [
+        "EF06CO04"
+      ],
+      "objective": "Aplicar decomposição a um problema visual.",
+      "prompt": "Uma figura de gato parece difícil. Qual estratégia usa decomposição?",
+      "options": [
+        "Tentar tudo ao acaso",
+        "Separar mentalmente cabeça, corpo e cauda",
+        "Mover apenas peças pequenas",
+        "Usar sempre a mesma rotação"
+      ],
+      "answer": 1,
+      "explanation": "Decompor é dividir um problema maior em partes menores e mais fáceis de resolver.",
+      "xp": 35,
+      "tags": [
+        "logica",
+        "decomposicao"
+      ]
+    },
+    {
+      "id": "6-IO-01",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Entrada e saída",
+      "title": "Entrada → processo → saída",
+      "bncc": [
+        "EF06CO05"
+      ],
+      "objective": "Identificar entradas e saídas em uma solução computacional.",
+      "prompt": "Num comando para posicionar uma peça, qual opção é um exemplo de entrada?",
+      "options": [
+        "A figura final pronta",
+        "O ângulo de rotação escolhido",
+        "A mensagem 'concluído'",
+        "O troféu recebido"
+      ],
+      "answer": 1,
+      "explanation": "O ângulo é um dado fornecido ao processo; a figura pronta e as mensagens são resultados.",
+      "xp": 30,
+      "tags": [
+        "dados",
+        "programacao"
+      ]
+    },
+    {
+      "id": "6-VAR-01",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Variáveis",
+      "title": "Um comando, vários casos",
+      "bncc": [
+        "EF06CO06"
+      ],
+      "objective": "Perceber como parâmetros permitem generalizar algoritmos.",
+      "prompt": "Queremos usar GIRAR(ângulo) com 45°, 90° ou 180°. O que deve variar?",
+      "options": [
+        "O nome do aplicativo",
+        "O parâmetro ângulo",
+        "O número de peças do Tangram",
+        "A cor da tela"
+      ],
+      "answer": 1,
+      "explanation": "Um parâmetro permite reutilizar o mesmo algoritmo com valores diferentes.",
+      "xp": 35,
+      "tags": [
+        "variavel",
+        "programacao",
+        "reuso"
+      ]
+    },
+    {
+      "id": "6-GEO-01",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Matemática",
+      "eixo": "Geometria",
+      "topic": "Ângulos",
+      "title": "Dois giros",
+      "bncc": [
+        "BNCC Matemática • Geometria • 6º ano"
+      ],
+      "objective": "Relacionar composição de ângulos às rotações das peças.",
+      "prompt": "Uma peça gira 45° duas vezes no mesmo sentido. Qual foi a rotação total?",
+      "options": [
+        "45°",
+        "60°",
+        "90°",
+        "180°"
+      ],
+      "answer": 2,
+      "explanation": "45° + 45° = 90°.",
+      "xp": 25,
+      "tags": [
+        "geometria",
+        "angulo"
+      ]
+    },
+    {
+      "id": "6-GEO-02",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Matemática",
+      "eixo": "Geometria",
+      "topic": "Transformações",
+      "title": "Só mudou de lugar",
+      "bncc": [
+        "BNCC Matemática • Geometria • 6º ano"
+      ],
+      "objective": "Distinguir translação de rotação e reflexão.",
+      "prompt": "A peça foi deslocada para a direita sem girar nem espelhar. Que transformação ocorreu?",
+      "options": [
+        "Reflexão",
+        "Translação",
+        "Rotação",
+        "Ampliação"
+      ],
+      "answer": 1,
+      "explanation": "Na translação muda a posição, mas a orientação e o tamanho são preservados.",
+      "xp": 25,
+      "tags": [
+        "geometria",
+        "transformacao"
+      ]
+    },
+    {
+      "id": "6-GEO-03",
+      "year": 6,
+      "track": "Explorador",
+      "area": "Matemática",
+      "eixo": "Grandezas e Medidas",
+      "topic": "Frações e área",
+      "title": "Área equivalente",
+      "bncc": [
+        "BNCC Matemática • Grandezas e Medidas • 6º ano"
+      ],
+      "objective": "Comparar frações de área usando as peças do Tangram.",
+      "prompt": "Um triângulo grande vale 1/4 da área do Tangram e um pequeno vale 1/16. Quantos pequenos equivalem a um grande?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "8"
+      ],
+      "answer": 2,
+      "explanation": "1/4 = 4/16. Portanto, quatro triângulos pequenos têm a área de um grande.",
+      "xp": 30,
+      "tags": [
+        "geometria",
+        "area",
+        "fracao"
+      ]
+    },
+    {
+      "id": "7-DAD-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Vetores e matrizes",
+      "title": "Guarde a sequência",
+      "bncc": [
+        "EF07CO01"
+      ],
+      "objective": "Reconhecer quando uma estrutura linear organiza uma sequência de dados.",
+      "prompt": "Você quer guardar a ordem [triângulo grande, quadrado, paralelogramo, triângulo pequeno]. Qual estrutura é adequada?",
+      "options": [
+        "Um valor isolado",
+        "Uma coleção unidimensional",
+        "Somente uma condição",
+        "Um som"
+      ],
+      "answer": 1,
+      "explanation": "Uma coleção unidimensional organiza vários elementos em uma sequência.",
+      "xp": 35,
+      "tags": [
+        "dados",
+        "lista",
+        "programacao"
+      ]
+    },
+    {
+      "id": "7-BUG-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Depuração",
+      "title": "Caçador de bugs",
+      "bncc": [
+        "EF07CO02"
+      ],
+      "objective": "Analisar uma sequência de comandos e corrigir um erro.",
+      "prompt": "O alvo exige um giro de 45°, mas o programa executa GIRAR 45° e depois GIRAR 45° novamente. Qual correção é mais direta?",
+      "options": [
+        "Adicionar outro giro",
+        "Remover um dos giros",
+        "Trocar mover por repetir",
+        "Apagar todo o algoritmo"
+      ],
+      "answer": 1,
+      "explanation": "O programa está girando 90°. Remover um dos giros corrige o excesso.",
+      "xp": 40,
+      "tags": [
+        "debugging",
+        "logica",
+        "programacao"
+      ]
+    },
+    {
+      "id": "7-PRO-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Projetos",
+      "title": "Planeje antes de codar",
+      "bncc": [
+        "EF07CO03"
+      ],
+      "objective": "Selecionar dados e estratégia antes de implementar uma solução.",
+      "prompt": "Antes de programar um resolvedor de Tangram, o que faz mais sentido?",
+      "options": [
+        "Escolher quais dados representam posição e rotação",
+        "Começar pelo botão de compartilhar",
+        "Trocar o ícone do app",
+        "Ignorar as regras do problema"
+      ],
+      "answer": 0,
+      "explanation": "Projetos computacionais começam com a modelagem do problema, dos dados e da estratégia.",
+      "xp": 35,
+      "tags": [
+        "projeto",
+        "programacao"
+      ]
+    },
+    {
+      "id": "7-GRA-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Grafos",
+      "title": "Peças vizinhas",
+      "bncc": [
+        "EF07CO04"
+      ],
+      "objective": "Relacionar vértices e arestas a relações de vizinhança.",
+      "prompt": "Se cada peça é um vértice e ligamos duas peças quando elas se tocam, o que as linhas representam?",
+      "options": [
+        "Variáveis",
+        "Arestas",
+        "Loops",
+        "Arquivos"
+      ],
+      "answer": 1,
+      "explanation": "Em um grafo, as arestas representam relações entre os vértices.",
+      "xp": 40,
+      "tags": [
+        "grafos",
+        "logica"
+      ]
+    },
+    {
+      "id": "7-REU-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Decomposição e reúso",
+      "title": "Não repita trabalho",
+      "bncc": [
+        "EF07CO05"
+      ],
+      "objective": "Reconhecer o reúso como estratégia para reduzir repetição.",
+      "prompt": "Várias missões precisam posicionar um triângulo usando x, y e ângulo. Qual solução favorece reúso?",
+      "options": [
+        "Criar uma função posicionarTriangulo(x,y,ângulo)",
+        "Copiar os mesmos comandos muitas vezes",
+        "Usar apenas imagens",
+        "Remover os parâmetros"
+      ],
+      "answer": 0,
+      "explanation": "Uma função parametrizada encapsula uma solução e pode ser reutilizada.",
+      "xp": 40,
+      "tags": [
+        "reuso",
+        "funcao",
+        "programacao"
+      ]
+    },
+    {
+      "id": "7-GEO-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Matemática",
+      "eixo": "Geometria",
+      "topic": "Reflexão",
+      "title": "Girar não basta",
+      "bncc": [
+        "BNCC Matemática • Geometria • 7º ano"
+      ],
+      "objective": "Distinguir reflexão de rotação usando o paralelogramo.",
+      "prompt": "O paralelogramo está inclinado para o lado oposto ao necessário e nenhuma rotação resolve. O que tentar?",
+      "options": [
+        "Aumentar a peça",
+        "Refletir/espelhar",
+        "Apagar a peça",
+        "Somar áreas"
+      ],
+      "answer": 1,
+      "explanation": "A reflexão inverte a orientação; por isso pode resolver casos em que apenas girar não basta.",
+      "xp": 30,
+      "tags": [
+        "geometria",
+        "transformacao"
+      ]
+    },
+    {
+      "id": "7-GEO-02",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Matemática",
+      "eixo": "Geometria",
+      "topic": "Coordenadas",
+      "title": "Do ponto A ao ponto B",
+      "bncc": [
+        "BNCC Matemática • Geometria • 7º ano"
+      ],
+      "objective": "Interpretar deslocamentos em um sistema de coordenadas.",
+      "prompt": "Uma peça vai de (2,3) para (5,3). O que aconteceu?",
+      "options": [
+        "Subiu 3 unidades",
+        "Desceu 3 unidades",
+        "Moveu 3 unidades para a direita",
+        "Girou 90°"
+      ],
+      "answer": 2,
+      "explanation": "A coordenada x aumentou de 2 para 5 e y permaneceu igual.",
+      "xp": 30,
+      "tags": [
+        "geometria",
+        "coordenadas"
+      ]
+    },
+    {
+      "id": "7-LOG-01",
+      "year": 7,
+      "track": "Inventor",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Lógica e estratégia",
+      "title": "Teste com propósito",
+      "bncc": [
+        "EF07CO02",
+        "EF07CO03"
+      ],
+      "objective": "Usar verificação sistemática em vez de tentativa aleatória.",
+      "prompt": "Qual estratégia produz informação útil a cada tentativa?",
+      "options": [
+        "Mover muitas peças ao mesmo tempo",
+        "Alterar uma hipótese, testar e observar o resultado",
+        "Reiniciar sempre sem olhar",
+        "Escolher apenas pela cor"
+      ],
+      "answer": 1,
+      "explanation": "Mudar uma hipótese de cada vez ajuda a identificar o que causou o resultado.",
+      "xp": 35,
+      "tags": [
+        "logica",
+        "debugging"
+      ]
+    },
+    {
+      "id": "8-REC-01",
+      "year": 8,
+      "track": "Programador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Recursão",
+      "title": "Resolver o que resta",
+      "bncc": [
+        "EF08CO01"
+      ],
+      "objective": "Compreender a ideia de resolver um problema a partir de uma versão menor dele.",
+      "prompt": "Depois de posicionar corretamente uma peça, o algoritmo chama a mesma estratégia para as peças restantes. A ideia lembra:",
+      "options": [
+        "Recursão",
+        "Somente translação",
+        "Um arquivo",
+        "Criptografia"
+      ],
+      "answer": 0,
+      "explanation": "Na recursão, a solução reaplica a estratégia a uma versão menor do problema.",
+      "xp": 45,
+      "tags": [
+        "recursao",
+        "loop",
+        "programacao"
+      ]
+    },
+    {
+      "id": "8-LIS-01",
+      "year": 8,
+      "track": "Programador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Listas",
+      "title": "Coleção de peças",
+      "bncc": [
+        "EF08CO02"
+      ],
+      "objective": "Identificar listas como estrutura para conjuntos ordenados e mutáveis.",
+      "prompt": "Queremos guardar as peças ainda não usadas e remover cada uma quando for posicionada. Qual estrutura é apropriada?",
+      "options": [
+        "Lista",
+        "Um único booleano",
+        "Somente um som",
+        "Uma cor"
+      ],
+      "answer": 0,
+      "explanation": "Listas são adequadas para coleções em que elementos podem ser consultados, adicionados ou removidos.",
+      "xp": 40,
+      "tags": [
+        "lista",
+        "dados",
+        "programacao"
+      ]
+    },
+    {
+      "id": "8-LIS-02",
+      "year": 8,
+      "track": "Programador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Algoritmos em listas",
+      "title": "Ordene para decidir",
+      "bncc": [
+        "EF08CO03"
+      ],
+      "objective": "Aplicar ordenação como apoio a uma estratégia.",
+      "prompt": "A R.A.I. quer tentar primeiro as peças de maior área. O que deve fazer com a lista de peças?",
+      "options": [
+        "Ordenar por área decrescente",
+        "Embaralhar para sempre",
+        "Apagar a lista",
+        "Converter tudo em texto"
+      ],
+      "answer": 0,
+      "explanation": "Ordenar a lista por área permite priorizar sistematicamente as peças maiores.",
+      "xp": 45,
+      "tags": [
+        "lista",
+        "algoritmo",
+        "programacao"
+      ]
+    },
+    {
+      "id": "8-PRO-01",
+      "year": 8,
+      "track": "Programador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Projetos",
+      "title": "Escolha a técnica",
+      "bncc": [
+        "EF08CO04"
+      ],
+      "objective": "Selecionar estruturas e técnicas adequadas ao problema.",
+      "prompt": "Um projeto precisa registrar peças, testar posições e guardar tentativas válidas. Qual decisão é mais importante?",
+      "options": [
+        "Escolher estruturas de dados e algoritmos adequados",
+        "Escolher primeiro a música",
+        "Usar o maior número de comandos possível",
+        "Evitar qualquer teste"
+      ],
+      "answer": 0,
+      "explanation": "A qualidade da solução depende de representar bem os dados e escolher técnicas compatíveis.",
+      "xp": 40,
+      "tags": [
+        "projeto",
+        "programacao"
+      ]
+    },
+    {
+      "id": "8-GEO-01",
+      "year": 8,
+      "track": "Programador",
+      "area": "Matemática",
+      "eixo": "Geometria",
+      "topic": "Congruência",
+      "title": "Mesma forma, mesmo tamanho",
+      "bncc": [
+        "BNCC Matemática • Geometria • 8º ano"
+      ],
+      "objective": "Reconhecer congruência após movimentos rígidos.",
+      "prompt": "Depois de transladar e girar uma peça, sua forma e seu tamanho permanecem iguais. A peça original e a movida são:",
+      "options": [
+        "Congruentes",
+        "Sempre semelhantes mas não congruentes",
+        "De áreas diferentes",
+        "Incomparáveis"
+      ],
+      "answer": 0,
+      "explanation": "Rotações e translações preservam distâncias e ângulos, portanto preservam a congruência.",
+      "xp": 35,
+      "tags": [
+        "geometria",
+        "congruencia"
+      ]
+    },
+    {
+      "id": "8-GEO-02",
+      "year": 8,
+      "track": "Programador",
+      "area": "Matemática",
+      "eixo": "Grandezas e Medidas",
+      "topic": "Área e perímetro",
+      "title": "Mesma área, outro contorno",
+      "bncc": [
+        "BNCC Matemática • Grandezas e Medidas • 8º ano"
+      ],
+      "objective": "Distinguir conservação de área de variação de perímetro.",
+      "prompt": "Duas figuras usam exatamente as sete peças do mesmo Tangram. O que podemos afirmar?",
+      "options": [
+        "Têm necessariamente o mesmo perímetro",
+        "Têm a mesma área total",
+        "Têm sempre a mesma forma",
+        "Têm sempre o mesmo número de lados"
+      ],
+      "answer": 1,
+      "explanation": "Como usam as mesmas sete peças sem sobreposição, a área total é preservada; o contorno pode mudar.",
+      "xp": 35,
+      "tags": [
+        "geometria",
+        "area",
+        "perimetro"
+      ]
+    },
+    {
+      "id": "8-EFI-01",
+      "year": 8,
+      "track": "Programador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Eficiência",
+      "title": "Código enxuto",
+      "bncc": [
+        "EF08CO04"
+      ],
+      "objective": "Comparar soluções pela clareza e quantidade de operações necessárias.",
+      "prompt": "Duas soluções chegam ao mesmo resultado. A usa 18 comandos e B usa 9 comandos claros e equivalentes. Qual tende a ser melhor para manutenção?",
+      "options": [
+        "A, porque é maior",
+        "B, por ser mais simples e direta",
+        "As duas obrigatoriamente são idênticas",
+        "Nenhuma pode ser testada"
+      ],
+      "answer": 1,
+      "explanation": "Uma solução mais simples, quando correta e legível, costuma ser mais fácil de entender, testar e manter.",
+      "xp": 40,
+      "tags": [
+        "algoritmo",
+        "otimizacao",
+        "programacao"
+      ]
+    },
+    {
+      "id": "8-REC-02",
+      "year": 8,
+      "track": "Programador",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Recursão",
+      "title": "Quando parar?",
+      "bncc": [
+        "EF08CO01"
+      ],
+      "objective": "Reconhecer a importância do caso base em uma solução recursiva.",
+      "prompt": "Num algoritmo recursivo para posicionar peças, qual é um bom caso de parada?",
+      "options": [
+        "Quando não restar nenhuma peça",
+        "Quando a tela mudar de cor",
+        "Sempre após o primeiro comando",
+        "Nunca parar"
+      ],
+      "answer": 0,
+      "explanation": "A recursão precisa de um caso base; aqui, o problema termina quando não há peças restantes.",
+      "xp": 45,
+      "tags": [
+        "recursao",
+        "debugging",
+        "programacao"
+      ]
+    },
+    {
+      "id": "9-GRA-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Grafos e árvores",
+      "title": "Mapa de estados",
+      "bncc": [
+        "EF09CO01"
+      ],
+      "objective": "Modelar estados possíveis e transições usando grafos.",
+      "prompt": "Cada configuração válida do Tangram é um vértice; um movimento permitido liga duas configurações. Essa representação é:",
+      "options": [
+        "Um grafo",
+        "Uma única variável",
+        "Somente uma imagem",
+        "Uma planilha sem relações"
+      ],
+      "answer": 0,
+      "explanation": "Grafos modelam estados como vértices e transições como arestas.",
+      "xp": 50,
+      "tags": [
+        "grafos",
+        "programacao",
+        "logica"
+      ]
+    },
+    {
+      "id": "9-ARB-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Árvores de busca",
+      "title": "Escolhas e retrocesso",
+      "bncc": [
+        "EF09CO01"
+      ],
+      "objective": "Relacionar busca em árvore à exploração de alternativas.",
+      "prompt": "O algoritmo testa uma posição, segue para outra decisão e volta quando encontra um beco sem saída. Isso lembra:",
+      "options": [
+        "Busca em árvore com backtracking",
+        "Somente uma translação",
+        "Um filtro de imagem",
+        "Uma soma simples"
+      ],
+      "answer": 0,
+      "explanation": "Uma árvore de busca representa escolhas sucessivas; o backtracking retorna quando um ramo não funciona.",
+      "xp": 55,
+      "tags": [
+        "arvore",
+        "backtracking",
+        "logica",
+        "programacao"
+      ]
+    },
+    {
+      "id": "9-AUT-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Autômatos e eventos",
+      "title": "Estados do jogo",
+      "bncc": [
+        "EF09CO03"
+      ],
+      "objective": "Descrever comportamento por estados e transições.",
+      "prompt": "O app pode estar em AGUARDANDO, ARRASTANDO, VERIFICANDO ou CONCLUÍDO. Esse modelo se aproxima de:",
+      "options": [
+        "Máquina de estados/autômato",
+        "Somente uma lista de cores",
+        "Uma fotografia",
+        "Uma fração"
+      ],
+      "answer": 0,
+      "explanation": "Autômatos descrevem comportamentos por estados e regras de transição entre eles.",
+      "xp": 50,
+      "tags": [
+        "automato",
+        "eventos",
+        "programacao"
+      ]
+    },
+    {
+      "id": "9-EVT-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Programação por eventos",
+      "title": "O toque dispara ação",
+      "bncc": [
+        "EF09CO03"
+      ],
+      "objective": "Relacionar eventos de interface a mudanças de estado.",
+      "prompt": "Quando o aluno toca em 'Verificar', o app executa uma rotina. O toque é:",
+      "options": [
+        "Um evento",
+        "Uma área geométrica",
+        "Um tipo de triângulo",
+        "Uma constante física"
+      ],
+      "answer": 0,
+      "explanation": "Em programação orientada a eventos, ações do usuário disparam rotinas específicas.",
+      "xp": 45,
+      "tags": [
+        "eventos",
+        "programacao"
+      ]
+    },
+    {
+      "id": "9-PRO-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Projetos integrados",
+      "title": "Projeto completo",
+      "bncc": [
+        "EF09CO02"
+      ],
+      "objective": "Integrar modelagem, dados, algoritmos, testes e colaboração.",
+      "prompt": "Qual sequência descreve melhor um projeto computacional escolar?",
+      "options": [
+        "Definir problema → modelar dados → criar solução → testar → melhorar",
+        "Escolher ícone → encerrar",
+        "Codar sem objetivo → não testar",
+        "Copiar comandos → evitar revisão"
+      ],
+      "answer": 0,
+      "explanation": "Projetos consistentes partem do problema, constroem uma solução testável e passam por revisão.",
+      "xp": 50,
+      "tags": [
+        "projeto",
+        "programacao",
+        "debugging"
+      ]
+    },
+    {
+      "id": "9-GEO-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Matemática",
+      "eixo": "Geometria",
+      "topic": "Semelhança e escala",
+      "title": "Mudou a escala",
+      "bncc": [
+        "BNCC Matemática • Geometria • 9º ano"
+      ],
+      "objective": "Distinguir ampliação de movimentos rígidos.",
+      "prompt": "Uma figura foi ampliada com fator 2: todos os comprimentos dobraram. O que acontece com a área?",
+      "options": [
+        "Permanece igual",
+        "Dobra",
+        "Quadruplica",
+        "Divide por 2"
+      ],
+      "answer": 2,
+      "explanation": "Ao dobrar comprimentos, a área é multiplicada por 2² = 4.",
+      "xp": 40,
+      "tags": [
+        "geometria",
+        "escala",
+        "area"
+      ]
+    },
+    {
+      "id": "9-OPT-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Computação",
+      "eixo": "Pensamento Computacional",
+      "topic": "Busca e otimização",
+      "title": "Menos tentativas inúteis",
+      "bncc": [
+        "EF09CO01",
+        "EF09CO02"
+      ],
+      "objective": "Usar restrições para reduzir o espaço de busca.",
+      "prompt": "Antes de testar uma posição, o algoritmo descarta as que ultrapassam o contorno. Qual é a vantagem?",
+      "options": [
+        "Aumentar tentativas inúteis",
+        "Reduzir o espaço de busca",
+        "Impedir qualquer solução",
+        "Trocar geometria por som"
+      ],
+      "answer": 1,
+      "explanation": "Aplicar restrições cedo elimina alternativas impossíveis e torna a busca mais eficiente.",
+      "xp": 50,
+      "tags": [
+        "otimizacao",
+        "grafos",
+        "logica"
+      ]
+    },
+    {
+      "id": "9-BOSS-01",
+      "year": 9,
+      "track": "Maker",
+      "area": "Integração",
+      "eixo": "Pensamento Computacional + Geometria",
+      "topic": "Desafio final",
+      "title": "Boss R.A.I.",
+      "bncc": [
+        "EF09CO01",
+        "EF09CO02",
+        "EF09CO03",
+        "BNCC Matemática • Geometria • 9º ano"
+      ],
+      "objective": "Integrar estados, busca, eventos e transformações geométricas.",
+      "prompt": "Para criar um Tangram digital robusto, qual combinação é mais completa?",
+      "options": [
+        "Estados/eventos + representação das peças + regras geométricas + testes",
+        "Somente cores bonitas",
+        "Somente um cronômetro",
+        "Somente arrastar sem regras"
+      ],
+      "answer": 0,
+      "explanation": "Um sistema completo combina representação, comportamento, geometria, interação e verificação.",
+      "xp": 60,
+      "tags": [
+        "boss",
+        "projeto",
+        "grafos",
+        "eventos",
+        "geometria",
+        "programacao"
+      ]
+    }
+  ]
+}
