@@ -10,9 +10,33 @@
  const fmt=ms=>{ms=Math.max(0,Math.round(ms||0));const totalTenths=Math.floor(ms/100),tenths=totalTenths%10,totalSec=Math.floor(totalTenths/10),min=Math.floor(totalSec/60),sec=totalSec%60;return String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0')+'.'+tenths};
  let active=false,running=false,startAt=0,elapsed=0,raf=0,countToken=0,lastVerifyAt=0,currentMission=missionName(),resultTimer=0;
 
- const actions=document.querySelector('.rai-curr-actions');
  let button=document.getElementById('raiGamerButton');
- if(actions&&!button){button=document.createElement('button');button.type='button';button.id='raiGamerButton';button.className='rai-curr-btn rai-gamer-button';button.textContent='🎮 Gamer';actions.appendChild(button)}
+ function bindButton(btn){
+   if(!btn||btn.dataset.gamerBound==='1')return;
+   btn.dataset.gamerBound='1';
+   btn.addEventListener('click',()=>active?exit():enter());
+ }
+ function ensureButton(){
+   const actions=document.querySelector('.rai-curr-actions');
+   if(!actions)return false;
+   button=document.getElementById('raiGamerButton');
+   if(!button){
+     button=document.createElement('button');
+     button.type='button';
+     button.id='raiGamerButton';
+     button.className='rai-curr-btn rai-gamer-button';
+     button.innerHTML='🎮 <span>Modo Gamer</span><small>NOVO</small>';
+     actions.prepend(button);
+   }
+   bindButton(button);
+   return true;
+ }
+ if(!ensureButton()){
+   const mo=new MutationObserver(()=>{if(ensureButton())mo.disconnect()});
+   mo.observe(document.body,{childList:true,subtree:true});
+   setTimeout(ensureButton,400);
+   setTimeout(ensureButton,1200);
+ }
 
  const hud=document.createElement('div');hud.className='rai-gamer-hud';hud.innerHTML='<div class="rai-gamer-timer-wrap"><div class="rai-gamer-label">Tempo</div><div class="rai-gamer-time" id="raiGamerTime">00:00.0</div></div><div class="rai-gamer-best">Recorde<br><b id="raiGamerBest">—</b></div><div class="rai-gamer-status" id="raiGamerStatus">PRONTO</div><button class="rai-gamer-exit" id="raiGamerExit" aria-label="Sair do modo gamer">×</button>';document.body.appendChild(hud);
  const countdown=document.createElement('div');countdown.className='rai-gamer-countdown';countdown.innerHTML='<div class="rai-gamer-count" id="raiGamerCount">3</div>';document.body.appendChild(countdown);
@@ -35,18 +59,17 @@
    if(token!==countToken||!active)return;countdown.classList.remove('show');startClock();
  }
  function enter(){
-   active=true;document.body.classList.add('rai-gamer-running');button?.classList.add('active');if(button)button.textContent='🎮 Gamer ativo';hud.classList.add('show');
+   active=true;document.body.classList.add('rai-gamer-running');button?.classList.add('active');if(button)button.innerHTML='🎮 <span>Gamer ativo</span><small>ON</small>';hud.classList.add('show');
    document.querySelector('.rai-curr-overlay')?.classList.remove('show');startCountdown();
  }
  function exit(){
-   active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');button?.classList.remove('active');if(button)button.textContent='🎮 Gamer';
+   active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');button?.classList.remove('active');if(button)button.innerHTML='🎮 <span>Modo Gamer</span><small>NOVO</small>';
  }
  function completeFromVerify(){
    if(!active||!running||Date.now()-lastVerifyAt>3500)return;
    const ms=stopClock(),k=keyFor(currentMission),prior=bestFor(currentMission),arr=store.records[k]||[];arr.push(Math.round(ms));store.records[k]=arr.slice(-30);save();
    const isRecord=prior==null||ms<prior;refreshBest();statusEl.textContent=isRecord?'RECORDE!':'CONCLUÍDO';vibrate(isRecord?[30,55,45]:[25,35,25]);showResult(ms,isRecord,prior);
  }
- button?.addEventListener('click',()=>active?exit():enter());
  hud.querySelector('#raiGamerExit').addEventListener('click',exit);
  result.querySelector('#raiGamerResultClose').addEventListener('click',closeResult);
 
