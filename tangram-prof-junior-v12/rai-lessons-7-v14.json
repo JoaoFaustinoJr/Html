@@ -1,0 +1,42 @@
+[
+  {
+    "year": 7,
+    "id": "7-sim",
+    "topic": "Simetria e transformações",
+    "icon": "🪞",
+    "concept": "Translação move, rotação gira e reflexão espelha. Essas transformações preservam forma e tamanho.",
+    "formula": "Translação = mover • Rotação = girar • Reflexão = espelhar",
+    "challenge": "Quando girar o paralelogramo não basta e é preciso espelhar?",
+    "answer": "Quando a inclinação necessária está invertida.",
+    "crep": "PR.EF07MA20.s.7.22–25 • PR.EF07MA21.a.7.26",
+    "trim": "1º trimestre",
+    "objective": "Reconhecer simetria, translação, rotação e reflexão."
+  },
+  {
+    "year": 7,
+    "id": "7-flux",
+    "topic": "Estratégias, algoritmos e fluxogramas",
+    "icon": "🔀",
+    "concept": "Um fluxograma representa decisões: encaixou? continue; não encaixou? volte e corrija.",
+    "formula": "Decisão → sim / não → próxima ação",
+    "challenge": "Depois de mover uma peça, qual pergunta deve aparecer antes de seguir?",
+    "answer": "A peça encaixou sem bloquear as demais?",
+    "crep": "PR.EF07MA07.s.7.39 • PR.EF07MA26.s.7.67",
+    "trim": "2º trimestre",
+    "objective": "Representar passos e decisões por algoritmos e fluxogramas.",
+    "comp": "EF07CO02 — detectar e corrigir erros."
+  },
+  {
+    "year": 7,
+    "id": "7-tri",
+    "topic": "Triângulos e rigidez geométrica",
+    "icon": "△",
+    "concept": "Cinco das sete peças do Tangram são triângulos. Triângulos têm propriedades importantes em estruturas.",
+    "formula": "Ângulos internos de um triângulo = 180°",
+    "challenge": "Quanto somam 45°, 45° e 90°?",
+    "answer": "180°.",
+    "crep": "PR.EF07MA24.s.7.60 • PR.EF07MA25.s.7.61",
+    "trim": "2º trimestre",
+    "objective": "Compreender propriedades dos triângulos e sua rigidez."
+  }
+]
