@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1200,initial-scale=1">
+<title>Tangram Educativo — Card</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#03111d;color:#fff}
+.card{position:relative;width:1200px;height:630px;padding:38px 44px;background:
+radial-gradient(circle at 78% 20%,rgba(25,184,211,.18),transparent 30%),
+radial-gradient(circle at 18% 78%,rgba(77,232,178,.12),transparent 28%),
+linear-gradient(135deg,#06131f 0%,#072235 52%,#061722 100%);overflow:hidden}
+.card:before{content:"";position:absolute;inset:14px;border:1px solid rgba(87,213,239,.34);border-radius:26px;pointer-events:none}
+.geo{position:absolute;opacity:.18;filter:drop-shadow(0 0 10px rgba(44,224,220,.16))}
+.g1{width:120px;height:120px;right:330px;top:38px;background:#2ad6d0;clip-path:polygon(0 0,100% 0,0 100%)}
+.g2{width:90px;height:90px;right:30px;top:84px;background:#8b5cf6;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.g3{width:110px;height:110px;left:450px;bottom:20px;background:#60e39f;clip-path:polygon(0 0,100% 100%,0 100%)}
+.left{position:relative;z-index:2;width:57%;height:100%;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:18px}
+.brand img{width:100px;height:100px;border-radius:23px;border:1px solid #3d7890;box-shadow:0 14px 32px rgba(0,0,0,.35)}
+.title{font-size:66px;line-height:.96;font-weight:950;letter-spacing:-2.6px}
+.title span{display:block;background:linear-gradient(90deg,#5cf0cc,#28cce0,#6599ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.author{margin:12px 0 0 118px;color:#b9dbe5;font-weight:800;font-size:22px}
+.line{width:560px;height:2px;margin:20px 0;background:linear-gradient(90deg,#43dfd0,transparent)}
+.desc{font-size:28px;line-height:1.26;font-weight:720;max-width:610px;color:#eefcff}
+.desc b{color:#62e8ce}
+.badges{display:flex;gap:12px;margin-top:28px}
+.badge{min-width:160px;padding:15px 17px;border:1px solid #285a70;background:rgba(8,31,45,.86);border-radius:17px;display:flex;align-items:center;gap:11px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+.badge .ico{font-size:29px}.badge b{display:block;font-size:18px}.badge small{display:block;color:#9cc8d4;font-size:13px;margin-top:2px}
+.url{margin-top:auto;display:flex;align-items:center;gap:12px;width:610px;padding:14px 18px;border-radius:15px;border:1px solid #2d6c85;background:#061b29;color:#68e9d4;font-size:17px;font-weight:800}
+.right{position:absolute;right:30px;top:25px;width:475px;height:580px;z-index:2}
+.phone{position:absolute;left:8px;top:8px;width:325px;height:565px;border-radius:42px;padding:12px;background:linear-gradient(145deg,#344754,#0a1218 42%,#53616a);box-shadow:0 28px 55px rgba(0,0,0,.46);transform:rotate(2deg)}
+.screen{width:100%;height:100%;border-radius:32px;background:#06131e;border:1px solid #18465b;overflow:hidden;padding:16px 14px}
+.apphead{display:flex;gap:10px;align-items:center}.apphead img{width:48px;height:48px;border-radius:12px}.appname{font-size:18px;font-weight:950}.appsub{font-size:10px;color:#a7cbd6;margin-top:2px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.pill{padding:7px 9px;border-radius:999px;border:1px solid #2d5b70;background:#0b293a;font-size:10px;font-weight:850;color:#dffaff}
+.level{margin-top:14px;border:1px solid #255269;border-radius:15px;overflow:hidden}.leveltop{padding:10px 11px;font-size:12px;font-weight:950;color:#95f2e1;background:#082333}.progress{height:9px;margin:9px 10px;border-radius:99px;background:#0a1b25;overflow:hidden}.progress:after{content:"";display:block;width:100%;height:100%;background:linear-gradient(90deg,#19c5dc,#5ff0b3)}
+.tangram{position:relative;width:150px;height:150px;margin:30px auto 18px;background:#fff;border:2px solid #d7ffff;overflow:hidden}
+.tangram i{position:absolute;display:block}.t1{left:0;top:0;width:75px;height:150px;background:#ff5f6d;clip-path:polygon(0 0,100% 50%,0 100%)}.t2{left:0;bottom:0;width:150px;height:75px;background:#ff9f43;clip-path:polygon(0 100%,100% 100%,50% 0)}.t3{right:0;top:0;width:75px;height:75px;background:#ffd93d;clip-path:polygon(0 0,100% 0,100% 100%)}.t4{left:58px;top:0;width:83px;height:52px;background:#d66bff;clip-path:polygon(0 0,70% 0,100% 100%,30% 100%)}.t5{left:62px;top:52px;width:45px;height:45px;background:#3dd6ff;clip-path:polygon(0 0,100% 0,50% 100%)}.t6{right:0;top:75px;width:75px;height:75px;background:#6bff95;clip-path:polygon(100% 0,100% 100%,0 50%)}.t7{left:90px;top:58px;width:58px;height:58px;background:#7c83ff;transform:rotate(45deg)}
+.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 8px}.ctl{height:42px;border:1px solid #2d5f76;border-radius:11px;background:#0f354a;text-align:center;padding-top:8px;font-size:9px;font-weight:850}.verify{grid-column:1/2;background:#0b8ca6;border-color:#62e7f7}
+.rai{position:absolute;right:0;bottom:18px;width:210px;height:210px;filter:drop-shadow(0 20px 25px rgba(0,0,0,.45));transform:rotate(-2deg)}
+.rai img{width:100%;height:100%;object-fit:cover;border-radius:34px;border:1px solid #3b7a88}
+.bubble{position:absolute;right:0;top:72px;width:174px;padding:12px 14px;background:#0b2b3b;border:1px solid #4ce7ca;border-radius:18px 18px 4px 18px;font-size:13px;font-weight:850;line-height:1.25;color:#eafffb;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.bubble strong{color:#65f1d6}.tiny{position:absolute;right:18px;bottom:6px;color:#6ea1b0;font-size:10px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="geo g1"></div><div class="geo g2"></div><div class="geo g3"></div>
+  <section class="left">
+    <div class="brand"><img src="rai-icon.svg" alt="R.A.I."><div class="title">Tangram <span>Educativo</span></div></div>
+    <div class="author">Prof. João Faustino Junior</div>
+    <div class="line"></div>
+    <div class="desc">10 desafios interativos para desenvolver <b>lógica, geometria, percepção espacial</b> e estratégia.</div>
+    <div class="badges">
+      <div class="badge"><div class="ico">📱</div><div><b>Instalável</b><small>no celular</small></div></div>
+      <div class="badge"><div class="ico">🤖</div><div><b>R.A.I. Tutora</b><small>dicas e explicações</small></div></div>
+      <div class="badge"><div class="ico">🧩</div><div><b>10 desafios</b><small>progressivos</small></div></div>
+    </div>
+    <div class="url"><span>🌐</span> joaofaustinojr.github.io/Html/tangram-prof-junior-v12/</div>
+  </section>
+  <section class="right">
+    <div class="phone">
+      <div class="screen">
+        <div class="apphead"><img src="rai-icon.svg" alt=""><div><div class="appname">🧩 Tangram Educativo</div><div class="appsub">Prof. João Faustino Junior • v13.1</div></div></div>
+        <div class="pills"><span class="pill">⭐ XP</span><span class="pill">🏅 Lenda Tangram</span><span class="pill">📐 100%</span></div>
+        <div class="level"><div class="leveltop">1. Quadrado Clássico — Fácil</div><div class="progress"></div></div>
+        <div class="tangram"><i class="t1"></i><i class="t2"></i><i class="t3"></i><i class="t4"></i><i class="t5"></i><i class="t6"></i><i class="t7"></i></div>
+        <div class="controls"><div class="ctl">↺<br>Girar</div><div class="ctl">⇋<br>Espelhar</div><div class="ctl">↻<br>Girar</div><div class="ctl">💡<br>Dica</div><div class="ctl">👁<br>Amostra</div><div class="ctl">🔍<br>Ampliar</div><div class="ctl verify">✓<br>Verificar</div></div>
+      </div>
+    </div>
+    <div class="bubble"><strong>R.A.I.:</strong> pronta para dar dicas, explicar as formas e comemorar cada conquista!</div>
+    <div class="rai"><img src="rai-icon.svg" alt="R.A.I."></div>
+  </section>
+  <div class="tiny">Tangram Educativo • compartilhamento</div>
+</div>
+</body></html>

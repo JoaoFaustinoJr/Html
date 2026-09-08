@@ -1,0 +1,1 @@
+Correção de instalação PWA aplicada em 03/09/2026. Ícones com URLs novas e registro antecipado do service worker.
