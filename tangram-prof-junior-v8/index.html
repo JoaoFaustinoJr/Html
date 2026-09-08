@@ -138,7 +138,7 @@
   })();
   <\/script>`;
 
-  page=page.replace('</body>',focusScript+'</body>');
+  page=page.replace('</body>',focusScript+'<script src="../tangram-legacy-update-v1.js?v=1"><\/script></body>');
   document.open();document.write(page);document.close();
  }catch(e){document.getElementById('loading').innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o jogo. Atualize a página.</p></div>'}
 })();
