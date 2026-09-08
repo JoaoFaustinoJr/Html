@@ -31,7 +31,8 @@
   stroke-width:1.15px;
 }
 #tangram-levels #board .piece.rai-piece-dragging{
-  filter:drop-shadow(0 0 2px rgba(255,255,255,.78)) drop-shadow(0 0 9px rgba(92,238,214,.62)) drop-shadow(0 10px 13px rgba(0,0,0,.40)) saturate(1.12) brightness(1.065);
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.24)) saturate(1.05);
+  transition:none!important;
 }
 #tangram-levels #board .piece.rai-piece-drop{
   animation:raiPieceDrop .28s ease-out;
@@ -40,7 +41,7 @@
   animation:raiPieceWin .62s ease-out;
 }
 @keyframes raiPieceDrop{
-  0%{filter:drop-shadow(0 10px 13px rgba(0,0,0,.40)) saturate(1.12) brightness(1.065)}
+  0%{filter:drop-shadow(0 3px 4px rgba(0,0,0,.24)) saturate(1.05)}
   48%{filter:drop-shadow(0 2px 3px rgba(0,0,0,.22)) drop-shadow(0 0 6px rgba(255,255,255,.30)) saturate(1.10) brightness(1.08)}
   100%{filter:drop-shadow(0 5px 7px rgba(0,0,0,.28)) saturate(1.06) brightness(1.015)}
 }
