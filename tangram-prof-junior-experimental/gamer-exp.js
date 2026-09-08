@@ -58,7 +58,8 @@
    if(token!==countToken||!active)return;countdown.classList.remove('show');startClock();
  }
  function enter(){
-   active=true;document.body.classList.add('rai-gamer-running');button?.classList.add('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Gamer ativo</b><small>cronômetro correndo</small></span><em>ON</em>';hud.classList.add('show');
+   active=true;document.body.classList.add('rai-gamer-running');
+   try{root.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){};button?.classList.add('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Gamer ativo</b><small>cronômetro correndo</small></span><em>ON</em>';hud.classList.add('show');
    document.querySelector('.rai-curr-overlay')?.classList.remove('show');startCountdown();
  }
  function exit(){
