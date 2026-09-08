@@ -1,0 +1,43 @@
+[
+  {
+    "year": 9,
+    "id": "9-sem",
+    "topic": "Semelhança e congruência",
+    "icon": "📏",
+    "concept": "Figuras semelhantes têm mesma forma, mas podem ter tamanhos diferentes. Figuras congruentes têm mesma forma e mesmo tamanho.",
+    "formula": "Semelhança → forma • Congruência → forma + tamanho",
+    "challenge": "Uma cópia ampliada de um triângulo é semelhante ou congruente ao original?",
+    "answer": "Semelhante; só é congruente se também tiver o mesmo tamanho.",
+    "crep": "PR.EF09MA12.s.9.37 • PR.EF09MA12.d.9.38",
+    "trim": "2º trimestre",
+    "objective": "Reconhecer semelhança e congruência de triângulos."
+  },
+  {
+    "year": 9,
+    "id": "9-pit",
+    "topic": "Pitágoras no Tangram",
+    "icon": "📐",
+    "concept": "Os triângulos do Tangram são retângulos. Neles podemos relacionar catetos e hipotenusa pelo Teorema de Pitágoras.",
+    "formula": "a² + b² = c²",
+    "notation": "c = hipotenusa • a e b = catetos",
+    "challenge": "Se os catetos medem 1 e 1, quanto mede a hipotenusa?",
+    "answer": "√2, aproximadamente 1,41.",
+    "crep": "PR.EF09MA13.s.9.48 • PR.EF09MA13.d.9.49–51",
+    "trim": "2º trimestre",
+    "objective": "Reconhecer e aplicar o Teorema de Pitágoras."
+  },
+  {
+    "year": 9,
+    "id": "9-alg",
+    "topic": "Construção, escala e algoritmo",
+    "icon": "🧩",
+    "concept": "Uma construção geométrica pode ser descrita como um algoritmo: cada etapa precisa ser clara, ordenada e verificável.",
+    "formula": "Definir → executar → verificar → corrigir",
+    "challenge": "Escreva quatro passos para reproduzir uma figura do Tangram em escala maior.",
+    "answer": "Escolher o fator de escala → multiplicar medidas → manter ângulos → verificar proporcionalidade.",
+    "crep": "PR.EF09MA15.s.9.56 • PR.EF09MA08.s.9.42",
+    "trim": "3º trimestre",
+    "objective": "Descrever construções por algoritmo e aplicar escalas.",
+    "comp": "EF09CO02 — desenvolver e avaliar projetos computacionais."
+  }
+]
