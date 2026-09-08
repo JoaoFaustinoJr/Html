@@ -1,0 +1,42 @@
+[
+  {
+    "year": 5,
+    "id": "5-pol",
+    "topic": "Polígonos e ângulos",
+    "icon": "🔺",
+    "concept": "No Tangram aparecem triângulos, um quadrado e um paralelogramo. Compare lados, vértices e ângulos.",
+    "formula": "Polígono → lados • vértices • ângulos",
+    "challenge": "Escolha um triângulo e encontre um ângulo reto. Quais são os outros dois?",
+    "answer": "45°, 45° e 90°.",
+    "crep": "PR.EF05MA17.s.5.68 • PR.EF05MA17.n.5.69",
+    "trim": "2º trimestre",
+    "objective": "Reconhecer e comparar polígonos.",
+    "comp": "EF05CO04 — sequências, repetições e condições."
+  },
+  {
+    "year": 5,
+    "id": "5-cong",
+    "topic": "Congruência, ampliação e redução",
+    "icon": "🔍",
+    "concept": "Ao ampliar ou reduzir proporcionalmente uma figura, seus ângulos correspondentes permanecem congruentes.",
+    "formula": "Escala muda • ângulos permanecem",
+    "challenge": "Se uma peça dobrar de tamanho, o que acontece com seus ângulos?",
+    "answer": "Permanecem com as mesmas medidas.",
+    "crep": "PR.EF05MA18.s.5.78 • PR.EF05MA18.d.5.79–81",
+    "trim": "3º trimestre",
+    "objective": "Reconhecer proporcionalidade e congruência."
+  },
+  {
+    "year": 5,
+    "id": "5-area",
+    "topic": "Área e perímetro",
+    "icon": "📐",
+    "concept": "Área mede a superfície; perímetro mede o contorno. As sete peças conservam a área total.",
+    "formula": "Área = superfície • Perímetro = contorno",
+    "challenge": "Duas figuras com as mesmas sete peças podem ter a mesma área e perímetros diferentes?",
+    "answer": "Sim.",
+    "crep": "PR.EF05MA20.s.5.84 • PR.EF05MA20.d.5.85",
+    "trim": "3º trimestre",
+    "objective": "Investigar relações entre área e perímetro."
+  }
+]
