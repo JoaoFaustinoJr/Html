@@ -1,5 +1,7 @@
 
-.rai-gamer-button{position:relative}
+.rai-gamer-button{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.rai-gamer-button span{font-weight:950}.rai-gamer-button small{padding:2px 5px;border-radius:999px;background:#f4c542;color:#10202c;font-size:9px;font-weight:950;letter-spacing:.06em}
+.rai-gamer-button.active small{background:#10202c;color:#f8da6c}
 .rai-gamer-button.active{background:#f4c542;color:#10202c;border-color:#f4c542}
 .rai-gamer-hud{position:fixed;z-index:10020;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);display:none;align-items:center;gap:9px;padding:7px 9px;border-radius:16px;background:rgba(4,18,28,.94);border:1px solid rgba(126,218,236,.3);box-shadow:0 10px 30px rgba(0,0,0,.38);backdrop-filter:blur(8px);color:#effcff;min-width:min(94vw,390px);justify-content:center}
 .rai-gamer-hud.show{display:flex}
@@ -20,4 +22,4 @@
 .rai-gamer-result .trophy{font-size:48px}.rai-gamer-result h3{margin:4px 0 8px;font-size:22px}.rai-gamer-result .final-time{font:950 34px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#f8da6c;margin:10px 0}.rai-gamer-result p{margin:6px 0;color:#bde6ef}
 .rai-gamer-result button{margin-top:12px;border:0;border-radius:12px;padding:10px 15px;background:#f4c542;color:#10202c;font-weight:900;cursor:pointer}
 .rai-gamer-running .rai-curr-hub{box-shadow:0 0 0 1px rgba(244,197,66,.28),0 10px 30px rgba(0,0,0,.18)}
-@media(max-width:680px){.rai-gamer-hud{top:max(5px,env(safe-area-inset-top));gap:6px;padding:6px 7px;min-width:94vw}.rai-gamer-time{font-size:22px}.rai-gamer-best{font-size:10px}.rai-gamer-status{font-size:10px;min-width:48px}.rai-gamer-exit{width:31px;height:31px}}
+@media(max-width:680px){.rai-gamer-button{grid-column:1/-1;min-height:42px;font-size:14px}.rai-gamer-hud{top:max(5px,env(safe-area-inset-top));gap:6px;padding:6px 7px;min-width:94vw}.rai-gamer-time{font-size:22px}.rai-gamer-best{font-size:10px}.rai-gamer-status{font-size:10px;min-width:48px}.rai-gamer-exit{width:31px;height:31px}}
