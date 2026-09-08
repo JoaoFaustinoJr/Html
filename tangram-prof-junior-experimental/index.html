@@ -46,31 +46,7 @@ if('serviceWorker' in navigator){
   page=page.replace(/screen\.orientation\.lock\s*\([^;]*?\)/g,'Promise.resolve()').replace(/document\.exitFullscreen\s*\([^;]*?\)/g,'Promise.resolve()').replaceAll('Prof. Júnior','Prof. João Faustino Junior').replaceAll('Prof. Junior','Prof. João Faustino Junior');
   const raiImg='rai-icon.svg?v=rai2';
   page=page.replace(/<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,`<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior • v13.11 • EXP Currículo</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="experienceApp">🔊 <span>Som</span></button><button type="button" class="tl-mini-action" id="comfortApp">♿ <span>Conforto</span></button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ <span>Sobre</span></button></div></div>`);
-  page=page.replace('</head>','<style id="gamerCriticalV11">
-body.rai-gamer-running #tangram-levels.tl-focus .tl-stage{
-  display:flex!important;flex-direction:column!important;height:100dvh!important;overflow:hidden!important;
-}
-body.rai-gamer-running #tangram-levels.tl-focus .rai-gamer-hud{
-  position:relative!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
-  transform:none!important;display:flex!important;flex:0 0 74px!important;width:100%!important;min-width:0!important;height:74px!important;
-  margin:0!important;padding:max(7px,env(safe-area-inset-top)) 10px 7px!important;border:0!important;border-bottom:1px solid #315d74!important;
-  border-radius:0!important;background:#071824!important;box-shadow:none!important;backdrop-filter:none!important;z-index:40!important;
-  align-items:center!important;justify-content:center!important;box-sizing:border-box!important;
-}
-body.rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll{
-  flex:1 1 0!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;overflow:hidden!important;
-  align-items:center!important;justify-content:center!important;box-sizing:border-box!important;
-}
-body.rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll svg{
-  display:block!important;width:116vw!important;min-width:116vw!important;max-width:none!important;
-  height:100%!important;max-height:100%!important;margin:0!important;transform:none!important;
-}
-body.rai-gamer-running #tangram-levels.tl-focus #mFull,
-body.rai-gamer-running #tangram-levels.tl-focus #focusZoom{display:none!important}
-body.rai-gamer-running #tangram-levels.tl-focus .tl-mobile-controls{
-  flex:0 0 auto!important;position:relative!important;bottom:auto!important;
-}
-</style><link rel="manifest" href="manifest.webmanifest?v=install4"><link rel="icon" href="icon-192.png?v=rai3" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=rai3"><link rel="stylesheet" href="v10.css?v=12a"><link rel="stylesheet" href="comfort-v11.css?v=12a"><link rel="stylesheet" href="focus-v11.css?v=12a"><link rel="stylesheet" href="performance-v12.css?v=13c"><link rel="stylesheet" href="rai-aula-v13.css?v=13j"><link rel="stylesheet" href="game-polish-v13.css?v=13k"><link rel="stylesheet" href="curriculo-exp.css?v=1"><link rel="stylesheet" href="gamer-v10.css?v=11"><meta name="theme-color" content="#07131f"></head>');
+  page=page.replace('</head>','<link rel="manifest" href="manifest.webmanifest?v=install4"><link rel="icon" href="icon-192.png?v=rai3" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=rai3"><link rel="stylesheet" href="v10.css?v=12a"><link rel="stylesheet" href="comfort-v11.css?v=12a"><link rel="stylesheet" href="focus-v11.css?v=12a"><link rel="stylesheet" href="performance-v12.css?v=13c"><link rel="stylesheet" href="rai-aula-v13.css?v=13j"><link rel="stylesheet" href="game-polish-v13.css?v=13k"><link rel="stylesheet" href="curriculo-exp.css?v=1"><link rel="stylesheet" href="gamer-v10.css?v=11"><link rel="stylesheet" href="gamer-repair-v11.css?v=11"><meta name="theme-color" content="#07131f"></head>');
   page=page.replace('<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>','<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="focusZoom" type="button" style="width:100%;margin-top:8px">🔍 Ampliar área de jogo</button>');
   page=page.replace('<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>','<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>');
   page=page.replace('<div class="tl-layout">','<button id="raiGamerButton" type="button" class="rai-gamer-launch" style="width:100%;margin:8px 0 12px;padding:12px 14px;border:2px solid #ffe783;border-radius:16px;background:#f4c542;color:#10202c;font:900 16px system-ui;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer">🎮 <span><b>Modo Gamer</b> <small style="display:block;font-size:11px">3 • 2 • 1 • GO! • cronômetro visível</small></span> <em style="margin-left:6px;font-style:normal;font-size:10px;background:#10202c;color:#f8da6c;padding:3px 7px;border-radius:999px">NOVO</em></button><div class="tl-layout">');
@@ -80,51 +56,7 @@ body.rai-gamer-running #tangram-levels.tl-focus .tl-mobile-controls{
   page=page.replace("function svgPt(e){const p=board.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(board.getScreenCTM().inverse())}\nlet savedBodyOverflow='',savedBodyTouchAction='';","function svgPt(e,matrix){const p=board.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(matrix||board.getScreenCTM().inverse())}\nlet dragFrame=0,pendingDragPoint=null;\nfunction applyPendingDrag(){\n if(!drag||!pendingDragPoint)return;\n const point=pendingDragPoint;pendingDragPoint=null;\n const q=svgPt(point,drag.inv),p=pieces[drag.id];\n p.x=q.x-drag.dx;p.y=q.y-drag.dy;\n if(drag.el&&drag.el.isConnected){\n   drag.el.setAttribute('transform',`translate(${p.x} ${p.y}) rotate(${p.r}) scale(${p.flip} 1)`);\n }\n}\nlet savedBodyOverflow='',savedBodyTouchAction='';");
   page=page.replace("function begin(e,id){\n if(sampleActive){e.preventDefault();return}\n e.preventDefault();\n e.stopPropagation();\n selected=id;\n lockDragSurface();\n if(e.currentTarget&&e.currentTarget.setPointerCapture){\n   try{e.currentTarget.setPointerCapture(e.pointerId)}catch(err){}\n }\n const q=svgPt(e),p=pieces[id];\n drag={\n   id,\n   dx:q.x-p.x,\n   dy:q.y-p.y,\n   pointerId:e.pointerId,\n   startClientX:e.clientX,\n   startClientY:e.clientY,\n   moved:false\n };\n render();\n}\nboard.addEventListener('pointermove',e=>{\n if(!drag)return;\n e.preventDefault();\n e.stopPropagation();\n if(Math.hypot(e.clientX-drag.startClientX,e.clientY-drag.startClientY)>8){\n   drag.moved=true;\n }\n if(!drag.moved)return;\n const q=svgPt(e),p=pieces[drag.id];\n p.x=q.x-drag.dx;p.y=q.y-drag.dy;\n render();\n},{passive:false});","function begin(e,id){\n if(sampleActive){e.preventDefault();return}\n e.preventDefault();\n e.stopPropagation();\n selected=id;\n board.querySelectorAll('.piece.selected').forEach(el=>el.classList.remove('selected'));\n if(e.currentTarget)e.currentTarget.classList.add('selected');\n pieceMath();\n lockDragSurface();\n if(e.currentTarget&&e.currentTarget.setPointerCapture){\n   try{e.currentTarget.setPointerCapture(e.pointerId)}catch(err){}\n }\n let inv=null;try{const ctm=board.getScreenCTM();if(ctm)inv=ctm.inverse()}catch(err){}\n const q=svgPt(e,inv),p=pieces[id];\n drag={\n   id,\n   dx:q.x-p.x,\n   dy:q.y-p.y,\n   pointerId:e.pointerId,\n   startClientX:e.clientX,\n   startClientY:e.clientY,\n   moved:false,\n   el:e.currentTarget,\n   inv\n };\n}\nboard.addEventListener('pointermove',e=>{\n if(!drag)return;\n e.preventDefault();\n e.stopPropagation();\n if(Math.hypot(e.clientX-drag.startClientX,e.clientY-drag.startClientY)>8){\n   drag.moved=true;\n }\n if(!drag.moved)return;\n pendingDragPoint={clientX:e.clientX,clientY:e.clientY};\n if(dragFrame)return;\n dragFrame=requestAnimationFrame(()=>{\n   dragFrame=0;\n   applyPendingDrag();\n });\n},{passive:false});");
   page=page.replace("function finishDrag(){\n if(!drag){unlockDragSurface();return}\n const id=drag.id;","function finishDrag(){\n if(!drag){unlockDragSurface();return}\n if(dragFrame){cancelAnimationFrame(dragFrame);dragFrame=0}\n applyPendingDrag();\n const id=drag.id;");
-  page=page.replace('</body>','<script src="app-v10.js?v=13e"><\/script><script src="comfort-v11.js?v=12a"><\/script><script src="performance-v12.js?v=13f"><\/script><script src="rai-aula-v13.js?v=13j"><\/script><script src="game-polish-v13.js?v=13k"><\/script><script src="curriculo-exp.js?v=1"><\/script><script src="gamer-v10.js?v=11"><\/script><script id="gamerRepairV11">
-(()=>{
- const root=document.getElementById('tangram-levels');
- if(!root)return;
- function repair(){
-   if(!document.body.classList.contains('rai-gamer-running'))return;
-   const stage=root.querySelector('.tl-stage');
-   const hud=document.querySelector('.rai-gamer-hud');
-   const board=root.querySelector('.tl-board-scroll');
-   const controls=root.querySelector('.tl-mobile-controls');
-   if(stage&&hud&&hud.parentElement!==stage)stage.insertBefore(hud,stage.firstChild);
-   if(stage&&hud&&stage.firstElementChild!==hud)stage.insertBefore(hud,stage.firstChild);
-   if(hud){
-     hud.style.setProperty('position','relative','important');
-     hud.style.setProperty('inset','auto','important');
-     hud.style.setProperty('transform','none','important');
-     hud.style.setProperty('flex','0 0 74px','important');
-     hud.style.setProperty('height','74px','important');
-     hud.style.setProperty('width','100%','important');
-     hud.style.setProperty('margin','0','important');
-     hud.style.setProperty('border-radius','0','important');
-   }
-   if(stage){
-     stage.style.setProperty('display','flex','important');
-     stage.style.setProperty('flex-direction','column','important');
-     stage.style.setProperty('height','100dvh','important');
-     stage.style.setProperty('overflow','hidden','important');
-   }
-   if(board){
-     board.style.setProperty('flex','1 1 0','important');
-     board.style.setProperty('min-height','0','important');
-     board.style.setProperty('padding','0','important');
-     board.style.setProperty('overflow','hidden','important');
-   }
-   const full=root.querySelector('#mFull'); if(full)full.style.setProperty('display','none','important');
-   const zoom=root.querySelector('#focusZoom'); if(zoom)zoom.style.setProperty('display','none','important');
-   if(controls){controls.style.setProperty('position','relative','important');controls.style.setProperty('bottom','auto','important')}
- }
- new MutationObserver(repair).observe(document.body,{attributes:true,attributeFilter:['class'],subtree:false});
- document.addEventListener('click',e=>{
-   if(e.target.closest?.('#raiGamerButton'))setTimeout(repair,0);
- },true);
- setTimeout(repair,0);setTimeout(repair,250);setTimeout(repair,900);
-})();
-</script></body>');document.open();document.write(page);document.close();
+  page=page.replace('</body>','<script src="app-v10.js?v=13e"><\/script><script src="comfort-v11.js?v=12a"><\/script><script src="performance-v12.js?v=13f"><\/script><script src="rai-aula-v13.js?v=13j"><\/script><script src="game-polish-v13.js?v=13k"><\/script><script src="curriculo-exp.js?v=1"><\/script><script src="gamer-v10.js?v=11"><\/script><script src="gamer-repair-v11.js?v=11"><\/script></body>');document.open();document.write(page);document.close();
  }catch(e){const el=document.getElementById('loading');if(el)el.innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o aplicativo. Atualize a página.</p></div>';console.error(e)}
 })();
 </script></body></html>
