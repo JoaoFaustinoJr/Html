@@ -39,12 +39,14 @@
  const countdown=document.createElement('div');countdown.className='rai-gamer-countdown';countdown.innerHTML='<div class="rai-gamer-count" id="raiGamerCount">3</div>';document.body.appendChild(countdown);
  const result=document.createElement('div');result.className='rai-gamer-result';result.innerHTML='<div class="trophy">🏆</div><h3 id="raiGamerResultTitle">Missão concluída!</h3><div class="final-time" id="raiGamerFinal">00:00.0</div><p id="raiGamerResultText"></p><button type="button" id="raiGamerResultClose">Continuar</button>';document.body.appendChild(result);
  const timeEl=hud.querySelector('#raiGamerTime'),bestEl=hud.querySelector('#raiGamerBest'),statusEl=hud.querySelector('#raiGamerStatus'),countEl=countdown.querySelector('#raiGamerCount');
+ const nativeTimer=root.querySelector('#timer');
+ const setClockText=t=>{timeEl.textContent=t;if(nativeTimer)nativeTimer.textContent=t};
 
  function bestFor(name=currentMission){const arr=store.records[keyFor(name)]||[];return arr.length?Math.min(...arr):null}
  function refreshBest(){const b=bestFor();bestEl.textContent=b==null?'—':fmt(b)}
- function tick(){if(!running)return;elapsed=performance.now()-startAt;timeEl.textContent=fmt(elapsed);raf=requestAnimationFrame(tick)}
- function stopClock(){if(!running)return elapsed;elapsed=performance.now()-startAt;running=false;cancelAnimationFrame(raf);raf=0;timeEl.textContent=fmt(elapsed);statusEl.textContent='PAROU';return elapsed}
- function resetClock(){running=false;cancelAnimationFrame(raf);raf=0;elapsed=0;timeEl.textContent='00:00.0';statusEl.textContent='PRONTO'}
+ function tick(){if(!running)return;elapsed=performance.now()-startAt;setClockText(fmt(elapsed));raf=requestAnimationFrame(tick)}
+ function stopClock(){if(!running)return elapsed;elapsed=performance.now()-startAt;running=false;cancelAnimationFrame(raf);raf=0;setClockText(fmt(elapsed));statusEl.textContent='PAROU';return elapsed}
+ function resetClock(){running=false;cancelAnimationFrame(raf);raf=0;elapsed=0;setClockText('00:00.0');statusEl.textContent='PRONTO'}
  function startClock(){resetClock();startAt=performance.now();running=true;statusEl.textContent='CORRENDO';raf=requestAnimationFrame(tick)}
  const vibrate=p=>{try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}};
  function closeResult(){clearTimeout(resultTimer);result.classList.remove('show')}
