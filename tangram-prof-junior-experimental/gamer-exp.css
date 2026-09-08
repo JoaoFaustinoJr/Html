@@ -28,3 +28,130 @@
 .rai-gamer-launch-icon{font-size:26px;line-height:1}.rai-gamer-launch>span:nth-child(2){display:flex;flex-direction:column;gap:1px}.rai-gamer-launch b{font-size:15px;line-height:1.05}.rai-gamer-launch small{font-size:10px;opacity:.78;font-weight:850;letter-spacing:.04em}.rai-gamer-launch em{margin-left:auto;font-style:normal;font-size:9px;font-weight:950;letter-spacing:.08em;padding:3px 6px;border-radius:999px;background:#10202c;color:#f8da6c}
 .rai-gamer-launch.active{background:linear-gradient(135deg,#173f50,#0d2b3a);color:#effcff;border-color:#65cde0}.rai-gamer-launch.active em{background:#f4c542;color:#10202c}
 @media(max-width:680px){.rai-gamer-launch{position:sticky;top:4px;z-index:10010;margin:6px 2px 10px;padding:10px 12px}.rai-gamer-launch b{font-size:16px}.rai-gamer-launch small{font-size:10px}}
+
+
+/* ===== Gamer Focus v6: apenas jogo, cronômetro e controles ===== */
+.rai-gamer-running #tangram-levels{
+  max-width:1280px;
+  padding:8px;
+  border-color:#244b62;
+  background:#050f18;
+}
+.rai-gamer-running #tangram-levels > .tl-head,
+.rai-gamer-running #tangram-levels > .rai-curr-hub,
+.rai-gamer-running #tangram-levels > .tl-stats,
+.rai-gamer-running #tangram-levels .tl-toolbar,
+.rai-gamer-running #tangram-levels .tl-meter,
+.rai-gamer-running #tangram-levels .tl-metertext,
+.rai-gamer-running #tangram-levels .tl-legend,
+.rai-gamer-running #tangram-levels .tl-msg,
+.rai-gamer-running #tangram-levels .tl-math,
+.rai-gamer-running #tangram-levels .tl-rule,
+.rai-gamer-running #tangram-levels .tl-help,
+.rai-gamer-running #tangram-levels .tl-scoregrid,
+.rai-gamer-running .rai-lesson-dock,
+.rai-gamer-running .rai-lesson-overlay,
+.rai-gamer-running .rai-tutor-fab,
+.rai-gamer-running .rai-tutor-bubble,
+.rai-gamer-running .rai-tutor-overlay,
+.rai-gamer-running .tl-v12-perf-overlay,
+.rai-gamer-running .tl-v12-master-jump,
+.rai-gamer-running .rai-gamer-launch{
+  display:none!important;
+}
+.rai-gamer-running .tl-v12-perf-toast{display:none!important}
+.rai-gamer-running #tangram-levels .tl-layout{
+  grid-template-columns:220px minmax(0,1fr);
+  gap:8px;
+}
+.rai-gamer-running #tangram-levels .tl-stage{
+  border-radius:14px;
+  border-color:#315d74;
+}
+.rai-gamer-running #tangram-levels .tl-side{
+  padding:10px;
+  border-radius:14px;
+}
+.rai-gamer-running #tangram-levels .tl-side h3{
+  display:none!important;
+}
+.rai-gamer-running #tangram-levels .tl-side .tl-levels{
+  gap:5px;
+  margin-bottom:9px;
+}
+.rai-gamer-running #tangram-levels .tl-side .tl-level{
+  padding:8px 9px;
+  font-size:12px;
+}
+.rai-gamer-running #tangram-levels .tl-side .tl-level small,
+.rai-gamer-running #tangram-levels .tl-side .tl-level .stars{
+  display:none!important;
+}
+.rai-gamer-running #tangram-levels .tl-side .tl-btns{
+  gap:6px;
+}
+.rai-gamer-running #tangram-levels .tl-side .tl-btn{
+  padding:9px 7px;
+  font-size:12px;
+}
+.rai-gamer-running .rai-gamer-hud{
+  display:flex;
+  min-width:0;
+  width:auto;
+  padding:7px 9px;
+  gap:7px;
+}
+.rai-gamer-running .rai-gamer-hud .rai-gamer-best,
+.rai-gamer-running .rai-gamer-hud .rai-gamer-status{
+  display:none!important;
+}
+.rai-gamer-running .rai-gamer-hud .rai-gamer-timer-wrap{
+  min-width:116px;
+}
+.rai-gamer-running .rai-gamer-hud .rai-gamer-label{
+  font-size:9px;
+}
+.rai-gamer-running .rai-gamer-hud .rai-gamer-time{
+  font-size:27px;
+}
+.rai-gamer-running .rai-gamer-hud .rai-gamer-exit{
+  display:block;
+}
+@media(max-width:640px){
+  .rai-gamer-running #tangram-levels{
+    padding:4px;
+    border-radius:10px;
+    min-height:100vh;
+  }
+  .rai-gamer-running #tangram-levels .tl-layout{
+    display:block;
+  }
+  .rai-gamer-running #tangram-levels .tl-side{
+    display:none!important;
+  }
+  .rai-gamer-running #tangram-levels .tl-game{
+    width:100%;
+  }
+  .rai-gamer-running #tangram-levels .tl-stage{
+    border-radius:10px;
+  }
+  .rai-gamer-running #tangram-levels .tl-board-scroll{
+    border-top:0;
+  }
+  .rai-gamer-running #tangram-levels .tl-mobile-controls{
+    display:grid!important;
+    grid-template-columns:repeat(3,1fr);
+    gap:5px;
+    padding:6px;
+    position:sticky;
+    bottom:0;
+    z-index:20;
+  }
+  .rai-gamer-running #tangram-levels .tl-mobile-controls button{
+    min-height:48px;
+    font-size:18px;
+  }
+  .rai-gamer-running .rai-gamer-hud{
+    top:max(5px,env(safe-area-inset-top));
+  }
+}
