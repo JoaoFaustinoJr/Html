@@ -1,0 +1,39 @@
+
+.rai-exp-badge{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:3px 8px;border-radius:999px;background:#f4c542;color:#10202c;font-size:11px;font-weight:900;letter-spacing:.04em;vertical-align:middle}
+.rai-curr-hub{margin:10px 0 12px;padding:10px;border:1px solid rgba(83,190,214,.28);background:linear-gradient(180deg,rgba(9,39,55,.94),rgba(7,27,40,.94));border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.rai-curr-hub-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.rai-curr-title{display:flex;align-items:center;gap:8px;font-weight:900;color:#eafbff}.rai-curr-title small{font-weight:700;color:#8fd8e9}
+.rai-curr-actions{display:flex;gap:7px;flex-wrap:wrap}
+.rai-curr-btn{border:1px solid rgba(126,218,236,.28);background:#0d3448;color:#effcff;border-radius:12px;padding:8px 10px;font-weight:800;cursor:pointer;touch-action:manipulation}
+.rai-curr-btn.primary{background:#f4c542;color:#10202c;border-color:#f4c542}.rai-curr-btn:active{transform:translateY(1px)}
+.rai-curr-xp{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:12px;background:rgba(0,0,0,.18);font-weight:900;color:#f8da6c}
+.rai-curr-overlay{position:fixed;inset:0;z-index:10050;background:rgba(2,10,16,.76);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:14px}
+.rai-curr-overlay.show{display:flex}
+.rai-curr-card{width:min(760px,96vw);max-height:92vh;overflow:auto;background:#071c29;border:1px solid rgba(127,220,238,.3);border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.55);color:#eefdff}
+.rai-curr-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(7,28,41,.97);border-bottom:1px solid rgba(127,220,238,.18)}
+.rai-curr-head img{width:42px;height:42px;border-radius:12px}.rai-curr-head h3{margin:0;font-size:18px}.rai-curr-head small{color:#8fd8e9}
+.rai-curr-close{margin-left:auto;width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.16);background:#102f40;color:#fff;font-size:22px;cursor:pointer}
+.rai-curr-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 12px 0}
+.rai-curr-tab{border:1px solid rgba(126,218,236,.2);background:#0a2a3b;color:#c8edf5;border-radius:11px;padding:8px 5px;font-weight:800;cursor:pointer}
+.rai-curr-tab.active{background:#174e64;color:#fff;border-color:#65cde0}
+.rai-curr-body{padding:14px}.rai-curr-yearrow{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.rai-year-chip{border:1px solid rgba(126,218,236,.25);background:#0d3042;color:#dff8ff;border-radius:999px;padding:7px 11px;font-weight:850;cursor:pointer}
+.rai-year-chip.active{background:#f4c542;color:#10202c;border-color:#f4c542}
+.rai-mission-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px}.rai-pill{padding:4px 8px;border-radius:999px;background:#0f3a4d;color:#aeeaf6;font-size:12px;font-weight:850}
+.rai-mission-title{font-size:24px;font-weight:950;margin:5px 0}.rai-mission-prompt{font-size:17px;line-height:1.45;margin:10px 0 14px;color:#f3fcff}
+.rai-options{display:grid;gap:8px}.rai-option{width:100%;text-align:left;padding:11px 12px;border-radius:13px;border:1px solid rgba(126,218,236,.24);background:#0b2b3d;color:#effcff;font-weight:750;cursor:pointer}
+.rai-option:hover{border-color:#65cde0}.rai-option.correct{background:#153f2c;border-color:#50d78a}.rai-option.wrong{background:#4a2027;border-color:#ff7b8b}
+.rai-feedback{margin-top:12px;padding:11px 12px;border-radius:13px;background:#0d3143;display:none;line-height:1.4}.rai-feedback.show{display:block}.rai-feedback strong{color:#f8da6c}
+.rai-mission-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.rai-track-grid,.rai-badge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rai-track,.rai-badge-card,.rai-teacher-box{padding:12px;border-radius:14px;background:#0b2c3d;border:1px solid rgba(126,218,236,.18)}
+.rai-track h4,.rai-badge-card h4{margin:0 0 5px}.rai-track p,.rai-badge-card p{margin:4px 0;color:#b9e1ea;font-size:13px;line-height:1.35}
+.rai-progress{height:8px;border-radius:999px;background:#061721;overflow:hidden;margin-top:8px}.rai-progress>span{display:block;height:100%;background:#f4c542;border-radius:inherit}
+.rai-badge-card.locked{opacity:.48;filter:grayscale(.65)}.rai-badge-icon{font-size:27px}
+.rai-passport-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#0d4054,#102b3a);margin-bottom:12px}
+.rai-passport-xp{font-size:28px;font-weight:950;color:#f8da6c}.rai-passport-level{font-weight:900}
+.rai-teacher-box{margin-bottom:10px}.rai-teacher-box b{color:#f8da6c}.rai-teacher-box p{margin:6px 0;line-height:1.42}.rai-bncc-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.rai-code{padding:5px 8px;border-radius:8px;background:#061a25;border:1px solid rgba(126,218,236,.2);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#aeeaf6}
+.rai-curr-note{font-size:12px;color:#87bdc9;margin-top:12px;line-height:1.4}
+.rai-curr-stage-pulse{animation:raiCurrPulse 1.3s ease}@keyframes raiCurrPulse{0%,100%{filter:none}50%{filter:drop-shadow(0 0 16px rgba(244,197,66,.9))}}
+@media(max-width:680px){.rai-curr-hub{margin:8px 0}.rai-curr-hub-top{align-items:stretch}.rai-curr-title{width:100%}.rai-curr-actions{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.rai-curr-btn{padding:9px 6px;font-size:12px}.rai-curr-xp{justify-content:center}.rai-curr-tabs{grid-template-columns:repeat(2,1fr)}.rai-track-grid,.rai-badge-grid{grid-template-columns:1fr}.rai-mission-title{font-size:21px}.rai-curr-card{max-height:94vh}}
