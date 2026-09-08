@@ -39,3 +39,11 @@ body.rai-gamer-running .rai-brand-hero{
 @media(max-width:390px){
   .rai-brand-hero img{height:145px}
 }
+
+.rai-about-brand-art{
+  display:block;width:100%;height:auto;max-height:250px;object-fit:cover;object-position:center;
+  border-bottom:1px solid #315d74;background:#071824
+}
+@media(max-width:640px){
+  .rai-about-brand-art{max-height:180px}
+}
