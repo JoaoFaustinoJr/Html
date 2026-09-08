@@ -17,26 +17,23 @@
    btn.addEventListener('click',()=>active?exit():enter());
  }
  function ensureButton(){
-   const actions=document.querySelector('.rai-curr-actions');
-   if(!actions)return false;
    button=document.getElementById('raiGamerButton');
    if(!button){
      button=document.createElement('button');
      button.type='button';
      button.id='raiGamerButton';
-     button.className='rai-curr-btn rai-gamer-button';
-     button.innerHTML='🎮 <span>Modo Gamer</span><small>NOVO</small>';
-     actions.prepend(button);
+     button.className='rai-gamer-launch';
+     button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Modo Gamer</b><small>3 • 2 • 1 • GO!</small></span><em>NOVO</em>';
+     const anchor=root.querySelector('.tl-head');
+     if(anchor)anchor.insertAdjacentElement('afterend',button);
+     else root.prepend(button);
    }
    bindButton(button);
    return true;
  }
- if(!ensureButton()){
-   const mo=new MutationObserver(()=>{if(ensureButton())mo.disconnect()});
-   mo.observe(document.body,{childList:true,subtree:true});
-   setTimeout(ensureButton,400);
-   setTimeout(ensureButton,1200);
- }
+ ensureButton();
+ setTimeout(ensureButton,250);
+ setTimeout(ensureButton,900);
 
  const hud=document.createElement('div');hud.className='rai-gamer-hud';hud.innerHTML='<div class="rai-gamer-timer-wrap"><div class="rai-gamer-label">Tempo</div><div class="rai-gamer-time" id="raiGamerTime">00:00.0</div></div><div class="rai-gamer-best">Recorde<br><b id="raiGamerBest">—</b></div><div class="rai-gamer-status" id="raiGamerStatus">PRONTO</div><button class="rai-gamer-exit" id="raiGamerExit" aria-label="Sair do modo gamer">×</button>';document.body.appendChild(hud);
  const countdown=document.createElement('div');countdown.className='rai-gamer-countdown';countdown.innerHTML='<div class="rai-gamer-count" id="raiGamerCount">3</div>';document.body.appendChild(countdown);
@@ -59,11 +56,11 @@
    if(token!==countToken||!active)return;countdown.classList.remove('show');startClock();
  }
  function enter(){
-   active=true;document.body.classList.add('rai-gamer-running');button?.classList.add('active');if(button)button.innerHTML='🎮 <span>Gamer ativo</span><small>ON</small>';hud.classList.add('show');
+   active=true;document.body.classList.add('rai-gamer-running');button?.classList.add('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Gamer ativo</b><small>cronômetro correndo</small></span><em>ON</em>';hud.classList.add('show');
    document.querySelector('.rai-curr-overlay')?.classList.remove('show');startCountdown();
  }
  function exit(){
-   active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');button?.classList.remove('active');if(button)button.innerHTML='🎮 <span>Modo Gamer</span><small>NOVO</small>';
+   active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');button?.classList.remove('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Modo Gamer</b><small>3 • 2 • 1 • GO!</small></span><em>NOVO</em>';
  }
  function completeFromVerify(){
    if(!active||!running||Date.now()-lastVerifyAt>3500)return;
