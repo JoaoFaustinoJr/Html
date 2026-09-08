@@ -19,10 +19,12 @@
     if(!p||!document.body.contains(p))return;
     p.classList.remove('rai-piece-dragging');
     p.classList.remove('rai-piece-drop');
-    void p.getBoundingClientRect();
-    p.classList.add('rai-piece-drop');
     clearTimeout(dropTimer);
-    dropTimer=setTimeout(()=>p.classList.remove('rai-piece-drop'),330);
+    requestAnimationFrame(()=>{
+      if(!document.body.contains(p))return;
+      p.classList.add('rai-piece-drop');
+      dropTimer=setTimeout(()=>p.classList.remove('rai-piece-drop'),330);
+    });
   };
 
   board.addEventListener('pointerdown',e=>{
@@ -51,9 +53,11 @@
       setTimeout(()=>{
         if(!document.body.contains(p))return;
         p.classList.remove('rai-piece-win');
-        void p.getBoundingClientRect();
-        p.classList.add('rai-piece-win');
-        setTimeout(()=>p.classList.remove('rai-piece-win'),700);
+        requestAnimationFrame(()=>{
+          if(!document.body.contains(p))return;
+          p.classList.add('rai-piece-win');
+          setTimeout(()=>p.classList.remove('rai-piece-win'),700);
+        });
       },i*72);
     });
   };
