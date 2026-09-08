@@ -49,21 +49,38 @@
  function resetClock(){running=false;cancelAnimationFrame(raf);raf=0;elapsed=0;setClockText('00:00.0');statusEl.textContent='PRONTO'}
  function startClock(){resetClock();startAt=performance.now();running=true;statusEl.textContent='CORRENDO';raf=requestAnimationFrame(tick)}
  const vibrate=p=>{try{if(navigator.vibrate)navigator.vibrate(p)}catch(e){}};
+ function ensureGameFocus(){
+   if(root.classList.contains('tl-focus'))return;
+   const btn=document.getElementById('focusZoom')||document.getElementById('mFull');
+   if(btn){try{btn.click();return}catch(e){}}
+   root.classList.add('tl-focus');
+   document.documentElement.style.overflow='hidden';
+   document.body.style.overflow='hidden';
+ }
+ function leaveGameFocus(){
+   try{
+     if(typeof window.__tangramExitFocus==='function'){window.__tangramExitFocus(true);return}
+   }catch(e){}
+   root.classList.remove('tl-focus');
+   document.documentElement.style.overflow='';
+   document.body.style.overflow='';
+ }
  function closeResult(){clearTimeout(resultTimer);result.classList.remove('show')}
  function showResult(ms,isRecord,prior){result.querySelector('#raiGamerResultTitle').textContent=isRecord?'🏆 NOVO RECORDE!':'✅ Missão concluída!';result.querySelector('#raiGamerFinal').textContent=fmt(ms);result.querySelector('#raiGamerResultText').textContent=isRecord?(prior==null?'Primeira marca registrada nesta missão.':'Você foi '+fmt(prior-ms)+' mais rápido que o recorde anterior.'):(prior!=null?'Recorde atual: '+fmt(prior):'Tempo registrado.');result.classList.add('show');resultTimer=setTimeout(closeResult,5200)}
  async function startCountdown(){
-   if(!active)return;countToken++;const token=countToken;closeResult();resetClock();currentMission=missionName();refreshBest();
+   if(!active)return;ensureGameFocus();countToken++;const token=countToken;closeResult();resetClock();currentMission=missionName();refreshBest();
    countdown.classList.add('show');
    for(const v of ['3','2','1','GO!']){if(token!==countToken||!active)return;countEl.textContent=v;countEl.classList.toggle('go',v==='GO!');countEl.style.animation='none';void countEl.offsetWidth;countEl.style.animation='';vibrate(v==='GO!'?35:12);await new Promise(r=>setTimeout(r,v==='GO!'?520:760))}
    if(token!==countToken||!active)return;countdown.classList.remove('show');startClock();
  }
  function enter(){
    active=true;document.body.classList.add('rai-gamer-running');
-   try{root.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){};button?.classList.add('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Gamer ativo</b><small>cronômetro correndo</small></span><em>ON</em>';hud.classList.add('show');
+   ensureGameFocus();
+   try{root.scrollIntoView({behavior:'auto',block:'start'})}catch(e){};button?.classList.add('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Gamer ativo</b><small>cronômetro correndo</small></span><em>ON</em>';hud.classList.add('show');
    document.querySelector('.rai-curr-overlay')?.classList.remove('show');startCountdown();
  }
  function exit(){
-   active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');button?.classList.remove('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Modo Gamer</b><small>3 • 2 • 1 • GO!</small></span><em>NOVO</em>';
+   active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');leaveGameFocus();button?.classList.remove('active');if(button)button.innerHTML='<span class="rai-gamer-launch-icon">🎮</span><span><b>Modo Gamer</b><small>3 • 2 • 1 • GO!</small></span><em>NOVO</em>';
  }
  function completeFromVerify(){
    if(!active||!running||Date.now()-lastVerifyAt>3500)return;
@@ -85,7 +102,7 @@
  const msg=root.querySelector('#msg');
  if(msg)new MutationObserver(()=>{const txt=(msg.textContent||'').replace(/\s+/g,' ');if(/miss[aã]o conclu[ií]da/i.test(txt))completeFromVerify()}).observe(msg,{subtree:true,childList:true,characterData:true});
  const title=root.querySelector('#title');
- if(title)new MutationObserver(()=>{const n=missionName();if(n===currentMission)return;currentMission=n;if(active)setTimeout(startCountdown,220);else refreshBest()}).observe(title,{subtree:true,childList:true,characterData:true});
+ if(title)new MutationObserver(()=>{const n=missionName();if(n===currentMission)return;currentMission=n;if(active){setTimeout(()=>{ensureGameFocus();startCountdown()},220)}else refreshBest()}).observe(title,{subtree:true,childList:true,characterData:true});
  refreshBest();
  window.__raiGamerExp={enter,exit,start:startCountdown,get active(){return active}};
 })();
