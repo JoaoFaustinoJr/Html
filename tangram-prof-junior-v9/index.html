@@ -4,82 +4,35 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07131f">
-<title>Tangram Educativo — Prof. João Faustino Junior</title>
-<meta name="description" content="Desafios interativos de lógica, geometria, percepção espacial e estratégia.">
-<meta name="author" content="Prof. João Faustino Junior">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="Tangram Educativo — Prof. João Faustino Junior">
-<meta property="og:description" content="Desafie sua lógica! Geometria, estratégia e criatividade em missões interativas.">
-<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v9/">
-<meta property="og:image" content="https://joaofaustinojr.github.io/Html/tangram-prof-junior/tangram-card-v5.png">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Tangram Educativo — atualização</title>
+<meta name="description" content="Esta versão do Tangram Educativo foi atualizada.">
+<link rel="canonical" href="https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/">
 <style>
 html,body{margin:0;min-height:100%;background:#050f18;color:#eefaff;font-family:system-ui}
-#loading{min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px}
+main{min-height:100vh;display:grid;place-items:center;padding:28px;text-align:center}
+.card{max-width:560px;padding:28px;border:1px solid #3d7589;border-radius:24px;background:#092233;box-shadow:0 20px 55px #0008}
+h1{margin:0 0 12px;color:#9ff6e2}p{line-height:1.5;color:#cce8ef}.small{font-size:13px;color:#8eb6c2}
 </style>
 </head>
 <body>
-<div id="loading"><div><h1>🧩 Tangram Educativo</h1><p>Carregando desafio...</p></div></div>
+<main><div class="card">
+<h1>🧩 Tangram Educativo</h1>
+<p>Esta versão foi atualizada. Abrindo agora a versão mais recente do aplicativo…</p>
+<p class="small">Se a página não mudar automaticamente, toque aqui: <a id="go" href="../tangram-prof-junior-v12/" style="color:#78e8ff">abrir versão atual</a>.</p>
+</div></main>
 <script>
 (async()=>{
+  const target=new URL('../tangram-prof-junior-v12/',location.href);
+  target.hash=location.hash||'';
   try{
-    const files=[
-      '../tangram-prof-junior/chunk01.txt?v=9f',
-      '../tangram-prof-junior/chunk02-03.txt?v=9f',
-      '../tangram-prof-junior/chunk04-05.txt?v=9f',
-      '../tangram-prof-junior/chunk06-07.txt?v=9f',
-      '../tangram-prof-junior/chunk08-09.txt?v=9f'
-    ];
-    const parts=await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{
-      if(!r.ok)throw new Error('Falha ao carregar '+f);
-      return r.text();
-    })));
-    const b64=parts.join('').replace(/\s+/g,'');
-    const bin=atob(b64);
-    const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
-    let page=new TextDecoder('utf-8').decode(bytes);
-
-    page=page.replace(/screen\.orientation\.lock\s*\([^;]*?\)/g,'Promise.resolve()');
-    page=page.replace(/document\.exitFullscreen\s*\([^;]*?\)/g,'Promise.resolve()');
-    page=page.replaceAll('Prof. Júnior','Prof. João Faustino Junior');
-    page=page.replaceAll('Prof. Junior','Prof. João Faustino Junior');
-
-    const raiImg='../tangram-prof-junior/rai-chalk.webp?v=9f';
-    page=page.replace(
-      /<div class="tl-head">\s*<div><h1>.*?<\/h1><div class="tl-sub">.*?<\/div><\/div>/s,
-      `<div class="tl-head"><div class="tl-brand"><img class="tl-rai-brand" src="${raiImg}" alt="R.A.I."><div><h1>🧩 Tangram Educativo</h1><div class="tl-sub">Prof. João Faustino Junior</div></div><div class="tl-brand-tools"><button type="button" class="tl-mini-action tl-install-action" id="installApp">⬇ Instalar</button><button type="button" class="tl-mini-action" id="aboutApp">ⓘ Sobre</button></div></div>`
-    );
-
-    page=page.replace('</head>',
-      '<link rel="manifest" href="manifest.webmanifest">'+
-      '<link rel="icon" href="icon-192.png" type="image/png">'+
-      '<link rel="apple-touch-icon" href="apple-touch-icon.png">'+
-      '<link rel="stylesheet" href="v9.css?v=6">'+
-      '<meta name="theme-color" content="#07131f">'+
-      '</head>'
-    );
-
-    page=page.replace(
-      '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button>',
-      '<button class="tl-btn" id="sample" type="button" style="width:100%;margin-top:8px">👁️ Amostra de solução</button><button class="tl-btn primary" id="focusZoom" type="button" style="width:100%;margin-top:8px">🔍 Ampliar área de jogo</button>'
-    );
-    page=page.replace(
-      '<button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>',
-      '<button type="button" id="mFull" aria-label="Ampliar área de jogo">🔍<span>Ampliar</span></button><button type="button" id="mCheck" aria-label="Verificar encaixe">✓<span>Verificar</span></button>'
-    );
-
-    page=page.replace('</body>','<script src="app-v9.js?v=6"><\/script></body>');
-    document.open();
-    document.write(page);
-    document.close();
-  }catch(e){
-    const el=document.getElementById('loading');
-    if(el)el.innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o jogo. Atualize a página.</p></div>';
-    console.error(e);
-  }
+    if('serviceWorker' in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.filter(r=>r.scope.includes('/tangram-prof-junior-v9/')).map(r=>r.unregister()));
+    }
+  }catch(_){}
+  const go=document.getElementById('go');
+  if(go)go.href=target.href;
+  setTimeout(()=>location.replace(target.href),450);
 })();
 </script>
 </body>
