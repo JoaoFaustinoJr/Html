@@ -1,0 +1,42 @@
+[
+  {
+    "year": 6,
+    "id": "6-ang",
+    "topic": "Ângulos e giro",
+    "icon": "↻",
+    "concept": "Girar uma peça muda sua direção, mas preserva forma e área. No Tangram, giros de 45° aparecem o tempo todo.",
+    "formula": "45° + 45° = 90° • 4 × 45° = 180°",
+    "challenge": "Gire uma peça duas vezes em 45°. Quanto ela girou?",
+    "answer": "90°.",
+    "crep": "PR.EF06MA25.s.6.76 • PR.EF06MA26.s.6.78 • PR.EF06MA27.s.6.79",
+    "trim": "3º trimestre",
+    "objective": "Reconhecer e determinar medidas de ângulos."
+  },
+  {
+    "year": 6,
+    "id": "6-alg",
+    "topic": "Algoritmo geométrico",
+    "icon": "🧠",
+    "concept": "Uma estratégia pode ser descrita como passos: observar, escolher, mover, girar, verificar e corrigir.",
+    "formula": "Observar → escolher → mover/girar → verificar → corrigir",
+    "challenge": "Crie um algoritmo de cinco passos para posicionar uma peça.",
+    "answer": "Exemplo: selecionar → comparar → girar → mover → verificar.",
+    "crep": "PR.EF06MA23.s.6.95",
+    "trim": "3º trimestre",
+    "objective": "Construir algoritmos passo a passo em geometria.",
+    "comp": "EF06CO02 e EF06CO04 — algoritmos e decomposição."
+  },
+  {
+    "year": 6,
+    "id": "6-sem",
+    "topic": "Semelhança, área e perímetro",
+    "icon": "⬚",
+    "concept": "Figuras semelhantes mantêm a forma. Área e perímetro não crescem da mesma maneira.",
+    "formula": "Dobrar o lado → perímetro ×2 • área ×4",
+    "challenge": "Se os lados de um quadrado dobram, o que acontece com a área?",
+    "answer": "Fica quatro vezes maior.",
+    "crep": "PR.EF06MA21.s.6.90 • PR.EF06MA29.s.6.96–103",
+    "trim": "3º trimestre",
+    "objective": "Relacionar semelhança, escala, área e perímetro."
+  }
+]
