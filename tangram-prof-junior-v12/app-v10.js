@@ -77,23 +77,40 @@
   const expBtn=document.getElementById('experienceApp');
   const installBtn=document.getElementById('installApp');
   const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-  const isAndroid=/Android/i.test(navigator.userAgent);
+  const ua=navigator.userAgent||'';
+  const isAndroid=/Android/i.test(ua);
+  const isWindows=/Windows/i.test(ua);
+  const isLinux=/Linux/i.test(ua)&&!isAndroid;
+  const isIOS=/iPhone|iPad|iPod/i.test(ua);
+  const isDesktop=isWindows||isLinux;
+  const desktopInstallLabel=isWindows?'🖥️ Instalar no PC':'🖥️ Instalar no computador';
   let deferredPrompt=null, aboutInstall=null, installHelp=null;
 
   const makeOverlay=(cls,html)=>{const overlay=document.createElement('div');overlay.className='tl-about-overlay '+cls;overlay.innerHTML=html;document.body.appendChild(overlay);return overlay};
 
   if(aboutBtn){
-    const overlay=makeOverlay('tl-about-main',`<div class="tl-about-card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><div class="tl-about-top"><img src="${rai}" alt="R.A.I."><div><div class="tl-about-title" id="aboutTitle">Tangram Educativo</div><div class="tl-about-sub">Prof. João Faustino Junior</div></div><button class="tl-about-close" type="button" aria-label="Fechar">×</button></div><div class="tl-about-body"><p><b>João Faustino Junior</b> é casado e pai de dois filhos. Farmacêutico e bioquímico de formação e professor por vocação, reúne uma trajetória de quase <b>três décadas nas análises clínicas</b>, hoje integrada à educação. Atua com <b>Química, Programação e Robótica</b> e desenvolve projetos que aproximam ciência, tecnologia, cultura maker e aprendizagem criativa.</p><p>Formado em <b>Farmácia e Bioquímica pela Universidade Estadual de Ponta Grossa (UEPG)</b>, possui <b>Formação Pedagógica com Habilitação em Química pela UTFPR</b> e especializações em tecnologias e metodologias educacionais. Sua trajetória inclui experiência pedagógica na <b>University of Texas Rio Grande Valley (UTRGV)</b>, com atividades em <b>Human Genetics</b> e contato com metodologias como <b>Problem-Based Learning (PBL)</b> e <b>sala de aula invertida</b>.</p><p>Entre seus projetos estão <b>RunnBot – Uma Aventura STEAM</b>, <b>LoRa – AgroAlerta</b> e <b>R.A.I. – Robô Assistente Interativo</b>. O RunnBot alcançou a <b>segunda fase do Prêmio LED – Luz na Educação</b> e teve destaque na revista educacional <b>Paraná Integral</b>, da rede estadual do Paraná. Seu trabalho busca transformar a tecnologia em instrumento de curiosidade, autoria, criatividade e aprendizagem significativa.</p><hr><p><b>Sobre o projeto.</b> O Tangram Educativo foi concebido para desenvolver raciocínio lógico, percepção espacial, estratégia e conceitos de geometria por meio de desafios interativos.</p><p class="tl-install-help" id="installHelp"><b>Instalar no celular:</b> toque em “Instalar aplicativo”. Se o navegador não abrir a janela automaticamente, use o menu ⋮ do Chrome → “Instalar app” ou “Adicionar à tela inicial”.</p><div class="tl-about-actions"><button type="button" class="tl-about-btn primary" id="aboutInstall">⬇ Instalar aplicativo</button><button type="button" class="tl-about-btn" id="aboutClose">Fechar</button></div><p class="tl-signature">Desenvolvido por Prof. João Faustino Junior • Jaboti–PR</p></div></div>`);
+    const overlay=makeOverlay('tl-about-main',`<div class="tl-about-card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle"><div class="tl-about-top"><img src="${rai}" alt="R.A.I."><div><div class="tl-about-title" id="aboutTitle">Tangram Educativo</div><div class="tl-about-sub">Prof. João Faustino Junior</div></div><button class="tl-about-close" type="button" aria-label="Fechar">×</button></div><div class="tl-about-body"><p><b>João Faustino Junior</b> é casado e pai de dois filhos. Farmacêutico e bioquímico de formação e professor por vocação, reúne uma trajetória de quase <b>três décadas nas análises clínicas</b>, hoje integrada à educação. Atua com <b>Química, Programação e Robótica</b> e desenvolve projetos que aproximam ciência, tecnologia, cultura maker e aprendizagem criativa.</p><p>Formado em <b>Farmácia e Bioquímica pela Universidade Estadual de Ponta Grossa (UEPG)</b>, possui <b>Formação Pedagógica com Habilitação em Química pela UTFPR</b> e especializações em tecnologias e metodologias educacionais. Sua trajetória inclui experiência pedagógica na <b>University of Texas Rio Grande Valley (UTRGV)</b>, com atividades em <b>Human Genetics</b> e contato com metodologias como <b>Problem-Based Learning (PBL)</b> e <b>sala de aula invertida</b>.</p><p>Entre seus projetos estão <b>RunnBot – Uma Aventura STEAM</b>, <b>LoRa – AgroAlerta</b> e <b>R.A.I. – Robô Assistente Interativo</b>. O RunnBot alcançou a <b>segunda fase do Prêmio LED – Luz na Educação</b> e teve destaque na revista educacional <b>Paraná Integral</b>, da rede estadual do Paraná. Seu trabalho busca transformar a tecnologia em instrumento de curiosidade, autoria, criatividade e aprendizagem significativa.</p><hr><p><b>Sobre o projeto.</b> O Tangram Educativo foi concebido para desenvolver raciocínio lógico, percepção espacial, estratégia e conceitos de geometria por meio de desafios interativos.</p><p class="tl-install-help" id="installHelp"><b>Instalar o Tangram:</b> no celular, toque em “Instalar aplicativo”. No Windows ou Linux, use Chrome, Chromium ou Edge e confirme “Instalar app” quando o navegador oferecer a opção.</p><div class="tl-about-actions"><button type="button" class="tl-about-btn primary" id="aboutInstall">⬇ Instalar aplicativo</button><button type="button" class="tl-about-btn" id="aboutClose">Fechar</button></div><p class="tl-signature">Desenvolvido por Prof. João Faustino Junior • Jaboti–PR</p></div></div>`);
     const close=()=>overlay.classList.remove('show'); aboutBtn.addEventListener('click',()=>overlay.classList.add('show')); overlay.querySelector('.tl-about-close').addEventListener('click',close); overlay.querySelector('#aboutClose').addEventListener('click',close); overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
     installHelp=overlay.querySelector('#installHelp'); aboutInstall=overlay.querySelector('#aboutInstall');
     const showHelp=msg=>{overlay.classList.add('show');if(installHelp)installHelp.innerHTML=msg;if(installHelp)installHelp.scrollIntoView({behavior:'smooth',block:'center'})};
     const doInstall=async()=>{
       if(isStandalone()){if(aboutInstall){aboutInstall.textContent='✓ Aplicativo instalado';aboutInstall.disabled=true}showHelp('<b>✓ O Tangram Educativo já está instalado neste aparelho.</b>');return}
       if(deferredPrompt){const ev=deferredPrompt;deferredPrompt=null;try{await ev.prompt();const choice=await ev.userChoice;if(choice&&choice.outcome==='accepted')showHelp('<b>✓ Instalação iniciada.</b> O Tangram Educativo será adicionado aos seus aplicativos.');else showHelp('<b>A instalação foi cancelada.</b> Você pode tentar novamente quando quiser.')}catch(e){showHelp('<b>O Chrome não conseguiu abrir a instalação automática.</b> Use o menu <b>⋮ → Instalar app</b> ou <b>Adicionar à tela inicial</b>.')}if(installBtn)installBtn.style.display='none';return}
-      showHelp(isAndroid?'<b>A instalação automática ainda não foi liberada pelo Chrome.</b> Use o menu <b>⋮ → Instalar app</b> ou <b>Adicionar à tela inicial</b>.':'<b>Para instalar:</b> use “Adicionar à tela inicial”. No iPhone: Safari → Compartilhar → <b>Adicionar à Tela de Início</b>.');
+      if(isAndroid){showHelp('<b>A instalação automática ainda não foi liberada pelo navegador.</b> Use o menu <b>⋮ → Instalar app</b> ou <b>Adicionar à tela inicial</b>.');return}
+      if(isDesktop){
+        showHelp(isWindows?'<b>Instalar no Windows:</b> abra o Tangram no Chrome ou Edge e use o ícone de instalação na barra de endereços ou o menu <b>⋮ → Instalar Tangram Educativo</b>. Depois ele poderá abrir em janela própria e aparecer no Menu Iniciar.':'<b>Instalar no Linux:</b> abra o Tangram no Chrome, Chromium ou Edge e use o ícone de instalação na barra de endereços ou o menu <b>⋮ → Instalar Tangram Educativo</b>. O app abrirá em janela própria.');
+        return;
+      }
+      showHelp(isIOS?'<b>Instalar no iPhone/iPad:</b> Safari → Compartilhar → <b>Adicionar à Tela de Início</b>.':'<b>Para instalar:</b> use a opção de instalação do seu navegador ou “Adicionar à tela inicial”.');
     };
     if(installBtn)installBtn.addEventListener('click',doInstall); aboutInstall.addEventListener('click',doInstall);
-    if(isStandalone()){aboutInstall.textContent='✓ Aplicativo instalado';aboutInstall.disabled=true;if(installBtn)installBtn.style.display='none'}else if(isAndroid&&installBtn){installBtn.style.display='inline-flex'}
+    if(isStandalone()){
+      aboutInstall.textContent='✓ Aplicativo instalado';aboutInstall.disabled=true;if(installBtn)installBtn.style.display='none'
+    }else{
+      if(isDesktop){aboutInstall.textContent=desktopInstallLabel;if(installBtn){installBtn.innerHTML=desktopInstallLabel;installBtn.style.display='inline-flex'}}
+      else if(isAndroid){if(installBtn)installBtn.style.display='inline-flex'}
+      else if(isIOS){aboutInstall.textContent='＋ Adicionar à Tela de Início';if(installBtn)installBtn.style.display='inline-flex'}
+    }
   }
 
   if(expBtn){
@@ -109,7 +126,7 @@
     renderPrefs();
   }
 
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(installBtn)installBtn.style.display='inline-flex';if(aboutInstall&&!isStandalone()){aboutInstall.disabled=false;aboutInstall.textContent='⬇ Instalar aplicativo'}if(installHelp)installHelp.innerHTML='<b>Pronto para instalar.</b> Toque em “Instalar aplicativo” e confirme a janela do Chrome.'});
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(installBtn){installBtn.style.display='inline-flex';if(isDesktop)installBtn.innerHTML=desktopInstallLabel}if(aboutInstall&&!isStandalone()){aboutInstall.disabled=false;aboutInstall.textContent=isDesktop?desktopInstallLabel:'⬇ Instalar aplicativo'}if(installHelp)installHelp.innerHTML=isDesktop?'<b>Pronto para instalar no computador.</b> Toque em “'+desktopInstallLabel.replace(/^🖥️\s*/,'')+'” e confirme a janela do navegador.':'<b>Pronto para instalar.</b> Toque em “Instalar aplicativo” e confirme a janela do navegador.'});
   window.addEventListener('appinstalled',()=>{deferredPrompt=null;if(installBtn)installBtn.style.display='none';if(aboutInstall){aboutInstall.textContent='✓ Aplicativo instalado';aboutInstall.disabled=true}if(installHelp)installHelp.innerHTML='<b>✓ Tangram Educativo instalado com sucesso.</b>'});
 
   let activePointer=null;
