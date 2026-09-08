@@ -1,0 +1,45 @@
+
+.tl-gamer-action{border-color:#4b6b7b!important;background:#0e2735!important}
+.tl-gamer-action.active{border-color:#e8c85a!important;color:#ffe88e!important;background:#283015!important}
+.rai-gamer-official-hud{display:none}
+body.rai-gamer-running #tangram-levels.tl-focus .rai-gamer-official-hud{
+ position:absolute!important;top:max(7px,env(safe-area-inset-top))!important;right:8px!important;left:auto!important;bottom:auto!important;
+ z-index:2147483642!important;display:flex!important;align-items:center!important;gap:5px!important;
+ padding:5px 6px 5px 9px!important;border:1px solid #315d74!important;border-radius:12px!important;background:rgba(7,24,36,.96)!important;
+ box-shadow:0 5px 16px rgba(0,0,0,.32)!important;backdrop-filter:blur(5px)!important
+}
+.rai-gamer-official-time{font:950 18px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#fff;letter-spacing:.01em;min-width:72px;text-align:center}
+.rai-gamer-official-exit{width:27px;height:27px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:#12364a;color:#fff;font:900 15px system-ui;padding:0;cursor:pointer}
+.rai-gamer-official-countdown{position:fixed;inset:0;z-index:2147483646;display:none;place-items:center;background:rgba(2,10,16,.72);backdrop-filter:blur(4px)}
+.rai-gamer-official-countdown.show{display:grid}
+.rai-gamer-official-countdown>div{font:950 clamp(70px,24vw,145px)/1 system-ui;color:#fff;text-shadow:0 8px 30px rgba(0,0,0,.55);animation:raiGamerOfficialPop .6s ease both}
+.rai-gamer-official-countdown>div.go{font-size:clamp(52px,18vw,100px);color:#f8da6c}
+@keyframes raiGamerOfficialPop{0%{transform:scale(.55);opacity:0}50%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:1}}
+.rai-gamer-official-result{position:fixed;z-index:2147483645;left:50%;top:50%;transform:translate(-50%,-50%) scale(.95);display:none;width:min(86vw,340px);padding:18px;border-radius:18px;background:#071c29;border:1px solid rgba(126,218,236,.32);box-shadow:0 24px 80px rgba(0,0,0,.58);text-align:center;color:#effcff}
+.rai-gamer-official-result.show{display:block}
+.rai-gamer-official-result .ico{font-size:42px}
+.rai-gamer-official-result h3{margin:4px 0 7px;font-size:20px}
+.rai-gamer-official-result .tm{font:950 31px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#f8da6c;margin:9px 0}
+.rai-gamer-official-result p{margin:6px 0;color:#bde6ef;font:650 12px/1.4 system-ui}
+.rai-gamer-official-result button{margin-top:10px;border:0;border-radius:10px;padding:9px 13px;background:#f4c542;color:#10202c;font-weight:900}
+body.rai-gamer-running #tangram-levels.tl-focus .tl-head,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-side,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-math,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-legend,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-toolbar,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-meter,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-metertext,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-msg,
+body.rai-gamer-running #tangram-levels.tl-focus .rai-lesson-dock,
+body.rai-gamer-running .rai-lesson-overlay,
+body.rai-gamer-running .rai-tutor-fab,
+body.rai-gamer-running .rai-tutor-bubble,
+body.rai-gamer-running .rai-tutor-overlay,
+body.rai-gamer-running .tl-v12-perf-overlay,
+body.rai-gamer-running .tl-v12-master-jump,
+body.rai-gamer-running #tangram-levels.tl-focus .tl-focus-back,
+body.rai-gamer-running #tangram-levels.tl-focus #mFull,
+body.rai-gamer-running #tangram-levels.tl-focus #focusZoom{display:none!important}
+body.rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll{padding:0!important}
+body.rai-gamer-running #tangram-levels.tl-focus .tl-mobile-controls{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding:6px!important}
+@media(max-width:640px){.rai-gamer-official-time{font-size:17px;min-width:68px}.rai-gamer-official-exit{width:26px;height:26px}}
