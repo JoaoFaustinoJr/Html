@@ -1,0 +1,41 @@
+
+/* Identidade visual v14.1 — nova arte Tangram Educativo + R.A.I. */
+.rai-brand-hero{
+  position:relative;
+  width:100%;
+  margin:10px 0 12px;
+  border:1px solid #315d74;
+  border-radius:18px;
+  overflow:hidden;
+  background:#071824;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.rai-brand-hero img{
+  display:block;
+  width:100%;
+  height:clamp(150px,30vw,285px);
+  object-fit:cover;
+  object-position:center;
+}
+.rai-brand-hero::after{
+  content:'';
+  position:absolute;
+  inset:auto 0 0;
+  height:34%;
+  pointer-events:none;
+  background:linear-gradient(to top,rgba(5,15,24,.12),transparent);
+}
+#tangram-levels.tl-focus .rai-brand-hero,
+body.rai-gamer-running .rai-brand-hero{
+  display:none!important;
+}
+@media(max-width:640px){
+  .rai-brand-hero{margin:7px 0 9px;border-radius:13px}
+  .rai-brand-hero img{
+    height:clamp(122px,47vw,190px);
+    object-position:center;
+  }
+}
+@media(max-width:390px){
+  .rai-brand-hero img{height:145px}
+}
