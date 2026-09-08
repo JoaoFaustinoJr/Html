@@ -1,0 +1,42 @@
+[
+  {
+    "year": 8,
+    "id": "8-trans",
+    "topic": "Composição de transformações",
+    "icon": "🧭",
+    "concept": "Uma posição pode exigir uma sequência de transformações: mover, girar e, em alguns casos, refletir.",
+    "formula": "Transformação composta = sequência de transformações",
+    "challenge": "Dê um exemplo de duas transformações que mudem a posição sem alterar o tamanho.",
+    "answer": "Exemplo: transladar e depois rotacionar 90°.",
+    "crep": "PR.EF08MA18.s.8.55",
+    "trim": "3º trimestre",
+    "objective": "Reconhecer composições de translação, reflexão e rotação."
+  },
+  {
+    "year": 8,
+    "id": "8-pad",
+    "topic": "Padrões, regularidade e recursão",
+    "icon": "🔁",
+    "concept": "Quando uma regra se repete, podemos descrever um padrão. Em computação, algumas soluções usam repetição e recursão.",
+    "formula": "Regra → repetir → observar o próximo estado",
+    "challenge": "“Gire 45° e verifique; se não encaixar, repita.” Qual ideia computacional aparece?",
+    "answer": "Repetição; uma solução também pode ser expressa com recursão.",
+    "crep": "PR.EF08MA10.s.8.25 • PR.EF08MA11.s.8.28",
+    "trim": "1º trimestre",
+    "objective": "Reconhecer padrões e algoritmos de regularidade.",
+    "comp": "EF08CO01 — reconhecer e utilizar recursão."
+  },
+  {
+    "year": 8,
+    "id": "8-cong",
+    "topic": "Congruência e construção",
+    "icon": "◫",
+    "concept": "Figuras congruentes têm mesma forma e mesmo tamanho. Rotação e translação preservam congruência.",
+    "formula": "Congruência → mesma forma + mesmo tamanho",
+    "challenge": "Ao girar um triângulo, ele deixa de ser congruente ao original?",
+    "answer": "Não. Rotação preserva forma e tamanho.",
+    "crep": "PR.EF08MA14.s.8.52 • PR.EF08MA16.s.8.51",
+    "trim": "2º trimestre",
+    "objective": "Relacionar congruência e construção geométrica por passos."
+  }
+]
