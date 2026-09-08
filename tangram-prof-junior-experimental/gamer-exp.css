@@ -155,3 +155,21 @@
     top:max(5px,env(safe-area-inset-top));
   }
 }
+
+
+/* ===== Gamer v8: faixa reservada para o cronômetro ===== */
+.rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll{
+  padding-top:64px!important;
+}
+.rai-gamer-running #tangram-levels.tl-focus .rai-gamer-hud{
+  top:max(7px,env(safe-area-inset-top))!important;
+}
+@media(max-width:640px){
+  .rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll{
+    padding:max(64px,calc(env(safe-area-inset-top) + 58px)) 0 2px!important;
+  }
+  .rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll svg{
+    height:100%!important;
+    max-height:100%!important;
+  }
+}
