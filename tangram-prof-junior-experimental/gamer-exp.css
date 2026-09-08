@@ -173,3 +173,50 @@
     max-height:100%!important;
   }
 }
+
+
+/* ===== Gamer v9: cronômetro como barra real, sem flutuar sobre o SVG ===== */
+.rai-gamer-running #tangram-levels.tl-focus .rai-gamer-hud{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  width:100%!important;
+  min-width:0!important;
+  flex:0 0 auto!important;
+  margin:0!important;
+  padding:max(7px,env(safe-area-inset-top)) 10px 7px!important;
+  border:0!important;
+  border-bottom:1px solid #244b62!important;
+  border-radius:0!important;
+  background:#071824!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+}
+.rai-gamer-running #tangram-levels.tl-focus .rai-gamer-hud .rai-gamer-timer-wrap{
+  min-width:128px!important;
+}
+.rai-gamer-running #tangram-levels.tl-focus .rai-gamer-hud .rai-gamer-time{
+  font-size:29px!important;
+}
+.rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll{
+  padding:2px 0!important;
+}
+.rai-gamer-running #tangram-levels #mFull,
+.rai-gamer-running #tangram-levels #focusZoom{
+  display:none!important;
+}
+@media(max-width:640px){
+  .rai-gamer-running #tangram-levels.tl-focus .rai-gamer-hud{
+    min-height:70px!important;
+    justify-content:center!important;
+  }
+  .rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll{
+    padding:0!important;
+  }
+  .rai-gamer-running #tangram-levels.tl-focus .tl-board-scroll svg{
+    height:100%!important;
+    max-height:100%!important;
+  }
+}
