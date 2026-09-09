@@ -32,9 +32,10 @@
 #tangram-levels .tl-brand-identity{
   min-width:0;
   display:grid;
-  grid-template-columns:minmax(0,1fr) 84px;
+  grid-template-columns:minmax(0,1fr) 76px;
   align-items:center;
-  gap:8px;
+  column-gap:8px;
+  row-gap:5px;
 }
 #tangram-levels .tl-wordmark-wrap{min-width:0}
 #tangram-levels .tl-wordmark{
@@ -68,8 +69,10 @@
   text-shadow:0 0 12px rgba(58,205,255,.35),0 2px 3px rgba(0,0,0,.55);
 }
 #tangram-levels .tl-brand-credit{
+  grid-column:1 / -1;
   display:inline-flex;align-items:center;
-  margin-top:7px;padding:5px 9px;
+  width:max-content;max-width:100%;
+  margin-top:0;padding:5px 9px;
   border:1px solid rgba(75,188,228,.55);
   border-radius:999px;
   background:rgba(5,28,44,.74);
@@ -78,15 +81,15 @@
   white-space:nowrap;
 }
 #tangram-levels .tl-brand-rai-v15{
-  width:84px;height:84px;object-fit:contain;
+  width:76px;height:76px;object-fit:contain;
   filter:drop-shadow(0 8px 10px rgba(0,0,0,.38));
   transform:rotate(2deg);
 }
 #tangram-levels .tl-brand-tools{
   display:grid!important;
-  grid-template-columns:repeat(3,minmax(42px,1fr));
+  grid-template-columns:repeat(5,minmax(48px,1fr));
   gap:6px!important;
-  width:min(238px,34vw);
+  width:min(330px,42vw);
   margin:0!important;
   align-self:start;
 }
@@ -106,6 +109,7 @@
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
 }
 #tangram-levels .tl-mini-action span{
+  display:block!important;
   font:800 9px/1.05 system-ui!important;
   letter-spacing:0!important;
 }
@@ -123,6 +127,7 @@
 #tangram-levels #gamerApp{order:3}
 #tangram-levels #installApp{order:1}
 #tangram-levels #comfortApp{display:none!important}
+#tangram-levels #updateApp{display:none!important}
 
 /* Remove resíduos das artes raster anteriores */
 #tangram-levels .tl-brand-main,
@@ -136,31 +141,45 @@
 @media(max-width:640px){
   #tangram-levels .tl-head{padding:8px 9px!important;border-radius:15px!important}
   #tangram-levels .tl-brand{
-    grid-template-columns:minmax(0,1fr) 176px;
-    gap:7px!important;
+    grid-template-columns:1fr;
+    gap:8px!important;
+    align-items:start!important;
   }
   #tangram-levels .tl-brand-identity{
-    grid-template-columns:minmax(0,1fr) 58px;
-    gap:4px;
+    grid-template-columns:minmax(0,1fr) 54px;
+    column-gap:6px;
+    row-gap:4px;
   }
   #tangram-levels .tl-wordmark{height:31px;font-size:30px}
   #tangram-levels .tl-wordmark-sub{font-size:12px;letter-spacing:.25em;margin-top:2px}
-  #tangram-levels .tl-brand-credit{font-size:10px;margin-top:5px;padding:4px 7px}
-  #tangram-levels .tl-brand-rai-v15{width:58px;height:58px}
-  #tangram-levels .tl-brand-tools{
-    width:176px;grid-template-columns:repeat(3,54px);gap:5px!important;
+  #tangram-levels .tl-brand-credit{
+    font-size:10px;
+    padding:4px 7px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
-  #tangram-levels .tl-mini-action{min-height:43px!important;padding:5px 4px!important;font-size:15px!important;border-radius:12px!important}
-  #tangram-levels .tl-mini-action span{font-size:8px!important}
+  #tangram-levels .tl-brand-rai-v15{width:54px;height:54px}
+  #tangram-levels .tl-brand-tools{
+    width:100%;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:5px!important;
+  }
+  #tangram-levels .tl-mini-action{
+    min-height:43px!important;
+    padding:5px 3px!important;
+    font-size:15px!important;
+    border-radius:12px!important;
+  }
+  #tangram-levels .tl-mini-action span{display:block!important;font-size:8px!important}
 }
 @media(max-width:430px){
-  #tangram-levels .tl-brand{grid-template-columns:minmax(0,1fr) 150px}
-  #tangram-levels .tl-brand-identity{grid-template-columns:minmax(0,1fr) 50px}
+  #tangram-levels .tl-brand-identity{grid-template-columns:minmax(0,1fr) 48px}
   #tangram-levels .tl-wordmark{height:28px;font-size:27px}
   #tangram-levels .tl-wordmark-sub{font-size:10px;letter-spacing:.23em}
   #tangram-levels .tl-brand-credit{font-size:9.5px}
-  #tangram-levels .tl-brand-rai-v15{width:50px;height:50px}
-  #tangram-levels .tl-brand-tools{width:150px;grid-template-columns:repeat(3,46px)}
+  #tangram-levels .tl-brand-rai-v15{width:48px;height:48px}
+  #tangram-levels .tl-brand-tools{grid-template-columns:repeat(5,minmax(0,1fr))}
   #tangram-levels .tl-mini-action{min-height:41px!important;font-size:14px!important}
-  #tangram-levels .tl-mini-action span{font-size:7.5px!important}
+  #tangram-levels .tl-mini-action span{display:block!important;font-size:7.5px!important}
 }
