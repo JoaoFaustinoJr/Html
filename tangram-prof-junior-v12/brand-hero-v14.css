@@ -21,16 +21,33 @@
   flex-direction:column;
   align-items:flex-start;
 }
+#tangram-levels .tl-brand-art-wrap{
+  position:relative;
+  width:min(420px,100%);
+  aspect-ratio:3/1;
+  flex:0 1 auto;
+}
 #tangram-levels .tl-brand-banner{
   display:block;
-  width:min(420px,100%);
-  height:86px;
+  width:100%;
+  height:100%;
   object-fit:cover;
-  object-position:center 44%;
+  object-position:center;
   border-radius:13px;
   border:1px solid rgba(84,170,196,.38);
   box-shadow:0 7px 20px rgba(0,0,0,.34);
   background:#071824;
+}
+#tangram-levels .tl-brand-rai-label{
+  position:absolute;
+  left:77.5%;
+  top:61%;
+  transform:translate(-50%,-50%);
+  color:#fff8dc;
+  font:950 clamp(7px,1vw,11px)/1 system-ui;
+  letter-spacing:.03em;
+  text-shadow:0 1px 3px rgba(0,0,0,.85);
+  pointer-events:none;
 }
 #tangram-levels .tl-brand-caption{
   margin:6px 0 0 4px;
@@ -54,12 +71,13 @@
     align-items:start!important;
   }
   #tangram-levels .tl-brand-main{min-width:0}
-  #tangram-levels .tl-brand-banner{
+  #tangram-levels .tl-brand-art-wrap{
     width:100%;
     max-width:330px;
-    height:68px;
+    aspect-ratio:3/1;
+  }
+  #tangram-levels .tl-brand-banner{
     border-radius:11px;
-    object-position:center 44%;
   }
   #tangram-levels .tl-brand-caption{
     margin-top:5px;
@@ -74,7 +92,7 @@
   }
 }
 @media(max-width:390px){
-  #tangram-levels .tl-brand-banner{height:62px}
+  #tangram-levels .tl-brand-art-wrap{max-width:300px}
   #tangram-levels .tl-brand-caption{font-size:10.5px}
   #tangram-levels .tl-brand-tools{max-width:132px}
 }
