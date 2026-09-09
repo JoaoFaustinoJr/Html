@@ -1,43 +1,49 @@
-
-/* Identidade visual v14.1 — nova arte Tangram Educativo + R.A.I. */
-.rai-brand-hero{
-  position:relative;
-  width:100%;
-  margin:10px 0 12px;
-  border:1px solid #315d74;
+/* Identidade visual v14.2 — arte integrada ao cabeçalho */
+#tangram-levels .tl-head{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate;
   border-radius:18px;
-  overflow:hidden;
-  background:#071824;
-  box-shadow:0 10px 30px rgba(0,0,0,.22);
+  background:#071824!important;
 }
-.rai-brand-hero img{
-  display:block;
-  width:100%;
-  height:clamp(150px,30vw,285px);
-  object-fit:cover;
-  object-position:center;
-}
-.rai-brand-hero::after{
+#tangram-levels .tl-head::before{
   content:'';
   position:absolute;
-  inset:auto 0 0;
-  height:34%;
+  inset:0;
+  z-index:0;
   pointer-events:none;
-  background:linear-gradient(to top,rgba(5,15,24,.12),transparent);
+  background:
+    linear-gradient(90deg,rgba(5,15,24,.96) 0%,rgba(5,15,24,.86) 40%,rgba(5,15,24,.50) 72%,rgba(5,15,24,.34) 100%),
+    url('tangram-hero-v14.webp?v=2') center 43% / cover no-repeat;
+  opacity:.74;
 }
-#tangram-levels.tl-focus .rai-brand-hero,
-body.rai-gamer-running .rai-brand-hero{
-  display:none!important;
+#tangram-levels .tl-head>*{
+  position:relative;
+  z-index:1;
+}
+#tangram-levels .tl-head .tl-brand h1,
+#tangram-levels .tl-head .tl-sub{
+  text-shadow:0 2px 7px rgba(0,0,0,.72);
+}
+#tangram-levels .tl-head .tl-rai-brand{
+  box-shadow:0 6px 18px rgba(0,0,0,.42),0 0 0 1px rgba(111,226,236,.10);
 }
 @media(max-width:640px){
-  .rai-brand-hero{margin:7px 0 9px;border-radius:13px}
-  .rai-brand-hero img{
-    height:clamp(122px,47vw,190px);
-    object-position:center;
+  #tangram-levels .tl-head{
+    border-radius:15px;
+  }
+  #tangram-levels .tl-head::before{
+    background:
+      linear-gradient(90deg,rgba(5,15,24,.97) 0%,rgba(5,15,24,.92) 48%,rgba(5,15,24,.68) 78%,rgba(5,15,24,.52) 100%),
+      url('tangram-hero-v14.webp?v=2') 64% 43% / cover no-repeat;
+    opacity:.56;
   }
 }
 @media(max-width:390px){
-  .rai-brand-hero img{height:145px}
+  #tangram-levels .tl-head::before{
+    opacity:.48;
+    background-position:68% 43%;
+  }
 }
 
 .rai-about-brand-art{
