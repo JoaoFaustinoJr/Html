@@ -80,6 +80,7 @@ function show(name){
  window.scrollTo({top:0,behavior:'smooth'});
  if(name==='reports')renderReports();
  if(name==='voice')renderVoice();
+ if(name==='roadsetup')syncRoadSetup();
 }
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2300);}
 function buzz(p=20){if(navigator.vibrate)navigator.vibrate(p);}
@@ -96,7 +97,14 @@ function setTutor(mode,title,text,phraseId,auto=false){
 function targetSize(){return Math.max(64,Math.min(136,state.size+(state.easy?10:0)+(state.projection?14:0)));}
 function syncRoadSummary(){
  const dest=ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school;
- const el=$('#roadActionSummary');if(el)el.textContent=dest.label+' • Rota '+(Number(state.roadRoute)||2);
+ const control=state.roadControl==='tap'?'Tocar':'Arrastar';
+ const el=$('#roadActionSummary');if(el)el.textContent=dest.label+' • Rota '+(Number(state.roadRoute)||2)+' • '+control;
+}
+function syncRoadSetup(){
+ $$('[data-destination]').forEach(x=>x.classList.toggle('active',x.dataset.destination===state.roadDestination));
+ $$('[data-road-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.roadRoute)===(Number(state.roadRoute)||2)));
+ $('[data-road-control]').forEach(x=>x.classList.toggle('active',x.dataset.roadControl===state.roadControl));
+ syncRoadSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
 
@@ -486,9 +494,9 @@ $$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('r
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
-$('[data-destination]').forEach(b=>b.onclick=()=>{state.roadDestination=b.dataset.destination;$('[data-destination]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();playVoice('choice',false);});
-$('[data-road-route]').forEach(b=>b.onclick=()=>{state.roadRoute=Number(b.dataset.roadRoute)||2;$('[data-road-route]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();});
-$$('[data-road-control]').forEach(b=>b.onclick=()=>{state.roadControl=b.dataset.roadControl;$$('[data-road-control]').forEach(x=>x.classList.toggle('active',x===b));});
+$$('[data-destination]').forEach(b=>b.onclick=()=>{state.roadDestination=b.dataset.destination;$$('[data-destination]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();playVoice('choice',false);});
+$$('[data-road-route]').forEach(b=>b.onclick=()=>{state.roadRoute=Number(b.dataset.roadRoute)||2;$$('[data-road-route]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();});
+$('[data-road-control]').forEach(b=>b.onclick=()=>{state.roadControl=b.dataset.roadControl;$('[data-road-control]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();});
 $('#startRoadMission').onclick=()=>startCircuit(['road']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
