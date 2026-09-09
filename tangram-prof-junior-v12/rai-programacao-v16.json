@@ -1,0 +1,242 @@
+[
+  {
+    "year": 5,
+    "id": "p5-robo",
+    "section": "prog",
+    "topic": "R.A.I. dá ordens ao robô",
+    "icon": "🤖",
+    "concept": "Um robô executa instruções na ordem em que foram programadas. Podemos combinar sequência, repetição e condições; também podemos usar as ideias lógicas NÃO, E e OU.",
+    "formula": "Sequência + repetição + condição",
+    "notation": "REPITA 4 VEZES → avance • SE obstáculo → pare • SE esquerda livre E direita bloqueada → vire à esquerda.",
+    "challenge": "Crie um algoritmo para o robô andar três passos e parar se encontrar um obstáculo.",
+    "answer": "Exemplo: REPITA até 3 vezes: SE houver obstáculo, PARE; SENÃO, AVANCE.",
+    "crep": "EF05CO03 • EF05CO04 — lógica, algoritmos, repetição e seleção.",
+    "trim": "5º ano • Programação",
+    "objective": "Construir e simular algoritmos simples com sequência, repetição e condições.",
+    "comp": "Pensamento Computacional — lógica booleana e controle de fluxo.",
+    "quiz": [
+      {
+        "q": "REPITA é usado para...",
+        "options": [
+          "Tomar uma decisão",
+          "Repetir instruções",
+          "Guardar um texto"
+        ],
+        "correct": 1,
+        "explanation": "REPITA representa um laço."
+      },
+      {
+        "q": "SE obstáculo → PARE é...",
+        "options": [
+          "Condição",
+          "Variável",
+          "Função matemática"
+        ],
+        "correct": 0,
+        "explanation": "A ação depende de uma condição."
+      },
+      {
+        "q": "E, OU e NÃO são operadores...",
+        "options": [
+          "Lógicos",
+          "Geométricos",
+          "De instalação"
+        ],
+        "correct": 0,
+        "explanation": "Eles combinam ou negam condições."
+      }
+    ]
+  },
+  {
+    "year": 6,
+    "id": "p6-programa",
+    "section": "prog",
+    "topic": "Do algoritmo ao programa",
+    "icon": "💻",
+    "concept": "Programar é representar um algoritmo em uma linguagem que o computador possa executar. Para isso usamos dados, variáveis e estruturas como sequência, repetição e seleção.",
+    "formula": "Algoritmo → linguagem → execução",
+    "notation": "idade = 12 • SE idade >= 12: mostrar(\"desafio liberado\")",
+    "challenge": "Qual variável você criaria para guardar o número de tentativas de um jogador?",
+    "answer": "Por exemplo: tentativas = 0.",
+    "crep": "EF06CO01 • EF06CO02 • EF06CO03 — dados, algoritmos e programação.",
+    "trim": "6º ano • Programação",
+    "objective": "Relacionar algoritmo, dados, variáveis e estruturas de controle em um programa.",
+    "comp": "Pensamento Computacional — representação de dados e implementação de algoritmos.",
+    "quiz": [
+      {
+        "q": "Uma variável pode guardar...",
+        "options": [
+          "Um valor usado pelo programa",
+          "Somente imagens",
+          "Somente erros"
+        ],
+        "correct": 0,
+        "explanation": "Variáveis podem guardar diferentes tipos de dados."
+      },
+      {
+        "q": "O código é...",
+        "options": [
+          "Uma representação do algoritmo em uma linguagem",
+          "O mesmo que hardware",
+          "Sempre anterior ao algoritmo"
+        ],
+        "correct": 0,
+        "explanation": "O algoritmo é planejado e pode depois ser codificado."
+      },
+      {
+        "q": "SE/ENTÃO é uma estrutura de...",
+        "options": [
+          "Seleção",
+          "Som",
+          "Armazenamento físico"
+        ],
+        "correct": 0,
+        "explanation": "Seleção escolhe uma ação conforme uma condição."
+      }
+    ]
+  },
+  {
+    "year": 7,
+    "id": "p7-bugs",
+    "section": "prog",
+    "topic": "Caçadores de Bugs",
+    "icon": "🕵️",
+    "concept": "Programas precisam ser testados. No 7º ano, podemos analisar dados em estruturas como vetores e registros e observar passo a passo onde o resultado deixa de ser o esperado.",
+    "formula": "Teste → compare → localize → corrija → teste",
+    "notation": "pontuacoes = [10, 20, 30] • acessar posição errada pode gerar resultado incorreto ou erro.",
+    "challenge": "Uma lista tem três itens, mas o programa tenta acessar o quarto. Que tipo de problema devemos investigar?",
+    "answer": "Um erro de índice/posição da lista; devemos revisar a posição acessada.",
+    "crep": "EF07CO01 • EF07CO02 • EF07CO03 — estruturas de dados, análise, teste e depuração.",
+    "trim": "7º ano • Programação",
+    "objective": "Analisar pequenos programas, localizar erros e compreender estruturas de dados simples.",
+    "comp": "Pensamento Computacional — depuração e avaliação de programas.",
+    "quiz": [
+      {
+        "q": "Uma lista/vetor serve para...",
+        "options": [
+          "Agrupar vários valores",
+          "Instalar o app",
+          "Desenhar somente triângulos"
+        ],
+        "correct": 0,
+        "explanation": "Listas armazenam coleções de dados."
+      },
+      {
+        "q": "Ao encontrar um bug, o próximo passo é...",
+        "options": [
+          "Investigar sua causa",
+          "Desistir",
+          "Trocar de computador"
+        ],
+        "correct": 0,
+        "explanation": "Depuração começa pela observação e investigação."
+      },
+      {
+        "q": "Testar um programa ajuda a...",
+        "options": [
+          "Comparar resultado esperado e obtido",
+          "Aumentar a tela",
+          "Criar internet"
+        ],
+        "correct": 0,
+        "explanation": "Testes revelam comportamentos incorretos."
+      }
+    ]
+  },
+  {
+    "year": 8,
+    "id": "p8-listas",
+    "section": "prog",
+    "topic": "Listas e algoritmos",
+    "icon": "📚",
+    "concept": "Listas organizam conjuntos de dados. Podemos percorrê-las para buscar, inserir, remover ou ordenar valores. Algumas soluções avançadas podem também usar recursão.",
+    "formula": "Lista → percorrer → comparar → agir",
+    "notation": "para cada valor em lista → comparar com o alvo • ordenar = reorganizar segundo uma regra.",
+    "challenge": "Você tem [8, 3, 5]. Qual poderia ser o primeiro passo de um algoritmo de ordenação crescente?",
+    "answer": "Comparar valores e trocar posições quando o anterior for maior que o seguinte; diferentes algoritmos podem fazer isso de maneiras distintas.",
+    "crep": "EF08CO01 • EF08CO02 • EF08CO03 — listas, algoritmos clássicos e recursão.",
+    "trim": "8º ano • Programação",
+    "objective": "Compreender operações com listas, busca, ordenação e a ideia de recursão.",
+    "comp": "Pensamento Computacional — estruturas de dados e estratégias algorítmicas.",
+    "quiz": [
+      {
+        "q": "Buscar em uma lista significa...",
+        "options": [
+          "Localizar um valor ou item",
+          "Apagar o programa",
+          "Instalar Python"
+        ],
+        "correct": 0,
+        "explanation": "Algoritmos de busca procuram elementos."
+      },
+      {
+        "q": "Ordenar uma lista significa...",
+        "options": [
+          "Reorganizar seus elementos segundo uma regra",
+          "Duplicar todos os itens",
+          "Transformar números em imagens"
+        ],
+        "correct": 0,
+        "explanation": "A ordem pode ser crescente, alfabética etc."
+      },
+      {
+        "q": "Recursão acontece quando...",
+        "options": [
+          "Uma solução usa a própria ideia/função em subproblemas menores",
+          "O computador desliga",
+          "Uma variável não muda"
+        ],
+        "correct": 0,
+        "explanation": "Recursão reaplica a solução a uma versão menor do problema."
+      }
+    ]
+  },
+  {
+    "year": 9,
+    "id": "p9-eventos",
+    "section": "prog",
+    "topic": "Eventos, estados e robôs",
+    "icon": "📡",
+    "concept": "Em programas orientados a eventos, ações acontecem quando algo ocorre: clique, tecla, mensagem ou sensor. Estados representam a situação atual do sistema e ajudam a decidir a próxima ação.",
+    "formula": "Evento → verificar estado → executar ação → atualizar estado",
+    "notation": "SE sensor detectar obstáculo → estado = DESVIANDO • ao concluir → estado = AVANÇANDO.",
+    "challenge": "Em um robô, qual evento poderia fazer o estado mudar de AVANÇANDO para PARADO?",
+    "answer": "Por exemplo: sensor detectar obstáculo, botão de emergência ser pressionado ou receber comando de parada.",
+    "crep": "EF09CO01 • EF09CO02 • EF09CO03 — eventos, estados, projetos e sistemas computacionais.",
+    "trim": "9º ano • Programação",
+    "objective": "Modelar comportamentos simples usando eventos, estados e ações, relacionando-os à robótica.",
+    "comp": "Pensamento Computacional — programação orientada a eventos e modelagem de sistemas.",
+    "quiz": [
+      {
+        "q": "Um clique do mouse é um...",
+        "options": [
+          "Evento",
+          "Tipo de memória",
+          "Algoritmo de ordenação"
+        ],
+        "correct": 0,
+        "explanation": "Eventos disparam ações no programa."
+      },
+      {
+        "q": "Estado representa...",
+        "options": [
+          "A situação atual do sistema",
+          "Somente a cor da tela",
+          "Um erro obrigatório"
+        ],
+        "correct": 0,
+        "explanation": "O estado ajuda o programa a decidir o que fazer a seguir."
+      },
+      {
+        "q": "Um sensor de robô pode...",
+        "options": [
+          "Gerar um evento",
+          "Substituir todo o algoritmo",
+          "Impedir qualquer programação"
+        ],
+        "correct": 0,
+        "explanation": "Leituras de sensores podem disparar mudanças de estado e ações."
+      }
+    ]
+  }
+]
