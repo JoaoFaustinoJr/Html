@@ -25,26 +25,81 @@ jobs:
       - name: Install Pillow
         run: python -m pip install --quiet pillow
 
-      - name: Build real 1200x630 social card
+      - name: Build social card from current Tangram identity
         run: |
           python - <<'PY'
-          from PIL import Image, ImageEnhance, ImageFilter
+          from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
           from pathlib import Path
 
+          W,H = 1200,630
           base = Path("tangram-prof-junior-v12")
-          src = base / "tangram-share-v17.jpg"
-          dst = base / "tangram-share-v18.jpg"
+          header = Image.open(base/"tangram-header-v144.webp").convert("RGB")
+          icon = Image.open(base/"icon-512.webp").convert("RGBA")
 
-          im = Image.open(src).convert("RGB")
-          # Preserve the exact new artwork, but make the physical asset
-          # compliant with large Open Graph previews.
-          im = im.resize((1200, 630), Image.Resampling.LANCZOS)
-          im = ImageEnhance.Sharpness(im).enhance(1.15)
-          im.save(dst, "JPEG", quality=88, optimize=True, progressive=True)
+          # Deep blue Tangram background with subtle blueprint grid.
+          card = Image.new("RGB",(W,H),(4,31,66))
+          d = ImageDraw.Draw(card)
+          for y in range(H):
+              t=y/(H-1)
+              d.line((0,y,W,y), fill=(int(4+2*t),int(31+25*t),int(66+28*t)))
+          grid=(18,78,121)
+          for x in range(0,W,60): d.line((x,0,x,H),fill=grid,width=1)
+          for y in range(0,H,60): d.line((0,y,W,y),fill=grid,width=1)
 
-          check = Image.open(dst)
-          assert check.size == (1200, 630), check.size
-          print("Generated:", dst, check.size)
+          # Header artwork: preserve ratio, place as a crisp branded panel.
+          header = header.resize((900,300),Image.Resampling.LANCZOS)
+          panel=Image.new("RGB",(930,330),(4,25,50))
+          panel.paste(header,(15,15))
+          card.paste(panel,(28,30))
+          d.rounded_rectangle((28,30,958,360),radius=28,outline=(43,180,206),width=3)
+
+          # R.A.I. icon at upper right, visually tied to header.
+          icon = icon.resize((190,190),Image.Resampling.LANCZOS)
+          mask=Image.new("L",(210,210),0)
+          md=ImageDraw.Draw(mask); md.rounded_rectangle((5,5,205,205),radius=38,fill=255)
+          icon_bg=Image.new("RGBA",(210,210),(6,51,74,235))
+          icon_bg.alpha_composite(icon,(10,10))
+          card.paste(icon_bg.convert("RGB"),(975,40),mask)
+
+          # Fonts.
+          bold="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+          reg="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+          fb=ImageFont.truetype(bold,38)
+          fm=ImageFont.truetype(bold,25)
+          fr=ImageFont.truetype(reg,24)
+          fs=ImageFont.truetype(reg,20)
+
+          # Strong lower information band.
+          d.rounded_rectangle((28,385,1172,600),radius=30,fill=(5,25,48),outline=(35,101,135),width=2)
+          d.text((58,410),"Tangram Educativo",font=fb,fill=(239,251,255))
+          d.text((58,463),"10 desafios de lógica, geometria e percepção espacial",font=fr,fill=(193,229,244))
+
+          # Feature pills.
+          pills=[
+              ("🎮  Modo Gamer",58,515,245),
+              ("R.A.I. Tutora",320,515,220),
+              ("Instalável",555,515,175),
+              ("Android • Windows • Linux",745,515,390),
+          ]
+          # Emoji fallback: omit unsupported glyph in renderer by normalizing first pill.
+          pills[0]=("Modo Gamer",58,515,245)
+          for txt,x,y,w in pills:
+              d.rounded_rectangle((x,y,x+w,y+52),radius=18,fill=(8,55,79),outline=(31,165,191),width=2)
+              tw=d.textbbox((0,0),txt,font=fm)[2]
+              d.text((x+(w-tw)//2,y+12),txt,font=fm,fill=(235,250,255))
+
+          d.text((975,250),"R.A.I.",font=fm,fill=(255,211,49))
+          d.text((975,286),"Aprender também",font=fs,fill=(220,239,248))
+          d.text((975,312),"é um jogo.",font=fs,fill=(220,239,248))
+          d.text((58,608),"Prof. João Faustino Junior",font=fs,fill=(171,214,234))
+
+          out=base/"tangram-share-v18.jpg"
+          card.save(out,"JPEG",quality=91,optimize=True,progressive=True)
+
+          check=Image.open(out)
+          assert check.size==(1200,630),check.size
+          check.verify()
+          print("OK:",out,"1200x630",out.stat().st_size,"bytes")
           PY
 
       - name: Commit generated card
