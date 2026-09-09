@@ -25,81 +25,117 @@ jobs:
       - name: Install Pillow
         run: python -m pip install --quiet pillow
 
-      - name: Build social card from current Tangram identity
+      - name: Generate 1200x630 Tangram social card
         run: |
           python - <<'PY'
-          from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+          from PIL import Image, ImageDraw, ImageFont
           from pathlib import Path
+          import math, random
 
-          W,H = 1200,630
-          base = Path("tangram-prof-junior-v12")
-          header = Image.open(base/"tangram-header-v144.webp").convert("RGB")
-          icon = Image.open(base/"icon-512.webp").convert("RGBA")
+          W,H=1200,630
+          out=Path("tangram-prof-junior-v12/tangram-share-v18.jpg")
+          img=Image.new("RGB",(W,H),(3,25,54))
+          d=ImageDraw.Draw(img)
 
-          # Deep blue Tangram background with subtle blueprint grid.
-          card = Image.new("RGB",(W,H),(4,31,66))
-          d = ImageDraw.Draw(card)
+          # Blue educational / blueprint background.
           for y in range(H):
               t=y/(H-1)
-              d.line((0,y,W,y), fill=(int(4+2*t),int(31+25*t),int(66+28*t)))
-          grid=(18,78,121)
-          for x in range(0,W,60): d.line((x,0,x,H),fill=grid,width=1)
-          for y in range(0,H,60): d.line((0,y,W,y),fill=grid,width=1)
+              d.line((0,y,W,y),fill=(3+int(3*t),25+int(28*t),54+int(38*t)))
+          for x in range(0,W,60):
+              d.line((x,0,x,H),fill=(12,63,103),width=1)
+          for y in range(0,H,60):
+              d.line((0,y,W,y),fill=(12,63,103),width=1)
 
-          # Header artwork: preserve ratio, place as a crisp branded panel.
-          header = header.resize((900,300),Image.Resampling.LANCZOS)
-          panel=Image.new("RGB",(930,330),(4,25,50))
-          panel.paste(header,(15,15))
-          card.paste(panel,(28,30))
-          d.rounded_rectangle((28,30,958,360),radius=28,outline=(43,180,206),width=3)
+          # Soft blueprint geometry.
+          bp=(21,83,126)
+          d.polygon([(65,105),(155,45),(175,145)],outline=bp)
+          d.rectangle((1020,70,1110,160),outline=bp,width=3)
+          d.ellipse((945,420,1055,530),outline=bp,width=3)
+          d.line((72,480,175,405,225,510,72,480),fill=bp,width=3)
 
-          # R.A.I. icon at upper right, visually tied to header.
-          icon = icon.resize((190,190),Image.Resampling.LANCZOS)
-          mask=Image.new("L",(210,210),0)
-          md=ImageDraw.Draw(mask); md.rounded_rectangle((5,5,205,205),radius=38,fill=255)
-          icon_bg=Image.new("RGBA",(210,210),(6,51,74,235))
-          icon_bg.alpha_composite(icon,(10,10))
-          card.paste(icon_bg.convert("RGB"),(975,40),mask)
-
-          # Fonts.
           bold="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
           reg="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-          fb=ImageFont.truetype(bold,38)
-          fm=ImageFont.truetype(bold,25)
-          fr=ImageFont.truetype(reg,24)
-          fs=ImageFont.truetype(reg,20)
+          f_logo=ImageFont.truetype(bold,82)
+          f_edu=ImageFont.truetype(bold,35)
+          f_title=ImageFont.truetype(bold,31)
+          f_body=ImageFont.truetype(reg,25)
+          f_pill=ImageFont.truetype(bold,20)
+          f_robot=ImageFont.truetype(bold,27)
+          f_small=ImageFont.truetype(reg,18)
 
-          # Strong lower information band.
-          d.rounded_rectangle((28,385,1172,600),radius=30,fill=(5,25,48),outline=(35,101,135),width=2)
-          d.text((58,410),"Tangram Educativo",font=fb,fill=(239,251,255))
-          d.text((58,463),"10 desafios de lógica, geometria e percepção espacial",font=fr,fill=(193,229,244))
+          # Tangram wordmark, each letter in a strong piece-like color.
+          word="TANGRAM"
+          colors=[(255,82,96),(255,164,58),(255,211,49),(60,215,109),(41,194,238),(112,114,246),(208,82,235)]
+          x=55
+          for ch,col in zip(word,colors):
+              d.text((x,72),ch,font=f_logo,fill=col,stroke_width=1,stroke_fill=(255,255,255))
+              x+=d.textlength(ch,font=f_logo)-3
+          d.text((62,158),"E D U C A T I V O",font=f_edu,fill=(248,252,255))
 
-          # Feature pills.
-          pills=[
-              ("🎮  Modo Gamer",58,515,245),
-              ("R.A.I. Tutora",320,515,220),
-              ("Instalável",555,515,175),
-              ("Android • Windows • Linux",745,515,390),
-          ]
-          # Emoji fallback: omit unsupported glyph in renderer by normalizing first pill.
-          pills[0]=("Modo Gamer",58,515,245)
-          for txt,x,y,w in pills:
-              d.rounded_rectangle((x,y,x+w,y+52),radius=18,fill=(8,55,79),outline=(31,165,191),width=2)
-              tw=d.textbbox((0,0),txt,font=fm)[2]
-              d.text((x+(w-tw)//2,y+12),txt,font=fm,fill=(235,250,255))
+          # Geometric accents around logo.
+          d.polygon([(54,55),(88,20),(105,62)],fill=(255,211,49))
+          d.polygon([(480,55),(525,18),(548,73)],fill=(41,194,238))
+          d.polygon([(560,145),(610,95),(645,150)],fill=(60,215,109))
+          d.polygon([(650,65),(708,65),(680,112)],fill=(208,82,235))
 
-          d.text((975,250),"R.A.I.",font=fm,fill=(255,211,49))
-          d.text((975,286),"Aprender também",font=fs,fill=(220,239,248))
-          d.text((975,312),"é um jogo.",font=fs,fill=(220,239,248))
-          d.text((58,608),"Prof. João Faustino Junior",font=fs,fill=(171,214,234))
+          # Professor signature + short descriptor.
+          d.rounded_rectangle((55,225,735,340),radius=24,fill=(5,42,70),outline=(38,138,172),width=2)
+          d.text((80,246),"Prof. João Faustino Junior",font=f_title,fill=(240,251,255))
+          d.text((80,292),"Lógica • geometria • percepção espacial",font=f_body,fill=(184,226,241))
 
-          out=base/"tangram-share-v18.jpg"
-          card.save(out,"JPEG",quality=91,optimize=True,progressive=True)
+          # R.A.I. robot, orange modern mascot silhouette.
+          # shadow
+          d.rounded_rectangle((815,90,1115,520),radius=55,fill=(2,16,34),outline=(35,133,163),width=3)
+          # legs / feet
+          d.rounded_rectangle((875,442,930,500),radius=14,fill=(197,95,21))
+          d.rounded_rectangle((1000,442,1055,500),radius=14,fill=(197,95,21))
+          d.rounded_rectangle((852,486,947,520),radius=14,fill=(235,126,29))
+          d.rounded_rectangle((983,486,1078,520),radius=14,fill=(235,126,29))
+          # body
+          d.rounded_rectangle((855,285,1075,445),radius=28,fill=(236,126,29),outline=(255,181,70),width=5)
+          # arms
+          d.rounded_rectangle((810,310,865,405),radius=18,fill=(230,119,27))
+          d.rounded_rectangle((1065,310,1120,405),radius=18,fill=(230,119,27))
+          # neck
+          d.rounded_rectangle((946,254,985,295),radius=12,fill=(79,59,45))
+          # head
+          d.rounded_rectangle((842,125,1088,275),radius=35,fill=(235,127,31),outline=(255,185,71),width=5)
+          d.rounded_rectangle((870,149,1060,247),radius=28,fill=(42,58,60))
+          # eyes
+          for cx in (925,1005):
+              d.ellipse((cx-31,166,cx+31,228),fill=(248,240,211))
+              d.ellipse((cx-14,180,cx+14,213),fill=(47,31,20))
+              d.ellipse((cx-7,184,cx+1,192),fill=(255,255,255))
+          # smile
+          d.arc((940,202,995,240),0,180,fill=(10,15,16),width=4)
+          # antennae
+          d.line((900,128,890,95),fill=(205,104,23),width=7)
+          d.line((1030,128,1040,95),fill=(205,104,23),width=7)
+          d.ellipse((879,83,900,104),fill=(245,143,38))
+          d.ellipse((1029,83,1050,104),fill=(245,143,38))
+          # R.A.I. name, explicitly readable
+          rai="R.A.I."
+          tw=d.textlength(rai,font=f_robot)
+          d.text((965-tw/2,337),rai,font=f_robot,fill=(255,249,219))
+          d.text((888,535),"R.A.I. Tutora",font=f_title,fill=(110,234,239))
 
+          # Footer feature pills.
+          pill_y=390
+          items=[("10 desafios",55,180),( "Modo Gamer",250,190),("Instalável",455,165),("Android • Windows • Linux",635,330)]
+          for txt,x,w in items:
+              d.rounded_rectangle((x,pill_y,x+w,pill_y+58),radius=18,fill=(7,55,79),outline=(31,173,197),width=2)
+              tw=d.textlength(txt,font=f_pill)
+              d.text((x+(w-tw)/2,pill_y+16),txt,font=f_pill,fill=(238,251,255))
+
+          d.text((58,478),"Aprender também é um jogo.",font=ImageFont.truetype(bold,29),fill=(117,232,238))
+          d.text((58,525),"Abra o card e jogue no navegador ou instale o app.",font=f_body,fill=(200,231,243))
+          d.text((58,574),"joaofaustinojr.github.io/Html/tangram-prof-junior-v12/",font=f_small,fill=(148,208,232))
+
+          img.save(out,"JPEG",quality=92,optimize=True,progressive=True)
           check=Image.open(out)
-          assert check.size==(1200,630),check.size
-          check.verify()
-          print("OK:",out,"1200x630",out.stat().st_size,"bytes")
+          assert check.size==(1200,630)
+          check.load()
+          print("OK",check.size,out.stat().st_size)
           PY
 
       - name: Commit generated card
