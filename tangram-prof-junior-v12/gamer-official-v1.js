@@ -66,6 +66,7 @@
  }
  function exit(){
    active=false;running=false;countToken++;cancelAnimationFrame(raf);raf=0;countdown.classList.remove('show');hud.classList.remove('show');closeResult();document.body.classList.remove('rai-gamer-running');button.classList.remove('active');leaveFocus();
+   setTimeout(()=>{try{if(window.__tlRefreshMetrics)window.__tlRefreshMetrics()}catch(e){}},80);
  }
  function complete(){
    if(!active||!running||Date.now()-lastVerifyAt>3500)return;
