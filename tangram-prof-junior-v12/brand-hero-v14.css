@@ -1,58 +1,80 @@
-/* Compatibilidade com HTML antigo: nunca deixar o antigo banner reservar espaço */
+/* Identidade visual v14.4 — cabeçalho com a nova marca Tangram + R.A.I. */
 #tangram-levels .rai-brand-hero{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
-
-/* Identidade visual v14.2 — arte integrada ao cabeçalho */
 #tangram-levels .tl-head{
   position:relative!important;
   overflow:hidden!important;
-  isolation:isolate;
   border-radius:18px;
-  background:#071824!important;
+  background:linear-gradient(135deg,#071824,#092638)!important;
 }
-#tangram-levels .tl-head::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg,rgba(5,15,24,.96) 0%,rgba(5,15,24,.86) 40%,rgba(5,15,24,.50) 72%,rgba(5,15,24,.34) 100%),
-    url('tangram-hero-v14.webp?v=3') center 43% / cover no-repeat;
-  opacity:.74;
+#tangram-levels .tl-head::before{display:none!important}
+#tangram-levels .tl-brand{
+  width:100%;
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-width:0;
 }
-#tangram-levels .tl-head>*{
-  position:relative;
-  z-index:1;
+#tangram-levels .tl-brand-main{
+  min-width:0;
+  flex:1 1 390px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
 }
-#tangram-levels .tl-head .tl-brand h1,
-#tangram-levels .tl-head .tl-sub{
-  text-shadow:0 2px 7px rgba(0,0,0,.72);
+#tangram-levels .tl-brand-banner{
+  display:block;
+  width:min(420px,100%);
+  height:86px;
+  object-fit:cover;
+  object-position:center 44%;
+  border-radius:13px;
+  border:1px solid rgba(84,170,196,.38);
+  box-shadow:0 7px 20px rgba(0,0,0,.34);
+  background:#071824;
 }
-#tangram-levels .tl-head .tl-rai-brand{
-  box-shadow:0 6px 18px rgba(0,0,0,.42),0 0 0 1px rgba(111,226,236,.10);
+#tangram-levels .tl-brand-caption{
+  margin:6px 0 0 4px;
+  color:#b9dce7;
+  font:800 12px/1.25 system-ui;
+  letter-spacing:.01em;
+  text-shadow:0 2px 6px rgba(0,0,0,.6);
 }
+#tangram-levels .tl-brand-tools{
+  margin-left:auto!important;
+  flex:0 1 auto;
+}
+#tangram-levels .tl-rai-brand,
+#tangram-levels .tl-brand h1{display:none!important}
 @media(max-width:640px){
-  #tangram-levels .tl-head{
-    border-radius:15px;
+  #tangram-levels .tl-head{border-radius:15px}
+  #tangram-levels .tl-brand{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:7px!important;
+    align-items:start!important;
   }
-  #tangram-levels .tl-head::before{
-    background:
-      linear-gradient(90deg,rgba(5,15,24,.97) 0%,rgba(5,15,24,.92) 48%,rgba(5,15,24,.68) 78%,rgba(5,15,24,.52) 100%),
-      url('tangram-hero-v14.webp?v=3') 64% 43% / cover no-repeat;
-    opacity:.56;
+  #tangram-levels .tl-brand-main{min-width:0}
+  #tangram-levels .tl-brand-banner{
+    width:100%;
+    max-width:330px;
+    height:68px;
+    border-radius:11px;
+    object-position:center 44%;
+  }
+  #tangram-levels .tl-brand-caption{
+    margin-top:5px;
+    font-size:11px;
+    white-space:nowrap;
+  }
+  #tangram-levels .tl-brand-tools{
+    margin-left:0!important;
+    justify-content:flex-end;
+    align-content:flex-start;
+    max-width:148px;
   }
 }
 @media(max-width:390px){
-  #tangram-levels .tl-head::before{
-    opacity:.48;
-    background-position:68% 43%;
-  }
-}
-
-.rai-about-brand-art{
-  display:block;width:100%;height:auto;max-height:250px;object-fit:cover;object-position:center;
-  border-bottom:1px solid #315d74;background:#071824
-}
-@media(max-width:640px){
-  .rai-about-brand-art{max-height:180px}
+  #tangram-levels .tl-brand-banner{height:62px}
+  #tangram-levels .tl-brand-caption{font-size:10.5px}
+  #tangram-levels .tl-brand-tools{max-width:132px}
 }
