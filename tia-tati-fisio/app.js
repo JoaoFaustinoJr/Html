@@ -238,6 +238,7 @@ function road(){
  const area=$('#activityArea'),screen=$('#screen-game');
  screen.classList.add('road-immersive');
  app.classList.add('road-game-mode');
+ document.body.classList.add('road-game-active');
  area.classList.add('road-activity');
  const dest=ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school;
  const level=Number(state.roadRoute)||2;
@@ -276,17 +277,7 @@ function road(){
  ];
  if(state.roadDestination==='school')trafficEvents.push({fraction:.87,type:'school',icon:'🏫',text:'Zona escolar: atenção redobrada e velocidade reduzida.',phrase:'traffic_school'});
 
- const argoSvg='<svg viewBox="0 0 116 78" aria-hidden="true">'+
- '<defs><linearGradient id="argoBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2ca7ff"/><stop offset=".48" stop-color="#0877d8"/><stop offset="1" stop-color="#004f9f"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#99dcff"/><stop offset="1" stop-color="#26475d"/></linearGradient></defs>'+
- '<path d="M19 47 L25 29 Q29 20 40 18 L70 17 Q82 18 88 28 L94 45 Q103 47 106 54 L106 62 Q105 68 97 68 H18 Q10 68 9 61 V55 Q11 49 19 47Z" fill="url(#argoBlue)" stroke="#fff" stroke-width="3"/>'+
- '<path d="M35 22 L70 21 Q77 22 83 32 H29 Q31 26 35 22Z" fill="url(#glass)"/>'+
- '<path d="M58 21 V32" stroke="#d9f5ff" stroke-width="2" opacity=".75"/>'+
- '<path d="M14 51 Q28 45 43 44 H79 Q94 45 102 51" fill="none" stroke="#0a3155" stroke-width="2" opacity=".5"/>'+
- '<rect x="19" y="46" width="16" height="7" rx="3" fill="#eaf8ff"/><rect x="84" y="46" width="14" height="7" rx="3" fill="#ffef9c"/>'+
- '<path d="M19 60 H98" stroke="#ed4b62" stroke-width="3" stroke-linecap="round"/>'+
- '<circle cx="29" cy="66" r="10" fill="#1d2d38" stroke="#fff" stroke-width="3"/><circle cx="87" cy="66" r="10" fill="#1d2d38" stroke="#fff" stroke-width="3"/>'+
- '<circle cx="29" cy="66" r="4" fill="#a9bac5"/><circle cx="87" cy="66" r="4" fill="#a9bac5"/>'+
- '</svg>';
+ const carAsset='assets/argo-hgt-blue.svg';
 
  const scene=document.createElement('div');scene.className='road-game-shell';
  scene.innerHTML=
@@ -294,29 +285,12 @@ function road(){
  '<div class="road-game-top">'+
   '<div class="road-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI DIZ</small><strong class="road-tutor-msg">Cuidado com a curva!</strong></div></div>'+
   '<div class="road-score"><span>⭐ <b class="road-points">0</b></span><span>📍 '+dest.label+'</span></div>'+
-  '<div class="road-game-actions"><button class="road-voice-btn" type="button" aria-label="Ouvir Tia Tati">🔊</button><button class="road-hint-btn" type="button" aria-label="Dica">💡</button><button class="road-pause-btn" type="button" aria-label="Pausar">⏸️</button></div>'+
+  '<div class="road-game-actions"><button class="road-exit-btn" type="button" aria-label="Voltar">←</button><button class="road-voice-btn" type="button" aria-label="Ouvir Tia Tati">🔊</button><button class="road-hint-btn" type="button" aria-label="Dica">💡</button><button class="road-pause-btn" type="button" aria-label="Pausar">⏸️</button></div>'+
  '</div>'+
  '<div class="road-game-stage">'+
   '<svg class="road-world" viewBox="0 0 '+vw+' '+vh+'" preserveAspectRatio="none" aria-label="Estrada do Caminho Seguro">'+
-   '<defs>'+
-    '<linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8fd76e"/><stop offset="1" stop-color="#65bd69"/></linearGradient>'+
-    '<filter id="roadShadow"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity=".18"/></filter>'+
-   '</defs>'+
-   '<rect width="'+vw+'" height="'+vh+'" fill="#bfeaff"/>'+
-   '<rect y="105" width="'+vw+'" height="'+(vh-105)+'" fill="url(#grass)"/>'+
-   '<circle cx="350" cy="60" r="27" fill="#ffd85a"/>'+
-   '<g opacity=".92">'+
-    '<circle cx="48" cy="160" r="38" fill="#54ad61"/><circle cx="92" cy="145" r="32" fill="#62bc6c"/><circle cx="345" cy="170" r="44" fill="#54ad61"/>'+
-    '<circle cx="385" cy="220" r="30" fill="#68c273"/><circle cx="58" cy="350" r="35" fill="#5bb76a"/><circle cx="365" cy="405" r="39" fill="#56ae62"/>'+
-    '<circle cx="52" cy="575" r="44" fill="#64bf70"/><circle cx="370" cy="590" r="46" fill="#5db76a"/>'+
-   '</g>'+
-   '<g class="destination-building">'+
-    '<rect x="148" y="12" width="124" height="78" rx="7" fill="'+(state.roadDestination==='school'?'#ffe9ad':state.roadDestination==='home'?'#fff0e7':'#dff2cb')+'" stroke="#fff" stroke-width="5"/>'+
-    '<path d="M140 18 L210 -12 L280 18Z" fill="'+(state.roadDestination==='school'?'#f47b73':state.roadDestination==='home'?'#e76c67':'#76bf6d')+'"/>'+
-    '<rect x="198" y="55" width="24" height="35" rx="3" fill="#5aaee4"/>'+
-    '<rect x="164" y="38" width="22" height="18" rx="2" fill="#fff9b6"/><rect x="234" y="38" width="22" height="18" rx="2" fill="#fff9b6"/>'+
-    '<text x="210" y="30" text-anchor="middle" font-size="16" font-weight="900" fill="#17374d">'+dest.label.toUpperCase()+'</text>'+
-   '</g>'+
+   '<defs><filter id="roadShadow"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity=".20"/></filter></defs>'+
+   '<image href="assets/road-'+state.roadDestination+'.svg" x="0" y="0" width="'+vw+'" height="'+vh+'" preserveAspectRatio="none"/>'+
    '<path d="'+path+'" fill="none" stroke="#e6eef0" stroke-width="'+(roadWidth+26)+'" stroke-linecap="round" stroke-linejoin="round" filter="url(#roadShadow)"/>'+
    '<path d="'+path+'" fill="none" stroke="#4f5961" stroke-width="'+roadWidth+'" stroke-linecap="round" stroke-linejoin="round"/>'+
    '<path class="road-guide" d="'+path+'" fill="none" stroke="#76d8c3" stroke-width="'+Math.max(roadWidth-26,40)+'" stroke-linecap="round" stroke-linejoin="round"/>'+
@@ -334,7 +308,7 @@ function road(){
  area.appendChild(scene);
  const stage=scene.querySelector('.road-game-stage');
 
- const car=document.createElement('div');car.className='game-object argo-token';car.innerHTML=argoSvg;stage.appendChild(car);
+ const car=document.createElement('div');car.className='game-object argo-token';car.innerHTML='<img src="'+carAsset+'" alt="Carrinho azul da Tia Tati" draggable="false">';stage.appendChild(car);
 
  const starEls=starPoints.map((p,i)=>{
   const star=document.createElement('div');star.className='road-star';star.textContent='⭐';star.dataset.i=i;stage.appendChild(star);return star;
@@ -357,6 +331,7 @@ function road(){
 
  let checkpoint=0,lastErr=0,helpLevel=0,lives=3,finished=false,lastTrafficIndex=-1,stars=0;
  const collected=new Set(),pointsEl=scene.querySelector('.road-points'),starsEl=scene.querySelector('.road-stars-count'),tutorMsg=scene.querySelector('.road-tutor-msg'),trafficBubble=scene.querySelector('.road-traffic-bubble'),crashEl=scene.querySelector('.road-crash'),progressFill=scene.querySelector('.road-progress-fill');
+ scene.querySelector('.road-exit-btn').onclick=()=>show('roadsetup');
  scene.querySelector('.road-voice-btn').onclick=()=>playVoice(state.currentPhrase,true);
  scene.querySelector('.road-hint-btn').onclick=()=>{state.assists++;tutorMsg.textContent=MISSIONS.road.hint;trafficBubble.textContent='💡 '+MISSIONS.road.hint;playVoice('road_hint',false);};
  scene.querySelector('.road-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';trafficBubble.textContent=state.paused?'⏸️ Pausado. Continue quando estiver pronto.':'🚗 Vamos continuar com calma.';};
@@ -416,11 +391,28 @@ function road(){
  };
 
  if(state.roadControl==='drag'){
-  dragObject(car,stage,(x,y,r)=>{
+  let dragging=false;
+  const driveAt=(clientX,clientY)=>{
+   if(state.paused||finished)return;
+   const r=stage.getBoundingClientRect(),x=Math.max(0,Math.min(r.width,clientX-r.left)),y=Math.max(0,Math.min(r.height,clientY-r.top));
+   car.style.left=(x-car.offsetWidth/2)+'px';car.style.top=(y-car.offsetHeight/2)+'px';
    let best=Infinity,bestIndex=0;for(let i=0;i<samples.length;i++){const p=samples[i],q=Math.hypot(x-p[0]*r.width,y-p[1]*r.height);if(q<best){best=q;bestIndex=i;}}
-   const progress=bestIndex/(samples.length-1),allow=(roadWidth/2)+10+(helpLevel>=2?18:0),cpReached=checkpointFractions.filter(fr=>progress>=fr).length;
-   if(best<allow&&cpReached>checkpoint)updateCheckpoint(cpReached);if(best>allow+20)deviate();updateProgress(progress);if(progress>.97&&best<allow+12)finishRoad();
-  });
+   const progress=bestIndex/(samples.length-1),allow=(roadWidth/2)+12+(helpLevel>=2?20:0),cpReached=checkpointFractions.filter(fr=>progress>=fr).length;
+   if(best<allow&&cpReached>checkpoint)updateCheckpoint(cpReached);if(best>allow+22)deviate();updateProgress(progress);if(progress>.97&&best<allow+14)finishRoad();resetIdle();
+  };
+  const nearCar=(clientX,clientY)=>{
+   const r=stage.getBoundingClientRect(),cr=car.getBoundingClientRect(),cx=cr.left+cr.width/2-r.left,cy=cr.top+cr.height/2-r.top;
+   return Math.hypot(clientX-r.left-cx,clientY-r.top-cy)<Math.max(72,cr.width*.9);
+  };
+  const tstart=e=>{if(!e.touches?.length)return;const t=e.touches[0];if(nearCar(t.clientX,t.clientY)){dragging=true;car.classList.add('dragging');if(e.cancelable)e.preventDefault();driveAt(t.clientX,t.clientY);}};
+  const tmove=e=>{if(!dragging||!e.touches?.length)return;if(e.cancelable)e.preventDefault();const t=e.touches[0];driveAt(t.clientX,t.clientY);};
+  const tend=e=>{if(!dragging)return;dragging=false;car.classList.remove('dragging');if(e.cancelable)e.preventDefault();};
+  const pdown=e=>{if(e.pointerType==='touch')return;if(!nearCar(e.clientX,e.clientY))return;dragging=true;car.classList.add('dragging');if(e.cancelable)e.preventDefault();driveAt(e.clientX,e.clientY);};
+  const pmove=e=>{if(!dragging||e.pointerType==='touch')return;if(e.cancelable)e.preventDefault();driveAt(e.clientX,e.clientY);};
+  const pup=()=>{dragging=false;car.classList.remove('dragging');};
+  stage.addEventListener('touchstart',tstart,{passive:false});stage.addEventListener('touchmove',tmove,{passive:false});stage.addEventListener('touchend',tend,{passive:false});stage.addEventListener('touchcancel',tend,{passive:false});
+  stage.addEventListener('pointerdown',pdown,{passive:false});window.addEventListener('pointermove',pmove,{passive:false});window.addEventListener('pointerup',pup,{passive:true});
+  var roadInputCleanup=()=>{stage.removeEventListener('touchstart',tstart);stage.removeEventListener('touchmove',tmove);stage.removeEventListener('touchend',tend);stage.removeEventListener('touchcancel',tend);stage.removeEventListener('pointerdown',pdown);window.removeEventListener('pointermove',pmove);window.removeEventListener('pointerup',pup);};
  }else{
   car.style.cursor='default';
   checkpoints.forEach((cp,k)=>cp.addEventListener('click',()=>{
@@ -429,7 +421,7 @@ function road(){
    if(k===checkpoints.length-1)setTimeout(()=>{const g=samples.at(-1);car.style.left=(g[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(g[1]*r.height-car.offsetHeight/2)+'px';updateProgress(1);setTimeout(finishRoad,500);},520);
   }));
  }
- state.cleanup=()=>{finished=true;window.removeEventListener('resize',place);screen.classList.remove('road-immersive');app.classList.remove('road-game-mode');area.classList.remove('road-activity');};
+ state.cleanup=()=>{finished=true;try{roadInputCleanup?.();}catch(_){}window.removeEventListener('resize',place);screen.classList.remove('road-immersive');app.classList.remove('road-game-mode');document.body.classList.remove('road-game-active');area.classList.remove('road-activity');};
 }
 function bee(){
  const area=$('#activityArea'),f=document.createElement('div');f.className='playfield';f.style.background='linear-gradient(#dff6ff,#eaf8d8)';
