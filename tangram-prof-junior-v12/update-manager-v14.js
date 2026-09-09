@@ -71,6 +71,29 @@
  const b=ensureButton();if(b)b.addEventListener('click',apply);
  bindAbout();
 
+ // Recuperação automática quando a interface antiga ficou presa no cache.
+ const visibleVersion=(()=>{
+   const el=document.querySelector('#tangram-levels .tl-brand-credit,#tangram-levels .tl-sub');
+   return el?el.textContent:'';
+ })();
+ if(visibleVersion && !visibleVersion.includes('v'+APP_VERSION)){
+   const key='rai-force-version-'+APP_VERSION;
+   const last=Number(sessionStorage.getItem(key)||0);
+   if(Date.now()-last>15000){
+     sessionStorage.setItem(key,String(Date.now()));
+     setTimeout(async()=>{
+       try{
+         const r=await navigator.serviceWorker.getRegistration('./');
+         if(r){await r.update();if(r.waiting)r.waiting.postMessage({type:'SKIP_WAITING'})}
+       }catch(e){}
+       const u=new URL(location.href);
+       u.searchParams.set('v',APP_VERSION);
+       u.searchParams.set('refresh',String(Date.now()));
+       location.replace(u.toString());
+     },700);
+   }
+ }
+
  if('serviceWorker' in navigator){
    navigator.serviceWorker.getRegistration('./').then(r=>{if(r)listenRegistration(r);check()}).catch(()=>{});
    navigator.serviceWorker.addEventListener('controllerchange',()=>{
