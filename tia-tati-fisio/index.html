@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -88,7 +88,7 @@
       <h1>Dirija com atenção<br><em>até o destino.</em></h1>
       <p>Controle o carrinho pela estrada, respeite o caminho e observe as placas. Se sair da pista, a Tia Tati ajuda a retomar do último ponto seguro.</p>
       <div class="road-learning-pills">
-        <span>🎯 Controle de trajetória</span><span>👀 Atenção visual</span><span>🧠 Planejamento motor</span><span>🚸 Educação no trânsito</span>
+        <span>🎯 Trajetória</span><span>👀 Atenção</span><span>🧠 Planejamento</span><span>🚸 Trânsito seguro</span>
       </div>
     </div>
     <div class="road-preview-card">
@@ -140,9 +140,24 @@
   <div class="road-setup-section">
     <span class="kicker">2. ESCOLHA A ROTA</span>
     <div class="route-grid">
-      <button class="route-card" data-road-route="1" type="button"><span class="route-preview route-one"></span><strong>Rota 1 • Início</strong><small>Mais larga e quase reta.</small></button>
-      <button class="route-card active" data-road-route="2" type="button"><span class="route-preview route-two"></span><strong>Rota 2 • Curvas em S</strong><small>Curvas suaves e controle contínuo.</small></button>
-      <button class="route-card" data-road-route="3" type="button"><span class="route-preview route-three"></span><strong>Rota 3 • Desafio</strong><small>Mais mudanças de direção e sinalização.</small></button>
+      <button class="route-card" data-road-route="1" type="button">
+        <span class="route-preview">
+          <svg viewBox="0 0 300 92" aria-hidden="true"><rect width="300" height="92" rx="14" fill="#d9f2ff"/><rect y="57" width="300" height="35" fill="#cae99f"/><path d="M28 52 C98 50 188 49 272 47" fill="none" stroke="#eef3f4" stroke-width="34" stroke-linecap="round"/><path d="M28 52 C98 50 188 49 272 47" fill="none" stroke="#5e6870" stroke-width="25" stroke-linecap="round"/><path d="M28 52 C98 50 188 49 272 47" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="14 10"/></svg>
+        </span>
+        <strong>Rota 1 • Início</strong><small>Mais larga e quase reta.</small>
+      </button>
+      <button class="route-card active" data-road-route="2" type="button">
+        <span class="route-preview">
+          <svg viewBox="0 0 300 92" aria-hidden="true"><rect width="300" height="92" rx="14" fill="#d9f2ff"/><rect y="57" width="300" height="35" fill="#cae99f"/><path d="M26 68 C74 14 120 17 151 45 C179 70 218 77 274 24" fill="none" stroke="#eef3f4" stroke-width="34" stroke-linecap="round"/><path d="M26 68 C74 14 120 17 151 45 C179 70 218 77 274 24" fill="none" stroke="#5e6870" stroke-width="25" stroke-linecap="round"/><path d="M26 68 C74 14 120 17 151 45 C179 70 218 77 274 24" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="14 10"/></svg>
+        </span>
+        <strong>Rota 2 • Curvas em S</strong><small>Curvas suaves e controle contínuo.</small>
+      </button>
+      <button class="route-card" data-road-route="3" type="button">
+        <span class="route-preview">
+          <svg viewBox="0 0 300 92" aria-hidden="true"><rect width="300" height="92" rx="14" fill="#d9f2ff"/><rect y="57" width="300" height="35" fill="#cae99f"/><path d="M24 70 C58 20 99 72 132 37 C161 7 196 67 226 43 C245 28 258 20 276 22" fill="none" stroke="#eef3f4" stroke-width="30" stroke-linecap="round"/><path d="M24 70 C58 20 99 72 132 37 C161 7 196 67 226 43 C245 28 258 20 276 22" fill="none" stroke="#5e6870" stroke-width="22" stroke-linecap="round"/><path d="M24 70 C58 20 99 72 132 37 C161 7 196 67 226 43 C245 28 258 20 276 22" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="12 9"/></svg>
+        </span>
+        <strong>Rota 3 • Desafio</strong><small>Mais curvas, sem cruzar a pista.</small>
+      </button>
     </div>
   </div>
 
@@ -158,7 +173,11 @@
     <span>💗</span>
     <div><strong>Modo terapêutico</strong><p>Ao sair da pista aparece um <b>CRASH!</b> em estilo de gibi, mas a resposta continua acolhedora: o carro volta ao último ponto seguro e a ajuda visual aumenta se necessário.</p></div>
   </div>
-  <button class="primary wide road-start" id="startRoadMission" type="button">🚗 Começar Caminho Seguro</button>
+  <div class="road-action-dock">
+    <button class="soft-btn road-back" data-home type="button">← Voltar</button>
+    <div class="road-action-copy"><small>Destino e rota escolhidos</small><strong id="roadActionSummary">Escola • Rota 2</strong></div>
+    <button class="primary road-start" id="startRoadMission" type="button">🚗 Começar</button>
+  </div>
 </section>
 
 <section class="screen" id="screen-game">
@@ -283,6 +302,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 </body>
 </html>
