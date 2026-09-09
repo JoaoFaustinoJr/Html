@@ -304,3 +304,150 @@
   document.addEventListener('pointerdown',ensureAudio,{once:true,passive:true});
   if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(err=>console.warn('SW',err))}
 })();
+
+
+/* Tangram v15.5 — Instalação Universal */
+(function(){
+  if(window.__raiUniversalInstallV155)return;
+  window.__raiUniversalInstallV155=true;
+
+  var ua=navigator.userAgent||'';
+  var platform=navigator.platform||'';
+  var touch=navigator.maxTouchPoints||0;
+  var isAndroid=/Android/i.test(ua);
+  var isWindows=/Windows/i.test(ua);
+  var isLinux=/Linux/i.test(ua)&&!isAndroid;
+  var isIPadOS=platform==='MacIntel'&&touch>1;
+  var isIOS=/iPhone|iPad|iPod/i.test(ua)||isIPadOS;
+  var isSafari=isIOS&&/Safari/i.test(ua)&&!/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+  var isEdge=/Edg\//i.test(ua);
+  var isChrome=/Chrome\//i.test(ua)&&!isEdge;
+  var isInApp=/WhatsApp|Instagram|FBAN|FBAV|Line\/|ChatGPT|GSA\//i.test(ua)||(/; wv\)/i.test(ua)&&isAndroid);
+  var INSTALL_URL='https://joaofaustinojr.github.io/Html/tangram-prof-junior-v12/';
+  var isStandalone=function(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true};
+
+  var panel=document.createElement('div');
+  panel.className='tl-about-overlay tl-install-universal';
+  panel.innerHTML="<div class='tl-about-card' role='dialog' aria-modal='true' aria-labelledby='raiInstallTitle'><div class='tl-about-top'><img src='rai-icon.svg?v=rai3' alt='R.A.I.'><div><div class='tl-about-title' id='raiInstallTitle'>Instalar Tangram</div><div class='tl-about-sub' id='raiInstallPlatform'></div></div><button class='tl-about-close' type='button' aria-label='Fechar'>×</button></div><div class='tl-about-body'><p class='tl-install-help' id='raiInstallText'></p><div class='tl-about-actions'><button type='button' class='tl-about-btn primary' id='raiInstallTry'>⬇ Tentar instalar</button><button type='button' class='tl-about-btn' id='raiInstallCopy'>🔗 Copiar link</button><button type='button' class='tl-about-btn' id='raiInstallClose'>Fechar</button></div><p class='tl-exp-note'>O Tangram continua funcionando normalmente no navegador mesmo sem instalação.</p></div></div>";
+  document.body.appendChild(panel);
+
+  var txt=panel.querySelector('#raiInstallText');
+  var sub=panel.querySelector('#raiInstallPlatform');
+  var tryBtn=panel.querySelector('#raiInstallTry');
+  var copyBtn=panel.querySelector('#raiInstallCopy');
+  var closeBtn=panel.querySelector('#raiInstallClose');
+  var closeX=panel.querySelector('.tl-about-close');
+
+  function platformName(){
+    if(isIOS)return 'iPhone / iPad';
+    if(isAndroid)return 'Android / tablet';
+    if(isWindows)return 'Windows';
+    if(isLinux)return 'Linux';
+    return 'este aparelho';
+  }
+
+  function guide(){
+    if(isIOS){
+      if(!isSafari||isInApp){
+        return "<b> Instalar no iPhone/iPad</b><br><br><b>1.</b> Abra este endereço no <b>Safari</b>. Se você veio do WhatsApp, ChatGPT ou outro aplicativo, use o menu de compartilhamento do aplicativo e escolha abrir no Safari. Se preferir, toque em <b>Copiar link</b> abaixo.<br><br><b>2.</b> No Safari, toque em <b>Compartilhar</b> (quadrado com seta para cima).<br><b>3.</b> Toque em <b>Adicionar à Tela de Início</b>.<br><b>4.</b> Se aparecer <b>Abrir como App da Web</b>, deixe a opção ativada e toque em <b>Adicionar</b>.<br><br>Depois disso, o Tangram aparecerá junto aos demais aplicativos.";
+      }
+      return "<b> Instalar no iPhone/iPad</b><br><br><b>1.</b> No Safari, toque em <b>Compartilhar</b> (quadrado com seta para cima).<br><b>2.</b> Escolha <b>Adicionar à Tela de Início</b>.<br><b>3.</b> Se aparecer <b>Abrir como App da Web</b>, deixe a opção ativada.<br><b>4.</b> Toque em <b>Adicionar</b>.<br><br>O Tangram passará a abrir em janela própria, como um aplicativo.";
+    }
+    if(isInApp){
+      return "<b>Este navegador interno não permite concluir a instalação.</b><br><br>Abra o Tangram no navegador principal do aparelho. No Android use <b>Chrome</b>; no computador use <b>Edge, Chrome ou Chromium</b>. Toque em <b>Copiar link</b>, cole no navegador e volte ao botão <b>Instalar</b>.";
+    }
+    if(isAndroid){
+      return "<b>Instalar no Android/tablet</b><br><br>Se a janela automática não apareceu, abra o menu <b>⋮</b> do Chrome e escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>. Confirme e o Tangram ficará entre seus aplicativos.";
+    }
+    if(isWindows){
+      if(isEdge)return "<b>Instalar no Windows pelo Edge</b><br><br>Abra <b>⋯ → Aplicativos → Instalar este site como um aplicativo</b> e confirme. Depois você pode fixar o Tangram no Menu Iniciar ou na barra de tarefas.";
+      if(isChrome)return "<b>Instalar no Windows pelo Chrome</b><br><br>Use o ícone de instalação na barra de endereços. Se ele não aparecer, abra <b>⋮</b> e escolha <b>Instalar Tangram Educativo</b> ou <b>Instalar página como app</b>.";
+      return "<b>Instalar no Windows</b><br><br>Abra este endereço no <b>Microsoft Edge</b> ou <b>Google Chrome</b> e toque novamente em <b>Instalar</b>. Se estiver em outro navegador, use <b>Copiar link</b>.";
+    }
+    if(isLinux){
+      return "<b>Instalar no Linux</b><br><br>Abra o Tangram no <b>Chrome, Chromium ou Edge</b>. Use o ícone de instalação da barra de endereços ou o menu <b>⋮ → Instalar Tangram Educativo</b>.";
+    }
+    return "<b>Instalar o Tangram</b><br><br>Abra este endereço em um navegador que permita instalar aplicativos web e escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.";
+  }
+
+  function show(html){
+    sub.textContent='Instalação em '+platformName();
+    txt.innerHTML=html||guide();
+    panel.classList.add('show');
+  }
+  function close(){panel.classList.remove('show')}
+
+  async function copyLink(){
+    try{
+      if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(INSTALL_URL);
+      else{
+        var t=document.createElement('textarea');
+        t.value=INSTALL_URL;t.style.position='fixed';t.style.opacity='0';
+        document.body.appendChild(t);t.focus();t.select();document.execCommand('copy');t.remove();
+      }
+      if(window.__tangramToast)window.__tangramToast('Link do Tangram copiado');
+      else show('<b>✓ Link copiado.</b><br><br>Agora abra o Safari, Chrome ou Edge e cole o endereço.');
+    }catch(e){
+      show('<b>Copie este endereço:</b><br><br><span style="word-break:break-all">'+INSTALL_URL+'</span>');
+    }
+  }
+
+  async function install(){
+    if(isStandalone()){show('<b>✓ O Tangram Educativo já está instalado neste aparelho.</b>');return}
+    if(isIOS||isInApp){show();return}
+    var ev=window.__raiDeferredInstall||null;
+    if(ev){
+      window.__raiDeferredInstall=null;
+      try{
+        await ev.prompt();
+        var choice=await ev.userChoice;
+        if(choice&&choice.outcome==='accepted')show('<b>✓ Instalação iniciada.</b><br><br>Confirme a janela do navegador. O Tangram será adicionado aos seus aplicativos.');
+        else show('<b>A instalação foi cancelada.</b><br><br>Você pode tentar novamente quando quiser.');
+      }catch(e){show()}
+      return;
+    }
+    show();
+  }
+
+  tryBtn.addEventListener('click',install);
+  copyBtn.addEventListener('click',copyLink);
+  closeBtn.addEventListener('click',close);
+  closeX.addEventListener('click',close);
+  panel.addEventListener('click',function(e){if(e.target===panel)close()});
+
+  function intercept(btn){
+    if(!btn)return;
+    btn.addEventListener('click',function(e){
+      e.preventDefault();e.stopImmediatePropagation();install();
+    },true);
+  }
+  var topInstall=document.getElementById('installApp');
+  intercept(topInstall);
+
+  var aboutInstall=document.getElementById('aboutInstall');
+  intercept(aboutInstall);
+
+  var configActions=document.querySelector('.tl-exp-actions');
+  if(configActions&&!document.getElementById('raiInstallFromConfig')){
+    var b=document.createElement('button');
+    b.className='tl-about-btn';b.id='raiInstallFromConfig';b.type='button';b.textContent='⬇ Instalação';
+    b.addEventListener('click',function(e){e.preventDefault();show()});
+    configActions.appendChild(b);
+  }
+
+  if(isStandalone()&&topInstall)topInstall.style.display='none';
+  else if(topInstall){topInstall.style.display='inline-flex';topInstall.innerHTML='⬇ <span>Instalar</span>'}
+
+  if(aboutInstall&&!isStandalone()){
+    aboutInstall.disabled=false;
+    aboutInstall.textContent=isIOS?' Instalar no iPhone/iPad':(isWindows||isLinux?'🖥️ Instalar no computador':'⬇ Instalar aplicativo');
+  }
+
+  window.addEventListener('rai-install-ready',function(){
+    if(panel.classList.contains('show'))txt.innerHTML='<b>✓ Este navegador está pronto para instalar.</b><br><br>Toque em <b>Tentar instalar</b> e confirme a janela que aparecer.';
+  });
+  window.addEventListener('appinstalled',function(){
+    if(topInstall)topInstall.style.display='none';
+    show('<b>✓ Tangram Educativo instalado com sucesso.</b>');
+  });
+})();
