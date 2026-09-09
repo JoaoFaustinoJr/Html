@@ -68,3 +68,56 @@ button,input,select,textarea{font:inherit}button{color:inherit}img{max-width:100
 .crash-pop{position:absolute;z-index:20;left:50%;top:50%;transform:translate(-50%,-50%) scale(.3) rotate(-8deg);opacity:0;pointer-events:none;font-weight:1000;font-size:clamp(38px,10vw,84px);letter-spacing:-.05em;color:#ff315d;text-shadow:4px 4px 0 #fff,8px 8px 0 #ffd75d,-3px -3px 0 #fff;filter:drop-shadow(0 7px 8px rgba(0,0,0,.16))}.crash-pop.show{animation:crashComic .62s cubic-bezier(.2,1.5,.4,1)}@keyframes crashComic{0%{opacity:0;transform:translate(-50%,-50%) scale(.15) rotate(-14deg)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(4deg)}75%{opacity:1;transform:translate(-50%,-50%) scale(.98) rotate(-2deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.08)}}
 .road-route-label{position:absolute;z-index:8;left:12px;top:48px;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;color:#587080}.checkpoint-flag{font-size:15px!important;background:#fff8cf!important;border-color:#fff!important}.checkpoint-flag.done{background:#69c67a!important;color:#fff}
 @media(max-width:760px){.road-challenge-hero{grid-template-columns:1fr}.road-preview-card{min-height:auto}.route-grid,.destination-grid{grid-template-columns:1fr}.road-preview-card>img{width:76px;height:76px}.preview-bubble{left:82px;bottom:25px}.traffic-tip{max-width:190px}.car-token{width:70px;height:52px}}
+
+/* V16 — refinamento móvel do setup do Caminho Seguro */
+.road-setup-mode .bottom-nav{display:none}
+.road-setup-mode{padding-bottom:28px}
+.route-preview:before,.route-preview:after{content:none!important;display:none!important}
+.route-preview svg{display:block;width:100%;height:100%;border-radius:14px}
+.road-action-dock{position:sticky;bottom:max(10px,env(safe-area-inset-bottom));z-index:75;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin:20px 0 4px;padding:10px;background:rgba(255,255,255,.95);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:22px;box-shadow:0 15px 40px rgba(22,52,74,.17)}
+.road-action-dock .road-back{min-width:94px}.road-action-copy{display:grid;min-width:0}.road-action-copy small{font-size:10px;color:var(--muted);font-weight:800}.road-action-copy strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.road-action-dock .road-start{min-width:138px}
+#screen-roadsetup .screen-head{margin-bottom:10px}
+#screen-roadsetup .road-setup-section{margin:15px 0}
+#screen-roadsetup .road-setup-note{margin:14px 0 12px}
+#screen-roadsetup .road-education-banner{margin:10px 0 15px}
+@media(max-width:650px){
+  #screen-roadsetup .screen-head{align-items:flex-start}
+  #screen-roadsetup .screen-head .back-btn{width:42px;height:42px;min-width:42px;border-radius:14px}
+  #screen-roadsetup .screen-head h2{font-size:25px}
+  #screen-roadsetup .screen-head .kicker{font-size:9px;line-height:1.3}
+  .road-challenge-hero{padding:14px;gap:11px;border-radius:22px}
+  .road-challenge-copy h1{font-size:36px;margin:8px 0 10px}
+  .road-challenge-copy p{font-size:13px;line-height:1.45}
+  .road-learning-pills{gap:5px;margin-top:10px}
+  .road-learning-pills span{font-size:9px;padding:6px 8px}
+  .road-preview-card{min-height:0;padding:6px;border-radius:20px}
+  .road-preview-card svg{max-height:170px}
+  .road-preview-card>img{width:62px;height:62px;left:10px;bottom:10px;border-radius:15px}
+  .preview-bubble{left:67px;bottom:21px;font-size:10px;padding:6px 8px}
+  .road-education-banner{padding:10px 12px;border-radius:18px}
+  .road-education-banner p{font-size:10.5px}
+  .destination-grid{gap:8px}
+  .destination-card{display:grid;grid-template-columns:116px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;padding:9px;border-radius:18px;min-height:112px}
+  .destination-card .destination-visual{grid-row:1/3;width:116px;height:92px;border-radius:14px}
+  .destination-card strong{margin:0;font-size:16px;align-self:end}
+  .destination-card small{margin:3px 0 0;font-size:10.5px;align-self:start}
+  .route-grid{gap:8px}
+  .route-card{display:grid;grid-template-columns:126px 1fr;grid-template-rows:auto auto;column-gap:11px;align-items:center;padding:9px;border-radius:18px}
+  .route-card .route-preview{grid-row:1/3;height:78px}
+  .route-card strong{margin:0;font-size:14px;align-self:end}
+  .route-card small{margin-top:3px;font-size:10.5px;align-self:start}
+  .control-grid{gap:8px}
+  .control-card{display:grid;grid-template-columns:48px 1fr;grid-template-rows:auto auto;padding:11px;border-radius:18px}
+  .control-card>span{grid-row:1/3;font-size:30px;align-self:center}
+  .control-card strong{margin:0;font-size:14px;align-self:end}
+  .control-card small{font-size:10.5px;margin-top:2px;align-self:start}
+  .road-setup-note{padding:11px}.road-setup-note p{font-size:10.5px}
+  .road-action-dock{grid-template-columns:auto 1fr;bottom:max(8px,env(safe-area-inset-bottom));border-radius:20px;padding:8px}
+  .road-action-dock .road-back{min-width:88px;padding-inline:11px}
+  .road-action-copy{display:none}
+  .road-action-dock .road-start{min-width:0;width:100%}
+}
+@media(max-width:380px){
+  .destination-card{grid-template-columns:96px 1fr}.destination-card .destination-visual{width:96px;height:82px}
+  .route-card{grid-template-columns:108px 1fr}.route-card .route-preview{height:70px}
+}
