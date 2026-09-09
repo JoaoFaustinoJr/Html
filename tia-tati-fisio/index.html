@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=17">
+<link rel="stylesheet" href="styles.css?v=18">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -77,106 +77,111 @@
 </section>
 
 <section class="screen" id="screen-roadsetup">
-  <div class="screen-head">
+  <div class="road-v18-head">
     <button class="back-btn" data-home type="button">←</button>
-    <div><span class="kicker">MISSÃO TERAPÊUTICA + EDUCAÇÃO NO TRÂNSITO</span><h2>Caminho Seguro</h2></div>
+    <div>
+      <span class="kicker">MISSÃO TERAPÊUTICA + EDUCAÇÃO NO TRÂNSITO</span>
+      <h2>Caminho Seguro</h2>
+      <p>Dirija com atenção até o destino.</p>
+    </div>
+    <div class="road-v18-tati">
+      <img src="assets/guide.webp" alt="Tia Tati">
+      <span>Você consegue! 💗</span>
+    </div>
   </div>
 
-  <div class="road-challenge-hero panel">
-    <div class="road-challenge-copy">
+  <div class="road-v18-car panel">
+    <div>
       <span class="mission-badge">🚦 DESAFIO DA TIA TATI</span>
-      <h1>Dirija com atenção<br><em>até o destino.</em></h1>
-      <p>Controle o carrinho pela estrada, respeite o caminho e observe as placas. Se sair da pista, a Tia Tati ajuda a retomar do último ponto seguro.</p>
+      <h1>O carrinho azul<br><em>está pronto!</em></h1>
+      <p>Escolha o destino, a rota e como dirigir. No caminho, observe placas, pedestres e curvas.</p>
       <div class="road-learning-pills">
-        <span>🎯 Trajetória</span><span>👀 Atenção</span><span>🧠 Planejamento</span><span>🚸 Trânsito seguro</span>
+        <span>🎯 Trajetória</span><span>👀 Atenção</span><span>🧠 Planejamento</span><span>🚸 Trânsito</span>
       </div>
     </div>
-    <div class="road-preview-card">
-      <svg viewBox="0 0 360 260" aria-label="Prévia de uma estrada em S">
-        <defs>
-          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cceeff"/><stop offset="1" stop-color="#eaf8dc"/></linearGradient>
-          <filter id="softShadow"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-opacity=".15"/></filter>
-        </defs>
-        <rect width="360" height="260" rx="28" fill="url(#skyGrad)"/>
-        <circle cx="300" cy="42" r="20" fill="#ffd75a"/>
-        <path d="M36 225 C68 185 126 210 139 162 C150 120 91 118 106 78 C122 35 204 62 230 88 C258 116 254 177 318 40" fill="none" stroke="#eef3f4" stroke-width="62" stroke-linecap="round"/>
-        <path d="M36 225 C68 185 126 210 139 162 C150 120 91 118 106 78 C122 35 204 62 230 88 C258 116 254 177 318 40" fill="none" stroke="#5d6770" stroke-width="48" stroke-linecap="round"/>
-        <path d="M36 225 C68 185 126 210 139 162 C150 120 91 118 106 78 C122 35 204 62 230 88 C258 116 254 177 318 40" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="13 10" stroke-linecap="round"/>
-        <g transform="translate(55 195)" filter="url(#softShadow)">
-          <rect x="-25" y="-13" width="50" height="27" rx="9" fill="#0d7fd8"/><path d="M-13-13 L-5-25 H14 L23-13Z" fill="#0561aa"/>
-          <rect x="-8" y="-21" width="18" height="9" rx="3" fill="#bde8ff"/><path d="M-22 8 H22" stroke="#ef4c61" stroke-width="2"/><circle cx="-13" cy="15" r="7" fill="#243848"/><circle cx="14" cy="15" r="7" fill="#243848"/>
-        </g>
-        <g transform="translate(300 24)"><rect x="-25" y="6" width="50" height="38" rx="5" fill="#fff"/><path d="M-31 7 L0-11 L31 7Z" fill="#ff819d"/><rect x="-7" y="23" width="14" height="21" fill="#6ab6e9"/><rect x="-20" y="16" width="9" height="9" fill="#ffe180"/><rect x="11" y="16" width="9" height="9" fill="#ffe180"/></g>
-        <g transform="translate(238 164)"><rect x="-3" y="-22" width="6" height="44" rx="3" fill="#55656f"/><path d="M-25-22 H25 L18 0 H-18Z" fill="#ffd85a" stroke="#fff" stroke-width="3"/><path d="M-8-13 Q0-21 8-13" fill="none" stroke="#44545f" stroke-width="4"/></g>
-      </svg>
-      <img src="assets/guide.webp" alt="Tia Tati orientando">
-      <div class="preview-bubble">“Cuidado com a curva!”</div><div class="road-car-identity">💙 O carrinho azul da Tia Tati</div>
-    </div>
+    <svg class="argo-preview" viewBox="0 0 240 130" aria-label="Carrinho azul esportivo da Tia Tati">
+      <defs>
+        <linearGradient id="argoPrevBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#27a7ff"/><stop offset=".52" stop-color="#0875d5"/><stop offset="1" stop-color="#034f9d"/></linearGradient>
+        <filter id="argoPrevShadow"><feDropShadow dx="0" dy="8" stdDeviation="7" flood-opacity=".22"/></filter>
+      </defs>
+      <ellipse cx="120" cy="107" rx="88" ry="13" fill="rgba(30,56,73,.13)"/>
+      <g filter="url(#argoPrevShadow)">
+        <path d="M39 84 L53 51 Q59 36 82 31 L148 29 Q169 31 181 48 L197 78 Q216 82 221 93 V104 Q220 113 205 113 H39 Q24 113 22 103 V93 Q25 86 39 84Z" fill="url(#argoPrevBlue)" stroke="#fff" stroke-width="5"/>
+        <path d="M74 39 L147 36 Q159 38 171 55 H61 Q65 46 74 39Z" fill="#9edcff"/>
+        <path d="M116 37 V55" stroke="#e5f7ff" stroke-width="4"/>
+        <rect x="41" y="80" width="28" height="12" rx="5" fill="#ecf9ff"/><rect x="175" y="80" width="25" height="12" rx="5" fill="#ffeda1"/>
+        <path d="M39 101 H204" stroke="#ef4c61" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="65" cy="110" r="18" fill="#1f303b" stroke="#fff" stroke-width="5"/><circle cx="177" cy="110" r="18" fill="#1f303b" stroke="#fff" stroke-width="5"/>
+        <circle cx="65" cy="110" r="7" fill="#adbcc5"/><circle cx="177" cy="110" r="7" fill="#adbcc5"/>
+      </g>
+    </svg>
+    <div class="road-car-identity">💙 O carrinho azul da Tia Tati</div>
   </div>
 
-  <div class="road-education-banner panel">
-    <span class="traffic-light-mini"><i></i><i></i><i></i></span>
-    <div><strong>Aprender enquanto dirige</strong><p>Placas e situações simples reforçam atenção, travessia segura, redução de velocidade e cuidado com pedestres — sem tirar o foco da tarefa motora.</p></div>
-  </div>
-
-  <div class="road-setup-section">
-    <span class="kicker">1. ESCOLHA O DESTINO</span>
-    <div class="destination-grid">
+  <section class="road-v18-section">
+    <div class="road-v18-section-title"><span>1</span><div><strong>Escolha o destino</strong><small>Para onde vamos hoje?</small></div></div>
+    <div class="destination-grid v18">
       <button class="destination-card active" data-destination="school" type="button">
+        <span class="pick-check">✓</span>
         <span class="destination-visual school-scene"><i class="scene-ground"></i><i class="scene-building"></i><i class="scene-roof"></i><i class="scene-door"></i><i class="scene-tree"></i></span>
         <strong>Escola</strong><small>Zona escolar: atenção e velocidade reduzida.</small>
       </button>
       <button class="destination-card" data-destination="home" type="button">
+        <span class="pick-check">✓</span>
         <span class="destination-visual home-scene"><i class="scene-ground"></i><i class="scene-building"></i><i class="scene-roof"></i><i class="scene-door"></i><i class="scene-tree"></i></span>
-        <strong>Casa</strong><small>Rua tranquila: cuidado com pedestres e entradas.</small>
+        <strong>Casa</strong><small>Cuidado com pedestres e entradas.</small>
       </button>
       <button class="destination-card" data-destination="park" type="button">
+        <span class="pick-check">✓</span>
         <span class="destination-visual park-scene"><i class="scene-ground"></i><i class="scene-tree big"></i><i class="scene-bench"></i><i class="scene-flower"></i></span>
-        <strong>Parque</strong><small>Área de lazer: atenção a pessoas e ciclistas.</small>
+        <strong>Parque</strong><small>Atenção a pessoas e ciclistas.</small>
       </button>
     </div>
-  </div>
+  </section>
 
-  <div class="road-setup-section">
-    <span class="kicker">2. ESCOLHA A ROTA</span>
-    <div class="route-grid">
+  <section class="road-v18-section">
+    <div class="road-v18-section-title"><span>2</span><div><strong>Escolha a rota</strong><small>Comece simples e evolua.</small></div></div>
+    <div class="route-grid v18">
       <button class="route-card" data-road-route="1" type="button">
+        <span class="pick-check">✓</span>
         <span class="route-preview">
-          <svg viewBox="0 0 300 92" aria-hidden="true"><rect width="300" height="92" rx="14" fill="#d9f2ff"/><rect y="57" width="300" height="35" fill="#cae99f"/><path d="M28 52 C98 50 188 49 272 47" fill="none" stroke="#eef3f4" stroke-width="34" stroke-linecap="round"/><path d="M28 52 C98 50 188 49 272 47" fill="none" stroke="#5e6870" stroke-width="25" stroke-linecap="round"/><path d="M28 52 C98 50 188 49 272 47" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="14 10"/></svg>
+          <svg viewBox="0 0 300 110" aria-hidden="true"><rect width="300" height="110" rx="16" fill="#cfefff"/><rect y="69" width="300" height="41" fill="#b7dd8a"/><circle cx="42" cy="28" r="18" fill="#66bd70"/><circle cx="258" cy="32" r="19" fill="#66bd70"/><path d="M28 58 C95 57 201 55 272 52" fill="none" stroke="#eef3f4" stroke-width="38" stroke-linecap="round"/><path d="M28 58 C95 57 201 55 272 52" fill="none" stroke="#56616a" stroke-width="29" stroke-linecap="round"/><path d="M28 58 C95 57 201 55 272 52" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="14 10"/></svg>
         </span>
-        <strong>Rota 1 • Início</strong><small>Mais larga e quase reta.</small>
+        <strong>Rota 1</strong><small>Reta e larga</small>
       </button>
       <button class="route-card active" data-road-route="2" type="button">
+        <span class="pick-check">✓</span>
         <span class="route-preview">
-          <svg viewBox="0 0 300 92" aria-hidden="true"><rect width="300" height="92" rx="14" fill="#d9f2ff"/><rect y="57" width="300" height="35" fill="#cae99f"/><path d="M26 68 C74 14 120 17 151 45 C179 70 218 77 274 24" fill="none" stroke="#eef3f4" stroke-width="34" stroke-linecap="round"/><path d="M26 68 C74 14 120 17 151 45 C179 70 218 77 274 24" fill="none" stroke="#5e6870" stroke-width="25" stroke-linecap="round"/><path d="M26 68 C74 14 120 17 151 45 C179 70 218 77 274 24" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="14 10"/></svg>
+          <svg viewBox="0 0 300 110" aria-hidden="true"><rect width="300" height="110" rx="16" fill="#cfefff"/><rect y="69" width="300" height="41" fill="#b7dd8a"/><circle cx="42" cy="30" r="18" fill="#66bd70"/><circle cx="258" cy="31" r="19" fill="#66bd70"/><path d="M24 82 C69 21 117 18 151 53 C186 89 231 86 276 25" fill="none" stroke="#eef3f4" stroke-width="38" stroke-linecap="round"/><path d="M24 82 C69 21 117 18 151 53 C186 89 231 86 276 25" fill="none" stroke="#56616a" stroke-width="29" stroke-linecap="round"/><path d="M24 82 C69 21 117 18 151 53 C186 89 231 86 276 25" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="14 10"/></svg>
         </span>
-        <strong>Rota 2 • Curvas em S</strong><small>Curvas suaves e controle contínuo.</small>
+        <strong>Rota 2</strong><small>Curvas em S</small>
       </button>
       <button class="route-card" data-road-route="3" type="button">
+        <span class="pick-check">✓</span>
         <span class="route-preview">
-          <svg viewBox="0 0 300 92" aria-hidden="true"><rect width="300" height="92" rx="14" fill="#d9f2ff"/><rect y="57" width="300" height="35" fill="#cae99f"/><path d="M24 70 C58 20 99 72 132 37 C161 7 196 67 226 43 C245 28 258 20 276 22" fill="none" stroke="#eef3f4" stroke-width="30" stroke-linecap="round"/><path d="M24 70 C58 20 99 72 132 37 C161 7 196 67 226 43 C245 28 258 20 276 22" fill="none" stroke="#5e6870" stroke-width="22" stroke-linecap="round"/><path d="M24 70 C58 20 99 72 132 37 C161 7 196 67 226 43 C245 28 258 20 276 22" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="12 9"/></svg>
+          <svg viewBox="0 0 300 110" aria-hidden="true"><rect width="300" height="110" rx="16" fill="#cfefff"/><rect y="69" width="300" height="41" fill="#b7dd8a"/><circle cx="38" cy="25" r="17" fill="#66bd70"/><circle cx="264" cy="30" r="18" fill="#66bd70"/><path d="M25 84 C56 31 90 84 125 48 C160 12 191 82 224 49 C242 31 257 22 278 23" fill="none" stroke="#eef3f4" stroke-width="34" stroke-linecap="round"/><path d="M25 84 C56 31 90 84 125 48 C160 12 191 82 224 49 C242 31 257 22 278 23" fill="none" stroke="#56616a" stroke-width="25" stroke-linecap="round"/><path d="M25 84 C56 31 90 84 125 48 C160 12 191 82 224 49 C242 31 257 22 278 23" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="12 9"/></svg>
         </span>
-        <strong>Rota 3 • Desafio</strong><small>Mais curvas, sem cruzar a pista.</small>
+        <strong>Rota 3</strong><small>Desafio</small>
       </button>
     </div>
-  </div>
+  </section>
 
-  <div class="road-setup-section">
-    <span class="kicker">3. COMO CONDUZIR</span>
-    <div class="control-grid">
-      <button class="control-card active" data-road-control="drag" type="button"><span>☝️</span><strong>Arrastar o carro</strong><small>Controle contínuo da trajetória.</small></button>
-      <button class="control-card" data-road-control="tap" type="button"><span>👆</span><strong>Tocar nos pontos</strong><small>Alternativa acessível sem arrastar.</small></button>
+  <section class="road-v18-section">
+    <div class="road-v18-section-title"><span>3</span><div><strong>Como conduzir</strong><small>Escolha a forma mais confortável.</small></div></div>
+    <div class="control-grid v18">
+      <button class="control-card active" data-road-control="drag" type="button"><span class="pick-check">✓</span><span>☝️</span><strong>Arrastar</strong><small>Mova o carrinho com o dedo.</small></button>
+      <button class="control-card" data-road-control="tap" type="button"><span class="pick-check">✓</span><span>👆</span><strong>Tocar nos pontos</strong><small>Siga as bandeirinhas.</small></button>
     </div>
+  </section>
+
+  <div class="road-v18-tip panel">
+    <span>🚸</span>
+    <p><strong>Trânsito seguro também se aprende brincando.</strong><br>Observe placas, faixa de pedestres e velocidade.</p>
   </div>
 
-  <div class="road-setup-note panel">
-    <span>💗</span>
-    <div><strong>Modo terapêutico</strong><p>Ao sair da pista aparece um <b>CRASH!</b> em estilo de gibi, mas a resposta continua acolhedora: o carro volta ao último ponto seguro e a ajuda visual aumenta se necessário.</p></div>
-  </div>
-  <div class="road-action-dock">
-    <button class="soft-btn road-back" data-home type="button">← Voltar</button>
-    <div class="road-action-copy"><small>Destino e rota escolhidos</small><strong id="roadActionSummary">Escola • Rota 2</strong></div>
-    <button class="primary road-start" id="startRoadMission" type="button">🚗 Começar</button>
+  <div class="road-action-dock v18">
+    <div class="road-action-copy"><small>Pronto para começar</small><strong id="roadActionSummary">Escola • Rota 2 • Arrastar</strong></div>
+    <button class="primary road-start" id="startRoadMission" type="button">▶ Iniciar o jogo</button>
   </div>
 </section>
 
@@ -302,6 +307,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=17"></script>
+<script src="app.js?v=18"></script>
 </body>
 </html>
