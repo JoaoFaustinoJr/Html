@@ -163,3 +163,40 @@ button,input,select,textarea{font:inherit}button{color:inherit}img{max-width:100
 
 .road-car-identity{position:absolute;right:12px;bottom:14px;z-index:4;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:9px;font-weight:950;color:#1d6bb1;box-shadow:var(--shadow-sm)}
 @media(max-width:650px){.road-car-identity{right:8px;bottom:8px;font-size:8px;padding:5px 7px}}
+
+/* V18 — aproximação forte do mockup aprovado */
+.road-v18-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;margin:4px 0 12px}
+.road-v18-head h2{margin:2px 0 0;font-size:28px;letter-spacing:-.03em}.road-v18-head p{margin:2px 0 0;color:var(--muted);font-size:12px;font-weight:700}
+.road-v18-tati{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:6px 9px;box-shadow:var(--shadow-sm)}
+.road-v18-tati img{width:46px;height:46px;object-fit:cover;border-radius:14px}.road-v18-tati span{font-size:11px;font-weight:900;max-width:95px;line-height:1.2;color:#5d6580}
+.road-v18-car{display:grid;grid-template-columns:minmax(0,1.15fr) 250px;gap:16px;align-items:center;padding:18px;position:relative;overflow:hidden;background:linear-gradient(145deg,#fff,#eef8ff 65%,#fff1f7)}
+.road-v18-car h1{font-size:clamp(31px,5vw,47px);line-height:.95;letter-spacing:-.04em;margin:9px 0 10px}.road-v18-car h1 em{font-style:normal;color:#1574cf}.road-v18-car p{margin:0;color:var(--muted);line-height:1.48;font-size:13px;max-width:650px}.argo-preview{width:100%;max-width:250px;justify-self:end}
+.road-v18-section{margin:18px 0}.road-v18-section-title{display:flex;gap:9px;align-items:center;margin:0 2px 9px}.road-v18-section-title>span{width:27px;height:27px;border-radius:9px;background:#eaf5ff;color:#2276b6;display:grid;place-items:center;font-size:12px;font-weight:950}.road-v18-section-title div{display:grid}.road-v18-section-title strong{font-size:16px}.road-v18-section-title small{font-size:10px;color:var(--muted);margin-top:1px}
+.destination-grid.v18,.route-grid.v18{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.destination-grid.v18 .destination-card,.route-grid.v18 .route-card{position:relative;display:block;padding:9px;border-radius:20px;min-width:0}.destination-grid.v18 .destination-visual{height:112px}.route-grid.v18 .route-preview{height:102px}.destination-grid.v18 strong,.route-grid.v18 strong{font-size:14px;margin-top:8px}.destination-grid.v18 small,.route-grid.v18 small{font-size:10px;line-height:1.35}
+.pick-check{position:absolute;z-index:8;right:8px;top:8px;width:24px;height:24px;border-radius:50%;background:#fff;border:1px solid var(--line);display:none!important;place-items:center;color:#fff;font-size:13px;font-weight:1000;box-shadow:0 4px 10px rgba(22,52,74,.12)}.destination-card.active .pick-check,.route-card.active .pick-check,.control-card.active .pick-check{display:grid!important;background:var(--pink);border-color:#fff}
+.control-grid.v18{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.control-grid.v18 .control-card{position:relative;display:grid;grid-template-columns:50px 1fr;grid-template-rows:auto auto;text-align:left;align-items:center;padding:13px;border-radius:20px}.control-grid.v18 .control-card>span:not(.pick-check){grid-row:1/3;font-size:31px}.control-grid.v18 .control-card strong{font-size:14px;margin:0}.control-grid.v18 .control-card small{font-size:10px;color:var(--muted);margin-top:2px}
+.road-v18-tip{display:flex;align-items:center;gap:12px;padding:13px 15px;margin:14px 0;background:linear-gradient(145deg,#fff,#eefaf6)}.road-v18-tip>span{font-size:30px}.road-v18-tip p{margin:0;color:var(--muted);font-size:11px;line-height:1.45}.road-v18-tip strong{color:var(--ink)}
+.road-action-dock.v18{grid-template-columns:1fr auto}.road-action-dock.v18 .road-start{min-width:190px}.road-action-dock.v18 .road-action-copy{display:grid}
+.road-v18-car .road-car-identity{right:16px;bottom:12px}
+.argo-token,.argo-token *{touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-user-drag:none!important}.argo-token svg{pointer-events:none!important}.argo-token.dragging{transition:none!important;filter:brightness(1.04) drop-shadow(0 10px 12px rgba(8,44,73,.3))}
+#screen-game.road-immersive .game-top{display:none}
+.road-game-shell{margin-top:4px}
+@media(max-width:700px){
+ .road-v18-head{grid-template-columns:auto 1fr}.road-v18-tati{display:none}.road-v18-head h2{font-size:27px}
+ .road-v18-car{grid-template-columns:1fr 145px;padding:13px;gap:8px;border-radius:23px}.road-v18-car h1{font-size:32px;margin:7px 0}.road-v18-car p{font-size:11px}.argo-preview{max-width:145px}
+ .road-learning-pills{grid-column:1/3}.road-v18-car .road-car-identity{font-size:7.5px;right:8px;bottom:7px}
+ .destination-grid.v18,.route-grid.v18{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .destination-grid.v18 .destination-card,.route-grid.v18 .route-card{padding:6px;border-radius:16px}
+ .destination-grid.v18 .destination-visual{height:82px;border-radius:12px}.route-grid.v18 .route-preview{height:72px;border-radius:12px}
+ .destination-grid.v18 strong,.route-grid.v18 strong{font-size:12px;margin-top:6px}.destination-grid.v18 small,.route-grid.v18 small{font-size:8.5px;line-height:1.25}
+ .pick-check{width:21px;height:21px;right:5px;top:5px}
+ .control-grid.v18{gap:7px}.control-grid.v18 .control-card{grid-template-columns:38px 1fr;padding:10px;border-radius:16px}.control-grid.v18 .control-card>span:not(.pick-check){font-size:25px}.control-grid.v18 .control-card strong{font-size:12px}.control-grid.v18 .control-card small{font-size:8.5px}
+ .road-v18-section{margin:14px 0}.road-v18-section-title{margin-bottom:7px}.road-v18-section-title strong{font-size:14px}.road-v18-section-title small{font-size:9px}
+ .road-v18-tip{padding:10px 12px}.road-v18-tip>span{font-size:24px}.road-v18-tip p{font-size:9.5px}
+ .road-action-dock.v18{grid-template-columns:1fr;bottom:max(7px,env(safe-area-inset-bottom));padding:7px}.road-action-dock.v18 .road-action-copy{display:none}.road-action-dock.v18 .road-start{width:100%;min-width:0;font-size:15px}
+}
+@media(max-width:390px){
+ .road-v18-car{grid-template-columns:1fr 120px}.argo-preview{max-width:120px}.road-v18-car h1{font-size:29px}
+ .destination-grid.v18 .destination-visual{height:72px}.route-grid.v18 .route-preview{height:66px}
+ .destination-grid.v18 strong,.route-grid.v18 strong{font-size:11px}.destination-grid.v18 small,.route-grid.v18 small{font-size:8px}
+}
