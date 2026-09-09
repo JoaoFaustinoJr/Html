@@ -1,3 +1,6 @@
+/* Compatibilidade com HTML antigo: nunca deixar o antigo banner reservar espaço */
+#tangram-levels .rai-brand-hero{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
+
 /* Identidade visual v14.2 — arte integrada ao cabeçalho */
 #tangram-levels .tl-head{
   position:relative!important;
@@ -14,7 +17,7 @@
   pointer-events:none;
   background:
     linear-gradient(90deg,rgba(5,15,24,.96) 0%,rgba(5,15,24,.86) 40%,rgba(5,15,24,.50) 72%,rgba(5,15,24,.34) 100%),
-    url('tangram-hero-v14.webp?v=2') center 43% / cover no-repeat;
+    url('tangram-hero-v14.webp?v=3') center 43% / cover no-repeat;
   opacity:.74;
 }
 #tangram-levels .tl-head>*{
@@ -35,7 +38,7 @@
   #tangram-levels .tl-head::before{
     background:
       linear-gradient(90deg,rgba(5,15,24,.97) 0%,rgba(5,15,24,.92) 48%,rgba(5,15,24,.68) 78%,rgba(5,15,24,.52) 100%),
-      url('tangram-hero-v14.webp?v=2') 64% 43% / cover no-repeat;
+      url('tangram-hero-v14.webp?v=3') 64% 43% / cover no-repeat;
     opacity:.56;
   }
 }
