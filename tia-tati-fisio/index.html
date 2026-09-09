@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=13">
+<link rel="stylesheet" href="styles.css?v=14">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -79,28 +79,75 @@
 <section class="screen" id="screen-roadsetup">
   <div class="screen-head">
     <button class="back-btn" data-home type="button">←</button>
-    <div><span class="kicker">MISSÃO TERAPÊUTICA</span><h2>Caminho Seguro</h2></div>
+    <div><span class="kicker">MISSÃO TERAPÊUTICA + EDUCAÇÃO NO TRÂNSITO</span><h2>Caminho Seguro</h2></div>
   </div>
-  <div class="road-setup-hero panel">
-    <div>
-      <span class="kicker">ESCOLHA + PLANEJAMENTO + CONTROLE</span>
-      <h1>Para onde vamos hoje?</h1>
-      <p>A criança escolhe um destino e conduz o carro por uma rota adaptada. A Tia Tati oferece ajuda progressiva sem transformar o erro em punição.</p>
+
+  <div class="road-challenge-hero panel">
+    <div class="road-challenge-copy">
+      <span class="mission-badge">🚦 DESAFIO DA TIA TATI</span>
+      <h1>Dirija com atenção<br><em>até o destino.</em></h1>
+      <p>Controle o carrinho pela estrada, respeite o caminho e observe as placas. Se sair da pista, a Tia Tati ajuda a retomar do último ponto seguro.</p>
+      <div class="road-learning-pills">
+        <span>🎯 Controle de trajetória</span><span>👀 Atenção visual</span><span>🧠 Planejamento motor</span><span>🚸 Educação no trânsito</span>
+      </div>
     </div>
-    <img src="assets/guide.webp" alt="Tia Tati orientando">
+    <div class="road-preview-card">
+      <svg viewBox="0 0 360 260" aria-label="Prévia de uma estrada em S">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cceeff"/><stop offset="1" stop-color="#eaf8dc"/></linearGradient>
+          <filter id="softShadow"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-opacity=".15"/></filter>
+        </defs>
+        <rect width="360" height="260" rx="28" fill="url(#skyGrad)"/>
+        <circle cx="300" cy="42" r="20" fill="#ffd75a"/>
+        <path d="M36 225 C68 185 126 210 139 162 C150 120 91 118 106 78 C122 35 204 62 230 88 C258 116 254 177 318 40" fill="none" stroke="#eef3f4" stroke-width="62" stroke-linecap="round"/>
+        <path d="M36 225 C68 185 126 210 139 162 C150 120 91 118 106 78 C122 35 204 62 230 88 C258 116 254 177 318 40" fill="none" stroke="#5d6770" stroke-width="48" stroke-linecap="round"/>
+        <path d="M36 225 C68 185 126 210 139 162 C150 120 91 118 106 78 C122 35 204 62 230 88 C258 116 254 177 318 40" fill="none" stroke="#ffd95d" stroke-width="3" stroke-dasharray="13 10" stroke-linecap="round"/>
+        <g transform="translate(55 195)" filter="url(#softShadow)">
+          <rect x="-24" y="-13" width="48" height="27" rx="9" fill="#ff5a6f"/><path d="M-12-13 L-4-25 H13 L22-13Z" fill="#e94158"/>
+          <rect x="-7" y="-21" width="17" height="9" rx="3" fill="#bde8ff"/><circle cx="-13" cy="15" r="7" fill="#243848"/><circle cx="14" cy="15" r="7" fill="#243848"/>
+        </g>
+        <g transform="translate(300 24)"><rect x="-25" y="6" width="50" height="38" rx="5" fill="#fff"/><path d="M-31 7 L0-11 L31 7Z" fill="#ff819d"/><rect x="-7" y="23" width="14" height="21" fill="#6ab6e9"/><rect x="-20" y="16" width="9" height="9" fill="#ffe180"/><rect x="11" y="16" width="9" height="9" fill="#ffe180"/></g>
+        <g transform="translate(238 164)"><rect x="-3" y="-22" width="6" height="44" rx="3" fill="#55656f"/><path d="M-25-22 H25 L18 0 H-18Z" fill="#ffd85a" stroke="#fff" stroke-width="3"/><path d="M-8-13 Q0-21 8-13" fill="none" stroke="#44545f" stroke-width="4"/></g>
+      </svg>
+      <img src="assets/guide.webp" alt="Tia Tati orientando">
+      <div class="preview-bubble">“Cuidado com a curva!”</div>
+    </div>
+  </div>
+
+  <div class="road-education-banner panel">
+    <span class="traffic-light-mini"><i></i><i></i><i></i></span>
+    <div><strong>Aprender enquanto dirige</strong><p>Placas e situações simples reforçam atenção, travessia segura, redução de velocidade e cuidado com pedestres — sem tirar o foco da tarefa motora.</p></div>
   </div>
 
   <div class="road-setup-section">
-    <span class="kicker">1. DESTINO</span>
+    <span class="kicker">1. ESCOLHA O DESTINO</span>
     <div class="destination-grid">
-      <button class="destination-card active" data-destination="school" type="button"><span>🏫</span><strong>Escola</strong><small>Vamos chegar para aprender.</small></button>
-      <button class="destination-card" data-destination="home" type="button"><span>🏠</span><strong>Casa</strong><small>Um caminho tranquilo até em casa.</small></button>
-      <button class="destination-card" data-destination="park" type="button"><span>🌳</span><strong>Parque</strong><small>Vamos brincar no parque.</small></button>
+      <button class="destination-card active" data-destination="school" type="button">
+        <span class="destination-visual school-scene"><i class="scene-ground"></i><i class="scene-building"></i><i class="scene-roof"></i><i class="scene-door"></i><i class="scene-tree"></i></span>
+        <strong>Escola</strong><small>Zona escolar: atenção e velocidade reduzida.</small>
+      </button>
+      <button class="destination-card" data-destination="home" type="button">
+        <span class="destination-visual home-scene"><i class="scene-ground"></i><i class="scene-building"></i><i class="scene-roof"></i><i class="scene-door"></i><i class="scene-tree"></i></span>
+        <strong>Casa</strong><small>Rua tranquila: cuidado com pedestres e entradas.</small>
+      </button>
+      <button class="destination-card" data-destination="park" type="button">
+        <span class="destination-visual park-scene"><i class="scene-ground"></i><i class="scene-tree big"></i><i class="scene-bench"></i><i class="scene-flower"></i></span>
+        <strong>Parque</strong><small>Área de lazer: atenção a pessoas e ciclistas.</small>
+      </button>
     </div>
   </div>
 
   <div class="road-setup-section">
-    <span class="kicker">2. COMO CONDUZIR</span>
+    <span class="kicker">2. ESCOLHA A ROTA</span>
+    <div class="route-grid">
+      <button class="route-card" data-road-route="1" type="button"><span class="route-preview route-one"></span><strong>Rota 1 • Início</strong><small>Mais larga e quase reta.</small></button>
+      <button class="route-card active" data-road-route="2" type="button"><span class="route-preview route-two"></span><strong>Rota 2 • Curvas em S</strong><small>Curvas suaves e controle contínuo.</small></button>
+      <button class="route-card" data-road-route="3" type="button"><span class="route-preview route-three"></span><strong>Rota 3 • Desafio</strong><small>Mais mudanças de direção e sinalização.</small></button>
+    </div>
+  </div>
+
+  <div class="road-setup-section">
+    <span class="kicker">3. COMO CONDUZIR</span>
     <div class="control-grid">
       <button class="control-card active" data-road-control="drag" type="button"><span>☝️</span><strong>Arrastar o carro</strong><small>Controle contínuo da trajetória.</small></button>
       <button class="control-card" data-road-control="tap" type="button"><span>👆</span><strong>Tocar nos pontos</strong><small>Alternativa acessível sem arrastar.</small></button>
@@ -109,7 +156,7 @@
 
   <div class="road-setup-note panel">
     <span>💗</span>
-    <div><strong>Modo terapêutico</strong><p>Se sair da pista, o carro para e retorna ao último ponto seguro. Após repetidas dificuldades, a ajuda visual aumenta discretamente.</p></div>
+    <div><strong>Modo terapêutico</strong><p>Ao sair da pista aparece um <b>CRASH!</b> em estilo de gibi, mas a resposta continua acolhedora: o carro volta ao último ponto seguro e a ajuda visual aumenta se necessário.</p></div>
   </div>
   <button class="primary wide road-start" id="startRoadMission" type="button">🚗 Começar Caminho Seguro</button>
 </section>
@@ -236,6 +283,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
 </body>
 </html>
