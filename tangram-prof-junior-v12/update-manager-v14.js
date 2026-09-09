@@ -1,6 +1,6 @@
 
 (()=>{
- const APP_VERSION='14.3';
+ const APP_VERSION='14.4';
  const PERMANENT_PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,reloading=false;
 
