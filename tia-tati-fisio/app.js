@@ -23,6 +23,12 @@ const MISSIONS={
  physical:{name:'Missão no Mundo Real',icon:'👣',therapy:'Transferência para tarefa funcional • movimento corporal guiado',intro:'Agora é hora de sair da tela e fazer a missão preparada pela fisioterapeuta.',hint:'Siga a orientação da Dra. Tatiana e depois toque em Concluído.'}
 };
 
+const ROAD_DESTINATIONS={
+ school:{label:'Escola',icon:'🏫',intro:'Vamos levar o carro até a escola. Fique na estrada e vá com calma.',finish:'Chegamos à escola! Muito bem!'},
+ home:{label:'Casa',icon:'🏠',intro:'Vamos levar o carro até em casa. Observe a estrada e dirija com calma.',finish:'Chegamos em casa! Muito bem!'},
+ park:{label:'Parque',icon:'🌳',intro:'Vamos levar o carro até o parque. Siga a estrada com atenção.',finish:'Chegamos ao parque! Parabéns!'}
+};
+
 const PHRASES=[
  ['welcome','Boas-vindas',CARDS.welcome.text],['guide','Orientação',CARDS.guide.text],['success','Incentivo',CARDS.success.text],
  ['retry','Motivação',CARDS.retry.text],['relax','Relaxamento',CARDS.relax.text],['celebrate','Comemoração',CARDS.celebrate.text],
@@ -30,7 +36,13 @@ const PHRASES=[
  ['breathe_in','Respiração — inspire','Puxe o ar pelo nariz, devagar.'],['breathe_out','Respiração — solte','Agora solte o ar devagar pela boca.'],
  ['posture','Postura','Vamos alinhar a postura. Ombros relaxados e olhar para frente.'],
  ['attention','Atenção','Olhe com calma. Veja por onde vamos passar.'],
- ['choice','Escolha','Qual você quer fazer agora?']
+ ['choice','Escolha','Qual você quer fazer agora?'],
+ ['road_school_intro','Caminho Seguro — Escola',ROAD_DESTINATIONS.school.intro],
+ ['road_home_intro','Caminho Seguro — Casa',ROAD_DESTINATIONS.home.intro],
+ ['road_park_intro','Caminho Seguro — Parque',ROAD_DESTINATIONS.park.intro],
+ ['road_checkpoint','Caminho Seguro — ponto seguro','Muito bem! Você chegou a um ponto seguro. Continue pelo caminho.'],
+ ['road_recover','Caminho Seguro — retomada','Ops! Vamos olhar a estrada outra vez. Eu te ajudo a voltar ao último ponto seguro.'],
+ ['road_finish','Caminho Seguro — chegada','Chegamos ao destino! Parabéns pelo cuidado no caminho.']
 ];
 
 const INTERVENTIONS=[
@@ -46,7 +58,7 @@ const INTERVENTIONS=[
 
 const prefsKey='tiaTatiV12Prefs', reportsKey='tiaTatiV12Reports';
 const state={
- screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0,
+ screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag',
  size:92,speed:2,amplitude:3,stimuli:2,reach:'all',context:'APAE',easy:true,guide:true,projection:false,reduced:false,therapeutic:true,
  paused:false,currentPhrase:null,currentText:'',cleanup:null,idleTimers:[],lastObservation:''
 };
@@ -131,12 +143,16 @@ async function recordPhrase(id,row){
 }
 
 function startCircuit(ids){
- if(!ids?.length)return;state.circuit=ids.slice();state.lastCircuit=ids.slice();state.step=0;state.interactions=0;state.assists=0;state.collisions=0;state.started=Date.now();show('game');renderMission();
+ if(!ids?.length)return;state.circuit=ids.slice();state.lastCircuit=ids.slice();state.step=0;state.interactions=0;state.assists=0;state.collisions=0;state.checkpoints=0;state.started=Date.now();show('game');renderMission();
 }
 function gameProgress(){const total=state.circuit.length,idx=Math.min(state.step+1,total);$('#gameProgressText').textContent=idx+'/'+total;$('#gameProgressFill').style.width=(state.step/total*100)+'%';}
 function clearActivity(){clearIdle();$('#activityArea').innerHTML='';$('#feedback').textContent='';stopAudio();}
 function renderMission(){
- clearActivity();gameProgress();const id=state.circuit[state.step],m=MISSIONS[id];$('#therapyNote').textContent='Foco terapêutico: '+m.therapy;setTutor(id==='breathe'?'relax':'guide',m.name,m.intro,id+'_intro',true);
+ clearActivity();gameProgress();const id=state.circuit[state.step],m=MISSIONS[id];$('#therapyNote').textContent='Foco terapêutico: '+m.therapy;
+ const intro=(id==='road'?(ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school).intro:m.intro);
+ const title=(id==='road'?m.name+' • '+(ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school).label:m.name);
+ const phrase=(id==='road'?'road_'+state.roadDestination+'_intro':id+'_intro');
+ setTutor(id==='breathe'?'relax':'guide',title,intro,phrase,true);
  ({road,bee,target:targetMission,hands,light,sensory,breathe,physical}[id]||(()=>finishStep()))();resetIdle();
 }
 function finishStep(){
@@ -158,17 +174,97 @@ function minPathDist(px,py,pts,w,h){let d=1e9;for(let i=0;i<pts.length-1;i++)d=M
 
 function road(){
  const area=$('#activityArea'),wrap=document.createElement('div');wrap.className='road-wrap';
- const pts=[[.06,.78],[.23,.63],[.36,.68],[.48,.50],[.62,.36],[.75,.44],[.92,.21]];
- wrap.innerHTML='<svg class="road-svg" viewBox="0 0 800 400" preserveAspectRatio="none"><rect width="800" height="400" fill="transparent"/><polyline points="'+pts.map(p=>p[0]*800+','+p[1]*400).join(' ')+'" fill="none" stroke="#e9eef1" stroke-width="105" stroke-linecap="round" stroke-linejoin="round"/><polyline points="'+pts.map(p=>p[0]*800+','+p[1]*400).join(' ')+'" fill="none" stroke="#5f6870" stroke-width="82" stroke-linecap="round" stroke-linejoin="round"/><polyline points="'+pts.map(p=>p[0]*800+','+p[1]*400).join(' ')+'" fill="none" stroke="#ffd951" stroke-width="4" stroke-dasharray="20 16"/></svg><div class="goal-badge">🏫 Escola</div>';
- const car=document.createElement('div');car.className='game-object car-token';car.textContent='🚗';wrap.appendChild(car);area.appendChild(wrap);
- requestAnimationFrame(()=>{car.style.left=(pts[0][0]*wrap.clientWidth-car.offsetWidth/2)+'px';car.style.top=(pts[0][1]*wrap.clientHeight-car.offsetHeight/2)+'px';});
- let lastSafe=0,lastErr=0;
- dragObject(car,wrap,(x,y,r)=>{
-  const d=minPathDist(x,y,pts,r.width,r.height),allow=46+(5-state.amplitude)*4;
-  let closest=0,best=1e9;pts.forEach((p,i)=>{const dd=Math.hypot(x-p[0]*r.width,y-p[1]*r.height);if(dd<best){best=dd;closest=i;}});if(d<allow)lastSafe=Math.max(lastSafe,closest);
-  if(d>allow+18&&Date.now()-lastErr>900){lastErr=Date.now();if(state.therapeutic){softError('Ops! Vamos olhar a estrada outra vez.');const p=pts[lastSafe];car.style.left=(p[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(p[1]*r.height-car.offsetHeight/2)+'px';}else softError('O carro saiu da pista. Tente novamente.');}
-  const goal=pts[pts.length-1];if(Math.hypot(x-goal[0]*r.width,y-goal[1]*r.height)<65){state.interactions++;finishStep();}
- });
+ const dest=ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school;
+ const routes={
+  school:[[.06,.80],[.20,.67],[.35,.70],[.47,.53],[.60,.39],[.75,.45],[.92,.22]],
+  home:[[.07,.22],[.20,.33],[.34,.28],[.49,.46],[.61,.62],[.77,.55],[.92,.76]],
+  park:[[.07,.77],[.18,.58],[.34,.45],[.49,.54],[.64,.35],[.78,.28],[.92,.39]]
+ };
+ const pts=routes[state.roadDestination]||routes.school;
+ const vw=800,vh=400,roadWidth=state.amplitude<=2?112:state.amplitude>=5?72:92;
+ const line=pts.map(p=>(p[0]*vw)+','+(p[1]*vh)).join(' ');
+ wrap.innerHTML=
+  '<div class="road-scenery">'+
+   '<span style="left:4%;top:7%">☁️</span><span style="left:34%;top:8%">☀️</span><span style="left:74%;top:6%">☁️</span>'+
+   '<span style="left:9%;bottom:8%">🌲</span><span style="left:30%;bottom:6%">🌼</span><span style="left:57%;bottom:7%">🌳</span><span style="right:7%;bottom:9%">🌷</span>'+
+  '</div>'+
+  '<svg class="road-svg" viewBox="0 0 '+vw+' '+vh+'" preserveAspectRatio="none">'+
+   '<polyline points="'+line+'" fill="none" stroke="#edf2f3" stroke-width="'+(roadWidth+24)+'" stroke-linecap="round" stroke-linejoin="round"/>'+
+   '<polyline points="'+line+'" fill="none" stroke="#5e6870" stroke-width="'+roadWidth+'" stroke-linecap="round" stroke-linejoin="round"/>'+
+   '<polyline class="road-guide" points="'+line+'" fill="none" stroke="#8de0d1" stroke-width="'+Math.max(roadWidth-22,44)+'" stroke-linecap="round" stroke-linejoin="round"/>'+
+   '<polyline points="'+line+'" fill="none" stroke="#ffd957" stroke-width="4" stroke-dasharray="20 16"/>'+
+  '</svg>'+
+  '<div class="road-hud">Pontos seguros: <span class="road-count">0</span>/'+(pts.length-2)+'</div>'+
+  '<div class="goal-badge">'+dest.icon+' '+dest.label+'</div>'+
+  (!state.therapeutic?'<div class="road-hearts">❤️❤️❤️</div>':'');
+ const car=document.createElement('div');car.className='game-object car-token';car.textContent='🚗';wrap.appendChild(car);
+ const checkpoints=[];
+ for(let i=1;i<pts.length-1;i++){
+  const cp=document.createElement('button');cp.type='button';cp.className='road-checkpoint'+(state.roadControl==='tap'?' tap-mode':'');cp.textContent=state.roadControl==='tap'?i:'•';cp.dataset.index=i;wrap.appendChild(cp);checkpoints.push(cp);
+ }
+ area.appendChild(wrap);
+ let checkpoint=0,lastErr=0,helpLevel=0,lives=3,finished=false;
+ const place=()=>{
+  const w=wrap.clientWidth,h=wrap.clientHeight;
+  car.style.left=(pts[0][0]*w-car.offsetWidth/2)+'px';car.style.top=(pts[0][1]*h-car.offsetHeight/2)+'px';
+  checkpoints.forEach((cp,k)=>{const p=pts[k+1];cp.style.left=(p[0]*w)+'px';cp.style.top=(p[1]*h)+'px';cp.classList.toggle('current',state.roadControl==='tap'&&k===0);});
+ };
+ requestAnimationFrame(place);
+ const updateCheckpoint=(idx)=>{
+  if(idx<=checkpoint)return;
+  checkpoint=Math.min(idx,pts.length-2);state.checkpoints=Math.max(state.checkpoints,checkpoint);
+  checkpoints.forEach((cp,k)=>{cp.classList.toggle('done',k<checkpoint);cp.classList.toggle('current',state.roadControl==='tap'&&k===checkpoint);});
+  wrap.querySelector('.road-count').textContent=checkpoint;
+  if(checkpoint<pts.length-1){feedback('Muito bem! Ponto seguro alcançado.');playVoice('road_checkpoint',false);}
+ };
+ const recover=()=>{
+  const p=pts[Math.min(checkpoint,pts.length-2)],r=wrap.getBoundingClientRect();car.classList.add('recovering');
+  car.style.left=(p[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(p[1]*r.height-car.offsetHeight/2)+'px';
+  setTimeout(()=>car.classList.remove('recovering'),450);
+ };
+ const deviate=()=>{
+  if(Date.now()-lastErr<950||finished)return;lastErr=Date.now();state.collisions++;helpLevel++;
+  if(state.therapeutic){
+    setTutor('retry',MISSIONS.road.name+' • '+dest.label,'Ops! Vamos olhar a estrada outra vez. Eu te ajudo a voltar ao último ponto seguro.','road_recover',false);
+    playVoice('road_recover',false);feedback('Retomando do último ponto seguro.');recover();
+    if(helpLevel>=2){wrap.querySelector('.road-guide')?.classList.add('visible');state.assists++;feedback('A Tia Tati deixou o caminho mais visível para ajudar.');}
+  }else{
+    lives--;const hearts=wrap.querySelector('.road-hearts');if(hearts)hearts.textContent='❤️'.repeat(Math.max(0,lives))+'🩶'.repeat(3-Math.max(0,lives));
+    softError('O carro saiu da pista. Tente novamente.');
+    if(lives<=0){lives=3;checkpoint=0;wrap.querySelector('.road-count').textContent='0';checkpoints.forEach(cp=>cp.classList.remove('done'));feedback('Vamos recomeçar o caminho com calma.');}
+    recover();
+  }
+ };
+ const reachedGoal=(x,y,r)=>{
+  const g=pts.at(-1);return Math.hypot(x-g[0]*r.width,y-g[1]*r.height)<72;
+ };
+ const finishRoad=()=>{
+  if(finished)return;finished=true;state.interactions++;
+  setTutor('success',MISSIONS.road.name+' • '+dest.label,dest.finish,'road_finish',false);playVoice('road_finish',false);feedback(dest.finish);
+  setTimeout(finishStep,550);
+ };
+
+ if(state.roadControl==='drag'){
+  dragObject(car,wrap,(x,y,r)=>{
+   const d=minPathDist(x,y,pts,r.width,r.height);
+   const allow=(roadWidth/2)+12+(helpLevel>=2?16:0);
+   let closest=0,best=Infinity;pts.forEach((p,i)=>{const q=Math.hypot(x-p[0]*r.width,y-p[1]*r.height);if(q<best){best=q;closest=i;}});
+   if(d<allow&&closest>checkpoint&&closest<pts.length-1)updateCheckpoint(closest);
+   if(d>allow+18)deviate();
+   if(reachedGoal(x,y,r))finishRoad();
+  });
+ }else{
+  car.style.cursor='default';
+  checkpoints.forEach((cp,k)=>cp.addEventListener('click',()=>{
+   if(state.paused||finished)return;
+   const expected=checkpoint;
+   if(k!==expected){setTutor('retry',MISSIONS.road.name+' • '+dest.label,'Procure o próximo ponto iluminado. Vamos na ordem.','road_recover',false);feedback('Um ponto de cada vez.');return;}
+   const p=pts[k+1],r=wrap.getBoundingClientRect();car.style.transition='left .35s ease, top .35s ease';
+   car.style.left=(p[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(p[1]*r.height-car.offsetHeight/2)+'px';state.interactions++;updateCheckpoint(k+1);
+   if(k===checkpoints.length-1)setTimeout(()=>{const g=pts.at(-1);car.style.left=(g[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(g[1]*r.height-car.offsetHeight/2)+'px';setTimeout(finishRoad,380);},420);
+  }));
+ }
+ state.cleanup=()=>{finished=true;};
 }
 function bee(){
  const area=$('#activityArea'),f=document.createElement('div');f.className='playfield';f.style.background='linear-gradient(#dff6ff,#eaf8d8)';
@@ -212,7 +308,7 @@ function physical(){
 function reports(){try{return JSON.parse(localStorage.getItem(reportsKey)||'[]');}catch(e){return[];}}
 function saveReports(list){try{localStorage.setItem(reportsKey,JSON.stringify(list.slice(0,30)));}catch(e){}}
 function finishSession(){
- clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
+ clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
  $('#doneStats').innerHTML='<div class="summary-box"><strong>'+state.circuit.length+'</strong><small>missões</small></div><div class="summary-box"><strong>'+state.interactions+'</strong><small>interações</small></div><div class="summary-box"><strong>'+duration+' min</strong><small>duração</small></div>';
  $('#gameProgressFill').style.width='100%';show('done');playVoice('celebrate',false);
 }
@@ -229,10 +325,13 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$$('[data-mission]').forEach(b=>b.onclick=()=>startCircuit([b.dataset.mission]));
+$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
+$('[data-destination]').forEach(b=>b.onclick=()=>{state.roadDestination=b.dataset.destination;$('[data-destination]').forEach(x=>x.classList.toggle('active',x===b));playVoice('choice',false);});
+$('[data-road-control]').forEach(b=>b.onclick=()=>{state.roadControl=b.dataset.roadControl;$('[data-road-control]').forEach(x=>x.classList.toggle('active',x===b));});
+$('#startRoadMission').onclick=()=>startCircuit(['road']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
 [['targetSize','targetSizeValue',' px'],['speed','speedValue','/5'],['amplitude','amplitudeValue','/5'],['stimuli','stimuliValue','/5']].forEach(([id,out,suf])=>$('#'+id).oninput=e=>$('#'+out).textContent=e.target.value+suf);
