@@ -1,0 +1,60 @@
+name: Build Tangram share v18
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-share-v18.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow
+        run: python -m pip install --quiet pillow
+
+      - name: Build real 1200x630 social card
+        run: |
+          python - <<'PY'
+          from PIL import Image, ImageEnhance, ImageFilter
+          from pathlib import Path
+
+          base = Path("tangram-prof-junior-v12")
+          src = base / "tangram-share-v17.jpg"
+          dst = base / "tangram-share-v18.jpg"
+
+          im = Image.open(src).convert("RGB")
+          # Preserve the exact new artwork, but make the physical asset
+          # compliant with large Open Graph previews.
+          im = im.resize((1200, 630), Image.Resampling.LANCZOS)
+          im = ImageEnhance.Sharpness(im).enhance(1.15)
+          im.save(dst, "JPEG", quality=88, optimize=True, progressive=True)
+
+          check = Image.open(dst)
+          assert check.size == (1200, 630), check.size
+          print("Generated:", dst, check.size)
+          PY
+
+      - name: Commit generated card
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tangram-prof-junior-v12/tangram-share-v18.jpg
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Gera card social Tangram v18 em 1200x630 real"
+            git push
+          fi
