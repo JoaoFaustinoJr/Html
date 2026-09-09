@@ -1,0 +1,288 @@
+[
+  {
+    "year": 0,
+    "id": "f-logica",
+    "section": "fund",
+    "topic": "O que é lógica?",
+    "icon": "🧠",
+    "concept": "Lógica é organizar o pensamento usando regras para chegar a uma conclusão ou resolver um problema. Na programação, ela ajuda a decidir a ordem das ações e o que fazer em cada situação.",
+    "formula": "Situação → regra → conclusão",
+    "notation": "Exemplo: SE a peça estiver correta → verificar; SENÃO → mover ou girar.",
+    "challenge": "Explique uma regra lógica que você usa no dia a dia no formato “se... então...”.",
+    "answer": "Exemplo: se estiver chovendo, então levo o guarda-chuva.",
+    "crep": "BNCC Computação / Referencial Curricular do Paraná — Pensamento Computacional.",
+    "trim": "Fundamento transversal • 5º ao 9º ano",
+    "objective": "Compreender lógica como organização do raciocínio e base para decisões em algoritmos.",
+    "comp": "Pensamento Computacional — formular regras, decisões e estratégias.",
+    "quiz": [
+      {
+        "q": "Lógica serve principalmente para...",
+        "options": [
+          "Decorar comandos",
+          "Organizar o raciocínio e tomar decisões",
+          "Aumentar a velocidade do computador"
+        ],
+        "correct": 1,
+        "explanation": "A lógica organiza regras, relações e decisões."
+      },
+      {
+        "q": "Qual frase tem uma condição?",
+        "options": [
+          "Mova a peça",
+          "SE encaixar, ENTÃO verifique",
+          "Repita quatro vezes"
+        ],
+        "correct": 1,
+        "explanation": "SE... ENTÃO representa uma decisão condicional."
+      },
+      {
+        "q": "Um raciocínio lógico precisa...",
+        "options": [
+          "Seguir regras coerentes",
+          "Ser sempre escrito em Python",
+          "Usar internet"
+        ],
+        "correct": 0,
+        "explanation": "A lógica existe antes da linguagem de programação."
+      }
+    ]
+  },
+  {
+    "year": 0,
+    "id": "f-algoritmo",
+    "section": "fund",
+    "topic": "Algoritmo: uma receita para resolver problemas",
+    "icon": "🧾",
+    "concept": "Algoritmo é uma sequência finita e organizada de passos para alcançar um objetivo. Podemos escrever algoritmos em linguagem comum, fluxogramas, blocos ou código.",
+    "formula": "Problema → algoritmo → programa",
+    "notation": "Exemplo: observar → escolher → mover → girar → verificar.",
+    "challenge": "Crie um algoritmo de quatro passos para abrir um aplicativo e iniciar uma atividade.",
+    "answer": "Exemplo: desbloquear o aparelho → tocar no app → escolher a atividade → iniciar.",
+    "crep": "BNCC Computação / Referencial Curricular do Paraná — construção e representação de algoritmos.",
+    "trim": "Fundamento transversal • 5º ao 9º ano",
+    "objective": "Definir algoritmo e reconhecer sua presença em tarefas cotidianas e computacionais.",
+    "comp": "Pensamento Computacional — decomposição e descrição de soluções passo a passo.",
+    "quiz": [
+      {
+        "q": "Um algoritmo é...",
+        "options": [
+          "Uma sequência de passos para resolver um problema",
+          "Somente um programa em Python",
+          "Uma peça do computador"
+        ],
+        "correct": 0,
+        "explanation": "Algoritmos podem existir sem código."
+      },
+      {
+        "q": "Qual vem antes?",
+        "options": [
+          "Programa",
+          "Algoritmo",
+          "Aplicativo instalado"
+        ],
+        "correct": 1,
+        "explanation": "Primeiro planejamos a solução; depois podemos codificá-la."
+      },
+      {
+        "q": "Um bom algoritmo deve ser...",
+        "options": [
+          "Ambíguo",
+          "Ordenado e compreensível",
+          "Sempre longo"
+        ],
+        "correct": 1,
+        "explanation": "Passos claros e ordenados facilitam execução e teste."
+      }
+    ]
+  },
+  {
+    "year": 0,
+    "id": "f-linguagens",
+    "section": "fund",
+    "topic": "Linguagens computacionais e de programação",
+    "icon": "💬",
+    "concept": "Linguagens computacionais são formas estruturadas de representar instruções e informações para sistemas digitais. Linguagens de programação permitem criar algoritmos executáveis. Elas podem ser visuais, como Scratch, ou textuais, como Python, JavaScript e C/C++.",
+    "formula": "Mesmo algoritmo → diferentes linguagens",
+    "notation": "Visual: Scratch • Textual: Python / JavaScript / C++ • Máquina: instruções binárias executadas pelo processador.",
+    "challenge": "Explique por que o mesmo algoritmo pode ser escrito em Scratch e em Python.",
+    "answer": "Porque o algoritmo é a ideia da solução; a linguagem é a forma usada para expressá-la.",
+    "crep": "BNCC Computação / Referencial Curricular do Paraná — linguagens e representação de algoritmos.",
+    "trim": "Fundamento transversal • 5º ao 9º ano",
+    "objective": "Distinguir algoritmo de linguagem e reconhecer linguagens visuais, textuais e de máquina.",
+    "comp": "Mundo Digital e Pensamento Computacional — representação e execução de instruções.",
+    "quiz": [
+      {
+        "q": "Python é...",
+        "options": [
+          "Sistema operacional",
+          "Linguagem de programação",
+          "Componente eletrônico"
+        ],
+        "correct": 1,
+        "explanation": "Python é uma linguagem textual de programação."
+      },
+      {
+        "q": "Scratch é...",
+        "options": [
+          "Uma linguagem visual baseada em blocos",
+          "Uma linguagem de máquina",
+          "Um navegador"
+        ],
+        "correct": 0,
+        "explanation": "Scratch representa instruções com blocos visuais."
+      },
+      {
+        "q": "Algoritmo e linguagem são a mesma coisa?",
+        "options": [
+          "Sim",
+          "Não"
+        ],
+        "correct": 1,
+        "explanation": "O algoritmo é a solução; a linguagem é uma forma de descrevê-la."
+      }
+    ]
+  },
+  {
+    "year": 0,
+    "id": "f-pilares-pc",
+    "section": "fund",
+    "topic": "Os 4 pilares do pensamento computacional",
+    "icon": "🧩",
+    "concept": "Pensamento computacional organiza a resolução de problemas por quatro ideias centrais: decomposição, reconhecimento de padrões, abstração e algoritmos.",
+    "formula": "Decompor • reconhecer padrões • abstrair • criar algoritmos",
+    "notation": "Tangram: dividir a figura → perceber formas repetidas → focar no essencial → planejar movimentos.",
+    "challenge": "Ao montar uma figura difícil do Tangram, dê um exemplo de decomposição.",
+    "answer": "Separar mentalmente a figura em regiões menores e decidir quais peças podem preencher cada região.",
+    "crep": "BNCC Computação / Referencial Curricular do Paraná — Pensamento Computacional.",
+    "trim": "Fundamento transversal • 5º ao 9º ano",
+    "objective": "Reconhecer e aplicar os quatro pilares do pensamento computacional.",
+    "comp": "Decomposição • reconhecimento de padrões • abstração • algoritmos.",
+    "quiz": [
+      {
+        "q": "Dividir um problema grande em partes menores é...",
+        "options": [
+          "Abstração",
+          "Decomposição",
+          "Depuração"
+        ],
+        "correct": 1,
+        "explanation": "Decomposição reduz a complexidade do problema."
+      },
+      {
+        "q": "Ignorar detalhes que não ajudam na solução é...",
+        "options": [
+          "Abstração",
+          "Repetição",
+          "Variável"
+        ],
+        "correct": 0,
+        "explanation": "Abstração destaca o que é relevante."
+      },
+      {
+        "q": "Perceber que duas situações têm estruturas parecidas é...",
+        "options": [
+          "Reconhecimento de padrões",
+          "Compilação",
+          "Instalação"
+        ],
+        "correct": 0,
+        "explanation": "Padrões ajudam a reutilizar estratégias."
+      }
+    ]
+  },
+  {
+    "year": 0,
+    "id": "f-fund-programacao",
+    "section": "fund",
+    "topic": "Fundamentos da programação",
+    "icon": "⚙️",
+    "concept": "Programas combinam algumas ferramentas fundamentais: sequência de instruções, dados e variáveis, condições, repetições e funções ou partes reutilizáveis.",
+    "formula": "Sequência • dados/variáveis • condições • repetições • funções",
+    "notation": "SE condição → decisão • REPITA → laço • variável → valor que pode mudar • função → conjunto reutilizável de instruções.",
+    "challenge": "Qual fundamento você usaria para fazer um robô repetir o mesmo movimento quatro vezes?",
+    "answer": "Uma repetição (laço).",
+    "crep": "BNCC Computação / Referencial Curricular do Paraná — programação e estruturas de controle.",
+    "trim": "Fundamento transversal • 5º ao 9º ano",
+    "objective": "Identificar estruturas e conceitos básicos presentes em programas.",
+    "comp": "Programação — sequência, dados, seleção, repetição e modularização.",
+    "quiz": [
+      {
+        "q": "Uma variável é...",
+        "options": [
+          "Um valor que pode ser armazenado e alterado",
+          "Uma peça física",
+          "Um erro do programa"
+        ],
+        "correct": 0,
+        "explanation": "Variáveis guardam dados usados pelo programa."
+      },
+      {
+        "q": "Quando uma ação deve acontecer várias vezes usamos...",
+        "options": [
+          "Condição",
+          "Repetição",
+          "Comentário"
+        ],
+        "correct": 1,
+        "explanation": "Laços evitam escrever a mesma instrução repetidamente."
+      },
+      {
+        "q": "SE... ENTÃO... SENÃO representa...",
+        "options": [
+          "Uma decisão",
+          "Uma imagem",
+          "Um arquivo"
+        ],
+        "correct": 0,
+        "explanation": "Condições permitem escolher caminhos diferentes."
+      }
+    ]
+  },
+  {
+    "year": 0,
+    "id": "f-bugs",
+    "section": "fund",
+    "topic": "Bug, teste e depuração",
+    "icon": "🐞",
+    "concept": "Bug é um erro ou comportamento inesperado em um programa. Testar ajuda a encontrá-lo; depurar significa investigar a causa, corrigir e testar novamente.",
+    "formula": "Executar → observar → localizar → corrigir → testar novamente",
+    "notation": "Depuração não é adivinhação: compare o resultado esperado com o resultado obtido.",
+    "challenge": "Um robô deveria andar 4 passos, mas anda 5. Qual seria sua primeira ação para depurar?",
+    "answer": "Revisar a parte do algoritmo que controla a quantidade de repetições e testar novamente.",
+    "crep": "BNCC Computação / Referencial Curricular do Paraná — teste, análise e correção de algoritmos.",
+    "trim": "Fundamento transversal • 5º ao 9º ano",
+    "objective": "Compreender bugs, testes e depuração como parte natural do desenvolvimento.",
+    "comp": "Pensamento Computacional — avaliação, teste e refinamento de soluções.",
+    "quiz": [
+      {
+        "q": "Depurar significa...",
+        "options": [
+          "Apagar todo o programa",
+          "Investigar e corrigir erros",
+          "Instalar outro navegador"
+        ],
+        "correct": 1,
+        "explanation": "Depuração procura a causa do comportamento incorreto."
+      },
+      {
+        "q": "Depois de corrigir um bug devemos...",
+        "options": [
+          "Testar novamente",
+          "Nunca mais executar",
+          "Trocar a linguagem"
+        ],
+        "correct": 0,
+        "explanation": "O novo teste confirma se a correção funcionou."
+      },
+      {
+        "q": "Encontrar um bug significa que o projeto fracassou?",
+        "options": [
+          "Sim",
+          "Não"
+        ],
+        "correct": 1,
+        "explanation": "Testar e corrigir faz parte do processo de programação."
+      }
+    ]
+  }
+]
