@@ -76,7 +76,7 @@ function show(name){
  $$('.screen').forEach(s=>s.classList.remove('active'));
  $('#screen-'+name)?.classList.add('active'); state.screen=name;
  $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
- app.classList.toggle('projection',state.projection);
+ app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup');
  window.scrollTo({top:0,behavior:'smooth'});
  if(name==='reports')renderReports();
  if(name==='voice')renderVoice();
@@ -94,6 +94,10 @@ function setTutor(mode,title,text,phraseId,auto=false){
  state.currentPhrase=phraseId||mode;state.currentText=text;if(auto)playVoice(state.currentPhrase,false);
 }
 function targetSize(){return Math.max(64,Math.min(136,state.size+(state.easy?10:0)+(state.projection?14:0)));}
+function syncRoadSummary(){
+ const dest=ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school;
+ const el=$('#roadActionSummary');if(el)el.textContent=dest.label+' • Rota '+(Number(state.roadRoute)||2);
+}
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
 
 const VoiceDB={
@@ -384,15 +388,15 @@ function saveObservation(){
  const txt=$('#sessionObservation').value.trim();if(!txt)return toast('Escreva uma observação primeiro.');const list=reports();if(!list.length)return toast('Ainda não há sessão registrada.');list[0].observation=txt;saveReports(list);$('#sessionObservation').value='';renderReports();toast('Observação salva no último registro.');
 }
 
-buildCircuitPicker();buildInterventions();syncSettings();
+buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
 $$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
-$$('[data-destination]').forEach(b=>b.onclick=()=>{state.roadDestination=b.dataset.destination;$$('[data-destination]').forEach(x=>x.classList.toggle('active',x===b));playVoice('choice',false);});
-$$('[data-road-route]').forEach(b=>b.onclick=()=>{state.roadRoute=Number(b.dataset.roadRoute)||2;$$('[data-road-route]').forEach(x=>x.classList.toggle('active',x===b));});
+$('[data-destination]').forEach(b=>b.onclick=()=>{state.roadDestination=b.dataset.destination;$('[data-destination]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();playVoice('choice',false);});
+$('[data-road-route]').forEach(b=>b.onclick=()=>{state.roadRoute=Number(b.dataset.roadRoute)||2;$('[data-road-route]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();});
 $$('[data-road-control]').forEach(b=>b.onclick=()=>{state.roadControl=b.dataset.roadControl;$$('[data-road-control]').forEach(x=>x.classList.toggle('active',x===b));});
 $('#startRoadMission').onclick=()=>startCircuit(['road']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
