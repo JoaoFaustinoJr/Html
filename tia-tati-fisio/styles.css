@@ -200,3 +200,49 @@ button,input,select,textarea{font:inherit}button{color:inherit}img{max-width:100
  .destination-grid.v18 .destination-visual{height:72px}.route-grid.v18 .route-preview{height:66px}
  .destination-grid.v18 strong,.route-grid.v18 strong{font-size:11px}.destination-grid.v18 small,.route-grid.v18 small{font-size:8px}
 }
+
+/* V19 — modo celular nativo + aproximação visual do mockup */
+body.road-game-active{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important;background:#d9f4ff}
+body.road-game-active .app.road-game-mode{max-width:none!important;width:100%!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important}
+.road-game-mode .topbar{display:none!important}
+.road-game-mode #screen-game.road-immersive{display:flex!important;position:fixed;inset:0;z-index:120;height:100dvh;width:100vw;padding:max(6px,env(safe-area-inset-top)) 6px max(6px,env(safe-area-inset-bottom));background:linear-gradient(180deg,#dff5ff,#f7fbf4);overflow:hidden}
+.road-game-mode #screen-game.road-immersive .activity{display:flex;flex:1;min-height:0;width:100%;margin:0;padding:0!important}
+.road-game-mode .road-game-shell{display:flex;flex-direction:column;width:min(100%,560px);height:100%;max-height:none;margin:0 auto;border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 18px 50px rgba(20,63,91,.2)}
+.road-game-mode .road-game-top{flex:0 0 auto;padding:8px 9px;background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(239,250,255,.98));border-bottom:1px solid rgba(65,119,149,.12)}
+.road-game-mode .road-game-stage{flex:1;min-height:0;aspect-ratio:auto!important;background:#8bd06e;touch-action:none!important;overscroll-behavior:none!important}
+.road-game-mode .road-game-footer{flex:0 0 auto;padding:8px 12px 10px}
+.road-mini-tutor img{width:62px;height:62px;border-radius:50%;border:4px solid #fff;box-shadow:0 7px 20px rgba(20,63,91,.18)}
+.road-mini-tutor{gap:10px}.road-mini-tutor div{background:#fff;border:1px solid var(--line);border-radius:17px;padding:7px 10px;box-shadow:0 5px 15px rgba(20,63,91,.08)}
+.road-mini-tutor small{font-size:7px}.road-mini-tutor strong{font-size:12px;max-width:190px;white-space:normal;line-height:1.2}
+.road-score{display:grid;grid-template-columns:1fr 1fr;gap:5px}.road-score span{padding:6px 8px;border-radius:14px;background:rgba(255,255,255,.96);font-size:10px}
+.road-game-actions{display:grid;grid-template-columns:repeat(2,34px);gap:5px}.road-game-actions button{width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.96)}
+.road-game-actions .road-exit-btn{font-size:18px;font-weight:900}
+.road-world image{pointer-events:none}
+.argo-token{width:94px;height:64px;z-index:14!important;background:transparent!important;touch-action:none!important;cursor:grab}.argo-token img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none!important;filter:drop-shadow(0 9px 8px rgba(5,43,73,.34))}
+.argo-token.dragging img{filter:drop-shadow(0 12px 11px rgba(5,43,73,.4)) brightness(1.04)}
+.road-sign-card{z-index:10}.road-star{z-index:11}.road-checkpoint.road-flag{z-index:10}
+.road-traffic-bubble{left:50%;right:auto;transform:translateX(-50%);width:min(86%,360px);bottom:12px;border-radius:17px;padding:9px 12px;font-size:10px}
+.road-route-chip{left:10px;top:10px}.road-progress-chip{right:10px;top:10px}
+.road-crash{right:7%;top:56%;font-size:clamp(36px,12vw,70px)}
+.road-progress-track{height:10px}.road-stars-summary{font-size:10px}
+#screen-roadsetup .argo-preview{filter:drop-shadow(0 10px 12px rgba(9,64,105,.18))}
+@media(max-width:650px){
+ .road-game-mode #screen-game.road-immersive{padding:0}
+ .road-game-mode .road-game-shell{width:100%;height:100dvh;border-radius:0;border:0;box-shadow:none}
+ .road-game-top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tutor actions" "score score";gap:5px;padding:max(7px,env(safe-area-inset-top)) 8px 7px!important}
+ .road-mini-tutor{grid-area:tutor}.road-score{grid-area:score;display:flex;justify-content:flex-start;padding-left:73px;margin-top:-6px}.road-game-actions{grid-area:actions;grid-template-columns:repeat(2,32px)}
+ .road-game-actions .road-voice-btn,.road-game-actions .road-hint-btn{display:none}
+ .road-mini-tutor img{width:58px;height:58px}.road-mini-tutor div{padding:6px 9px}.road-mini-tutor strong{font-size:11px;max-width:170px}
+ .road-game-stage{height:auto!important;min-height:0!important}
+ .argo-token{width:88px;height:60px}
+ .road-route-chip,.road-progress-chip{font-size:8px;padding:5px 7px}
+ .road-sign-card{width:40px;height:40px;border-radius:11px;font-size:17px}.road-sign-card.speed{font-size:12px}
+ .road-star{font-size:31px}
+ .road-traffic-bubble{width:88%;font-size:9.5px;bottom:9px}
+ .road-game-footer{padding-bottom:max(9px,env(safe-area-inset-bottom))}
+}
+@media(max-width:390px){
+ .road-mini-tutor strong{max-width:145px}
+ .argo-token{width:82px;height:56px}
+ .road-score{padding-left:68px}.road-score span{font-size:9px}
+}
