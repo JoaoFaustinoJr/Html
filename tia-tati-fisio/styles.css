@@ -344,3 +344,68 @@ body.road-game-active .app.road-game-mode{max-width:none!important;width:100%!im
  .argo-token{width:68px!important;height:96px!important}
  .road-mini-tutor strong{max-width:135px}
 }
+
+/* V21 — polimento final do Caminho Seguro */
+.road-v18-section{backdrop-filter:blur(7px)}
+.destination-visual.rich img{filter:saturate(1.08) contrast(1.02)}
+.destination-grid.v18 .destination-card.active,
+.route-grid.v18 .route-card.active,
+.control-grid.v18 .control-card.active{box-shadow:0 12px 28px rgba(255,90,165,.14),0 0 0 1px rgba(255,90,165,.08)}
+.route-grid.v18 .route-card.active .route-preview{box-shadow:inset 0 0 0 2px rgba(255,90,165,.16)}
+.road-action-dock.v18{background:rgba(255,255,255,.97);backdrop-filter:blur(14px)}
+.road-action-dock.v18 .road-start{min-height:52px;border-radius:17px}
+.road-v18-tip>span{filter:drop-shadow(0 4px 7px rgba(35,80,103,.12))}
+
+/* Tela de jogo com mais presença visual e menos aparência de protótipo */
+.road-game-mode .road-game-shell{background:#f8fcfd}
+.road-game-mode .road-game-stage{background:#71bf69}
+.road-game-mode .road-game-top{grid-template-columns:minmax(0,1.3fr) auto auto}
+.road-mini-tutor img{width:66px;height:66px}
+.road-mini-tutor div{border-radius:18px;padding:7px 11px 7px 14px;box-shadow:0 7px 18px rgba(20,63,91,.1)}
+.road-mini-tutor strong{font-size:12.5px;line-height:1.18}
+.road-mini-tutor em{font-size:8.5px}
+.road-score span{border-radius:15px}
+.road-score span>b{font-size:14px}
+.road-game-actions button{border-radius:13px}
+.road-route-chip,.road-progress-chip,.road-autonomy-chip{position:absolute;z-index:13;top:10px;border:1px solid rgba(255,255,255,.95);background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-radius:999px;padding:6px 9px;font-size:8.5px;font-weight:950;box-shadow:0 6px 17px rgba(23,66,92,.13);color:#456174}
+.road-route-chip{left:10px}
+.road-progress-chip{right:10px;background:rgba(255,249,222,.96);color:#6b5c21}
+.road-autonomy-chip{left:50%;transform:translateX(-50%);top:42px;background:rgba(255,240,247,.95);color:#e25692;border-color:#f7d4e3}
+.road-world path[stroke="#e6eef0"]{stroke:#eadfc9!important}
+.road-world path[stroke="#4f5961"]{stroke:#505a63!important}
+.road-world path[stroke="#fff"]{stroke:#fff!important}
+.road-traffic-bubble{bottom:14px;max-width:350px;font-size:10.5px}
+.road-sign-card{transform:translate(-50%,-50%) rotate(-2deg)}
+.road-sign-card.school{background:#5aa9ee}
+.road-star{animation-duration:1.45s}
+.road-praise{bottom:72px}
+.road-progress-track{height:9px}
+.road-progress-nodes{display:flex;align-items:flex-start;justify-content:space-between;height:26px;margin:0 10px;padding-right:28px}
+.road-progress-nodes:before{left:8px;right:34px;top:8px}
+.road-progress-nodes i{margin-right:0!important;flex:0 0 18px}
+.road-progress-nodes .finish-flag{right:0;top:-5px}
+.road-stars-summary{align-items:center;gap:12px}
+.road-stars-summary span:first-child{font-size:9.5px;color:#6b7380}
+.road-stars-summary span:last-child{margin-left:auto;text-align:right}
+.argo-token{filter:drop-shadow(0 0 9px rgba(0,142,255,.18))}
+.argo-token.arrived{transform:rotate(var(--car-angle,0deg)) scale(.86)!important;filter:drop-shadow(0 0 13px rgba(72,192,104,.36));transition:transform .5s ease,filter .5s ease!important}
+.road-crash{right:5%;top:55%}
+
+/* Mobile: ocupar a tela e manter todos os elementos legíveis */
+@media(max-width:650px){
+  .road-game-mode .road-game-top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tutor actions" "score score"}
+  .road-mini-tutor img{width:60px;height:60px}
+  .road-mini-tutor div{padding:6px 9px 6px 13px}
+  .road-mini-tutor strong{font-size:11.2px;max-width:165px}
+  .road-mini-tutor em{font-size:7.6px}
+  .road-score{padding-left:70px}
+  .road-route-chip,.road-progress-chip,.road-autonomy-chip{font-size:7.6px;padding:5px 7px}
+  .road-autonomy-chip{top:39px}
+  .road-traffic-bubble{font-size:9.7px;bottom:10px}
+  .road-praise{bottom:62px}
+  .road-stars-summary span:first-child{font-size:8.4px}
+}
+@media(max-width:390px){
+  .road-mini-tutor strong{max-width:140px}
+  .road-autonomy-chip{display:none}
+}
