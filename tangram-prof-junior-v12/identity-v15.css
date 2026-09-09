@@ -183,3 +183,108 @@
   #tangram-levels .tl-mini-action{min-height:41px!important;font-size:14px!important}
   #tangram-levels .tl-mini-action span{display:block!important;font-size:7.5px!important}
 }
+
+
+/* v15.2 — refinamento visual aprovado */
+#tangram-levels .tl-head{
+  padding:12px 14px 14px!important;
+  background:
+    radial-gradient(circle at 82% 18%,rgba(0,177,255,.17),transparent 26%),
+    radial-gradient(circle at 18% 12%,rgba(55,222,255,.08),transparent 22%),
+    linear-gradient(135deg,#061624 0%,#08273b 56%,#061824 100%)!important;
+}
+#tangram-levels .tl-head::before{
+  opacity:.82;
+  background-image:
+    linear-gradient(rgba(79,180,220,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(79,180,220,.06) 1px,transparent 1px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='220' viewBox='0 0 900 220'%3E%3Cg fill='none' stroke='%2348c7f0' stroke-opacity='.18' stroke-width='2'%3E%3Cpath d='M360 28l45 45-45 45zM415 75l55 55h-55zM510 35l35 35-35 35zM555 92l48 48h-48zM690 36l36 36-36 36zM730 120l42 42h-42z'/%3E%3Cpath d='M655 46c0-18 14-32 32-32s32 14 32 32c0 12-7 23-18 28v12h-28V74c-11-5-18-16-18-28zM675 93h24M676 101h22'/%3E%3Crect x='785' y='132' width='42' height='34' rx='4'/%3E%3Cpath d='M827 132l20 10v34l-20-10zM820 150h18'/%3E%3C/g%3E%3Cg fill='%2348c7f0' fill-opacity='.10'%3E%3Ccircle cx='610' cy='35' r='4'/%3E%3Ccircle cx='744' cy='86' r='3'/%3E%3Ccircle cx='842' cy='58' r='4'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:31px 31px,31px 31px,cover;
+  background-position:0 0,0 0,center;
+}
+#tangram-levels .tl-head::after{
+  content:'PENSAR  •  EXPLORAR  •  RESOLVER  •  APRENDER';
+  position:absolute;
+  right:18px;
+  bottom:12px;
+  z-index:0;
+  color:rgba(91,214,247,.22);
+  font:800 8px/1 system-ui,sans-serif;
+  letter-spacing:.17em;
+  pointer-events:none;
+}
+#tangram-levels .tl-brand{row-gap:10px!important}
+#tangram-levels .tl-wordmark{
+  height:46px;
+  font-size:clamp(31px,4.7vw,52px);
+}
+#tangram-levels .tl-wordmark-sub{
+  margin-top:5px;
+  font-size:clamp(14px,2.15vw,22px);
+}
+#tangram-levels .tl-brand-rai-v15{
+  width:68px;height:68px;
+}
+#tangram-levels .tl-brand-credit{
+  margin-top:2px;
+}
+#tangram-levels .tl-brand-tools{
+  margin-top:2px!important;
+}
+#tangram-levels .tl-stats{
+  margin-top:12px!important;
+}
+#tangram-levels .tl-mini-action{
+  min-height:50px!important;
+}
+#tangram-levels .tl-gamer-action{
+  background:linear-gradient(180deg,#efc62c,#b48307)!important;
+  border-color:#ffe979!important;
+  box-shadow:0 0 0 2px rgba(255,213,54,.12),0 7px 18px rgba(0,0,0,.24)!important;
+}
+
+@media(max-width:640px){
+  #tangram-levels .tl-head{padding:10px 10px 12px!important}
+  #tangram-levels .tl-head::after{
+    right:10px;bottom:8px;
+    font-size:6.7px;
+    letter-spacing:.11em;
+    opacity:.82;
+  }
+  #tangram-levels .tl-wordmark{
+    height:33px;
+    font-size:32px;
+  }
+  #tangram-levels .tl-wordmark-sub{
+    font-size:11px;
+    letter-spacing:.26em;
+  }
+  #tangram-levels .tl-brand-rai-v15{
+    width:46px;height:46px;
+  }
+  #tangram-levels .tl-brand-credit{
+    font-size:9.7px;
+    margin-top:2px;
+  }
+  #tangram-levels .tl-brand-tools{
+    margin-top:4px!important;
+  }
+  #tangram-levels .tl-stats{
+    margin-top:13px!important;
+  }
+  #tangram-levels .tl-mini-action{
+    min-height:45px!important;
+  }
+}
+@media(max-width:430px){
+  #tangram-levels .tl-wordmark{
+    height:31px;
+    font-size:30px;
+  }
+  #tangram-levels .tl-brand-rai-v15{
+    width:44px;height:44px;
+  }
+  #tangram-levels .tl-head::after{
+    font-size:6px;
+  }
+}
