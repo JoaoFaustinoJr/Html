@@ -171,12 +171,57 @@ function softError(msg){
  state.collisions++;setTutor('retry',MISSIONS[state.circuit[state.step]].name,msg,'retry',true);feedback(msg);buzz(35);
 }
 function dragObject(el,field,onMove,onEnd){
- let active=false;
- const move=e=>{if(!active||state.paused)return;const r=field.getBoundingClientRect(),x=Math.max(0,Math.min(r.width,e.clientX-r.left)),y=Math.max(0,Math.min(r.height,e.clientY-r.top));el.style.left=(x-el.offsetWidth/2)+'px';el.style.top=(y-el.offsetHeight/2)+'px';onMove?.(x,y,r);resetIdle();};
- el.addEventListener('pointerdown',e=>{active=true;el.setPointerCapture(e.pointerId);move(e);});
- el.addEventListener('pointermove',move);
- el.addEventListener('pointerup',e=>{if(!active)return;active=false;onEnd?.(e);});
- state.cleanup=()=>{active=false;};
+ let active=false,pointerId=null;
+ el.style.touchAction='none';el.style.userSelect='none';el.style.webkitUserDrag='none';
+ el.querySelectorAll?.('*').forEach(n=>{n.style.pointerEvents='none';n.style.userSelect='none';});
+ const point=e=>{
+  if(e.touches?.length)return e.touches[0];
+  if(e.changedTouches?.length)return e.changedTouches[0];
+  return e;
+ };
+ const move=e=>{
+  if(!active||state.paused)return;
+  if(e.cancelable)e.preventDefault();
+  const p=point(e),r=field.getBoundingClientRect();
+  const x=Math.max(0,Math.min(r.width,p.clientX-r.left)),y=Math.max(0,Math.min(r.height,p.clientY-r.top));
+  el.style.left=(x-el.offsetWidth/2)+'px';el.style.top=(y-el.offsetHeight/2)+'px';
+  onMove?.(x,y,r);resetIdle();
+ };
+ const removeGlobal=()=>{
+  window.removeEventListener('pointermove',move);
+  window.removeEventListener('pointerup',end);
+  window.removeEventListener('pointercancel',end);
+  window.removeEventListener('touchmove',move);
+  window.removeEventListener('touchend',end);
+  window.removeEventListener('touchcancel',end);
+  window.removeEventListener('mousemove',move);
+  window.removeEventListener('mouseup',end);
+ };
+ const end=e=>{
+  if(!active)return;active=false;el.classList.remove('dragging');removeGlobal();onEnd?.(e);
+ };
+ const start=e=>{
+  if(state.paused)return;
+  if(e.cancelable)e.preventDefault();
+  active=true;pointerId=e.pointerId??null;el.classList.add('dragging');
+  try{if(pointerId!=null)el.setPointerCapture(pointerId);}catch(_){}
+  if(window.PointerEvent){
+   window.addEventListener('pointermove',move,{passive:false});
+   window.addEventListener('pointerup',end,{passive:false});
+   window.addEventListener('pointercancel',end,{passive:false});
+  }else if(e.type.startsWith('touch')){
+   window.addEventListener('touchmove',move,{passive:false});
+   window.addEventListener('touchend',end,{passive:false});
+   window.addEventListener('touchcancel',end,{passive:false});
+  }else{
+   window.addEventListener('mousemove',move,{passive:false});
+   window.addEventListener('mouseup',end,{passive:false});
+  }
+  move(e);
+ };
+ if(window.PointerEvent)el.addEventListener('pointerdown',start,{passive:false});
+ else{el.addEventListener('touchstart',start,{passive:false});el.addEventListener('mousedown',start,{passive:false});}
+ return ()=>{active=false;el.classList.remove('dragging');removeGlobal();};
 }
 function distSeg(px,py,x1,y1,x2,y2){const dx=x2-x1,dy=y2-y1,l=dx*dx+dy*dy;if(!l)return Math.hypot(px-x1,py-y1);let t=((px-x1)*dx+(py-y1)*dy)/l;t=Math.max(0,Math.min(1,t));return Math.hypot(px-(x1+t*dx),py-(y1+t*dy));}
 function minPathDist(px,py,pts,w,h){let d=1e9;for(let i=0;i<pts.length-1;i++)d=Math.min(d,distSeg(px,py,pts[i][0]*w,pts[i][1]*h,pts[i+1][0]*w,pts[i+1][1]*h));return d;}
