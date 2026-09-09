@@ -184,6 +184,7 @@ function minPathDist(px,py,pts,w,h){let d=1e9;for(let i=0;i<pts.length-1;i++)d=M
 function road(){
  const area=$('#activityArea'),screen=$('#screen-game');
  screen.classList.add('road-immersive');
+ app.classList.add('road-game-mode');
  area.classList.add('road-activity');
  const dest=ROAD_DESTINATIONS[state.roadDestination]||ROAD_DESTINATIONS.school;
  const level=Number(state.roadRoute)||2;
@@ -240,6 +241,7 @@ function road(){
  '<div class="road-game-top">'+
   '<div class="road-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI DIZ</small><strong class="road-tutor-msg">Cuidado com a curva!</strong></div></div>'+
   '<div class="road-score"><span>⭐ <b class="road-points">0</b></span><span>📍 '+dest.label+'</span></div>'+
+  '<div class="road-game-actions"><button class="road-voice-btn" type="button" aria-label="Ouvir Tia Tati">🔊</button><button class="road-hint-btn" type="button" aria-label="Dica">💡</button><button class="road-pause-btn" type="button" aria-label="Pausar">⏸️</button></div>'+
  '</div>'+
  '<div class="road-game-stage">'+
   '<svg class="road-world" viewBox="0 0 '+vw+' '+vh+'" preserveAspectRatio="none" aria-label="Estrada do Caminho Seguro">'+
@@ -302,6 +304,9 @@ function road(){
 
  let checkpoint=0,lastErr=0,helpLevel=0,lives=3,finished=false,lastTrafficIndex=-1,stars=0;
  const collected=new Set(),pointsEl=scene.querySelector('.road-points'),starsEl=scene.querySelector('.road-stars-count'),tutorMsg=scene.querySelector('.road-tutor-msg'),trafficBubble=scene.querySelector('.road-traffic-bubble'),crashEl=scene.querySelector('.road-crash'),progressFill=scene.querySelector('.road-progress-fill');
+ scene.querySelector('.road-voice-btn').onclick=()=>playVoice(state.currentPhrase,true);
+ scene.querySelector('.road-hint-btn').onclick=()=>{state.assists++;tutorMsg.textContent=MISSIONS.road.hint;trafficBubble.textContent='💡 '+MISSIONS.road.hint;playVoice('road_hint',false);};
+ scene.querySelector('.road-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';trafficBubble.textContent=state.paused?'⏸️ Pausado. Continue quando estiver pronto.':'🚗 Vamos continuar com calma.';};
 
  const place=()=>{
   const w=stage.clientWidth,h=stage.clientHeight,start=samples[0];
@@ -371,7 +376,7 @@ function road(){
    if(k===checkpoints.length-1)setTimeout(()=>{const g=samples.at(-1);car.style.left=(g[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(g[1]*r.height-car.offsetHeight/2)+'px';updateProgress(1);setTimeout(finishRoad,500);},520);
   }));
  }
- state.cleanup=()=>{finished=true;window.removeEventListener('resize',place);screen.classList.remove('road-immersive');area.classList.remove('road-activity');};
+ state.cleanup=()=>{finished=true;window.removeEventListener('resize',place);screen.classList.remove('road-immersive');app.classList.remove('road-game-mode');area.classList.remove('road-activity');};
 }
 function bee(){
  const area=$('#activityArea'),f=document.createElement('div');f.className='playfield';f.style.background='linear-gradient(#dff6ff,#eaf8d8)';
