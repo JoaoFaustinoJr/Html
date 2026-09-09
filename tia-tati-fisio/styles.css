@@ -246,3 +246,101 @@ body.road-game-active .app.road-game-mode{max-width:none!important;width:100%!im
  .argo-token{width:82px;height:56px}
  .road-score{padding-left:68px}.road-score span{font-size:9px}
 }
+
+/* V20 — polimento visual do Caminho Seguro */
+#screen-roadsetup{background:
+  radial-gradient(circle at 8% 4%,rgba(255,208,229,.38),transparent 23%),
+  radial-gradient(circle at 96% 8%,rgba(190,239,234,.45),transparent 25%)}
+.road-v18-head{padding:4px 2px 2px}.road-v18-head>div:nth-child(2){min-width:0}
+.road-v18-head h2{font-size:30px}.road-v18-head p strong{color:var(--pink)}
+.road-v18-tati{border-radius:22px;background:linear-gradient(145deg,#fff,#fff4f8);border-color:#f5dce7}
+.road-v18-tati img{border-radius:50%;border:2px solid #fff}
+.road-v18-car{border:2px solid rgba(255,255,255,.9);box-shadow:0 20px 46px rgba(35,75,99,.12);background:
+  radial-gradient(circle at 80% 10%,rgba(255,255,255,.95),transparent 30%),
+  linear-gradient(145deg,#fff,#edf9ff 58%,#fff0f6)}
+.road-v18-car:after{content:"";position:absolute;right:-40px;bottom:-55px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,163,.13),transparent 68%)}
+.road-v18-car .mission-badge{background:#fff4bc;border-color:#f5df77;box-shadow:0 5px 14px rgba(146,112,24,.08)}
+.argo-preview{position:relative;z-index:2;transform:rotate(-4deg);filter:drop-shadow(0 17px 14px rgba(0,75,133,.22))}
+.road-car-identity{z-index:4;background:rgba(255,255,255,.94)!important;color:#126eb6!important;border-color:#cce9ff!important}
+.road-v18-section{background:rgba(255,255,255,.66);border:1px solid rgba(220,232,237,.78);border-radius:24px;padding:12px;box-shadow:0 8px 25px rgba(28,62,83,.05)}
+.road-v18-section-title>span{background:linear-gradient(145deg,#ff5aa5,#f47cab);color:#fff;box-shadow:0 5px 12px rgba(255,90,165,.18)}
+.destination-grid.v18 .destination-card,.route-grid.v18 .route-card,.control-grid.v18 .control-card{overflow:hidden;background:#fff;border:1px solid #dce8ed;box-shadow:0 8px 20px rgba(28,62,83,.07)}
+.destination-grid.v18 .destination-card.active,.route-grid.v18 .route-card.active,.control-grid.v18 .control-card.active{outline:3px solid rgba(255,90,165,.24);border-color:#ff6aa9;background:linear-gradient(145deg,#fff,#fff6fa)}
+.destination-visual.rich{display:block;position:relative;height:118px!important;border-radius:15px;overflow:hidden;background:#dff4ff}
+.destination-visual.rich img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 17%;transform:scale(1.05);user-select:none;pointer-events:none}
+.destination-icon{position:absolute;right:7px;bottom:6px;width:30px;height:30px;border-radius:10px;background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:17px;box-shadow:0 4px 12px rgba(28,62,83,.12)}
+.route-grid.v18 .route-preview{background:#dff4ff;border:1px solid #edf3f5}
+.route-grid.v18 .route-preview svg{transform:scale(1.02)}
+.pick-check{box-shadow:0 4px 12px rgba(255,90,165,.24)}
+.control-grid.v18 .control-card.active>span:not(.pick-check){transform:scale(1.06)}
+.road-v18-tip{border-color:#cfecea;background:linear-gradient(145deg,#fff,#edfbf6);box-shadow:0 8px 22px rgba(40,132,115,.06)}
+.road-action-dock.v18{border:1px solid rgba(255,161,198,.38);box-shadow:0 16px 42px rgba(255,90,165,.13)}
+.road-action-dock.v18 .road-start{background:linear-gradient(135deg,#ff5aa5,#fa4f91);box-shadow:0 10px 23px rgba(255,90,165,.24);font-size:15px}
+.road-action-dock.v18 .road-start:active{transform:scale(.985)}
+
+/* Game */
+.road-game-mode #screen-game.road-immersive{background:
+  radial-gradient(circle at 15% 8%,rgba(255,205,226,.45),transparent 26%),
+  linear-gradient(180deg,#dff5ff,#eefbe9)}
+.road-game-mode .road-game-shell{border:0;box-shadow:0 22px 65px rgba(11,55,82,.22)}
+.road-game-mode .road-game-top{background:linear-gradient(135deg,rgba(255,255,255,.99),rgba(239,250,255,.97));box-shadow:0 4px 14px rgba(19,64,90,.08);z-index:30}
+.road-mini-tutor{position:relative}.road-mini-tutor:after{content:"";position:absolute;left:49px;top:11px;width:14px;height:14px;background:#fff;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg);z-index:0}
+.road-mini-tutor img{position:relative;z-index:2;box-shadow:0 7px 20px rgba(20,63,91,.16)}
+.road-mini-tutor div{position:relative;z-index:1;padding-left:13px;background:#fff}
+.road-mini-tutor em{font-style:normal;font-size:8px;color:var(--pink);font-weight:850;margin-top:2px}
+.road-score span{position:relative;padding:7px 9px 6px;min-width:76px}
+.road-score span>b{display:inline;font-size:13px}.road-score span small{display:block;font-size:7px;color:#7a8e9b;text-transform:uppercase;letter-spacing:.07em;margin-top:1px}
+.road-score .score-star{background:#fff8d8;border-color:#f5e7a4}.road-score .score-dest{background:#fff0f6;border-color:#f5d8e5}
+.road-game-actions button{box-shadow:0 4px 10px rgba(18,62,89,.07);font-weight:900}
+.road-game-stage:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:
+  linear-gradient(90deg,rgba(255,255,255,.08),transparent 16%,transparent 84%,rgba(255,255,255,.06)),
+  linear-gradient(180deg,rgba(255,255,255,.08),transparent 20%)}
+.road-world{z-index:1}
+.road-world path:nth-last-of-type(4){filter:drop-shadow(0 5px 4px rgba(10,49,73,.18))}
+.argo-token{width:82px!important;height:116px!important;transform:rotate(var(--car-angle,0deg));transform-origin:50% 52%;transition:filter .1s ease,transform .12s linear}
+.argo-token img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(5,43,73,.38))}
+.argo-token.dragging{transition:filter .08s ease}.argo-token.dragging img{filter:drop-shadow(0 13px 11px rgba(5,43,73,.46)) brightness(1.06)}
+@keyframes argoRecoverV20{0%{transform:rotate(var(--car-angle,0deg)) scale(1)}45%{transform:rotate(calc(var(--car-angle,0deg) - 7deg)) scale(.82)}100%{transform:rotate(var(--car-angle,0deg)) scale(1)}}
+.argo-token.recovering{animation:argoRecoverV20 .5s ease!important}
+.road-sign-card{box-shadow:0 7px 16px rgba(20,55,75,.22);border-width:3px}
+.road-sign-card.curve{background:#ffd956}.road-sign-card.cross{background:#ffd956}.road-sign-card.speed{background:#fff;border-color:#f0505c}.road-sign-card.school{background:#4e9fea}
+.road-crosswalk{z-index:6;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.road-star{font-size:34px;filter:drop-shadow(0 6px 5px rgba(117,87,0,.25))}
+.road-checkpoint.road-flag{background:#ff5aa5;box-shadow:0 6px 15px rgba(255,90,165,.26)}
+.road-checkpoint.road-flag.done{background:#50c16b}
+.road-route-chip,.road-progress-chip{box-shadow:0 6px 16px rgba(23,66,92,.12)}
+.road-route-chip{background:rgba(255,255,255,.93)}.road-progress-chip{background:rgba(255,248,218,.95);color:#6b5c21}
+.road-traffic-bubble{background:rgba(255,255,255,.96);border:1px solid rgba(215,231,238,.95);box-shadow:0 9px 22px rgba(20,62,87,.16)}
+.road-praise{position:absolute;z-index:28;left:50%;bottom:64px;transform:translate(-50%,16px) scale(.94);opacity:0;pointer-events:none;min-width:210px;max-width:84%;text-align:center;background:linear-gradient(135deg,#4ab8ff,#2d92e1);color:#fff;border:3px solid #fff;border-radius:18px;padding:9px 13px;font-size:12px;font-weight:950;box-shadow:0 10px 25px rgba(11,75,119,.22);transition:.2s ease}
+.road-praise.show{opacity:1;transform:translate(-50%,0) scale(1)}.road-praise.retry{background:linear-gradient(135deg,#ff7aaa,#f25b91)}
+.road-praise:before{content:"";position:absolute;left:18px;top:-8px;width:14px;height:14px;background:inherit;transform:rotate(45deg);border-left:3px solid #fff;border-top:3px solid #fff}
+.road-game-footer{position:relative;background:linear-gradient(180deg,#fff,#f8fcfd);border-top:1px solid #e6eff2}
+.road-progress-track{height:8px;margin:2px 8px 0;background:#dfe8ec}.road-progress-fill{background:linear-gradient(90deg,#4dc76c,#42b96c,#ff5aa5)}
+.road-progress-nodes{position:relative;height:25px;margin:0 8px}.road-progress-nodes:before{content:"";position:absolute;left:5px;right:26px;top:8px;height:3px;background:#d9e4e9;border-radius:999px}.road-progress-nodes i{position:relative;display:inline-block;width:18px;height:18px;border-radius:50%;background:#edf2f4;border:3px solid #b9cbd4;margin-right:calc((100% - 100px)/4);z-index:2;vertical-align:top}.road-progress-nodes i.done{background:#4fc16a;border-color:#fff;box-shadow:0 0 0 2px #4fc16a}.road-progress-nodes i.done:after{content:"✓";display:grid;place-items:center;color:#fff;font-size:8px;font-weight:1000;position:absolute;inset:-3px}.road-progress-nodes .finish-flag{position:absolute;right:0;top:-4px;font-size:22px}
+.road-stars-summary{margin-top:0}.road-stars-summary span:last-child{font-size:8.5px;color:#ec5d97;font-weight:950}
+.road-crash{background:radial-gradient(circle at center,#fff3 0 42%,transparent 43%);padding:12px}
+@keyframes roadCrashComicV20{0%{opacity:0;transform:scale(.15) rotate(-14deg)}28%{opacity:1;transform:scale(1.22) rotate(5deg)}65%{opacity:1;transform:scale(.98) rotate(-2deg)}100%{opacity:0;transform:scale(1.12) rotate(2deg)}}
+.road-crash.show{animation:roadCrashComicV20 .72s cubic-bezier(.2,1.5,.4,1)!important}
+
+@media(max-width:650px){
+ .road-v18-section{padding:8px;border-radius:19px}
+ .road-v18-car{grid-template-columns:1fr 132px}
+ .road-v18-car h1{font-size:29px}.road-v18-car p{font-size:10.5px}
+ .destination-visual.rich{height:78px!important}.destination-visual.rich img{object-position:center 16%}
+ .destination-icon{width:25px;height:25px;font-size:14px;right:4px;bottom:4px}
+ .road-game-mode .road-game-top{padding:max(6px,env(safe-area-inset-top)) 7px 6px!important}
+ .road-mini-tutor img{width:55px;height:55px}.road-mini-tutor:after{left:46px}
+ .road-mini-tutor div{padding:5px 8px 5px 12px;border-radius:15px}.road-mini-tutor strong{font-size:10.5px}.road-mini-tutor em{font-size:7.5px}
+ .road-score{padding-left:65px;margin-top:-5px}.road-score span{min-width:68px;padding:5px 7px}.road-score span>b{font-size:11px}.road-score span small{font-size:6.5px}
+ .road-game-actions{grid-template-columns:repeat(2,31px)}.road-game-actions button{width:31px;height:31px}
+ .argo-token{width:74px!important;height:104px!important}
+ .road-praise{bottom:58px;font-size:11px;min-width:190px}
+ .road-progress-nodes i{width:17px;height:17px;margin-right:calc((100% - 95px)/4)}
+ .road-stars-summary span:last-child{font-size:7.5px}
+}
+@media(max-width:390px){
+ .road-v18-car{grid-template-columns:1fr 112px}.road-v18-car h1{font-size:27px}
+ .destination-visual.rich{height:68px!important}
+ .argo-token{width:68px!important;height:96px!important}
+ .road-mini-tutor strong{max-width:135px}
+}
