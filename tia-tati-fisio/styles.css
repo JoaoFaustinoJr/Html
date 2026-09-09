@@ -160,3 +160,6 @@ button,input,select,textarea{font:inherit}button{color:inherit}img{max-width:100
 @media(max-width:390px){
  .road-mini-tutor strong{max-width:160px}.road-score span{font-size:9px;padding:5px 7px}.road-game-actions button{width:31px;height:31px;font-size:13px}.argo-token{width:76px;height:52px}
 }
+
+.road-car-identity{position:absolute;right:12px;bottom:14px;z-index:4;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:9px;font-weight:950;color:#1d6bb1;box-shadow:var(--shadow-sm)}
+@media(max-width:650px){.road-car-identity{right:8px;bottom:8px;font-size:8px;padding:5px 7px}}
