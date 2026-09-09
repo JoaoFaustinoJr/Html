@@ -277,14 +277,14 @@ function road(){
  ];
  if(state.roadDestination==='school')trafficEvents.push({fraction:.87,type:'school',icon:'🏫',text:'Zona escolar: atenção redobrada e velocidade reduzida.',phrase:'traffic_school'});
 
- const carAsset='assets/argo-hgt-blue.svg';
+ const carAsset='assets/argo-hgt-game.svg';
 
  const scene=document.createElement('div');scene.className='road-game-shell';
  scene.innerHTML=
  '<div class="road-game-bg"></div>'+
  '<div class="road-game-top">'+
-  '<div class="road-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI DIZ</small><strong class="road-tutor-msg">Cuidado com a curva!</strong></div></div>'+
-  '<div class="road-score"><span>⭐ <b class="road-points">0</b></span><span>📍 '+dest.label+'</span></div>'+
+  '<div class="road-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="road-tutor-msg">Cuidado com a curva!</strong><em>Vamos com calma 💗</em></div></div>'+
+  '<div class="road-score"><span class="score-star">⭐ <b class="road-points">0</b><small>pontos</small></span><span class="score-dest">🚩 <b>'+dest.label+'</b><small>destino</small></span></div>'+
   '<div class="road-game-actions"><button class="road-exit-btn" type="button" aria-label="Voltar">←</button><button class="road-voice-btn" type="button" aria-label="Ouvir Tia Tati">🔊</button><button class="road-hint-btn" type="button" aria-label="Dica">💡</button><button class="road-pause-btn" type="button" aria-label="Pausar">⏸️</button></div>'+
  '</div>'+
  '<div class="road-game-stage">'+
@@ -301,9 +301,11 @@ function road(){
   '<div class="road-crash">CRASH!</div>'+
   '<div class="road-traffic-bubble">🚦 Observe as placas e dirija com cuidado.</div>'+
  '</div>'+
+ '<div class="road-praise" aria-live="polite">⭐ Muito bem! Continue assim!</div>'+
  '<div class="road-game-footer">'+
   '<div class="road-progress-track"><span class="road-progress-fill"></span></div>'+
-  '<div class="road-stars-summary"><span>⭐ <b class="road-stars-count">0</b>/'+starPoints.length+'</span><span>🏁 '+dest.label+'</span></div>'+
+  '<div class="road-progress-nodes">'+checkpointPoints.map((_,i)=>'<i data-progress-node="'+i+'"></i>').join('')+'<b class="finish-flag">🏁</b></div>'+
+  '<div class="road-stars-summary"><span>⭐ <b class="road-stars-count">0</b>/'+starPoints.length+' estrelas</span><span>Pequenos trajetos, grandes conquistas! 💗</span></div>'+
  '</div>';
  area.appendChild(scene);
  const stage=scene.querySelector('.road-game-stage');
@@ -330,15 +332,25 @@ function road(){
  });
 
  let checkpoint=0,lastErr=0,helpLevel=0,lives=3,finished=false,lastTrafficIndex=-1,stars=0;
- const collected=new Set(),pointsEl=scene.querySelector('.road-points'),starsEl=scene.querySelector('.road-stars-count'),tutorMsg=scene.querySelector('.road-tutor-msg'),trafficBubble=scene.querySelector('.road-traffic-bubble'),crashEl=scene.querySelector('.road-crash'),progressFill=scene.querySelector('.road-progress-fill');
+ const collected=new Set(),pointsEl=scene.querySelector('.road-points'),starsEl=scene.querySelector('.road-stars-count'),tutorMsg=scene.querySelector('.road-tutor-msg'),trafficBubble=scene.querySelector('.road-traffic-bubble'),crashEl=scene.querySelector('.road-crash'),progressFill=scene.querySelector('.road-progress-fill'),praise=scene.querySelector('.road-praise'),progressNodes=[...scene.querySelectorAll('[data-progress-node]')];
  scene.querySelector('.road-exit-btn').onclick=()=>show('roadsetup');
  scene.querySelector('.road-voice-btn').onclick=()=>playVoice(state.currentPhrase,true);
  scene.querySelector('.road-hint-btn').onclick=()=>{state.assists++;tutorMsg.textContent=MISSIONS.road.hint;trafficBubble.textContent='💡 '+MISSIONS.road.hint;playVoice('road_hint',false);};
  scene.querySelector('.road-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';trafficBubble.textContent=state.paused?'⏸️ Pausado. Continue quando estiver pronto.':'🚗 Vamos continuar com calma.';};
 
+ const showPraise=(text,kind='good')=>{
+  praise.textContent=text;praise.className='road-praise show '+kind;
+  clearTimeout(praise._timer);praise._timer=setTimeout(()=>praise.classList.remove('show'),1700);
+ };
+ const setCarAngle=(bestIndex)=>{
+  const i=Math.max(1,Math.min(samples.length-2,bestIndex)),a=samples[i-1],b=samples[i+1];
+  const dx=(b[0]-a[0])*stage.clientWidth,dy=(b[1]-a[1])*stage.clientHeight;
+  const angle=Math.atan2(dy,dx)*180/Math.PI+90;
+  car.style.setProperty('--car-angle',angle.toFixed(1)+'deg');
+ };
  const place=()=>{
   const w=stage.clientWidth,h=stage.clientHeight,start=samples[0];
-  car.style.left=(start[0]*w-car.offsetWidth/2)+'px';car.style.top=(start[1]*h-car.offsetHeight/2)+'px';
+  car.style.left=(start[0]*w-car.offsetWidth/2)+'px';car.style.top=(start[1]*h-car.offsetHeight/2)+'px';setCarAngle(1);
   checkpoints.forEach((cp,k)=>{const p=checkpointPoints[k];cp.style.left=(p[0]*w)+'px';cp.style.top=(p[1]*h)+'px';cp.classList.toggle('current',state.roadControl==='tap'&&k===0);});
   starEls.forEach((st,k)=>{const p=starPoints[k];st.style.left=(p[0]*w)+'px';st.style.top=(p[1]*h)+'px';});
  };
@@ -355,7 +367,7 @@ function road(){
 
  const collectForProgress=progress=>{
   starFractions.forEach((fr,i)=>{
-   if(progress>=fr&&!collected.has(i)){collected.add(i);stars++;state.interactions++;starEls[i]?.classList.add('collected');pointsEl.textContent=String(stars*40);starsEl.textContent=String(stars);buzz(18);feedback('Estrela conquistada! Continue com atenção.');}
+   if(progress>=fr&&!collected.has(i)){collected.add(i);stars++;state.interactions++;starEls[i]?.classList.add('collected');pointsEl.textContent=String(stars*40);starsEl.textContent=String(stars);buzz(18);showPraise('⭐ Estrela conquistada! Continue assim!');feedback('Estrela conquistada! Continue com atenção.');}
   });
  };
 
@@ -364,7 +376,7 @@ function road(){
  const updateCheckpoint=(idx)=>{
   if(idx<=checkpoint)return;checkpoint=Math.min(idx,checkpointPoints.length);state.checkpoints=Math.max(state.checkpoints,checkpoint);
   checkpoints.forEach((cp,k)=>{cp.classList.toggle('done',k<checkpoint);cp.classList.toggle('current',state.roadControl==='tap'&&k===checkpoint);});
-  scene.querySelector('.rp-current').textContent=String(checkpoint);feedback('Muito bem! Ponto seguro alcançado.');playVoice('road_checkpoint',false);
+  scene.querySelector('.rp-current').textContent=String(checkpoint);progressNodes.forEach((n,k)=>n.classList.toggle('done',k<checkpoint));showPraise('✅ Muito bem! Ponto seguro!');feedback('Muito bem! Ponto seguro alcançado.');playVoice('road_checkpoint',false);
  };
 
  const recover=()=>{
@@ -376,7 +388,7 @@ function road(){
 
  const deviate=()=>{
   if(Date.now()-lastErr<900||finished)return;lastErr=Date.now();state.collisions++;helpLevel++;showCrash();
-  tutorMsg.textContent='Ops! Vamos voltar ao ponto seguro.';
+  tutorMsg.textContent='Ops! Vamos voltar ao ponto seguro.';showPraise('💗 Tudo bem. Vamos tentar de novo!','retry');
   if(state.therapeutic){
    setTutor('retry',MISSIONS.road.name+' • '+dest.label,'Crash! Ops! Vamos voltar para a pista com calma.','road_crash',false);playVoice('road_crash',false);trafficBubble.textContent='💗 Sem problema: volte ao último ponto seguro.';recover();
    if(helpLevel>=2){scene.querySelector('.road-guide')?.classList.add('visible');state.assists++;trafficBubble.textContent='💗 Ajuda visual ativada. Siga a faixa verde-clara.';}
@@ -386,7 +398,7 @@ function road(){
  };
 
  const finishRoad=()=>{
-  if(finished)return;finished=true;progressFill.style.width='100%';tutorMsg.textContent='Chegamos! Muito bem!';trafficBubble.textContent='✅ Missão concluída com atenção e cuidado.';
+  if(finished)return;finished=true;progressFill.style.width='100%';progressNodes.forEach(n=>n.classList.add('done'));tutorMsg.textContent='Chegamos! Muito bem!';trafficBubble.textContent='✅ Missão concluída com atenção e cuidado.';showPraise('🏁 Chegamos! Que conquista linda!');
   setTutor('success',MISSIONS.road.name+' • '+dest.label,dest.finish,'road_finish',false);playVoice('road_finish',false);feedback(dest.finish);setTimeout(finishStep,850);
  };
 
@@ -397,7 +409,7 @@ function road(){
    const r=stage.getBoundingClientRect(),x=Math.max(0,Math.min(r.width,clientX-r.left)),y=Math.max(0,Math.min(r.height,clientY-r.top));
    car.style.left=(x-car.offsetWidth/2)+'px';car.style.top=(y-car.offsetHeight/2)+'px';
    let best=Infinity,bestIndex=0;for(let i=0;i<samples.length;i++){const p=samples[i],q=Math.hypot(x-p[0]*r.width,y-p[1]*r.height);if(q<best){best=q;bestIndex=i;}}
-   const progress=bestIndex/(samples.length-1),allow=(roadWidth/2)+12+(helpLevel>=2?20:0),cpReached=checkpointFractions.filter(fr=>progress>=fr).length;
+   setCarAngle(bestIndex);const progress=bestIndex/(samples.length-1),allow=(roadWidth/2)+12+(helpLevel>=2?20:0),cpReached=checkpointFractions.filter(fr=>progress>=fr).length;
    if(best<allow&&cpReached>checkpoint)updateCheckpoint(cpReached);if(best>allow+22)deviate();updateProgress(progress);if(progress>.97&&best<allow+14)finishRoad();resetIdle();
   };
   const nearCar=(clientX,clientY)=>{
@@ -417,7 +429,7 @@ function road(){
   car.style.cursor='default';
   checkpoints.forEach((cp,k)=>cp.addEventListener('click',()=>{
    if(state.paused||finished)return;if(k!==checkpoint){tutorMsg.textContent='Procure a próxima bandeirinha.';feedback('Uma bandeirinha de cada vez.');return;}
-   const p=checkpointPoints[k],r=stage.getBoundingClientRect();car.style.transition='left .42s ease, top .42s ease';car.style.left=(p[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(p[1]*r.height-car.offsetHeight/2)+'px';state.interactions++;updateCheckpoint(k+1);updateProgress(checkpointFractions[k]);
+   const p=checkpointPoints[k],r=stage.getBoundingClientRect();car.style.transition='left .42s ease, top .42s ease';car.style.left=(p[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(p[1]*r.height-car.offsetHeight/2)+'px';setCarAngle(Math.round(checkpointFractions[k]*(samples.length-1)));state.interactions++;updateCheckpoint(k+1);updateProgress(checkpointFractions[k]);
    if(k===checkpoints.length-1)setTimeout(()=>{const g=samples.at(-1);car.style.left=(g[0]*r.width-car.offsetWidth/2)+'px';car.style.top=(g[1]*r.height-car.offsetHeight/2)+'px';updateProgress(1);setTimeout(finishRoad,500);},520);
   }));
  }
