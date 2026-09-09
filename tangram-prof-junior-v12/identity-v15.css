@@ -119,29 +119,10 @@
 #tangram-levels .tl-install-action{color:#aaf4e8!important;border-color:#3db39f!important}
 #tangram-levels #performanceApp{order:4}
 #tangram-levels #aboutApp{order:5}
-#tangram-levels #configApp{order:2}
+#tangram-levels #experienceApp{order:2}
 #tangram-levels #gamerApp{order:3}
 #tangram-levels #installApp{order:1}
-#tangram-levels #experienceApp,
 #tangram-levels #comfortApp{display:none!important}
-
-/* Popover Config. */
-.tl-config-popover{
-  position:fixed;z-index:2147483644;
-  display:none;min-width:210px;
-  padding:8px;border:1px solid #376f89;border-radius:14px;
-  background:rgba(5,26,39,.98);box-shadow:0 16px 45px rgba(0,0,0,.52);
-  backdrop-filter:blur(8px);
-}
-.tl-config-popover.show{display:grid;gap:7px}
-.tl-config-popover button{
-  width:100%;display:flex;align-items:center;gap:9px;
-  border:1px solid #315f75;border-radius:10px;
-  padding:10px 11px;background:#0b2a3d;color:#eaffff;
-  font:850 12px system-ui;text-align:left;
-}
-.tl-config-popover button span{font-size:18px}
-.tl-config-popover small{display:block;color:#9ccad7;font-weight:650;margin-top:2px}
 
 /* Remove resíduos das artes raster anteriores */
 #tangram-levels .tl-brand-main,
