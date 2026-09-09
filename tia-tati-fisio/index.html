@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -74,6 +74,44 @@
     <button class="quick panel" id="reportsBtn" type="button"><span>📊</span><strong>Relatórios</strong><small>Registro funcional simples da sessão</small></button>
     <button class="quick panel" id="projectionBtn" type="button"><span>🖥️</span><strong>Modo Projeção</strong><small>Sala sensorial e tela ampliada</small></button>
   </div>
+</section>
+
+<section class="screen" id="screen-roadsetup">
+  <div class="screen-head">
+    <button class="back-btn" data-home type="button">←</button>
+    <div><span class="kicker">MISSÃO TERAPÊUTICA</span><h2>Caminho Seguro</h2></div>
+  </div>
+  <div class="road-setup-hero panel">
+    <div>
+      <span class="kicker">ESCOLHA + PLANEJAMENTO + CONTROLE</span>
+      <h1>Para onde vamos hoje?</h1>
+      <p>A criança escolhe um destino e conduz o carro por uma rota adaptada. A Tia Tati oferece ajuda progressiva sem transformar o erro em punição.</p>
+    </div>
+    <img src="assets/guide.webp" alt="Tia Tati orientando">
+  </div>
+
+  <div class="road-setup-section">
+    <span class="kicker">1. DESTINO</span>
+    <div class="destination-grid">
+      <button class="destination-card active" data-destination="school" type="button"><span>🏫</span><strong>Escola</strong><small>Vamos chegar para aprender.</small></button>
+      <button class="destination-card" data-destination="home" type="button"><span>🏠</span><strong>Casa</strong><small>Um caminho tranquilo até em casa.</small></button>
+      <button class="destination-card" data-destination="park" type="button"><span>🌳</span><strong>Parque</strong><small>Vamos brincar no parque.</small></button>
+    </div>
+  </div>
+
+  <div class="road-setup-section">
+    <span class="kicker">2. COMO CONDUZIR</span>
+    <div class="control-grid">
+      <button class="control-card active" data-road-control="drag" type="button"><span>☝️</span><strong>Arrastar o carro</strong><small>Controle contínuo da trajetória.</small></button>
+      <button class="control-card" data-road-control="tap" type="button"><span>👆</span><strong>Tocar nos pontos</strong><small>Alternativa acessível sem arrastar.</small></button>
+    </div>
+  </div>
+
+  <div class="road-setup-note panel">
+    <span>💗</span>
+    <div><strong>Modo terapêutico</strong><p>Se sair da pista, o carro para e retorna ao último ponto seguro. Após repetidas dificuldades, a ajuda visual aumenta discretamente.</p></div>
+  </div>
+  <button class="primary wide road-start" id="startRoadMission" type="button">🚗 Começar Caminho Seguro</button>
 </section>
 
 <section class="screen" id="screen-game">
@@ -198,6 +236,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
