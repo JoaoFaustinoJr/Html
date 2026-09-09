@@ -244,14 +244,20 @@ function road(){
  const level=Number(state.roadRoute)||2;
  const routeName=level===1?'Reta e larga':level===2?'Curvas em S':'Desafio';
 
+ const goalByDestination={
+  school:[.73,.12],
+  home:[.72,.12],
+  park:[.56,.12]
+ };
+ const goal=goalByDestination[state.roadDestination]||goalByDestination.school;
  const routeControls={
-  1:[[.50,.93],[.50,.78],[.50,.61],[.49,.44],[.51,.27],[.50,.08]],
-  2:[[.52,.93],[.70,.82],[.69,.67],[.34,.58],[.31,.43],[.68,.33],[.66,.19],[.50,.08]],
-  3:[[.48,.94],[.70,.84],[.62,.70],[.31,.64],[.27,.49],[.60,.43],[.72,.31],[.45,.23],[.32,.14],[.50,.07]]
+  1:[[.50,.93],[.50,.78],[.50,.61],[.51,.44],[.57,.28],goal],
+  2:[[.52,.93],[.70,.82],[.69,.67],[.34,.58],[.31,.43],[.68,.33],[.65,.20],goal],
+  3:[[.48,.94],[.70,.84],[.62,.70],[.31,.64],[.27,.49],[.60,.43],[.72,.31],[.45,.23],[.37,.15],goal]
  };
  const controls=(routeControls[level]||routeControls[2]).map(p=>[p[0],p[1]]);
  const vw=420,vh=720;
- const roadWidth=level===1?104:level===2?90:78;
+ const roadWidth=level===1?98:level===2?82:72;
 
  const quad=(a,c,b,t)=>[(1-t)*(1-t)*a[0]+2*(1-t)*t*c[0]+t*t*b[0],(1-t)*(1-t)*a[1]+2*(1-t)*t*c[1]+t*t*b[1]];
  const midpoint=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
@@ -296,8 +302,9 @@ function road(){
    '<path class="road-guide" d="'+path+'" fill="none" stroke="#76d8c3" stroke-width="'+Math.max(roadWidth-26,40)+'" stroke-linecap="round" stroke-linejoin="round"/>'+
    '<path d="'+path+'" fill="none" stroke="#fff" stroke-width="3.5" stroke-dasharray="20 18" stroke-linecap="round"/>'+
   '</svg>'+
-  '<div class="road-route-chip">Rota '+level+' • '+routeName+'</div>'+
+  '<div class="road-route-chip">🚗 Rota '+level+' • '+routeName+'</div>'+
   '<div class="road-progress-chip"><span class="rp-current">0</span>/'+checkpointPoints.length+' pontos seguros</div>'+
+  '<div class="road-autonomy-chip">💗 Caminhos para a autonomia</div>'+
   '<div class="road-crash">CRASH!</div>'+
   '<div class="road-traffic-bubble">🚦 Observe as placas e dirija com cuidado.</div>'+
  '</div>'+
@@ -367,7 +374,7 @@ function road(){
 
  const collectForProgress=progress=>{
   starFractions.forEach((fr,i)=>{
-   if(progress>=fr&&!collected.has(i)){collected.add(i);stars++;state.interactions++;starEls[i]?.classList.add('collected');pointsEl.textContent=String(stars*40);starsEl.textContent=String(stars);buzz(18);showPraise('⭐ Estrela conquistada! Continue assim!');feedback('Estrela conquistada! Continue com atenção.');}
+   if(progress>=fr&&!collected.has(i)){collected.add(i);stars++;state.interactions++;starEls[i]?.classList.add('collected');pointsEl.textContent=String(stars*40);starsEl.textContent=String(stars);buzz(18);showPraise('⭐ Muito bem! Continue assim!');feedback('Estrela conquistada! Continue com atenção.');}
   });
  };
 
@@ -387,7 +394,7 @@ function road(){
  const showCrash=()=>{crashEl.classList.remove('show');void crashEl.offsetWidth;crashEl.classList.add('show');buzz([35,25,45]);};
 
  const deviate=()=>{
-  if(Date.now()-lastErr<900||finished)return;lastErr=Date.now();state.collisions++;helpLevel++;showCrash();
+  if(Date.now()-lastErr<1050||finished)return;lastErr=Date.now();state.collisions++;helpLevel++;showCrash();
   tutorMsg.textContent='Ops! Vamos voltar ao ponto seguro.';showPraise('💗 Tudo bem. Vamos tentar de novo!','retry');
   if(state.therapeutic){
    setTutor('retry',MISSIONS.road.name+' • '+dest.label,'Crash! Ops! Vamos voltar para a pista com calma.','road_crash',false);playVoice('road_crash',false);trafficBubble.textContent='💗 Sem problema: volte ao último ponto seguro.';recover();
@@ -398,7 +405,7 @@ function road(){
  };
 
  const finishRoad=()=>{
-  if(finished)return;finished=true;progressFill.style.width='100%';progressNodes.forEach(n=>n.classList.add('done'));tutorMsg.textContent='Chegamos! Muito bem!';trafficBubble.textContent='✅ Missão concluída com atenção e cuidado.';showPraise('🏁 Chegamos! Que conquista linda!');
+  if(finished)return;finished=true;car.classList.add('arrived');progressFill.style.width='100%';progressNodes.forEach(n=>n.classList.add('done'));tutorMsg.textContent='Chegamos! Muito bem!';trafficBubble.textContent='✅ Missão concluída com atenção e cuidado.';showPraise('🏁 Chegamos! Que conquista linda!');
   setTutor('success',MISSIONS.road.name+' • '+dest.label,dest.finish,'road_finish',false);playVoice('road_finish',false);feedback(dest.finish);setTimeout(finishStep,850);
  };
 
