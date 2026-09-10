@@ -1,10 +1,10 @@
-const CACHE='tia-tati-v52-route-clean-20260910';
+const CACHE='tia-tati-v53-shell-20260910';
 const CORE=[
- './index.html','./home-v51.css?v=52','./home-v51-polish.css?v=52','./home-v51.js?v=52','./manifest.webmanifest',
+ './index.html','./home-v51.css?v=53','./home-v51-polish.css?v=53','./home-v53.js?v=53','./manifest.webmanifest',
  './activity-v52.html','./activity.html','./styles.css?v=52','./app.js?v=52','./activity-router-v52.js?v=52',
  './app-base-v39.js?v=52','./sensory-v40.js?v=52','./remaining-v41.js?v=52','./naming-v42.js?v=52','./final-v44.js?v=52','./identity-v45.js?v=52',
  './styles-base-v39.css?v=47','./sensory-v40.css?v=47','./remaining-v41.css?v=47','./polish-v43.css?v=47','./final-v44.css?v=47','./identity-v45.css?v=47',
- './assets/tati-approved-avatar.webp',
+ './assets/tati-approved-avatar.webp','./assets/tati-approved-hero.webp',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp',
  './assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg',
  './assets/bee-game.svg','./assets/bee-garden.svg','./assets/target-board.svg','./assets/hands-board.svg','./assets/pulse-lab.svg'
@@ -31,10 +31,10 @@ self.addEventListener('fetch',event=>{
   }));
   return;
  }
- const fresh=/\/(home-v51(?:-polish)?\.(?:css|js)|home-v52\.js|activity-v52\.html|app\.js|activity-router-v52\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css))$/.test(url.pathname);
+ const fresh=/\/(home-v51(?:-polish)?\.css|home-v53\.js|activity-v52\.html|app\.js|activity-router-v52\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css)|tati-approved-(?:avatar|hero)\.webp)$/.test(url.pathname);
  if(fresh){
-  event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;}).catch(()=>caches.match(event.request)));
+  event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;}).catch(()=>caches.match(event.request,{ignoreSearch:true})));
   return;
  }
- event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;})));
+ event.respondWith(caches.match(event.request,{ignoreSearch:true}).then(hit=>hit||fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;})));
 });
