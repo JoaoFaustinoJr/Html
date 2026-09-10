@@ -10,7 +10,7 @@
     'identity-v45.js'
   ];
   if(document.readyState==='loading'){
-    document.write(files.map(src=>'<script src="'+src+'?v='+v+'"><\\/script>').join(''));
+    document.write(files.map(src=>'<script src="'+src+'?v='+v+'"></script>').join(''));
     return;
   }
   const load=i=>{
