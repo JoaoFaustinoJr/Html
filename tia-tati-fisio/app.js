@@ -1026,6 +1026,12 @@ document.querySelectorAll('[data-light-mode]').forEach(b=>b.onclick=()=>{state.l
 document.querySelectorAll('[data-light-level]').forEach(b=>b.onclick=()=>{state.lightLevel=b.dataset.lightLevel;document.querySelectorAll('[data-light-level]').forEach(x=>x.classList.toggle('active',x===b));syncLightSummary();});
 document.querySelectorAll('[data-light-rounds]').forEach(b=>b.onclick=()=>{state.lightRounds=Number(b.dataset.lightRounds)||5;document.querySelectorAll('[data-light-rounds]').forEach(x=>x.classList.toggle('active',x===b));syncLightSummary();});
 $('#startLightMission').onclick=()=>startCircuit(['light']);
+document.querySelectorAll('[data-youth-light]').forEach(b=>b.onclick=()=>{
+ state.lightMode=b.dataset.youthLight||'react';
+ savePrefs();
+ syncLightSetup();
+ show('lightsetup');
+});
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
 [['targetSize','targetSizeValue',' px'],['speed','speedValue','/5'],['amplitude','amplitudeValue','/5'],['stimuli','stimuliValue','/5']].forEach(([id,out,suf])=>$('#'+id).oninput=e=>$('#'+out).textContent=e.target.value+suf);
@@ -1033,5 +1039,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=37').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=38').catch(()=>{});
 })();
