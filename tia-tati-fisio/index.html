@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=21">
+<link rel="stylesheet" href="styles.css?v=22">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -24,55 +24,130 @@
 </header>
 
 <main>
-<section class="screen active" id="screen-home">
-  <div class="hero panel">
-    <div class="hero-copy">
-      <span class="kicker">DRA. TATIANA • FISIOTERAPIA</span>
-      <h1>Movimento que inclui.<br><em>Brincar também é aprender.</em></h1>
-      <p>Missões terapêuticas com ludicidade, psicopedagogia, adaptação individual e intervenções da Tia Tati.</p>
-      <div class="pills">
-        <span>💗 Acolhimento</span><span>🧩 Autonomia</span><span>🌱 Desenvolvimento</span><span>✨ Conquistas</span>
+<section class="screen active home-v22" id="screen-home">
+  <section class="home-v22-hero panel">
+    <div class="home-v22-copy">
+      <div class="home-v22-logo">
+        <span class="home-v22-script">Tia Tati</span>
+        <span class="home-v22-pill">FISIO SENSORIAL</span>
       </div>
+      <span class="home-v22-kicker">DRA. TATIANA • FISIOTERAPIA</span>
+      <h1>Pequenas conquistas<br><em>movem grandes caminhos!</em></h1>
+      <p>Missões terapêuticas com movimento, psicopedagogia, ludicidade e adaptação individual — no tempo de cada criança.</p>
+      <div class="home-v22-values">
+        <span>🧠 Atenção e foco</span>
+        <span>🏃 Planejamento motor</span>
+        <span>💗 Acolhimento</span>
+        <span>🌱 Autonomia</span>
+      </div>
+      <div class="home-v22-phrase">Aprender hoje para um amanhã mais independente! 💗</div>
     </div>
-    <div class="hero-tutor">
-      <img src="assets/welcome.webp" alt="Card de boas-vindas da Tia Tati">
-      <div class="hero-bubble"><strong>Olá!</strong><br>Vamos juntos?</div>
+
+    <div class="home-v22-tutor">
+      <div class="home-v22-portrait-wrap">
+        <img src="assets/welcome.webp" alt="Tia Tati dando boas-vindas">
+        <div class="home-v22-bubble">Vamos começar? 💗</div>
+      </div>
+      <div class="home-v22-side-note">Juntos no caminho da autonomia!</div>
+      <div class="home-v22-hearts">♥ ♥</div>
     </div>
+  </section>
+
+  <div class="home-v22-section-head">
+    <div>
+      <span class="kicker">MISSÕES DA TIA TATI</span>
+      <h2>Escolha uma atividade</h2>
+      <p>Brincar, aprender, movimentar e conquistar.</p>
+    </div>
+    <button class="home-v22-circuit" id="circuitBtn" type="button">🧩 Montar circuito</button>
   </div>
 
-  <div class="section-title">
-    <div><span class="kicker">MISSÕES DA TIA TATI</span><h2>Escolha uma atividade</h2></div>
-    <button class="link-btn" id="circuitBtn" type="button">Montar circuito</button>
+  <div class="home-v22-missions">
+    <button class="home-v22-mission road" data-mission="road" type="button">
+      <span class="home-v22-visual road">
+        <img src="assets/road-school.svg" alt="" draggable="false">
+        <img class="home-v22-mini-car" src="assets/argo-hgt-blue.svg" alt="" draggable="false">
+      </span>
+      <span class="home-v22-mission-copy">
+        <span class="home-v22-mission-icon">🚗</span>
+        <span><strong>Caminho Seguro</strong><small>Trajetória • coordenação • trânsito seguro</small></span>
+      </span>
+      <em>Novo visual</em>
+    </button>
+
+    <button class="home-v22-mission bee" data-mission="bee" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">🐝</span><span class="home-v22-smallscene">🌸 🌼 🌿</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🐝</span><span><strong>Abelhinha e a Flor</strong><small>Rastreamento • precisão • direção</small></span></span>
+    </button>
+
+    <button class="home-v22-mission target" data-mission="target" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">🎯</span><span class="home-v22-smallscene">🔵 🟢 🟡</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🎯</span><span><strong>Alcance ao Alvo</strong><small>Alcance funcional • lateralidade</small></span></span>
+    </button>
+
+    <button class="home-v22-mission hands" data-mission="hands" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">🤲</span><span class="home-v22-smallscene">💗 ✨ 💗</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🤲</span><span><strong>Duas Mãos</strong><small>Coordenação bilateral • simultaneidade</small></span></span>
+    </button>
+
+    <button class="home-v22-mission light" data-mission="light" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">⭐</span><span class="home-v22-smallscene">✨ ⭐ ✨</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">⭐</span><span><strong>Siga a Luz</strong><small>Rastreamento visual • resposta motora</small></span></span>
+    </button>
+
+    <button class="home-v22-mission sensory" data-mission="sensory" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">🫧</span><span class="home-v22-smallscene">🫧 🌈 ✨</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🫧</span><span><strong>Descobertas</strong><small>Causa e efeito • exploração sensorial</small></span></span>
+    </button>
+
+    <button class="home-v22-mission breathe" data-mission="breathe" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">🌿</span><span class="home-v22-smallscene">☁️ 💚 ☁️</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🌿</span><span><strong>Respira Comigo</strong><small>Regulação • pausa • consciência respiratória</small></span></span>
+    </button>
+
+    <button class="home-v22-mission physical" data-mission="physical" type="button">
+      <span class="home-v22-visual"><span class="home-v22-bigemoji">👣</span><span class="home-v22-smallscene">🔵 ➜ 🟢</span></span>
+      <span class="home-v22-mission-copy"><span class="home-v22-mission-icon">👣</span><span><strong>Missão no Mundo Real</strong><small>Integra tela, sala e circuito físico</small></span></span>
+    </button>
   </div>
 
-  <div class="mission-grid">
-    <button class="mission car" data-mission="road" type="button"><span class="mission-icon">🚗</span><strong>Caminho Seguro</strong><small>Trajetória • coordenação • planejamento</small></button>
-    <button class="mission bee" data-mission="bee" type="button"><span class="mission-icon">🐝</span><strong>Abelhinha e a Flor</strong><small>Rastreamento • precisão • direção</small></button>
-    <button class="mission target" data-mission="target" type="button"><span class="mission-icon">🎯</span><strong>Alcance ao Alvo</strong><small>Alcance funcional • lateralidade</small></button>
-    <button class="mission hands" data-mission="hands" type="button"><span class="mission-icon">🤲</span><strong>Duas Mãos</strong><small>Coordenação bilateral • simultaneidade</small></button>
-    <button class="mission light" data-mission="light" type="button"><span class="mission-icon">⭐</span><strong>Siga a Luz</strong><small>Rastreamento visual • resposta motora</small></button>
-    <button class="mission sensory" data-mission="sensory" type="button"><span class="mission-icon">🫧</span><strong>Descobertas</strong><small>Causa e efeito • exploração sensorial</small></button>
-    <button class="mission breathe" data-mission="breathe" type="button"><span class="mission-icon">🌿</span><strong>Respira Comigo</strong><small>Regulação • pausa • consciência respiratória</small></button>
-    <button class="mission physical" data-mission="physical" type="button"><span class="mission-icon">👣</span><strong>Missão no Mundo Real</strong><small>Integra tela, sala e circuito físico</small></button>
+  <section class="home-v22-autonomy panel">
+    <div class="home-v22-autonomy-title">
+      <span>💗</span>
+      <div><span class="kicker">CAMINHOS PARA A AUTONOMIA</span><strong>Movimento com propósito</strong></div>
+    </div>
+    <div class="home-v22-autonomy-grid">
+      <span>🧠<strong>Atenção</strong><small>Uma tarefa de cada vez</small></span>
+      <span>🏃<strong>Movimento</strong><small>Desafios graduais</small></span>
+      <span>🚦<strong>Aprendizagem</strong><small>Contextos da vida real</small></span>
+      <span>💖<strong>Conquista</strong><small>Reforço positivo</small></span>
+    </div>
+  </section>
+
+  <div class="home-v22-section-head compact">
+    <div><span class="kicker">TUTORIA AFETIVA</span><h2>Cards da Tia Tati</h2><p>Orientação, incentivo e acolhimento em cada etapa.</p></div>
   </div>
 
-  <div class="section-title compact">
-    <div><span class="kicker">TUTORIA AFETIVA</span><h2>Cards da Tia Tati</h2></div>
-  </div>
-  <div class="card-strip">
-    <button data-card="welcome"><img src="assets/welcome.webp" alt=""><span>Boas-vindas</span></button>
-    <button data-card="guide"><img src="assets/guide.webp" alt=""><span>Orientação</span></button>
-    <button data-card="success"><img src="assets/success.webp" alt=""><span>Incentivo</span></button>
-    <button data-card="retry"><img src="assets/retry.webp" alt=""><span>Motivação</span></button>
-    <button data-card="relax"><img src="assets/relax.webp" alt=""><span>Relaxamento</span></button>
-    <button data-card="celebrate"><img src="assets/celebrate.webp" alt=""><span>Comemoração</span></button>
+  <div class="home-v22-cards">
+    <button data-card="welcome"><img src="assets/welcome.webp" alt=""><span><strong>Boas-vindas</strong><small>Vamos juntos?</small></span></button>
+    <button data-card="guide"><img src="assets/guide.webp" alt=""><span><strong>Orientação</strong><small>Olhe aqui...</small></span></button>
+    <button data-card="success"><img src="assets/success.webp" alt=""><span><strong>Incentivo</strong><small>Muito bem!</small></span></button>
+    <button data-card="retry"><img src="assets/retry.webp" alt=""><span><strong>Motivação</strong><small>Você consegue!</small></span></button>
+    <button data-card="relax"><img src="assets/relax.webp" alt=""><span><strong>Relaxamento</strong><small>Respira comigo...</small></span></button>
+    <button data-card="celebrate"><img src="assets/celebrate.webp" alt=""><span><strong>Comemoração</strong><small>Parabéns!</small></span></button>
   </div>
 
-  <div class="quick-grid">
-    <button class="quick panel" id="interventionsBtn" type="button"><span>💬</span><strong>Intervenções da Dra. Tatiana</strong><small>Vocabulário terapêutico acolhedor</small></button>
-    <button class="quick panel" id="voiceStudioBtn" type="button"><span>🎙️</span><strong>Estúdio de Voz</strong><small>Espaço para as gravações reais da Tatiana</small></button>
-    <button class="quick panel" id="reportsBtn" type="button"><span>📊</span><strong>Relatórios</strong><small>Registro funcional simples da sessão</small></button>
-    <button class="quick panel" id="projectionBtn" type="button"><span>🖥️</span><strong>Modo Projeção</strong><small>Sala sensorial e tela ampliada</small></button>
+  <div class="home-v22-tools">
+    <button class="home-v22-tool" id="interventionsBtn" type="button"><span>💬</span><span><strong>Intervenções</strong><small>Vocabulário terapêutico</small></span></button>
+    <button class="home-v22-tool" id="voiceStudioBtn" type="button"><span>🎙️</span><span><strong>Estúdio de Voz</strong><small>Gravações da Tatiana</small></span></button>
+    <button class="home-v22-tool" id="reportsBtn" type="button"><span>📊</span><span><strong>Relatórios</strong><small>Resumo funcional</small></span></button>
+    <button class="home-v22-tool" id="projectionBtn" type="button"><span>🖥️</span><span><strong>Modo Projeção</strong><small>Sala sensorial</small></span></button>
+  </div>
+
+  <div class="home-v22-footer-phrase">
+    <span>💗</span>
+    <strong>Mais movimento para um futuro incrível!</strong>
+    <small>Tia Tati • Fisio Sensorial</small>
   </div>
 </section>
 
@@ -292,6 +367,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=21"></script>
+<script src="app.js?v=22"></script>
 </body>
 </html>
