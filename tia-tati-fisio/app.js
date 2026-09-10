@@ -694,14 +694,14 @@ function hands(){
  const mode=state.handsMode||'together';
  const rounds=Math.max(3,Math.min(7,Number(state.handsRounds)||3));
  const pace=state.handsPace||'calm';
- const windowMs={calm:3200,medium:2200,challenge:1500}[pace]||3200;
+ const windowMs={calm:4500,medium:3000,challenge:2000}[pace]||4500;
  const modeLabel={together:'Juntas',alternate:'Alternadas',cross:'Cruzadas'}[mode]||'Juntas';
  const paceLabel={calm:'Calma',medium:'Moderada',challenge:'Desafio'}[pace]||'Calma';
 
  const scene=document.createElement('div');scene.className='hands-game-shell';
  scene.innerHTML=
  '<div class="hands-game-top">'+
-   '<div class="hands-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="hands-tutor-msg">'+(mode==='alternate'?'Uma mão de cada vez.':mode==='cross'?'Experimente cruzar as mãos.':'Toque os dois lados juntos.')+'</strong><em>Eu espero você 💗</em></div></div>'+
+   '<div class="hands-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="hands-tutor-msg">'+(mode==='alternate'?'Uma mão de cada vez.':mode==='cross'?'Experimente cruzar as mãos.':'Um lado e depois o outro.')+'</strong><em>Eu espero você 💗</em></div></div>'+
    '<div class="hands-score"><span>💗 <b class="hands-points">0</b><small>pontos</small></span><span>🤲 <b class="hands-round">1</b>/'+rounds+'<small>rodadas</small></span></div>'+
    '<div class="hands-game-actions"><button class="hands-exit-btn" type="button">←</button><button class="hands-pause-btn" type="button">⏸️</button></div>'+
  '</div>'+
@@ -713,7 +713,7 @@ function hands(){
    '<div class="hands-center-heart">♥</div>'+
    '<button class="hand-pad hands-v31-pad left" data-side="left" type="button"><span class="hands-pad-hand">'+(mode==='cross'?'🤚':'✋')+'</span><strong>'+(mode==='cross'?'MÃO DIREITA':'LADO ESQUERDO')+'</strong><small>'+(mode==='cross'?'toque o lado oposto':'toque aqui')+'</small></button>'+
    '<button class="hand-pad hands-v31-pad right" data-side="right" type="button"><span class="hands-pad-hand">'+(mode==='cross'?'✋':'🤚')+'</span><strong>'+(mode==='cross'?'MÃO ESQUERDA':'LADO DIREITO')+'</strong><small>'+(mode==='cross'?'toque o lado oposto':'toque aqui')+'</small></button>'+
-   '<div class="hands-hint-bubble">'+(mode==='alternate'?'↔️ Toque em qualquer ponto do lado que acender.':mode==='cross'?'❌ Cruze as mãos e toque uma vez em cada metade da tela.':'🤲 Use dois dedos: um toque em cada metade da tela.')+'</div>'+
+   '<div class="hands-hint-bubble">'+(mode==='alternate'?'↔️ Toque em qualquer ponto do lado que acender.':mode==='cross'?'❌ Cruze as mãos e toque uma vez em cada lado.':'🤲 Toque um lado e depois o outro na mesma rodada.')+'</div>'+
    '<div class="hands-spark">✨</div>'+
  '</div>'+
  '<div class="hands-praise" aria-live="polite">Muito bem!</div>'+
@@ -782,80 +782,42 @@ function hands(){
   }
 
   if(!firstSide){
-   firstSide=side;firstAt=now;pad.classList.add('waiting');pads[side==='left'?'right':'left'].classList.add('waiting','guided');hint.textContent=mode==='cross'?'✅ Primeiro toque! Agora o lado oposto com as mãos cruzadas.':'✅ Primeiro toque! Agora toque o outro lado.';showPraise('1º toque ✓ Agora o outro lado.');
+   firstSide=side;firstAt=now;pad.classList.add('waiting');showPraise(side==='left'?'👈 Esquerda ✓ Agora a direita.':'Direita ✓ Agora a esquerda. 👉');pads[side==='left'?'right':'left'].classList.add('waiting','guided');hint.textContent=mode==='cross'?'✅ Primeiro lado! Agora o lado oposto com as mãos cruzadas.':'✅ Primeiro lado! Agora toque o outro lado.';showPraise('1º toque ✓ Agora o outro lado.');
    timeout=setTimeout(failTiming,windowMs);return;
   }
   if(side===firstSide){pad.classList.add('guided');hint.textContent='💗 Falta o outro lado.';return;}
   if(now-firstAt<=windowMs){clearTimeout(timeout);pads[firstSide].classList.add('pressed');completeRound();}else failTiming();
  };
 
- const activePointers=new Map();
- const sideFromPoint=(clientX,clientY)=>{
-  const r=stage.getBoundingClientRect();
-  if(clientX<r.left||clientX>r.right||clientY<r.top||clientY>r.bottom)return null;
-  return clientX < r.left+r.width/2 ? 'left' : 'right';
- };
- const flashSide=side=>{
-  const pad=pads[side];if(!pad)return;
+ let suppressClickUntil={left:0,right:0};
+
+ const acknowledgeSide=side=>{
+  if(!side||finished||state.paused)return;
+  const pad=pads[side];
   pad.classList.add('pressed');
   clearTimeout(pad._releaseTimer);
-  pad._releaseTimer=setTimeout(()=>pad.classList.remove('pressed'),320);
- };
- const acknowledgeTouch=side=>{
-  if(!side||finished||state.paused)return;
-  flashSide(side);
-  const other=side==='left'?'right':'left';
-  if(mode!=='alternate' && !firstSide){
-    hint.textContent='✅ Primeiro lado! Agora toque o '+(other==='left'?'lado esquerdo.':'lado direito.');
-  }
+  pad._releaseTimer=setTimeout(()=>pad.classList.remove('pressed'),300);
   press(side);
  };
- const onPointerDown=e=>{
-  if(finished||state.paused)return;
-  const side=sideFromPoint(e.clientX,e.clientY);
-  if(!side)return;
-  if(e.cancelable)e.preventDefault();
-  activePointers.set(e.pointerId,side);
-  try{stage.setPointerCapture?.(e.pointerId);}catch(_){}
-  acknowledgeTouch(side);
- };
- const onPointerUp=e=>{
-  activePointers.delete(e.pointerId);
-  try{stage.releasePointerCapture?.(e.pointerId);}catch(_){}
- };
- const onPointerMove=e=>{
-  if(activePointers.has(e.pointerId) && e.cancelable)e.preventDefault();
- };
 
- // Pointer Events é o caminho principal no Chrome/Android/PWA e reconhece cada dedo separadamente.
- stage.addEventListener('pointerdown',onPointerDown,{passive:false,capture:true});
- stage.addEventListener('pointermove',onPointerMove,{passive:false,capture:true});
- stage.addEventListener('pointerup',onPointerUp,{passive:true,capture:true});
- stage.addEventListener('pointercancel',onPointerUp,{passive:true,capture:true});
+ const onLeftTouch=()=>{suppressClickUntil.left=Date.now()+700;acknowledgeSide('left');};
+ const onRightTouch=()=>{suppressClickUntil.right=Date.now()+700;acknowledgeSide('right');};
+ const onLeftClick=()=>{if(Date.now()<suppressClickUntil.left)return;acknowledgeSide('left');};
+ const onRightClick=()=>{if(Date.now()<suppressClickUntil.right)return;acknowledgeSide('right');};
 
- // Fallback para navegadores antigos sem PointerEvent.
- let onLegacyTouchStart=null;
- if(!window.PointerEvent){
-  onLegacyTouchStart=e=>{
-   if(finished||state.paused)return;
-   if(e.cancelable)e.preventDefault();
-   const seen=new Set();
-   [...e.changedTouches].forEach(t=>{
-    const side=sideFromPoint(t.clientX,t.clientY);
-    if(side&&!seen.has(side)){seen.add(side);acknowledgeTouch(side);}
-   });
-  };
-  stage.addEventListener('touchstart',onLegacyTouchStart,{passive:false,capture:true});
- }
+ // Entrada simples e compatível: cada metade é um botão real.
+ // O touchstart responde imediatamente no celular; click fica como fallback universal.
+ left.addEventListener('touchstart',onLeftTouch,{passive:true});
+ right.addEventListener('touchstart',onRightTouch,{passive:true});
+ left.addEventListener('click',onLeftClick);
+ right.addEventListener('click',onRightClick);
 
  const handsInputCleanup=()=>{
-  stage.removeEventListener('pointerdown',onPointerDown,true);
-  stage.removeEventListener('pointermove',onPointerMove,true);
-  stage.removeEventListener('pointerup',onPointerUp,true);
-  stage.removeEventListener('pointercancel',onPointerUp,true);
-  if(onLegacyTouchStart)stage.removeEventListener('touchstart',onLegacyTouchStart,true);
+  left.removeEventListener('touchstart',onLeftTouch);
+  right.removeEventListener('touchstart',onRightTouch);
+  left.removeEventListener('click',onLeftClick);
+  right.removeEventListener('click',onRightClick);
   [left,right].forEach(p=>clearTimeout(p._releaseTimer));
-  activePointers.clear();
  };
  scene.querySelector('.hands-exit-btn').onclick=()=>show('handssetup');
  scene.querySelector('.hands-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';if(state.paused){clearLocalTimers();hint.textContent='⏸️ Pausado. Continue quando estiver pronto.';}else{hint.textContent='🤲 Vamos continuar no seu tempo.';resetAttempt(false);}};
@@ -928,5 +890,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=34').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=35').catch(()=>{});
 })();
