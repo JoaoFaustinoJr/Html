@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=30">
+<link rel="stylesheet" href="styles.css?v=31">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -364,6 +364,68 @@
   </div>
 </section>
 
+<section class="screen" id="screen-handssetup">
+  <div class="hands-setup-head">
+    <button class="back-btn" data-home type="button">←</button>
+    <div>
+      <span class="kicker">MISSÃO TERAPÊUTICA + COORDENAÇÃO BILATERAL</span>
+      <h2>Duas Mãos</h2>
+      <p>Use os dois lados do corpo em desafios graduais e acolhedores.</p>
+    </div>
+    <div class="hands-setup-tutor"><img src="assets/guide.webp" alt="Tia Tati"><span>Uma mão de cada lado. Eu espero você. 💗</span></div>
+  </div>
+
+  <section class="hands-setup-hero panel">
+    <div>
+      <span class="mission-badge">🤲 DESAFIO DA TIA TATI</span>
+      <h1>Duas mãos,<br><em>uma conquista!</em></h1>
+      <p>Escolha o tipo de desafio e a quantidade de rodadas. A atividade trabalha simultaneidade, alternância e alcance bilateral sem transformar atraso em erro.</p>
+      <div class="road-learning-pills"><span>🤲 Coordenação bilateral</span><span>⏱️ Sincronia</span><span>↔️ Lateralidade</span><span>💗 Autonomia</span></div>
+    </div>
+    <div class="hands-hero-scene">
+      <img src="assets/hands-board.svg" alt="">
+      <span class="hands-hero-pad left">✋</span>
+      <span class="hands-hero-pad right">🤚</span>
+      <div class="hands-hero-heart">♥</div>
+      <div class="hands-hero-bubble">“Juntas!”</div>
+    </div>
+  </section>
+
+  <section class="hands-setup-section">
+    <div class="road-v18-section-title"><span>1</span><div><strong>Escolha o desafio</strong><small>Comece simples e evolua.</small></div></div>
+    <div class="hands-mode-grid">
+      <button class="hands-mode-card active" data-hands-mode="together" type="button"><span class="pick-check">✓</span><span class="hands-mode-icon">🤲</span><strong>Juntas</strong><small>Toque os dois lados quase ao mesmo tempo</small></button>
+      <button class="hands-mode-card" data-hands-mode="alternate" type="button"><span class="pick-check">✓</span><span class="hands-mode-icon">↔️</span><strong>Alternadas</strong><small>Esquerda e direita em sequência</small></button>
+      <button class="hands-mode-card" data-hands-mode="cross" type="button"><span class="pick-check">✓</span><span class="hands-mode-icon">❌</span><strong>Cruzadas</strong><small>Experimente cruzar as mãos até o lado oposto</small></button>
+    </div>
+  </section>
+
+  <section class="hands-setup-section">
+    <div class="road-v18-section-title"><span>2</span><div><strong>Escolha as rodadas</strong><small>Quantidade de conquistas na sessão.</small></div></div>
+    <div class="hands-round-grid">
+      <button class="hands-round-card active" data-hands-rounds="3" type="button"><span class="pick-check">✓</span><strong>3 rodadas</strong><small>Introdução</small></button>
+      <button class="hands-round-card" data-hands-rounds="5" type="button"><span class="pick-check">✓</span><strong>5 rodadas</strong><small>Moderado</small></button>
+      <button class="hands-round-card" data-hands-rounds="7" type="button"><span class="pick-check">✓</span><strong>7 rodadas</strong><small>Maior sustentação</small></button>
+    </div>
+  </section>
+
+  <section class="hands-setup-section">
+    <div class="road-v18-section-title"><span>3</span><div><strong>Janela de tempo</strong><small>Quanto tempo entre um toque e outro.</small></div></div>
+    <div class="hands-pace-grid">
+      <button class="hands-pace-card active" data-hands-pace="calm" type="button"><span class="pick-check">✓</span><strong>Calma</strong><small>Até 2,4 s</small></button>
+      <button class="hands-pace-card" data-hands-pace="medium" type="button"><span class="pick-check">✓</span><strong>Moderada</strong><small>Até 1,8 s</small></button>
+      <button class="hands-pace-card" data-hands-pace="challenge" type="button"><span class="pick-check">✓</span><strong>Desafio</strong><small>Até 1,2 s</small></button>
+    </div>
+  </section>
+
+  <div class="hands-learning panel"><span>💗</span><p><strong>Sem punição pelo tempo.</strong><br>Se os toques não acontecerem dentro da janela escolhida, a mesma rodada é oferecida novamente com uma pista visual.</p></div>
+
+  <div class="hands-action-dock">
+    <div><small>Pronto para começar</small><strong id="handsActionSummary">Juntas • 3 rodadas • Calma</strong></div>
+    <button class="primary" id="startHandsMission" type="button">🤲 Iniciar desafio</button>
+  </div>
+</section>
+
 <section class="screen" id="screen-game">
   <div class="game-top">
     <button class="back-btn" id="exitGame" type="button">←</button>
@@ -486,6 +548,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=30"></script>
+<script src="app.js?v=31"></script>
 </body>
 </html>
