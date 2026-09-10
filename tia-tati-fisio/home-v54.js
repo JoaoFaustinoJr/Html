@@ -1,17 +1,17 @@
 (()=>{
 'use strict';
-const VERSION='55';
+const VERSION='56';
 
-// Navegação da home: abre diretamente a activity.html original.
-// Isso elimina a página intermediária que estava recriando uma home semelhante.
+// v56: toda atividade abre pelo shell determinístico, nunca diretamente pela home antiga.
 document.addEventListener('click',e=>{
- const a=e.target.closest('a[href*="activity-v54.html?open="]');
+ const a=e.target.closest('a[href*="activity-v54.html?open="],a[href*="activity-v56.html?open="]');
  if(a){
   e.preventDefault();
+  e.stopPropagation();
   const u=new URL(a.href,location.href);
   const open=u.searchParams.get('open');
   if(open){
-   location.href='./activity.html?open='+encodeURIComponent(open)+'&v='+VERSION;
+   location.href='./activity-v56.html?open='+encodeURIComponent(open)+'&v='+VERSION+'&t='+Date.now();
    return;
   }
  }
