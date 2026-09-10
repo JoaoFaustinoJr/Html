@@ -2,6 +2,10 @@
 'use strict';
 const VERSION='51';
 
+const polish=document.createElement('link');
+polish.rel='stylesheet';polish.href='home-v51-polish.css?v='+VERSION;
+document.head.appendChild(polish);
+
 function openActivity(key){
  if(key==='home'){window.scrollTo({top:0,behavior:'smooth'});return;}
  const url=new URL('./activity.html',location.href);
