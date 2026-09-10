@@ -63,7 +63,7 @@ const INTERVENTIONS=[
 
 const prefsKey='tiaTatiV12Prefs', reportsKey='tiaTatiV12Reports';
 const state={
- screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2,
+ screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag',
  size:92,speed:2,amplitude:3,stimuli:2,reach:'all',context:'APAE',easy:true,guide:true,projection:false,reduced:false,therapeutic:true,
  paused:false,currentPhrase:null,currentText:'',cleanup:null,idleTimers:[],lastObservation:''
 };
@@ -76,11 +76,12 @@ function show(name){
  $$('.screen').forEach(s=>s.classList.remove('active'));
  $('#screen-'+name)?.classList.add('active'); state.screen=name;
  $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
- app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup');
+ app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup');
  window.scrollTo({top:0,behavior:'smooth'});
  if(name==='reports')renderReports();
  if(name==='voice')renderVoice();
  if(name==='roadsetup')syncRoadSetup();
+ if(name==='beesetup')syncBeeSetup();
 }
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2300);}
 function buzz(p=20){if(navigator.vibrate)navigator.vibrate(p);}
@@ -105,6 +106,17 @@ function syncRoadSetup(){
  $$('[data-road-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.roadRoute)===(Number(state.roadRoute)||2)));
  $$('[data-road-control]').forEach(x=>x.classList.toggle('active',x.dataset.roadControl===state.roadControl));
  syncRoadSummary();
+}
+function syncBeeSummary(){
+ const flower={pink:'Flor rosa',sun:'Girassol',white:'Margarida'}[state.beeFlower]||'Flor rosa';
+ const control=state.beeControl==='tap'?'Tocar':'Arrastar';
+ const el=$('#beeActionSummary');if(el)el.textContent='Caminho '+(Number(state.beeRoute)||2)+' • '+flower+' • '+control;
+}
+function syncBeeSetup(){
+ $$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
+ $$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
+ $$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
+ syncBeeSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
 
@@ -443,13 +455,110 @@ function road(){
  state.cleanup=()=>{finished=true;try{roadInputCleanup?.();}catch(_){}window.removeEventListener('resize',place);screen.classList.remove('road-immersive');app.classList.remove('road-game-mode');document.body.classList.remove('road-game-active');area.classList.remove('road-activity');};
 }
 function bee(){
- const area=$('#activityArea'),f=document.createElement('div');f.className='playfield';f.style.background='linear-gradient(#dff6ff,#eaf8d8)';
- const pts=[[.12,.72],[.28,.58],[.36,.42],[.54,.61],[.67,.44],[.84,.28]];
- const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','trail');svg.setAttribute('viewBox','0 0 800 400');svg.setAttribute('preserveAspectRatio','none');svg.innerHTML='<polyline points="'+pts.map(p=>p[0]*800+','+p[1]*400).join(' ')+'" fill="none" stroke="#2d7d68" stroke-width="6" stroke-dasharray="13 12" stroke-linecap="round"/>';f.appendChild(svg);
- const b=document.createElement('div');b.className='game-object bee-token';b.textContent='🐝';const flower=document.createElement('div');flower.className='game-object flower-goal';flower.textContent='🌸';f.append(b,flower);area.appendChild(f);
- requestAnimationFrame(()=>{b.style.left=(pts[0][0]*f.clientWidth-b.offsetWidth/2)+'px';b.style.top=(pts[0][1]*f.clientHeight-b.offsetHeight/2)+'px';flower.style.left=(pts.at(-1)[0]*f.clientWidth-flower.offsetWidth/2)+'px';flower.style.top=(pts.at(-1)[1]*f.clientHeight-flower.offsetHeight/2)+'px';});
- let lastErr=0;
- dragObject(b,f,(x,y,r)=>{const d=minPathDist(x,y,pts,r.width,r.height),allow=55+(5-state.amplitude)*4;if(d>allow&&Date.now()-lastErr>1200){lastErr=Date.now();softError('Quase! Vamos voltar para a trilha com calma.');}const g=pts.at(-1);if(Math.hypot(x-g[0]*r.width,y-g[1]*r.height)<70){state.interactions++;finishStep();}});
+ const area=$('#activityArea'),screen=$('#screen-game');
+ screen.classList.add('bee-immersive');app.classList.add('bee-game-mode');document.body.classList.add('bee-game-active');area.classList.add('bee-activity');
+ const level=Number(state.beeRoute)||2;
+ const flowerIcon={pink:'🌸',sun:'🌻',white:'🌼'}[state.beeFlower]||'🌸';
+ const flowerName={pink:'flor rosa',sun:'girassol',white:'margarida'}[state.beeFlower]||'flor rosa';
+
+ const routeControls={
+  1:[[.16,.86],[.32,.70],[.48,.55],[.65,.39],[.82,.20]],
+  2:[[.16,.86],[.34,.78],[.25,.59],[.57,.52],[.74,.35],[.82,.20]],
+  3:[[.16,.86],[.70,.76],[.28,.59],[.72,.48],[.30,.33],[.82,.20]]
+ };
+ const controls=(routeControls[level]||routeControls[2]).map(p=>[p[0],p[1]]);
+ const vw=420,vh=720;
+ const quad=(a,c,b,t)=>[(1-t)*(1-t)*a[0]+2*(1-t)*t*c[0]+t*t*b[0],(1-t)*(1-t)*a[1]+2*(1-t)*t*c[1]+t*t*b[1]];
+ const midpoint=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
+ const samples=[];let path='M '+(controls[0][0]*vw)+' '+(controls[0][1]*vh);let segStart=controls[0];
+ for(let i=1;i<controls.length-1;i++){
+  const control=controls[i],segEnd=midpoint(controls[i],controls[i+1]);
+  path+=' Q '+(control[0]*vw)+' '+(control[1]*vh)+' '+(segEnd[0]*vw)+' '+(segEnd[1]*vh);
+  for(let k=0;k<22;k++)samples.push(quad(segStart,control,segEnd,k/22));
+  segStart=segEnd;
+ }
+ const lc=controls[controls.length-2],le=controls[controls.length-1];
+ path+=' Q '+(lc[0]*vw)+' '+(lc[1]*vh)+' '+(le[0]*vw)+' '+(le[1]*vh);
+ for(let k=0;k<=28;k++)samples.push(quad(segStart,lc,le,k/28));
+
+ const leafFractions=level===1?[.27,.54,.78]:level===2?[.22,.43,.64,.82]:[.18,.36,.54,.70,.84];
+ const pollenFractions=level===1?[.20,.48,.74]:level===2?[.18,.47,.76]:[.16,.38,.60,.80];
+ const leafPoints=leafFractions.map(fr=>samples[Math.round(fr*(samples.length-1))]);
+ const pollenPoints=pollenFractions.map(fr=>samples[Math.round(fr*(samples.length-1))]);
+
+ const scene=document.createElement('div');scene.className='bee-game-shell';
+ scene.innerHTML=
+ '<div class="bee-game-top">'+
+   '<div class="bee-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="bee-tutor-msg">Siga a trilha com calma.</strong><em>Olhe primeiro, depois mova 💗</em></div></div>'+
+   '<div class="bee-score"><span>✨ <b class="bee-points">0</b><small>pólen</small></span><span>'+flowerIcon+' <b>'+flowerName+'</b><small>destino</small></span></div>'+
+   '<div class="bee-game-actions"><button class="bee-exit-btn" type="button">←</button><button class="bee-pause-btn" type="button">⏸️</button></div>'+
+ '</div>'+
+ '<div class="bee-stage">'+
+   '<svg class="bee-world" viewBox="0 0 '+vw+' '+vh+'" preserveAspectRatio="none">'+
+     '<image href="assets/bee-garden.svg" x="0" y="0" width="'+vw+'" height="'+vh+'" preserveAspectRatio="none"/>'+
+     '<path class="bee-trail-soft" d="'+path+'" fill="none" stroke="#fff" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" opacity=".56"/>'+
+     '<path class="bee-trail" d="'+path+'" fill="none" stroke="#f4a9c8" stroke-width="5" stroke-dasharray="12 13" stroke-linecap="round"/>'+
+   '</svg>'+
+   '<div class="bee-route-chip">🐝 Caminho '+level+'</div>'+
+   '<div class="bee-focus-chip">👀 Siga com os olhos</div>'+
+   '<div class="bee-bzzz">BZZZ!</div>'+
+   '<div class="bee-hint-bubble">🌿 Leve a abelhinha até a '+flowerName+'.</div>'+
+ '</div>'+
+ '<div class="bee-praise" aria-live="polite">✨ Muito bem!</div>'+
+ '<div class="bee-game-footer">'+
+   '<div class="bee-progress-track"><span class="bee-progress-fill"></span></div>'+
+   '<div class="bee-progress-nodes">'+leafPoints.map((_,i)=>'<i data-bee-node="'+i+'"></i>').join('')+'<b>'+flowerIcon+'</b></div>'+
+   '<div class="bee-footer-copy"><span>✨ <b class="bee-pollen-count">0</b>/'+pollenPoints.length+' pólen</span><span>Movimento com propósito 💗</span></div>'+
+ '</div>';
+ area.appendChild(scene);
+ const stage=scene.querySelector('.bee-stage');
+ const bee=document.createElement('div');bee.className='game-object bee-game-token';bee.innerHTML='<img src="assets/bee-game.svg" alt="Abelhinha" draggable="false">';stage.appendChild(bee);
+ const flower=document.createElement('div');flower.className='bee-flower-goal';flower.textContent=flowerIcon;stage.appendChild(flower);
+ const leaves=leafPoints.map((p,i)=>{const el=document.createElement('button');el.type='button';el.className='bee-leaf'+(state.beeControl==='tap'?' tap-mode':'');el.textContent='🍃';el.dataset.i=i;stage.appendChild(el);return el;});
+ const pollen=pollenPoints.map((p,i)=>{const el=document.createElement('span');el.className='bee-pollen';el.textContent='✨';stage.appendChild(el);return el;});
+
+ let checkpoint=0,lastErr=0,helpLevel=0,finished=false,collected=0;
+ const got=new Set(),praise=scene.querySelector('.bee-praise'),points=scene.querySelector('.bee-points'),pollenCount=scene.querySelector('.bee-pollen-count'),progressFill=scene.querySelector('.bee-progress-fill'),nodes=[...scene.querySelectorAll('[data-bee-node]')],msg=scene.querySelector('.bee-tutor-msg'),hint=scene.querySelector('.bee-hint-bubble'),bzzz=scene.querySelector('.bee-bzzz');
+ const showPraise=(txt,kind='good')=>{praise.textContent=txt;praise.className='bee-praise show '+kind;clearTimeout(praise._t);praise._t=setTimeout(()=>praise.classList.remove('show'),1500);};
+ const angleAt=i=>{const k=Math.max(1,Math.min(samples.length-2,i)),a=samples[k-1],b=samples[k+1];return Math.atan2((b[1]-a[1])*stage.clientHeight,(b[0]-a[0])*stage.clientWidth)*180/Math.PI;};
+ const place=()=>{
+  const w=stage.clientWidth,h=stage.clientHeight,start=samples[0],goal=samples.at(-1);
+  bee.style.left=(start[0]*w-bee.offsetWidth/2)+'px';bee.style.top=(start[1]*h-bee.offsetHeight/2)+'px';bee.style.setProperty('--bee-angle',angleAt(1)+'deg');
+  flower.style.left=(goal[0]*w)+'px';flower.style.top=(goal[1]*h)+'px';
+  leaves.forEach((el,i)=>{const p=leafPoints[i];el.style.left=(p[0]*w)+'px';el.style.top=(p[1]*h)+'px';el.classList.toggle('current',state.beeControl==='tap'&&i===0);});
+  pollen.forEach((el,i)=>{const p=pollenPoints[i];el.style.left=(p[0]*w)+'px';el.style.top=(p[1]*h)+'px';});
+ };
+ requestAnimationFrame(place);window.addEventListener('resize',place,{passive:true});
+
+ const collect=progress=>{
+  pollenFractions.forEach((fr,i)=>{if(progress>=fr&&!got.has(i)){got.add(i);collected++;state.interactions++;pollen[i]?.classList.add('collected');points.textContent=String(collected*25);pollenCount.textContent=String(collected);buzz(16);showPraise('✨ Pólen coletado! Muito bem!');}});
+ };
+ const updateProgress=progress=>{progressFill.style.width=Math.max(0,Math.min(100,progress*100))+'%';collect(progress);};
+ const updateCheckpoint=idx=>{if(idx<=checkpoint)return;checkpoint=Math.min(idx,leafPoints.length);nodes.forEach((n,k)=>n.classList.toggle('done',k<checkpoint));leaves.forEach((n,k)=>{n.classList.toggle('done',k<checkpoint);n.classList.toggle('current',state.beeControl==='tap'&&k===checkpoint);});showPraise('🍃 Ótimo! Continue pelo caminho.');};
+ const showBzzz=()=>{bzzz.classList.remove('show');void bzzz.offsetWidth;bzzz.classList.add('show');buzz([20,18,20]);};
+ const recover=()=>{const p=checkpoint===0?samples[0]:leafPoints[Math.min(checkpoint-1,leafPoints.length-1)],r=stage.getBoundingClientRect();bee.classList.add('recovering');bee.style.left=(p[0]*r.width-bee.offsetWidth/2)+'px';bee.style.top=(p[1]*r.height-bee.offsetHeight/2)+'px';setTimeout(()=>bee.classList.remove('recovering'),420);};
+ const deviate=()=>{if(Date.now()-lastErr<1100||finished)return;lastErr=Date.now();state.collisions++;helpLevel++;showBzzz();msg.textContent='Bzzz... por aqui! Vamos voltar à trilha.';hint.textContent='💗 Tudo bem. Volte ao último ponto seguro.';showPraise('💗 Vamos tentar outra vez.','retry');recover();if(helpLevel>=2){scene.querySelector('.bee-trail-soft')?.classList.add('visible');state.assists++;hint.textContent='💡 A trilha ficou mais visível para ajudar.';}};
+ const finishBee=()=>{if(finished)return;finished=true;progressFill.style.width='100%';nodes.forEach(n=>n.classList.add('done'));bee.classList.add('arrived');msg.textContent='Conseguimos! A abelhinha encontrou a flor!';hint.textContent='🌼 As abelhas ajudam as flores levando pólen de uma para outra.';showPraise('🌸 Que voo lindo! Parabéns!');setTutor('success',MISSIONS.bee.name,'Conseguimos! A abelhinha encontrou a flor!','bee_success',false);playVoice('bee_success',false);setTimeout(finishStep,1000);};
+
+ scene.querySelector('.bee-exit-btn').onclick=()=>show('beesetup');
+ scene.querySelector('.bee-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';hint.textContent=state.paused?'⏸️ Pausado. Continue quando estiver pronto.':'🐝 Vamos continuar no seu tempo.';};
+
+ if(state.beeControl==='drag'){
+  let dragging=false;
+  const near=(cx,cy)=>{const r=stage.getBoundingClientRect(),br=bee.getBoundingClientRect(),x=br.left+br.width/2-r.left,y=br.top+br.height/2-r.top;return Math.hypot(cx-r.left-x,cy-r.top-y)<Math.max(70,br.width);};
+  const drive=(cx,cy)=>{if(state.paused||finished)return;const r=stage.getBoundingClientRect(),x=Math.max(0,Math.min(r.width,cx-r.left)),y=Math.max(0,Math.min(r.height,cy-r.top));bee.style.left=(x-bee.offsetWidth/2)+'px';bee.style.top=(y-bee.offsetHeight/2)+'px';let best=Infinity,bi=0;for(let i=0;i<samples.length;i++){const p=samples[i],d=Math.hypot(x-p[0]*r.width,y-p[1]*r.height);if(d<best){best=d;bi=i;}}bee.style.setProperty('--bee-angle',angleAt(bi)+'deg');const progress=bi/(samples.length-1),allow=54+(state.easy?10:0)+(helpLevel>=2?16:0),cp=leafFractions.filter(fr=>progress>=fr).length;if(best<allow&&cp>checkpoint)updateCheckpoint(cp);if(best>allow+23)deviate();updateProgress(progress);if(progress>.97&&best<allow+12)finishBee();resetIdle();};
+  const ts=e=>{if(!e.touches?.length)return;const t=e.touches[0];if(near(t.clientX,t.clientY)){dragging=true;bee.classList.add('dragging');e.preventDefault();drive(t.clientX,t.clientY);}};
+  const tm=e=>{if(!dragging||!e.touches?.length)return;e.preventDefault();const t=e.touches[0];drive(t.clientX,t.clientY);};
+  const te=e=>{if(!dragging)return;dragging=false;bee.classList.remove('dragging');if(e.cancelable)e.preventDefault();};
+  const pd=e=>{if(e.pointerType==='touch'||!near(e.clientX,e.clientY))return;dragging=true;bee.classList.add('dragging');e.preventDefault();drive(e.clientX,e.clientY);};
+  const pm=e=>{if(!dragging||e.pointerType==='touch')return;e.preventDefault();drive(e.clientX,e.clientY);};
+  const pu=()=>{dragging=false;bee.classList.remove('dragging');};
+  stage.addEventListener('touchstart',ts,{passive:false});stage.addEventListener('touchmove',tm,{passive:false});stage.addEventListener('touchend',te,{passive:false});stage.addEventListener('touchcancel',te,{passive:false});stage.addEventListener('pointerdown',pd,{passive:false});window.addEventListener('pointermove',pm,{passive:false});window.addEventListener('pointerup',pu,{passive:true});
+  var beeInputCleanup=()=>{stage.removeEventListener('touchstart',ts);stage.removeEventListener('touchmove',tm);stage.removeEventListener('touchend',te);stage.removeEventListener('touchcancel',te);stage.removeEventListener('pointerdown',pd);window.removeEventListener('pointermove',pm);window.removeEventListener('pointerup',pu);};
+ }else{
+  leaves.forEach((el,k)=>el.addEventListener('click',()=>{if(state.paused||finished)return;if(k!==checkpoint){showPraise('🍃 Procure a próxima folhinha.','retry');return;}const p=leafPoints[k],r=stage.getBoundingClientRect();bee.style.left=(p[0]*r.width-bee.offsetWidth/2)+'px';bee.style.top=(p[1]*r.height-bee.offsetHeight/2)+'px';bee.style.setProperty('--bee-angle',angleAt(Math.round(leafFractions[k]*(samples.length-1)))+'deg');state.interactions++;updateCheckpoint(k+1);updateProgress(leafFractions[k]);if(k===leaves.length-1)setTimeout(()=>{const g=samples.at(-1);bee.style.left=(g[0]*r.width-bee.offsetWidth/2)+'px';bee.style.top=(g[1]*r.height-bee.offsetHeight/2)+'px';updateProgress(1);setTimeout(finishBee,450);},500);}));
+ }
+ state.cleanup=()=>{finished=true;try{beeInputCleanup?.();}catch(_){}window.removeEventListener('resize',place);screen.classList.remove('bee-immersive');app.classList.remove('bee-game-mode');document.body.classList.remove('bee-game-active');area.classList.remove('bee-activity');};
 }
 function targetMission(){
  const f=document.createElement('div');f.className='playfield';$('#activityArea').appendChild(f);
@@ -501,7 +610,7 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):startCircuit([b.dataset.mission]));
+$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
