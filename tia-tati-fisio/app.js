@@ -713,7 +713,7 @@ function hands(){
    '<div class="hands-center-heart">♥</div>'+
    '<button class="hand-pad hands-v31-pad left" data-side="left" type="button"><span class="hands-pad-hand">'+(mode==='cross'?'🤚':'✋')+'</span><strong>'+(mode==='cross'?'MÃO DIREITA':'LADO ESQUERDO')+'</strong><small>'+(mode==='cross'?'toque o lado oposto':'toque aqui')+'</small></button>'+
    '<button class="hand-pad hands-v31-pad right" data-side="right" type="button"><span class="hands-pad-hand">'+(mode==='cross'?'✋':'🤚')+'</span><strong>'+(mode==='cross'?'MÃO ESQUERDA':'LADO DIREITO')+'</strong><small>'+(mode==='cross'?'toque o lado oposto':'toque aqui')+'</small></button>'+
-   '<div class="hands-hint-bubble">'+(mode==='alternate'?'↔️ Siga o lado que acender.':mode==='cross'?'❌ Cruze as mãos e toque os dois lados.':'🤲 Toque os dois lados quase ao mesmo tempo.')+'</div>'+
+   '<div class="hands-hint-bubble">'+(mode==='alternate'?'↔️ Toque em qualquer ponto do lado que acender.':mode==='cross'?'❌ Cruze as mãos e toque uma vez em cada metade da tela.':'🤲 Use dois dedos: um toque em cada metade da tela.')+'</div>'+
    '<div class="hands-spark">✨</div>'+
  '</div>'+
  '<div class="hands-praise" aria-live="polite">Muito bem!</div>'+
@@ -789,21 +789,66 @@ function hands(){
   if(now-firstAt<=windowMs){clearTimeout(timeout);pads[firstSide].classList.add('pressed');completeRound();}else failTiming();
  };
 
- const touchHandlers=[];
- [left,right].forEach(pad=>{
-  const side=pad.dataset.side;
-  const onTouch=e=>{if(e.cancelable)e.preventDefault();press(side);};
-  const onPointer=e=>{if(e.pointerType==='touch')return;e.preventDefault();press(side);};
-  pad.addEventListener('touchstart',onTouch,{passive:false});
-  pad.addEventListener('pointerdown',onPointer,{passive:false});
-  touchHandlers.push([pad,onTouch,onPointer]);
- });
-
+ const activeTouchSides=new Set();
+ const sideFromPoint=(clientX,clientY)=>{
+  const r=stage.getBoundingClientRect();
+  if(clientX<r.left||clientX>r.right||clientY<r.top||clientY>r.bottom)return null;
+  return clientX < r.left+r.width/2 ? 'left' : 'right';
+ };
+ const flashSide=side=>{
+  const pad=pads[side];if(!pad)return;
+  pad.classList.add('pressed');
+  clearTimeout(pad._releaseTimer);
+  pad._releaseTimer=setTimeout(()=>pad.classList.remove('pressed'),260);
+ };
+ const handleSide=side=>{
+  if(!side||finished||state.paused)return;
+  flashSide(side);
+  press(side);
+ };
+ const onStageTouchStart=e=>{
+  if(finished||state.paused)return;
+  if(e.cancelable)e.preventDefault();
+  // changedTouches permite reconhecer dois dedos colocados praticamente ao mesmo tempo.
+  const seen=new Set();
+  [...e.changedTouches].forEach(t=>{
+   const side=sideFromPoint(t.clientX,t.clientY);
+   if(side&&!seen.has(side)){seen.add(side);activeTouchSides.add(side);handleSide(side);}
+  });
+ };
+ const onStageTouchMove=e=>{if(e.cancelable)e.preventDefault();};
+ const onStageTouchEnd=e=>{
+  if(e.cancelable)e.preventDefault();
+  [...e.changedTouches].forEach(t=>{
+   const side=sideFromPoint(t.clientX,t.clientY);
+   if(side)activeTouchSides.delete(side);
+  });
+ };
+ const onStagePointerDown=e=>{
+  if(e.pointerType==='touch'||finished||state.paused)return;
+  const side=sideFromPoint(e.clientX,e.clientY);
+  if(!side)return;
+  e.preventDefault();handleSide(side);
+ };
+ // Captura no palco inteiro: funciona mesmo se o navegador não entregar o toque diretamente ao botão.
+ stage.addEventListener('touchstart',onStageTouchStart,{passive:false,capture:true});
+ stage.addEventListener('touchmove',onStageTouchMove,{passive:false,capture:true});
+ stage.addEventListener('touchend',onStageTouchEnd,{passive:false,capture:true});
+ stage.addEventListener('touchcancel',onStageTouchEnd,{passive:false,capture:true});
+ stage.addEventListener('pointerdown',onStagePointerDown,{passive:false,capture:true});
+ const handsInputCleanup=()=>{
+  stage.removeEventListener('touchstart',onStageTouchStart,true);
+  stage.removeEventListener('touchmove',onStageTouchMove,true);
+  stage.removeEventListener('touchend',onStageTouchEnd,true);
+  stage.removeEventListener('touchcancel',onStageTouchEnd,true);
+  stage.removeEventListener('pointerdown',onStagePointerDown,true);
+  [left,right].forEach(p=>clearTimeout(p._releaseTimer));
+ };
  scene.querySelector('.hands-exit-btn').onclick=()=>show('handssetup');
  scene.querySelector('.hands-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';if(state.paused){clearLocalTimers();hint.textContent='⏸️ Pausado. Continue quando estiver pronto.';}else{hint.textContent='🤲 Vamos continuar no seu tempo.';resetAttempt(false);}};
 
  setActivePads();updateProgress();armAssist();
- state.cleanup=()=>{finished=true;clearLocalTimers();touchHandlers.forEach(([pad,t,p])=>{pad.removeEventListener('touchstart',t);pad.removeEventListener('pointerdown',p);});screen.classList.remove('hands-immersive');app.classList.remove('hands-game-mode');document.body.classList.remove('hands-game-active');area.classList.remove('hands-activity');};
+ state.cleanup=()=>{finished=true;clearLocalTimers();handsInputCleanup();screen.classList.remove('hands-immersive');app.classList.remove('hands-game-mode');document.body.classList.remove('hands-game-active');area.classList.remove('hands-activity');};
 }
 function light(){
  const f=document.createElement('div');f.className='playfield';const b=document.createElement('button');b.type='button';b.className='game-object target-dot';b.textContent='⭐';b.style.fontSize='42px';b.style.width=b.style.height=targetSize()+'px';b.style.background='#fff0a8';f.appendChild(b);$('#activityArea').appendChild(f);let n=0,timer=null,stopped=false;
@@ -870,5 +915,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=32').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=33').catch(()=>{});
 })();
