@@ -1,9 +1,9 @@
 {
   "id":"./",
-  "name":"Tia Tati Kids – Fisio Sensorial",
-  "short_name":"Tia Tati Kids",
-  "description":"Missões terapêuticas lúdicas da Tia Tati para crianças, com movimento, atenção, coordenação, autonomia e acolhimento.",
-  "start_url":"./?v=6",
+  "name":"Tia Tati – Fisio Sensorial",
+  "short_name":"Tia Tati",
+  "description":"Experiências terapêuticas com movimento, psicopedagogia, acessibilidade, tutoria visual e voz da Dra. Tatiana — com Área Kids e Área Jovem.",
+  "start_url":"./",
   "scope":"./",
   "display":"standalone",
   "orientation":"any",
