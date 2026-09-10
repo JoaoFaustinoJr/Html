@@ -17,7 +17,7 @@ const MISSIONS={
  bee:{name:'Abelhinha e a Flor',icon:'🐝',therapy:'Rastreamento visual • precisão • direção e sentido',intro:'Ajude a abelhinha a chegar até a flor. Siga o caminho com calma.',hint:'Acompanhe a trilha com os olhos e leve a abelhinha até a flor.'},
  target:{name:'Alcance ao Alvo',icon:'🎯',therapy:'Alcance funcional • lateralidade • coordenação',intro:'Agora vamos alcançar os alvos. Toque em cada círculo que aparecer.',hint:'Olhe para o alvo colorido e alcance com calma.'},
  hands:{name:'Duas Mãos',icon:'🤲',therapy:'Coordenação bilateral • simultaneidade • integração motora',intro:'Vamos usar as duas mãos. Toque nos dois lados quase ao mesmo tempo.',hint:'Uma mão de cada lado. Eu espero você.'},
- light:{name:'Siga a Luz',icon:'⭐',therapy:'Rastreamento visual • atenção sustentada • resposta motora',intro:'Siga a luz com os olhos e toque nela quando conseguir.',hint:'Primeiro acompanhe com os olhos. Depois toque na estrela.'},
+ light:{name:'Reflexo Neon',icon:'⚡',therapy:'Resposta motora • atenção sustentada • memória de trabalho • ritmo',intro:'Escolha seu foco. Observe primeiro e responda no seu tempo.',hint:'Olhe o padrão com calma. Depois responda quando estiver pronto.'},
  sensory:{name:'Descobertas',icon:'🫧',therapy:'Causa e efeito • exploração sensorial • iniciativa',intro:'Toque na tela e descubra o que acontece.',hint:'Experimente tocar em lugares diferentes da tela.'},
  breathe:{name:'Respira Comigo',icon:'🌿',therapy:'Autorregulação • pausa • consciência respiratória',intro:'Agora vamos fazer uma pausa. Respira comigo, devagar.',hint:'Inspire quando o círculo crescer e solte o ar quando ele diminuir.'},
  physical:{name:'Missão no Mundo Real',icon:'👣',therapy:'Transferência para tarefa funcional • movimento corporal guiado',intro:'Agora é hora de sair da tela e fazer a missão preparada pela fisioterapeuta.',hint:'Siga a orientação da Dra. Tatiana e depois toque em Concluído.'}
@@ -63,12 +63,12 @@ const INTERVENTIONS=[
 
 const prefsKey='tiaTatiV12Prefs', reportsKey='tiaTatiV12Reports';
 const state={
- screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag', targetReach:'all', targetCount:5, targetTheme:'rings', handsMode:'together', handsRounds:3, handsPace:'calm',
+ screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag', targetReach:'all', targetCount:5, targetTheme:'rings', handsMode:'together', handsRounds:3, handsPace:'calm', lightMode:'react', lightLevel:'flow', lightRounds:5,
  size:92,speed:2,amplitude:3,stimuli:2,reach:'all',context:'APAE',easy:true,guide:true,projection:false,reduced:false,therapeutic:true,
  paused:false,currentPhrase:null,currentText:'',cleanup:null,idleTimers:[],lastObservation:''
 };
 try{Object.assign(state,JSON.parse(localStorage.getItem(prefsKey)||'{}'));}catch(e){}
-function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl,targetReach:state.targetReach,targetCount:state.targetCount,targetTheme:state.targetTheme,handsMode:state.handsMode,handsRounds:state.handsRounds,handsPace:state.handsPace}));}catch(e){}}
+function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl,targetReach:state.targetReach,targetCount:state.targetCount,targetTheme:state.targetTheme,handsMode:state.handsMode,handsRounds:state.handsRounds,handsPace:state.handsPace,lightMode:state.lightMode,lightLevel:state.lightLevel,lightRounds:state.lightRounds}));}catch(e){}}
 
 function show(name){
  if(state.cleanup){state.cleanup();state.cleanup=null;}
@@ -76,7 +76,7 @@ function show(name){
  $$('.screen').forEach(s=>s.classList.remove('active'));
  $('#screen-'+name)?.classList.add('active'); state.screen=name;
  $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
- app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup'); app.classList.toggle('target-setup-mode',name==='targetsetup'); app.classList.toggle('hands-setup-mode',name==='handssetup');
+ app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup'); app.classList.toggle('target-setup-mode',name==='targetsetup'); app.classList.toggle('hands-setup-mode',name==='handssetup'); app.classList.toggle('light-setup-mode',name==='lightsetup');
  window.scrollTo({top:0,behavior:'smooth'});
  if(name==='reports')renderReports();
  if(name==='voice')renderVoice();
@@ -84,6 +84,7 @@ function show(name){
  if(name==='beesetup')syncBeeSetup();
  if(name==='targetsetup')syncTargetSetup();
  if(name==='handssetup')syncHandsSetup();
+ if(name==='lightsetup')syncLightSetup();
 }
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2300);}
 function buzz(p=20){if(navigator.vibrate)navigator.vibrate(p);}
@@ -141,6 +142,17 @@ function syncHandsSetup(){
  document.querySelectorAll('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',Number(x.dataset.handsRounds)===(Number(state.handsRounds)||3)));
  document.querySelectorAll('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x.dataset.handsPace===state.handsPace));
  syncHandsSummary();
+}
+function syncLightSummary(){
+ const mode={react:'Reação',memory:'Memorize',beat:'Beat & Move'}[state.lightMode]||'Reação';
+ const level={flow:'Flow',pulse:'Pulse',boost:'Boost'}[state.lightLevel]||'Flow';
+ const el=$('#lightActionSummary');if(el)el.textContent=mode+' • '+level+' • '+(Number(state.lightRounds)||5)+' etapas';
+}
+function syncLightSetup(){
+ document.querySelectorAll('[data-light-mode]').forEach(x=>x.classList.toggle('active',x.dataset.lightMode===state.lightMode));
+ document.querySelectorAll('[data-light-level]').forEach(x=>x.classList.toggle('active',x.dataset.lightLevel===state.lightLevel));
+ document.querySelectorAll('[data-light-rounds]').forEach(x=>x.classList.toggle('active',Number(x.dataset.lightRounds)===(Number(state.lightRounds)||5)));
+ syncLightSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
 
@@ -826,9 +838,136 @@ function hands(){
  state.cleanup=()=>{finished=true;clearLocalTimers();handsInputCleanup();screen.classList.remove('hands-immersive');app.classList.remove('hands-game-mode');document.body.classList.remove('hands-game-active');area.classList.remove('hands-activity');};
 }
 function light(){
- const f=document.createElement('div');f.className='playfield';const b=document.createElement('button');b.type='button';b.className='game-object target-dot';b.textContent='⭐';b.style.fontSize='42px';b.style.width=b.style.height=targetSize()+'px';b.style.background='#fff0a8';f.appendChild(b);$('#activityArea').appendChild(f);let n=0,timer=null,stopped=false;
- const move=()=>{if(state.paused||stopped)return;const w=f.clientWidth-b.offsetWidth,h=f.clientHeight-b.offsetHeight;b.style.left=(Math.random()*Math.max(0,w))+'px';b.style.top=(Math.random()*Math.max(0,h))+'px';};requestAnimationFrame(move);if(!state.reduced)timer=setInterval(move,Math.max(700,1800-state.speed*180));
- b.onclick=()=>{state.interactions++;n++;n>=4?(stopped=true,finishStep()):(state.reduced&&move(),feedback('Você encontrou a luz! '+n+' de 4.'));};state.cleanup=()=>timer&&clearInterval(timer);
+ const area=$('#activityArea'),screen=$('#screen-game');
+ screen.classList.add('light-immersive');app.classList.add('light-game-mode');document.body.classList.add('light-game-active');area.classList.add('light-activity');
+
+ const mode=state.lightMode||'react';
+ const level=state.lightLevel||'flow';
+ const total=Math.max(5,Math.min(9,Number(state.lightRounds)||5));
+ const delay={flow:1050,pulse:820,boost:620}[level]||1050;
+ const modeLabel={react:'REAÇÃO',memory:'MEMORIZE',beat:'BEAT & MOVE'}[mode]||'REAÇÃO';
+ const levelLabel={flow:'FLOW',pulse:'PULSE',boost:'BOOST'}[level]||'FLOW';
+
+ const scene=document.createElement('div');scene.className='light-game-shell';
+ scene.innerHTML=
+ '<div class="light-game-top">'+
+   '<div class="light-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="light-tutor-msg">'+(mode==='memory'?'Observe a sequência. Depois repita.':mode==='beat'?'Entre no ritmo e responda no pulso.':'Foco no ponto de luz.')+'</strong><em>Seu ritmo, sua conquista ⚡</em></div></div>'+
+   '<div class="light-game-score"><span>⚡ <b class="light-score">0</b><small>pontos</small></span><span>◉ <b class="light-step">1</b>/'+total+'<small>etapas</small></span></div>'+
+   '<div class="light-game-actions"><button class="light-exit-btn" type="button">←</button><button class="light-pause-btn" type="button">⏸️</button></div>'+
+ '</div>'+
+ '<div class="light-stage">'+
+   '<div class="light-grid"></div>'+
+   '<div class="light-mode-chip">'+modeLabel+'</div>'+
+   '<div class="light-level-chip">'+levelLabel+'</div>'+
+   '<div class="light-center-ring"></div>'+
+   '<div class="light-pads">'+
+     '<button class="light-pad p0" data-light-pad="0" type="button"><span></span></button>'+
+     '<button class="light-pad p1" data-light-pad="1" type="button"><span></span></button>'+
+     '<button class="light-pad p2" data-light-pad="2" type="button"><span></span></button>'+
+     '<button class="light-pad p3" data-light-pad="3" type="button"><span></span></button>'+
+   '</div>'+
+   '<button class="light-orb game-object" type="button" aria-label="Ponto de luz"></button>'+
+   '<div class="light-beat-core"><span>BEAT</span><b>●</b></div>'+
+   '<div class="light-hint">'+(mode==='memory'?'🧠 Memorize a ordem.':mode==='beat'?'🎵 Toque quando o pulso acender.':'⚡ Toque no ponto de luz.')+'</div>'+
+   '<div class="light-praise" aria-live="polite"></div>'+
+ '</div>'+
+ '<div class="light-game-footer">'+
+   '<div class="light-progress"><span class="light-progress-fill"></span></div>'+
+   '<div class="light-footer-copy"><span>'+modeLabel+' • '+levelLabel+'</span><span>Foco • movimento • autonomia</span></div>'+
+ '</div>';
+ area.appendChild(scene);
+
+ const stage=scene.querySelector('.light-stage'),orb=scene.querySelector('.light-orb'),pads=[...scene.querySelectorAll('.light-pad')],score=scene.querySelector('.light-score'),step=scene.querySelector('.light-step'),fill=scene.querySelector('.light-progress-fill'),msg=scene.querySelector('.light-tutor-msg'),hint=scene.querySelector('.light-hint'),praise=scene.querySelector('.light-praise'),core=scene.querySelector('.light-beat-core');
+ let done=0,finished=false,timer=null,assistTimer=null,sequence=[],inputIndex=0,beatExpected=-1,beatWindow=false,audioCtx=null;
+
+ const clearTimers=()=>{clearTimeout(timer);clearTimeout(assistTimer);timer=assistTimer=null;};
+ const showPraise=(text,kind='good')=>{praise.textContent=text;praise.className='light-praise show '+kind;clearTimeout(praise._t);praise._t=setTimeout(()=>praise.classList.remove('show'),1200);};
+ const update=()=>{score.textContent=String(done*20);step.textContent=String(Math.min(total,done+1));fill.style.width=(done/total*100)+'%';};
+ const finish=()=>{
+  if(finished)return;finished=true;clearTimers();fill.style.width='100%';score.textContent=String(total*20);step.textContent=String(total);msg.textContent='Desafio concluído.';hint.textContent='⚡ Excelente controle!';showPraise('LEVEL COMPLETE ⚡');setTutor('success',MISSIONS.light.name,'Desafio concluído. Ótimo controle!','light_success',false);playVoice('light_success',false);setTimeout(finishStep,900);
+ };
+ const tone=(freq=440,dur=.06)=>{
+  try{
+   audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+   const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=freq;o.type='sine';g.gain.value=.035;o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+dur);
+  }catch(_){}
+ };
+ const armAssist=target=>{
+  clearTimeout(assistTimer);if(!state.guide||state.paused||finished)return;
+  assistTimer=setTimeout(()=>{state.assists++;target?.classList.add('assist');hint.textContent='👀 Procure o elemento que está pulsando.';},3800);
+ };
+ const randomPad=()=>Math.floor(Math.random()*4);
+ const moveOrb=()=>{
+  const r=stage.getBoundingClientRect(),size=Math.max(72,targetSize());
+  const margin=size/2+18;
+  const x=margin+Math.random()*Math.max(1,r.width-margin*2),y=80+margin+Math.random()*Math.max(1,r.height-160-margin*2);
+  orb.style.width=orb.style.height=size+'px';orb.style.left=x+'px';orb.style.top=y+'px';orb.classList.remove('hit','assist');requestAnimationFrame(()=>orb.classList.add('active'));armAssist(orb);
+ };
+ const completeOne=()=>{
+  done++;state.interactions++;buzz(18);tone(520+done*30,.055);update();showPraise(done===total?'⚡ LEVEL COMPLETE':'NICE! +20');if(done>=total){finish();return true;}return false;
+ };
+
+ const startReact=()=>{
+  orb.hidden=false;pads.forEach(p=>p.hidden=true);core.hidden=true;moveOrb();
+  orb.onclick=()=>{if(state.paused||finished)return;clearTimeout(assistTimer);orb.classList.add('hit');if(completeOne())return;timer=setTimeout(moveOrb,Math.max(260,delay*.45));};
+ };
+
+ const showMemorySequence=async ()=>{
+  clearTimers();inputIndex=0;sequence=[];const len=Math.min(4,2+Math.floor(done/2));
+  for(let i=0;i<len;i++)sequence.push(randomPad());
+  pads.forEach(p=>{p.classList.remove('active','assist','wrong');p.disabled=true;});
+  msg.textContent='Observe primeiro.';hint.textContent='🧠 Memorize a sequência.';
+  for(let i=0;i<sequence.length;i++){
+   if(finished)return;
+   const p=pads[sequence[i]];p.classList.add('active');tone(360+sequence[i]*70,.08);await new Promise(r=>setTimeout(r,Math.max(260,delay*.45)));p.classList.remove('active');await new Promise(r=>setTimeout(r,Math.max(120,delay*.18)));
+  }
+  pads.forEach(p=>p.disabled=false);msg.textContent='Agora repita.';hint.textContent='Sua vez ⚡';
+  armAssist(pads[sequence[0]]);
+ };
+ const startMemory=()=>{
+  orb.hidden=true;core.hidden=true;pads.forEach(p=>p.hidden=false);
+  pads.forEach((p,idx)=>p.onclick=()=>{
+   if(state.paused||finished||p.disabled)return;
+   clearTimeout(assistTimer);p.classList.add('active');setTimeout(()=>p.classList.remove('active'),180);tone(360+idx*70,.055);
+   if(idx!==sequence[inputIndex]){
+    state.collisions++;showPraise('Quase. Veja a sequência outra vez.','retry');pads.forEach(x=>x.disabled=true);timer=setTimeout(showMemorySequence,650);return;
+   }
+   state.interactions++;inputIndex++;
+   if(inputIndex>=sequence.length){
+    done++;update();showPraise('SEQUÊNCIA OK ⚡');if(done>=total){finish();return;}pads.forEach(x=>x.disabled=true);timer=setTimeout(showMemorySequence,620);
+   }else armAssist(pads[sequence[inputIndex]]);
+  });
+  showMemorySequence();
+ };
+
+ const beatCycle=()=>{
+  if(finished||state.paused)return;
+  beatExpected=randomPad();beatWindow=true;const p=pads[beatExpected];
+  pads.forEach(x=>x.classList.remove('active','assist','wrong'));p.classList.add('active');core.classList.add('pulse');tone(220+beatExpected*55,.055);buzz(12);
+  hint.textContent='🎵 AGORA';
+  clearTimeout(timer);timer=setTimeout(()=>{
+   beatWindow=false;p.classList.remove('active');core.classList.remove('pulse');
+   if(!finished){state.collisions++;hint.textContent='Sinta o próximo pulso.';timer=setTimeout(beatCycle,Math.max(240,delay*.38));}
+  },Math.max(380,delay*.68));
+ };
+ const startBeat=()=>{
+  orb.hidden=true;core.hidden=false;pads.forEach(p=>p.hidden=false);
+  pads.forEach((p,idx)=>p.onclick=()=>{
+   if(state.paused||finished)return;
+   if(!beatWindow){showPraise('Espere o pulso.','retry');return;}
+   clearTimeout(timer);beatWindow=false;core.classList.remove('pulse');pads[beatExpected]?.classList.remove('active');
+   if(idx!==beatExpected){state.collisions++;showPraise('Quase. Siga a luz.','retry');timer=setTimeout(beatCycle,Math.max(260,delay*.45));return;}
+   if(completeOne())return;showPraise('ON BEAT ⚡');timer=setTimeout(beatCycle,Math.max(260,delay*.45));
+  });
+  timer=setTimeout(beatCycle,600);
+ };
+
+ scene.querySelector('.light-exit-btn').onclick=()=>show('lightsetup');
+ scene.querySelector('.light-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';if(state.paused){clearTimers();hint.textContent='Pausado.';}else{hint.textContent='Vamos continuar.';if(mode==='react')moveOrb();else if(mode==='memory')showMemorySequence();else beatCycle();}};
+ update();
+ if(mode==='memory')startMemory();else if(mode==='beat')startBeat();else startReact();
+
+ state.cleanup=()=>{finished=true;clearTimers();try{audioCtx?.close();}catch(_){}screen.classList.remove('light-immersive');app.classList.remove('light-game-mode');document.body.classList.remove('light-game-active');area.classList.remove('light-activity');};
 }
 function sensory(){
  const f=document.createElement('div');f.className='sensory-field';$('#activityArea').appendChild(f);let n=0;const cols=['#4ca6ff','#ff71a9','#77cf87','#ffd95f','#a98df3'];
@@ -846,7 +985,7 @@ function physical(){
 function reports(){try{return JSON.parse(localStorage.getItem(reportsKey)||'[]');}catch(e){return[];}}
 function saveReports(list){try{localStorage.setItem(reportsKey,JSON.stringify(list.slice(0,30)));}catch(e){}}
 function finishSession(){
- clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,roadRoute:state.circuit.includes('road')?state.roadRoute:null,targetReach:state.circuit.includes('target')?state.targetReach:null,targetCount:state.circuit.includes('target')?state.targetCount:null,targetTheme:state.circuit.includes('target')?state.targetTheme:null,handsMode:state.circuit.includes('hands')?state.handsMode:null,handsRounds:state.circuit.includes('hands')?state.handsRounds:null,handsPace:state.circuit.includes('hands')?state.handsPace:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
+ clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,roadRoute:state.circuit.includes('road')?state.roadRoute:null,targetReach:state.circuit.includes('target')?state.targetReach:null,targetCount:state.circuit.includes('target')?state.targetCount:null,targetTheme:state.circuit.includes('target')?state.targetTheme:null,handsMode:state.circuit.includes('hands')?state.handsMode:null,handsRounds:state.circuit.includes('hands')?state.handsRounds:null,handsPace:state.circuit.includes('hands')?state.handsPace:null,lightMode:state.circuit.includes('light')?state.lightMode:null,lightLevel:state.circuit.includes('light')?state.lightLevel:null,lightRounds:state.circuit.includes('light')?state.lightRounds:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
  $('#doneStats').innerHTML='<div class="summary-box"><strong>'+state.circuit.length+'</strong><small>missões</small></div><div class="summary-box"><strong>'+state.interactions+'</strong><small>interações</small></div><div class="summary-box"><strong>'+duration+' min</strong><small>duração</small></div>';
  $('#gameProgressFill').style.width='100%';show('done');playVoice('celebrate',false);
 }
@@ -863,7 +1002,7 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):b.dataset.mission==='hands'?show('handssetup'):startCircuit([b.dataset.mission]));
+$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):b.dataset.mission==='hands'?show('handssetup'):b.dataset.mission==='light'?show('lightsetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
@@ -883,6 +1022,10 @@ document.querySelectorAll('[data-hands-mode]').forEach(b=>b.onclick=()=>{state.h
 document.querySelectorAll('[data-hands-rounds]').forEach(b=>b.onclick=()=>{state.handsRounds=Number(b.dataset.handsRounds)||3;document.querySelectorAll('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
 document.querySelectorAll('[data-hands-pace]').forEach(b=>b.onclick=()=>{state.handsPace=b.dataset.handsPace;document.querySelectorAll('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
 $('#startHandsMission').onclick=()=>startCircuit(['hands']);
+document.querySelectorAll('[data-light-mode]').forEach(b=>b.onclick=()=>{state.lightMode=b.dataset.lightMode;document.querySelectorAll('[data-light-mode]').forEach(x=>x.classList.toggle('active',x===b));syncLightSummary();});
+document.querySelectorAll('[data-light-level]').forEach(b=>b.onclick=()=>{state.lightLevel=b.dataset.lightLevel;document.querySelectorAll('[data-light-level]').forEach(x=>x.classList.toggle('active',x===b));syncLightSummary();});
+document.querySelectorAll('[data-light-rounds]').forEach(b=>b.onclick=()=>{state.lightRounds=Number(b.dataset.lightRounds)||5;document.querySelectorAll('[data-light-rounds]').forEach(x=>x.classList.toggle('active',x===b));syncLightSummary();});
+$('#startLightMission').onclick=()=>startCircuit(['light']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
 [['targetSize','targetSizeValue',' px'],['speed','speedValue','/5'],['amplitude','amplitudeValue','/5'],['stimuli','stimuliValue','/5']].forEach(([id,out,suf])=>$('#'+id).oninput=e=>$('#'+out).textContent=e.target.value+suf);
@@ -890,5 +1033,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=36').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=37').catch(()=>{});
 })();
