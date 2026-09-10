@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const v='54';
+  const v='57';
   const files=[
     'app-base-v39.js',
     'sensory-v40.js',
@@ -8,7 +8,7 @@
     'naming-v42.js',
     'final-v44.js',
     'identity-v45.js',
-    'direct-route-v54.js'
+    'direct-route-v57.js'
   ];
   if(document.readyState==='loading'){
     document.write(files.map(src=>'<script src="'+src+'?v='+v+'"></script>').join(''));
