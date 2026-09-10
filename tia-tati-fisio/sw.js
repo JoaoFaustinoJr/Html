@@ -1,11 +1,13 @@
-const CACHE='tia-tati-v40-20260910';
+const CACHE='tia-tati-v41-20260910';
 const CORE=[
- './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest','./sensory-v40.css','./sensory-v40.js',
+ './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest','./sensory-v40.css','./sensory-v40.js','./remaining-v41.css','./remaining-v41.js',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp','./assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg','./assets/bee-game.svg','./assets/bee-garden.svg','./assets/target-board.svg','./assets/hands-board.svg','./assets/pulse-lab.svg','./assets/cards/beat-move.webp','./assets/cards/memorize.webp','./assets/cards/reflexo-neon.webp'
 ];
 const inject=html=>{
  if(!html.includes('sensory-v40.css'))html=html.replace('</head>','<link rel="stylesheet" href="sensory-v40.css"></head>');
+ if(!html.includes('remaining-v41.css'))html=html.replace('</head>','<link rel="stylesheet" href="remaining-v41.css"></head>');
  if(!html.includes('sensory-v40.js'))html=html.replace('</body>','<script src="sensory-v40.js"></script></body>');
+ if(!html.includes('remaining-v41.js'))html=html.replace('</body>','<script src="remaining-v41.js"></script></body>');
  return html;
 };
 const enhancedResponse=async response=>{
