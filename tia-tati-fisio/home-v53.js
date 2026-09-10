@@ -2,6 +2,11 @@
 'use strict';
 const VERSION='53';
 
+const linkFix=document.createElement('link');
+linkFix.rel='stylesheet';
+linkFix.href='home-v53-linkfix.css?v='+VERSION;
+document.head.appendChild(linkFix);
+
 document.addEventListener('click',e=>{
  const sc=e.target.closest('[data-scroll]');
  if(!sc)return;
