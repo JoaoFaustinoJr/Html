@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 720">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+  <stop stop-color="#e6f7ff"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#fff0f6"/>
+ </linearGradient>
+ <radialGradient id="blue"><stop stop-color="#fff"/><stop offset="1" stop-color="#d7f1ff"/></radialGradient>
+ <radialGradient id="pink"><stop stop-color="#fff"/><stop offset="1" stop-color="#ffe0ec"/></radialGradient>
+</defs>
+<rect width="420" height="720" fill="url(#bg)"/>
+<circle cx="84" cy="132" r="92" fill="url(#blue)" opacity=".86"/>
+<circle cx="336" cy="132" r="92" fill="url(#pink)" opacity=".86"/>
+<circle cx="84" cy="584" r="98" fill="#dff7f1" opacity=".55"/>
+<circle cx="336" cy="584" r="98" fill="#fff0d9" opacity=".55"/>
+<g opacity=".55" fill="none" stroke-width="3" stroke-linecap="round">
+ <path d="M210 170v380" stroke="#b8cbd8" stroke-dasharray="7 12"/>
+ <path d="M110 354 C150 310 175 310 210 354 C245 310 270 310 310 354" stroke="#efb4ce"/>
+ <path d="M110 390 C150 434 175 434 210 390 C245 434 270 434 310 390" stroke="#aad6e8"/>
+</g>
+<g fill="#fff" opacity=".82">
+ <circle cx="43" cy="58" r="8"/><circle cx="378" cy="72" r="10"/><circle cx="55" cy="660" r="9"/><circle cx="368" cy="645" r="8"/>
+</g>
+<g font-family="Arial" font-weight="700" text-anchor="middle">
+ <text x="110" y="690" font-size="18" fill="#5e8fab">COORDENAÇÃO</text>
+ <text x="310" y="690" font-size="18" fill="#d7789d">BILATERAL</text>
+</g>
+<path d="M210 323
+ C196 302 162 306 162 335
+ C162 371 210 398 210 398
+ C210 398 258 371 258 335
+ C258 306 224 302 210 323Z" fill="#ff7fae" opacity=".9"/>
+</svg>

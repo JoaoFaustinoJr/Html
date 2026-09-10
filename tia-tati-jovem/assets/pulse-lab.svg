@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071226"/><stop offset=".52" stop-color="#17164d"/><stop offset="1" stop-color="#2b103e"/></linearGradient>
+ <radialGradient id="g1"><stop stop-color="#fff"/><stop offset=".15" stop-color="#71f8ff"/><stop offset="1" stop-color="#00d9f0" stop-opacity="0"/></radialGradient>
+ <radialGradient id="g2"><stop stop-color="#fff"/><stop offset=".14" stop-color="#ff70d3"/><stop offset="1" stop-color="#ff42c2" stop-opacity="0"/></radialGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="720" height="420" rx="34" fill="url(#bg)"/>
+<g opacity=".16" stroke="#79a6ff" stroke-width="1"><path d="M0 70h720M0 140h720M0 210h720M0 280h720M0 350h720"/><path d="M90 0v420M180 0v420M270 0v420M360 0v420M450 0v420M540 0v420M630 0v420"/></g>
+<g filter="url(#glow)"><circle cx="150" cy="120" r="76" fill="url(#g1)"/><circle cx="572" cy="118" r="62" fill="url(#g2)"/><circle cx="508" cy="306" r="70" fill="url(#g1)"/><circle cx="245" cy="315" r="58" fill="url(#g2)"/></g>
+<path d="M150 120 C245 80 300 250 390 205 S500 300 572 118" fill="none" stroke="#63f5ff" stroke-width="8" stroke-linecap="round" opacity=".7" filter="url(#glow)"/>
+<g fill="#fff" font-family="Arial,Helvetica,sans-serif"><text x="34" y="58" font-size="22" font-weight="700" letter-spacing="4" fill="#72f8ff">PULSE LAB</text><text x="34" y="365" font-size="18" font-weight="700" fill="#d9ddff">TOQUE • CONECTE • DESCUBRA</text></g>
+<circle cx="360" cy="210" r="66" fill="#0b1734" stroke="#65f6ff" stroke-width="5" filter="url(#glow)"/><path d="M331 212h30l-13 42 48-62h-31l15-36z" fill="#ffeb58" filter="url(#glow)"/>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 140">
+<defs>
+  <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+    <stop stop-color="#35b5ff"/><stop offset=".42" stop-color="#0878d8"/><stop offset="1" stop-color="#034d98"/>
+  </linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+    <stop stop-color="#b9eaff"/><stop offset=".52" stop-color="#548aab"/><stop offset="1" stop-color="#17394f"/>
+  </linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-opacity=".32"/></filter>
+</defs>
+<g filter="url(#shadow)">
+  <ellipse cx="45" cy="126" rx="30" ry="7" fill="rgba(0,0,0,.16)"/>
+  <path d="M21 117 Q15 111 16 98 L20 41 Q21 23 31 14 Q37 8 45 8 Q53 8 59 14 Q69 23 70 41 L74 98 Q75 111 69 117 Q60 126 45 128 Q30 126 21 117Z" fill="url(#body)" stroke="#fff" stroke-width="3"/>
+  <path d="M28 45 Q30 26 37 20 Q41 17 45 17 Q49 17 53 20 Q60 26 62 45Z" fill="url(#glass)"/>
+  <path d="M27 51 H63 L66 89 H24Z" fill="#0c5ca6" opacity=".22"/>
+  <path d="M29 55 H61 L63 78 H27Z" fill="url(#glass)" opacity=".96"/>
+  <path d="M24 94 Q45 101 66 94" fill="none" stroke="#d7f1ff" stroke-width="2.2" opacity=".7"/>
+  <rect x="18" y="42" width="7" height="25" rx="3" fill="#172935"/><rect x="65" y="42" width="7" height="25" rx="3" fill="#172935"/>
+  <rect x="16" y="89" width="8" height="25" rx="3" fill="#172935"/><rect x="66" y="89" width="8" height="25" rx="3" fill="#172935"/>
+  <path d="M25 110 Q45 118 65 110" fill="none" stroke="#f24c61" stroke-width="4" stroke-linecap="round"/>
+  <rect x="28" y="113" width="34" height="8" rx="3" fill="#eaf4f8" stroke="#1c4b70" stroke-width="1.5"/>
+  <text x="45" y="119" text-anchor="middle" font-family="Arial,sans-serif" font-size="5.5" font-weight="700" fill="#154f84">TIA TATI</text>
+  <path d="M25 35 Q45 25 65 35" fill="none" stroke="#ffffff" stroke-width="2" opacity=".55"/>
+  <circle cx="29" cy="105" r="2.4" fill="#ff6c68"/><circle cx="61" cy="105" r="2.4" fill="#ff6c68"/>
+</g>
+</svg>
