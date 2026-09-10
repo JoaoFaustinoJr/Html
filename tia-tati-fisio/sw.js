@@ -1,4 +1,4 @@
-const CACHE='tia-tati-v44-20260910';
+const CACHE='tia-tati-v44-final-20260910';
 const CORE=[
  './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest',
  './sensory-v40.css','./sensory-v40.js','./remaining-v41.css','./remaining-v41.js',
