@@ -1,6 +1,6 @@
 (()=>{
   'use strict';
-  const v='52';
+  const v='53';
   const files=[
     'app-base-v39.js',
     'sensory-v40.js',
