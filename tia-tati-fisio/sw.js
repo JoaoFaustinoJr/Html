@@ -1,6 +1,6 @@
-const CACHE='tia-tati-v25-20260909';
+const CACHE='tia-tati-v26-20260909';
 const CORE=[
- './','./index.html','./styles.css?v=25','./app.js?v=25','./manifest.webmanifest',
+ './','./index.html','./styles.css?v=26','./app.js?v=26','./manifest.webmanifest',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp','./assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg','./assets/bee-game.svg','./assets/bee-garden.svg'
 ];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
