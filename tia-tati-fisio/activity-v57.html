@@ -6,46 +6,95 @@
 <meta name="theme-color" content="#f8fbff">
 <title>Tia Tati – Atividade</title>
 <style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-#frame{position:fixed;inset:0;width:100%;height:100dvh;border:0;background:#f8fbff;opacity:0;transition:opacity .14s ease}
-#frame.ready{opacity:1}
-#boot{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:linear-gradient(135deg,#fff8fc,#eefaff);color:#164b87;text-align:center}
+html,body{margin:0;min-height:100%;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+#boot{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:linear-gradient(135deg,#fff8fc,#eefaff);color:#164b87;text-align:center}
 #boot.hide{display:none}#boot>div{display:grid;gap:9px;place-items:center;padding:24px}#boot b{font-size:42px}#boot strong{font-size:19px}#boot small{color:#71849a}#error{display:none;max-width:320px;line-height:1.45;margin-top:14px}#error a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:999px;background:#ff4fa3;color:#fff;text-decoration:none;font-weight:850}
+#mount{opacity:0;transition:opacity .12s ease}#mount.ready{opacity:1}
 </style>
 </head>
 <body>
 <div id="boot"><div><b>💗</b><strong>Abrindo sua atividade…</strong><small>Tia Tati • Fisio Sensorial</small><div id="error">A atividade demorou mais do que o esperado para abrir.<br><a href="./?v=57">Voltar ao início</a></div></div></div>
-<iframe id="frame" title="Atividade Tia Tati" src="about:blank" allow="autoplay; fullscreen"></iframe>
+<div id="mount"></div>
 <script>
-(()=>{
+(async()=>{
 'use strict';
-const p=new URLSearchParams(location.search);
-const key=p.get('open')||'road';
-const frame=document.getElementById('frame');
+const params=new URLSearchParams(location.search);
+const key=params.get('open')||'road';
 const boot=document.getElementById('boot');
 const error=document.getElementById('error');
-const src=new URL('./activity.html',location.href);
-src.searchParams.set('route',key);
-src.searchParams.set('shell','57');
-src.searchParams.set('t',Date.now().toString());
-frame.src=src.href;
-let done=false;
-function reveal(){if(done)return;done=true;frame.classList.add('ready');boot.classList.add('hide');}
-function fail(){if(done)return;error.style.display='block';}
-window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='tia-tati-route-ready'&&e.data.route===key)reveal();});
-frame.addEventListener('load',()=>{
+const mount=document.getElementById('mount');
+let finished=false;
+
+function fail(msg){
+ if(finished)return;
+ console.error('[Tia Tati v57]',msg||'Falha ao abrir atividade');
+ error.style.display='block';
+}
+function reveal(){
+ if(finished)return;
+ finished=true;
+ mount.classList.add('ready');
+ boot.classList.add('hide');
+ window.scrollTo(0,0);
+}
+function addCss(href){
+ const l=document.createElement('link');
+ l.rel='stylesheet';l.href=href;document.head.appendChild(l);
+}
+function addScript(src){
+ return new Promise((resolve,reject)=>{
+  const s=document.createElement('script');
+  s.src=src;s.async=false;s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+ });
+}
+function activeAwayFromHome(){
+ const active=document.querySelector('.screen.active');
+ return !!active&&active.id!=='screen-home';
+}
+
+try{
+ const source=new URL('./activity.html',location.href);
+ source.searchParams.set('v','57');
+ source.searchParams.set('t',Date.now().toString());
+ const response=await fetch(source.href,{cache:'no-store'});
+ if(!response.ok)throw new Error('activity.html '+response.status);
+ const text=await response.text();
+ const parsed=new DOMParser().parseFromString(text,'text/html');
+ parsed.querySelectorAll('script').forEach(s=>s.remove());
+ mount.innerHTML=parsed.body.innerHTML;
+ addCss('./styles.css?v=57&t='+Date.now());
+ await addScript('./app.js?v=57&t='+Date.now());
+
+ // O app.js carrega os módulos em sequência. A própria direct-route-v57
+ // lê ?open= da URL desta página e seleciona a missão nativa.
  const started=Date.now();
  const timer=setInterval(()=>{
-  if(done){clearInterval(timer);return;}
-  try{
-   const d=frame.contentDocument||frame.contentWindow.document;
-   const active=d.querySelector('.screen.active');
-   if(active&&active.id!=='screen-home'){clearInterval(timer);reveal();return;}
-  }catch(_){ }
-  if(Date.now()-started>6500){clearInterval(timer);fail();}
- },90);
-});
-setTimeout(fail,7500);
+  if(activeAwayFromHome()){
+   clearInterval(timer);setTimeout(reveal,80);return;
+  }
+  if(Date.now()-started>9000){
+   clearInterval(timer);fail('A rota '+key+' não saiu da home');
+  }
+ },80);
+
+ // Segundo caminho de segurança: quando o botão já tiver seu handler,
+ // aciona diretamente a missão escolhida.
+ const map={
+  road:'[data-mission="road"]',bee:'[data-mission="bee"]',target:'[data-mission="target"]',hands:'[data-mission="hands"]',sensory:'[data-mission="sensory"]',breathe:'[data-mission="breathe"]',
+  react:'[data-youth-light="react"]',memory:'[data-youth-light="memory"]',beat:'[data-youth-light="beat"]',pulse:'[data-youth-sensory="pulse"]',restart:'[data-youth-breathe="reset"]',movequest:'[data-youth-physical="quest"]',
+  circuit:'#circuitBtn',voice:'#voiceStudioBtn',reports:'#reportsBtn',fisio:'#settingsTopBtn',interventions:'#interventionsBtn'
+ };
+ let tries=0;
+ const rescue=setInterval(()=>{
+  if(finished||activeAwayFromHome()){clearInterval(rescue);return;}
+  tries++;
+  const el=document.querySelector(map[key]||'');
+  if(el&&typeof el.onclick==='function')el.click();
+  else if(el)el.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
+  if(tries>70)clearInterval(rescue);
+ },120);
+
+}catch(err){fail(err&&err.message?err.message:String(err));}
 })();
 </script>
 </body>
