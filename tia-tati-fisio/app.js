@@ -1,13 +1,14 @@
 (()=>{
   'use strict';
-  const v='47';
+  const v='49';
   const files=[
     'app-base-v39.js',
     'sensory-v40.js',
     'remaining-v41.js',
     'naming-v42.js',
     'final-v44.js',
-    'identity-v45.js'
+    'identity-v45.js',
+    'legacy-bridge-v49.js'
   ];
   if(document.readyState==='loading'){
     document.write(files.map(src=>'<script src="'+src+'?v='+v+'"></script>').join(''));
