@@ -4,369 +4,127 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef9ff">
-<meta name="description" content="Tia Tati – Fisio Sensorial. Escolha entre a Área Kids e o Modo Jovem.">
+<meta name="description" content="Tia Tati – Fisio Sensorial. Portal para Área Kids e Modo Jovem.">
 <title>Tia Tati – Fisio Sensorial</title>
 <style>
 :root{
-  --blue:#114f91;
-  --blue-deep:#0a3972;
-  --pink:#ff4f9a;
-  --pink-soft:#ffe6f1;
-  --cyan:#20d9ee;
-  --ink:#17375e;
-  --muted:#60758d;
-  --line:#dcecf4;
-  --white:#fff;
-  --shadow:0 24px 60px rgba(34,79,111,.14);
+  --blue:#0f4d8c;--blue2:#173b72;--pink:#f64f9e;--pink2:#e94791;
+  --ink:#173b67;--muted:#60758d;--line:#dbeaf2;--white:#fff;
+  --cyan:#22d4ee;--shadow:0 18px 48px rgba(31,74,105,.12)
 }
 *{box-sizing:border-box}
 html{min-height:100%;background:#eef9ff}
 body{
-  margin:0;
-  min-height:100vh;
+  margin:0;min-height:100vh;overflow-x:hidden;
   font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--ink);
   background:
-    radial-gradient(circle at 12% 5%,rgba(255,205,226,.72),transparent 24%),
-    radial-gradient(circle at 92% 9%,rgba(168,235,239,.72),transparent 28%),
-    linear-gradient(180deg,#effbff 0%,#fbfeff 48%,#fff7fb 100%);
-  overflow-x:hidden;
+    radial-gradient(circle at 7% 5%,rgba(255,210,230,.58),transparent 24%),
+    radial-gradient(circle at 94% 7%,rgba(180,239,241,.68),transparent 28%),
+    linear-gradient(180deg,#eefaff 0%,#fbfeff 52%,#fff6fa 100%)
 }
-a{-webkit-tap-highlight-color:transparent}
-.portal{width:min(1240px,100%);margin:0 auto;padding:14px 18px 30px}
+a{-webkit-tap-highlight-color:transparent}.portal{width:min(1180px,100%);margin:auto;padding:12px 14px 28px}
 
-/* cabeçalho propositalmente limpo */
+/* Cabeçalho simples: marca + nome profissional. */
 .topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  min-height:72px;
-  padding:8px 14px;
-  border:1px solid rgba(255,255,255,.92);
-  border-radius:24px;
-  background:rgba(255,255,255,.78);
-  box-shadow:0 10px 30px rgba(32,78,108,.07);
-  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  min-height:72px;padding:10px 16px;border-radius:24px;
+  background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.98);
+  box-shadow:0 9px 28px rgba(34,76,102,.07);backdrop-filter:blur(10px)
 }
-.logo{display:flex;align-items:center;gap:13px;min-width:0}
-.logo-avatar{
-  width:54px;height:54px;flex:0 0 auto;
-  border-radius:17px;
-  object-fit:cover;
-  object-position:center 22%;
-  border:3px solid #fff;
-  box-shadow:0 7px 18px rgba(33,79,108,.13)
-}
-.logo-copy{display:grid;line-height:1}
-.logo-name{
-  font-family:"Segoe Print","Comic Sans MS",cursive;
-  font-size:clamp(1.65rem,3vw,2.35rem);
-  font-weight:900;
-  letter-spacing:-.07em;
-  color:var(--blue);
-  white-space:nowrap;
-}
-.logo-sub{
-  display:inline-flex;
-  width:max-content;
-  margin-top:4px;
-  padding:4px 9px;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--pink),#ef4a91);
-  color:#fff;
-  font-size:.61rem;
-  font-weight:950;
-  letter-spacing:.12em;
-}
-.top-phrase{font-size:.82rem;font-weight:850;color:#57718b;text-align:right}
-.top-phrase b{color:var(--pink)}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}.brand-mark{display:grid;line-height:1;min-width:0}
+.brand-script{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:clamp(1.8rem,3.2vw,2.55rem);font-weight:950;letter-spacing:-.07em;color:var(--blue);white-space:nowrap}
+.brand-pill{display:inline-flex;width:max-content;margin-top:4px;padding:4px 9px;border-radius:999px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font-size:.58rem;font-weight:950;letter-spacing:.12em}
+.professional{text-align:right;line-height:1.25}.professional strong{display:block;font-size:.9rem;color:var(--blue2)}.professional small{display:block;margin-top:3px;color:#718397;font-size:.72rem;font-weight:750}
 
 .hero{
-  position:relative;
-  display:grid;
-  grid-template-columns:minmax(320px,.88fr) minmax(0,1.12fr);
-  gap:26px;
-  align-items:stretch;
-  margin-top:14px;
-  min-height:640px;
-  border-radius:34px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.95);
+  display:grid;grid-template-columns:minmax(330px,.9fr) minmax(0,1.1fr);gap:22px;
+  margin-top:14px;padding:22px;border-radius:34px;
+  background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(237,250,255,.96) 55%,rgba(255,241,248,.97));
+  border:1px solid rgba(255,255,255,.98);box-shadow:var(--shadow);overflow:hidden
+}
+
+/* A arte fica sozinha: nenhum texto sobreposto ao rosto ou à imagem. */
+.art-panel{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  min-height:590px;padding:12px;border-radius:28px;overflow:hidden;
   background:
-    radial-gradient(circle at 57% 12%,rgba(255,255,255,.98),rgba(255,255,255,.64) 34%,transparent 56%),
-    linear-gradient(135deg,#dff6ff 0%,#f7fdff 47%,#fff0f7 100%);
-  box-shadow:var(--shadow);
+    radial-gradient(circle at 50% 46%,#fff 0 28%,rgba(255,255,255,.74) 48%,transparent 66%),
+    linear-gradient(180deg,#dff7ff 0%,#fff4f9 70%,#e7f7e8 100%)
 }
-.hero:before{
-  content:"";
-  position:absolute;inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(circle at 4% 14%,rgba(255,255,255,.8) 0 3%,transparent 3.3%),
-    radial-gradient(circle at 95% 13%,rgba(255,255,255,.75) 0 4%,transparent 4.3%);
-  opacity:.7
-}
-.hero:after{
-  content:"";
-  position:absolute;left:0;right:0;bottom:0;height:26%;
-  background:linear-gradient(180deg,transparent,rgba(208,241,222,.55));
-  pointer-events:none
-}
+.art-panel:after{content:"";position:absolute;left:-8%;right:-8%;bottom:-18%;height:36%;border-radius:50%;background:rgba(172,222,178,.35);pointer-events:none}
+.tati-art{position:relative;z-index:2;width:100%;height:565px;object-fit:contain;object-position:center;display:block;filter:drop-shadow(0 16px 24px rgba(31,69,95,.12))}
+.art-caption{position:absolute;z-index:3;left:16px;right:16px;bottom:14px;text-align:center;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid #efdfe8;color:var(--blue);font-family:"Segoe Print","Comic Sans MS",cursive;font-weight:900;font-size:.82rem;box-shadow:0 7px 18px rgba(31,72,98,.08)}
 
-/* Arte grande da Tatiana: sem crop */
-.tati-stage{
-  position:relative;
-  z-index:2;
-  min-height:640px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  padding:26px 8px 0 18px;
-}
-.tati-halo{
-  position:absolute;
-  left:50%;top:50%;
-  width:430px;height:430px;
-  transform:translate(-50%,-48%);
-  border-radius:50%;
-  background:radial-gradient(circle,#fff 0 35%,rgba(255,255,255,.42) 58%,transparent 70%);
-  pointer-events:none
-}
-.tati-art{
-  position:relative;
-  z-index:2;
-  width:min(100%,485px);
-  height:600px;
-  object-fit:contain;
-  object-position:center bottom;
-  filter:drop-shadow(0 18px 24px rgba(34,76,100,.15));
-}
-.tati-note{
-  position:absolute;
-  z-index:4;
-  left:18px;top:28px;
-  max-width:155px;
-  padding:12px 14px;
-  border-radius:24px 24px 24px 7px;
-  background:rgba(255,239,247,.92);
-  color:#174e86;
-  font-family:"Segoe Print","Comic Sans MS",cursive;
-  font-weight:900;
-  font-size:.95rem;
-  line-height:1.24;
-  transform:rotate(-4deg);
-  box-shadow:0 8px 22px rgba(39,75,100,.08)
-}
-.tati-note span{color:var(--pink)}
+.content{display:flex;flex-direction:column;justify-content:center;padding:20px 10px 14px 4px}.eyebrow{display:inline-flex;width:max-content;padding:7px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#718296;font-size:.65rem;font-weight:950;letter-spacing:.12em}
+.content h1{margin:14px 0 10px;font-family:"Segoe Print","Comic Sans MS",cursive;font-size:clamp(2.75rem,5.2vw,4.85rem);line-height:.93;letter-spacing:-.055em;color:#123f7f}.content h1 em{display:block;color:var(--pink);font-style:normal}.lead{max-width:640px;margin:0;color:#5b7188;font-size:1rem;line-height:1.55;font-weight:650}
 
-.hero-content{
-  position:relative;
-  z-index:3;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:42px 34px 36px 6px;
-}
-.kicker{
-  display:inline-flex;
-  width:max-content;
-  padding:7px 11px;
-  border-radius:999px;
-  background:#ffffffc9;
-  border:1px solid #dcecf4;
-  font-size:.68rem;
-  font-weight:950;
-  letter-spacing:.12em;
-  color:#6d8093
-}
-.hero h1{
-  margin:13px 0 9px;
-  max-width:700px;
-  font-family:"Segoe Print","Comic Sans MS",cursive;
-  font-size:clamp(2.65rem,5.6vw,5.1rem);
-  line-height:.91;
-  letter-spacing:-.055em;
-  color:#113d80;
-}
-.hero h1 em{display:block;color:var(--pink);font-style:normal}
-.hero-lead{max-width:660px;margin:0;color:#597087;font-size:1rem;line-height:1.55;font-weight:650}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:25px}.choice{position:relative;display:flex;flex-direction:column;min-height:260px;padding:18px;border-radius:27px;text-decoration:none;overflow:hidden;transition:.18s ease}.choice:hover{transform:translateY(-3px)}.choice:active{transform:scale(.985)}
+.choice-kids{color:#174f8c;background:linear-gradient(145deg,#fff8bd,#e5f9ff 54%,#ffe8f2);border:2px solid #fff;box-shadow:0 13px 30px rgba(54,91,113,.11)}
+.choice-youth{color:#fff;background:radial-gradient(circle at 82% 16%,rgba(0,232,255,.25),transparent 26%),radial-gradient(circle at 18% 80%,rgba(255,56,194,.24),transparent 31%),linear-gradient(145deg,#081533,#1d215c 56%,#35145f);border:2px solid rgba(66,227,255,.42);box-shadow:0 15px 34px rgba(14,29,79,.23)}
+.choice-top{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:72px}.choice-icons{font-size:1.8rem;letter-spacing:.08em}.choice-youth .choice-icons{text-shadow:0 0 12px #22d8f0}.choice-badge{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.88);font-size:.64rem;font-weight:950;letter-spacing:.1em}.choice-youth .choice-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff}
+.choice h2{margin:4px 0 7px;font-size:clamp(2rem,3.6vw,2.85rem);line-height:.95;letter-spacing:-.05em}.choice p{margin:0 0 14px;font-size:.82rem;line-height:1.42;font-weight:680}.choice-kids p{color:#5a7187}.choice-youth p{color:#d9e5ff}.enter{margin-top:auto;display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:10px 12px 10px 15px;border-radius:999px;font-size:.82rem;font-weight:950}.choice-kids .enter{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 9px 20px rgba(246,79,158,.2)}.choice-youth .enter{background:linear-gradient(90deg,#19daed,#2ba8ff);color:#082b56;box-shadow:0 0 22px rgba(25,218,237,.22)}.enter b{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.27);font-size:1.1rem}.choice-youth .enter b{background:rgba(255,255,255,.6)}
 
-.choices{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:25px;
-}
-.choice{
-  position:relative;
-  min-height:255px;
-  overflow:hidden;
-  border-radius:28px;
-  text-decoration:none;
-  transition:transform .18s ease,box-shadow .18s ease;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:18px;
-}
-.choice:hover{transform:translateY(-4px)}
-.choice:active{transform:scale(.985)}
-.choice-kids{
-  color:#164d88;
-  border:2px solid rgba(255,255,255,.96);
-  background:
-    radial-gradient(circle at 22% 18%,rgba(255,255,255,.93),transparent 30%),
-    linear-gradient(145deg,#fff7b9,#e5f9ff 52%,#ffe7f2);
-  box-shadow:0 16px 34px rgba(50,95,116,.12)
-}
-.choice-kids:before{
-  content:"🚗   🐝   🌸";
-  position:absolute;
-  left:17px;top:20px;
-  font-size:2.2rem;
-  letter-spacing:.12em;
-  filter:drop-shadow(0 5px 8px rgba(42,84,104,.12))
-}
-.choice-kids:after{
-  content:"🎯  🤲  🫧  🌿";
-  position:absolute;
-  right:17px;top:74px;
-  font-size:1.65rem;
-  letter-spacing:.08em
-}
-.choice-youth{
-  color:#fff;
-  border:2px solid rgba(73,227,255,.45);
-  background:
-    radial-gradient(circle at 78% 22%,rgba(0,231,255,.28),transparent 25%),
-    radial-gradient(circle at 26% 75%,rgba(255,61,199,.28),transparent 30%),
-    linear-gradient(145deg,#07142f,#1b2156 55%,#30135b);
-  box-shadow:0 16px 38px rgba(18,30,81,.24),inset 0 0 0 1px rgba(255,255,255,.05)
-}
-.choice-youth:before{
-  content:"⚡   🎵   🧠";
-  position:absolute;
-  left:17px;top:20px;
-  font-size:2.05rem;
-  letter-spacing:.1em;
-  text-shadow:0 0 14px #21eaff
-}
-.choice-youth:after{
-  content:"◉   ◉   ◉";
-  position:absolute;
-  right:14px;top:69px;
-  font-size:2.15rem;
-  color:#29eaff;
-  letter-spacing:.04em;
-  text-shadow:0 0 12px #29eaff,0 0 24px #ff3fc8
-}
-.choice-label{position:relative;z-index:2;font-size:.69rem;font-weight:950;letter-spacing:.12em;opacity:.8}
-.choice h2{position:relative;z-index:2;margin:4px 0 4px;font-size:clamp(2rem,4vw,3rem);line-height:.95;letter-spacing:-.05em}
-.choice-kids h2{color:#1d5aaa}
-.choice-youth h2{color:#fff;text-shadow:0 0 13px rgba(72,235,255,.28)}
-.choice p{position:relative;z-index:2;margin:0 0 13px;font-size:.82rem;line-height:1.4;font-weight:700;max-width:280px}
-.choice-kids p{color:#5d7187}.choice-youth p{color:#d7e1ff}
-.enter{
-  position:relative;z-index:2;
-  display:flex;align-items:center;justify-content:space-between;
-  min-height:48px;
-  padding:10px 13px 10px 15px;
-  border-radius:999px;
-  font-size:.82rem;font-weight:950
-}
-.choice-kids .enter{background:linear-gradient(135deg,#ff5aa5,#f14a91);color:#fff;box-shadow:0 9px 22px rgba(255,79,154,.23)}
-.choice-youth .enter{background:linear-gradient(90deg,#12dbea,#2aa9ff);color:#0b244e;box-shadow:0 0 20px rgba(25,221,238,.25)}
-.enter b{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#ffffff2e;font-size:1.15rem}
-.choice-youth .enter b{background:#ffffff63;color:#083663}
+.values{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.values span{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.88);border:1px solid #e4edf2;color:#526a83;font-size:.72rem;font-weight:850}.footer{text-align:center;margin:14px 0 0;color:#778b9f;font-size:.75rem}.footer strong{color:var(--pink)}
 
-.values{
-  position:relative;z-index:4;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  margin-top:15px
+@media(max-width:900px){.hero{grid-template-columns:300px 1fr}.art-panel{min-height:540px}.tati-art{height:515px}.content h1{font-size:3.45rem}.choice{min-height:235px}}
+@media(max-width:720px){
+  .portal{padding:8px 8px 22px}.topbar{min-height:66px;padding:9px 11px;border-radius:20px}.brand-script{font-size:1.7rem}.brand-pill{font-size:.5rem}.professional strong{font-size:.72rem;max-width:190px}.professional small{font-size:.62rem}
+  .hero{grid-template-columns:1fr;gap:0;padding:12px;border-radius:26px}.art-panel{min-height:380px;border-radius:21px;padding:5px}.tati-art{height:355px;width:100%;object-fit:contain}.art-caption{position:static;margin:5px 8px 8px;font-size:.72rem;border-radius:16px;padding:8px 10px}
+  .content{text-align:center;align-items:center;padding:15px 6px 8px}.eyebrow{font-size:.56rem}.content h1{font-size:2.55rem;margin:11px 0 9px}.lead{font-size:.86rem;line-height:1.48}
+  .choices{grid-template-columns:1fr;width:100%;gap:10px;margin-top:17px}.choice{min-height:205px;padding:15px;border-radius:22px;text-align:left}.choice-top{min-height:55px}.choice-icons{font-size:1.45rem}.choice h2{font-size:2rem}.choice p{font-size:.76rem}.enter{min-height:44px;font-size:.77rem}
+  .values{justify-content:center}.values span{font-size:.66rem;padding:7px 9px}
 }
-.value{
-  display:flex;align-items:center;gap:9px;
-  min-height:58px;
-  padding:9px 12px;
-  border-radius:18px;
-  background:rgba(255,255,255,.78);
-  border:1px solid rgba(255,255,255,.95);
-  box-shadow:0 6px 18px rgba(37,76,99,.06)
+@media(max-width:440px){
+  .professional strong{font-size:.68rem;max-width:165px}.professional small{display:none}.art-panel{min-height:350px}.tati-art{height:325px}.content h1{font-size:2.28rem}.choice{min-height:195px}
 }
-.value i{font-style:normal;font-size:1.45rem}.value strong{font-size:.77rem;line-height:1.15;color:#415d79}
-.footer{text-align:center;margin:15px 0 0;color:#75899c;font-size:.77rem}.footer strong{color:var(--pink)}
-
-@media(max-width:980px){
-  .hero{grid-template-columns:300px 1fr;min-height:590px}
-  .tati-stage{min-height:590px}.tati-art{height:550px}
-  .hero-content{padding-right:22px}
-  .hero h1{font-size:3.6rem}
-  .choice{min-height:235px}
-}
-@media(max-width:760px){
-  .portal{padding:8px 9px 24px}
-  .topbar{min-height:62px;padding:7px 10px;border-radius:19px}.logo-avatar{width:45px;height:45px;border-radius:14px}.logo-name{font-size:1.65rem}.logo-sub{font-size:.52rem;padding:4px 7px}.top-phrase{display:none}
-  .hero{grid-template-columns:1fr;min-height:0;border-radius:27px;gap:0}
-  .tati-stage{min-height:360px;padding:12px 8px 0;align-items:end}.tati-halo{width:320px;height:320px}.tati-art{width:min(94%,390px);height:355px}.tati-note{left:13px;top:16px;max-width:135px;font-size:.77rem;padding:9px 11px}
-  .hero-content{padding:19px 14px 18px;text-align:center;align-items:center}.kicker{font-size:.59rem}.hero h1{font-size:2.65rem;margin-top:11px}.hero-lead{font-size:.84rem;line-height:1.48}
-  .choices{grid-template-columns:1fr;gap:10px;width:100%;margin-top:18px}.choice{min-height:205px;text-align:left;padding:15px;border-radius:22px}.choice h2{font-size:2rem}.choice p{font-size:.75rem}.choice-kids:before,.choice-youth:before{font-size:1.65rem;top:14px}.choice-kids:after{font-size:1.25rem;top:57px}.choice-youth:after{font-size:1.5rem;top:54px}.enter{min-height:44px;font-size:.77rem}
-  .values{grid-template-columns:1fr 1fr;width:100%;gap:6px}.value{min-height:48px;padding:7px 9px;border-radius:15px}.value i{font-size:1.15rem}.value strong{font-size:.68rem}
-}
-@media(max-width:390px){
-  .tati-stage{min-height:325px}.tati-art{height:320px}.hero h1{font-size:2.35rem}.choice{min-height:195px}.values{grid-template-columns:1fr 1fr}
-}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <main class="portal">
   <header class="topbar">
-    <div class="logo">
-      <img class="logo-avatar" src="../tia-tati-kids/assets/welcome.webp" alt="Tia Tati">
-      <div class="logo-copy">
-        <span class="logo-name">Tia Tati</span>
-        <span class="logo-sub">FISIO SENSORIAL</span>
+    <div class="brand">
+      <div class="brand-mark">
+        <span class="brand-script">Tia Tati</span>
+        <span class="brand-pill">FISIO SENSORIAL</span>
       </div>
     </div>
-    <div class="top-phrase">Movimento que inclui.<br><b>Autonomia que cresce. ♥</b></div>
+    <div class="professional">
+      <strong>Dra. Tatiana de Oliveira Machado</strong>
+      <small>Fisioterapia • movimento que inclui</small>
+    </div>
   </header>
 
   <section class="hero" aria-labelledby="portal-title">
-    <div class="tati-stage">
-      <div class="tati-halo" aria-hidden="true"></div>
-      <img class="tati-art" src="../tia-tati-kids/assets/welcome.webp" alt="Tia Tati dando boas-vindas">
-      <div class="tati-note">Juntos por mais conquistas! <span>♥</span></div>
+    <div class="art-panel">
+      <img class="tati-art" src="../tia-tati-kids/assets/welcome.webp" alt="Dra. Tatiana de Oliveira Machado, Tia Tati, dando boas-vindas">
+      <div class="art-caption">Juntos por mais conquistas! ♥</div>
     </div>
 
-    <div class="hero-content">
-      <span class="kicker">TIA TATI • FISIO SENSORIAL</span>
+    <div class="content">
+      <span class="eyebrow">TIA TATI • FISIO SENSORIAL</span>
       <h1 id="portal-title">Pequenas conquistas<em>movem grandes caminhos!</em></h1>
-      <p class="hero-lead">Missões terapêuticas para um amanhã mais independente. Escolha a experiência mais adequada para este momento.</p>
+      <p class="lead">Missões terapêuticas para um amanhã mais independente. Escolha a experiência mais adequada para este momento.</p>
 
       <div class="choices" aria-label="Escolha a experiência">
         <a class="choice choice-kids" href="launch-kids.html" aria-label="Entrar na Área Kids">
-          <span class="choice-label">🌈 ÁREA KIDS</span>
+          <div class="choice-top"><span class="choice-badge">🌈 ÁREA KIDS</span><span class="choice-icons" aria-hidden="true">🚗 🐝 🌸</span></div>
           <h2>Área Kids</h2>
-          <p>Brincar, aprender, movimentar e se desenvolver em cada missão.</p>
+          <p>Brincar, aprender, movimentar e se desenvolver com leveza em cada missão.</p>
           <span class="enter">Entrar na Área Kids <b>→</b></span>
         </a>
 
         <a class="choice choice-youth" href="launch-jovem.html" aria-label="Entrar no Modo Jovem">
-          <span class="choice-label">🎮 MODO JOVEM</span>
+          <div class="choice-top"><span class="choice-badge">🎮 MODO JOVEM</span><span class="choice-icons" aria-hidden="true">⚡ 🎵 🧠</span></div>
           <h2>Modo Jovem</h2>
-          <p>Ritmo, foco, memória, resposta motora e desafios com energia neon.</p>
+          <p>Ritmo, foco, memória e resposta motora em desafios com uma identidade neon.</p>
           <span class="enter">Entrar no Modo Jovem <b>→</b></span>
         </a>
       </div>
 
       <div class="values" aria-label="Valores do projeto">
-        <div class="value"><i>🧠</i><strong>Mais atenção</strong></div>
-        <div class="value"><i>🏃</i><strong>Mais movimento</strong></div>
-        <div class="value"><i>💗</i><strong>Mais autonomia</strong></div>
-        <div class="value"><i>🌱</i><strong>Mais inclusão</strong></div>
+        <span>🧠 Atenção</span><span>🏃 Movimento</span><span>💗 Autonomia</span><span>🌱 Inclusão</span>
       </div>
     </div>
   </section>
