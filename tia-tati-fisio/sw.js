@@ -1,13 +1,13 @@
-const CACHE='tia-tati-v50-final-architecture-20260910';
+const CACHE='tia-tati-v51-final-home-activity-20260910';
 const CORE=[
- './index.html','./shell-v48.css?v=48','./shell-v48.js?v=50','./manifest.webmanifest',
- './activity.html?legacy=1&offline=1','./styles.css?v=39','./app.js?v=50','./legacy-bridge-v49.js?v=50',
- './app-base-v39.js?v=50','./sensory-v40.js?v=50','./remaining-v41.js?v=50','./naming-v42.js?v=50','./final-v44.js?v=50','./identity-v45.js?v=50',
+ './index.html','./home-v51.css?v=51','./home-v51-polish.css?v=51','./home-v51.js?v=51','./manifest.webmanifest',
+ './activity.html','./styles.css?v=39','./app.js?v=51','./activity-router-v51.js?v=51',
+ './app-base-v39.js?v=51','./sensory-v40.js?v=51','./remaining-v41.js?v=51','./naming-v42.js?v=51','./final-v44.js?v=51','./identity-v45.js?v=51',
  './styles-base-v39.css?v=47','./sensory-v40.css?v=47','./remaining-v41.css?v=47','./polish-v43.css?v=47','./final-v44.css?v=47','./identity-v45.css?v=47',
+ './assets/tati-approved-avatar.webp','./assets/tati-approved-hero.webp',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp',
  './assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg',
- './assets/bee-game.svg','./assets/bee-garden.svg','./assets/target-board.svg','./assets/hands-board.svg','./assets/pulse-lab.svg',
- './assets/cards/reflexo-neon.webp','./assets/cards/memorize.webp','./assets/cards/beat-move.webp'
+ './assets/bee-game.svg','./assets/bee-garden.svg','./assets/target-board.svg','./assets/hands-board.svg','./assets/pulse-lab.svg'
 ];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
@@ -25,12 +25,10 @@ self.addEventListener('fetch',event=>{
  if(url.origin!==location.origin)return;
  if(event.request.mode==='navigate'){
   const isActivity=url.pathname.endsWith('/activity.html');
-  event.respondWith(fetch(event.request,{cache:'no-store'}).catch(()=>
-   caches.match(isActivity?'./activity.html?legacy=1&offline=1':'./index.html')
-  ));
+  event.respondWith(fetch(event.request,{cache:'no-store'}).catch(()=>caches.match(isActivity?'./activity.html':'./index.html')));
   return;
  }
- const fresh=/\/(shell-v48\.(?:css|js)|app\.js|legacy-bridge-v49\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css))$/.test(url.pathname);
+ const fresh=/\/(home-v51(?:-polish)?\.(?:css|js)|app\.js|activity-router-v51\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css))$/.test(url.pathname);
  if(fresh){
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;}).catch(()=>caches.match(event.request)));
   return;
