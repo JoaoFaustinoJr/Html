@@ -969,3 +969,53 @@ body.light-game-active .app.light-game-mode{max-width:none!important;width:100%!
  .light-game-top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tutor actions" "score score";padding:max(6px,env(safe-area-inset-top)) 7px 6px}.light-mini-tutor{grid-area:tutor}.light-game-actions{grid-area:actions}.light-game-score{grid-area:score;padding-left:67px;margin-top:-5px}.light-mini-tutor img{width:55px;height:55px}.light-mini-tutor strong{font-size:10px;max-width:165px}.light-game-score span{font-size:8px;min-width:64px;padding:5px 7px}
  .light-pads{inset:60px 8px 66px;gap:7px}.light-pad{border-radius:20px}.light-pad span{width:55px;height:55px}.light-beat-core{width:92px;height:92px}.light-hint{font-size:8.5px;bottom:8px}.light-praise{bottom:55px;font-size:9.5px}.light-footer-copy{font-size:7px}
 }
+
+/* V38 — cards rápidos para público adolescente/jovem */
+.youth-challenges{margin:20px 0 4px;padding:16px;border-radius:26px;background:
+ radial-gradient(circle at 12% 15%,rgba(0,235,255,.12),transparent 24%),
+ radial-gradient(circle at 88% 80%,rgba(255,60,195,.12),transparent 26%),
+ linear-gradient(145deg,#0d122b,#151a3d 58%,#211335);border:1px solid #2c3364;box-shadow:0 18px 36px rgba(18,23,55,.16);color:#fff}
+.youth-challenges-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:12px}
+.youth-challenges-head .kicker{color:#67f4ff}
+.youth-challenges-head h2{margin:2px 0 2px;font-size:24px;letter-spacing:-.03em;color:#fff}
+.youth-challenges-head p{margin:0;color:#aebbe0;font-size:10.5px;line-height:1.4}
+.youth-challenges-tag{flex:0 0 auto;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#d7dcff;font-size:7.5px;font-weight:900;letter-spacing:.06em}
+.youth-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.youth-card{position:relative;display:grid;grid-template-rows:132px auto auto;overflow:hidden;text-align:left;border:1px solid #343b70;border-radius:21px;background:#101633;color:#fff;padding:0;cursor:pointer;box-shadow:0 12px 27px rgba(0,0,0,.2);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.youth-card:hover,.youth-card:focus-visible{transform:translateY(-3px);border-color:#6b7cff;box-shadow:0 17px 32px rgba(0,0,0,.26)}
+.youth-card-art{position:relative;display:block;overflow:hidden;background:
+ linear-gradient(rgba(98,117,255,.12) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(98,117,255,.12) 1px,transparent 1px),
+ radial-gradient(circle at 50% 50%,#1c2456,#0c1129 70%);background-size:24px 24px,24px 24px,auto}
+.youth-card-art i{position:absolute;width:88px;height:88px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:#37efff;box-shadow:0 0 20px rgba(55,239,255,.8),0 0 58px rgba(55,239,255,.34)}
+.youth-card.memory .youth-card-art i{background:#9a6dff;box-shadow:0 0 20px rgba(154,109,255,.8),0 0 58px rgba(154,109,255,.34)}
+.youth-card.beat .youth-card-art i{background:#ff4bc5;box-shadow:0 0 20px rgba(255,75,197,.8),0 0 58px rgba(255,75,197,.34)}
+.youth-card-art b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:41px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.youth-card-art em{position:absolute;left:10px;bottom:8px;font-style:normal;font-size:7px;font-weight:1000;letter-spacing:.18em;color:#dce8ff}
+.youth-card-copy{display:block;padding:11px 11px 5px}
+.youth-card-copy strong{display:block;font-size:15px;color:#fff}
+.youth-card-copy small{display:block;margin-top:3px;color:#9eadd4;font-size:8.5px;line-height:1.35}
+.youth-card-go{display:block;padding:4px 11px 11px;font-size:8px;font-weight:950;letter-spacing:.06em;color:#66f3ff}
+.youth-card.memory .youth-card-go{color:#bd9aff}
+.youth-card.beat .youth-card-go{color:#ff80d8}
+.youth-card:active{transform:scale(.985)}
+
+@media(max-width:720px){
+ .youth-card-grid{grid-template-columns:1fr 1fr}
+ .youth-card.beat{grid-column:1/-1}
+ .youth-card.beat{grid-template-columns:138px 1fr auto;grid-template-rows:auto;align-items:center}
+ .youth-card.beat .youth-card-art{height:112px}
+ .youth-card.beat .youth-card-copy{padding:10px}
+ .youth-card.beat .youth-card-go{padding:10px}
+}
+@media(max-width:470px){
+ .youth-challenges{padding:12px;border-radius:22px}
+ .youth-challenges-head{align-items:flex-start}.youth-challenges-tag{display:none}
+ .youth-challenges-head h2{font-size:21px}
+ .youth-card-grid{grid-template-columns:1fr}
+ .youth-card,.youth-card.beat{grid-column:auto;grid-template-columns:112px 1fr auto;grid-template-rows:auto;align-items:center;min-height:104px;border-radius:18px}
+ .youth-card-art,.youth-card.beat .youth-card-art{height:104px}
+ .youth-card-art i{width:67px;height:67px}.youth-card-art b{font-size:32px}.youth-card-art em{font-size:6px}
+ .youth-card-copy,.youth-card.beat .youth-card-copy{padding:10px 8px}.youth-card-copy strong{font-size:13px}.youth-card-copy small{font-size:7.5px}
+ .youth-card-go,.youth-card.beat .youth-card-go{font-size:0;padding:9px}.youth-card-go:after{content:"›";font-size:23px}
+}
