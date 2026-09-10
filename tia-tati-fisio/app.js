@@ -113,9 +113,9 @@ function syncBeeSummary(){
  const el=$('#beeActionSummary');if(el)el.textContent='Caminho '+(Number(state.beeRoute)||2)+' • '+flower+' • '+control;
 }
 function syncBeeSetup(){
- $$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
- $$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
- $$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
+ $$$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
+ $$$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
+ $$$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
  syncBeeSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
@@ -610,7 +610,7 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):startCircuit([b.dataset.mission]));
+$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
@@ -618,9 +618,9 @@ $$('[data-destination]').forEach(b=>b.onclick=()=>{state.roadDestination=b.datas
 $$('[data-road-route]').forEach(b=>b.onclick=()=>{state.roadRoute=Number(b.dataset.roadRoute)||2;$$('[data-road-route]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();});
 $$('[data-road-control]').forEach(b=>b.onclick=()=>{state.roadControl=b.dataset.roadControl;$$('[data-road-control]').forEach(x=>x.classList.toggle('active',x===b));syncRoadSummary();});
 $('#startRoadMission').onclick=()=>startCircuit(['road']);
-$('[data-bee-route]').forEach(b=>b.onclick=()=>{state.beeRoute=Number(b.dataset.beeRoute)||2;$('[data-bee-route]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
-$('[data-bee-flower]').forEach(b=>b.onclick=()=>{state.beeFlower=b.dataset.beeFlower;$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();playVoice('choice',false);});
-$('[data-bee-control]').forEach(b=>b.onclick=()=>{state.beeControl=b.dataset.beeControl;$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
+$$('[data-bee-route]').forEach(b=>b.onclick=()=>{state.beeRoute=Number(b.dataset.beeRoute)||2;$$('[data-bee-route]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
+$$('[data-bee-flower]').forEach(b=>b.onclick=()=>{state.beeFlower=b.dataset.beeFlower;$$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();playVoice('choice',false);});
+$$('[data-bee-control]').forEach(b=>b.onclick=()=>{state.beeControl=b.dataset.beeControl;$$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
 $('#startBeeMission').onclick=()=>startCircuit(['bee']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
