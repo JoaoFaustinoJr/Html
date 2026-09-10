@@ -1,2 +1,5 @@
 @import url('./styles-core-v39.css?v=39');
-@import url('./kids-shell-v1.css?v=1');
+@import url('./kids-shell-v1.css?v=3');
+
+/* Garantia local: o cabeçalho não é exibido na Área Kids. */
+#app>header.topbar,header.topbar,.app .topbar,body .topbar{display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important}
