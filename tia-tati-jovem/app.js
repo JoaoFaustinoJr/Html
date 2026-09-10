@@ -1,9 +1,10 @@
 (()=>{
 'use strict';
 if(window.__TIA_TATI_JOVEM_LOADER__)return;window.__TIA_TATI_JOVEM_LOADER__=true;
-const addCss=href=>{if(document.querySelector(`link[href^="${href}"]`))return;const l=document.createElement('link');l.rel='stylesheet';l.href=href+'?v=j1';document.head.appendChild(l);};
+const V='j2';
+const addCss=href=>{if(document.querySelector(`link[href^="${href}"]`))return;const l=document.createElement('link');l.rel='stylesheet';l.href=href+'?v='+V;document.head.appendChild(l);};
 ['sensory-v40.css','remaining-v41.css','polish-v43.css','final-v44.css','identity-v45.css','jovem-v1.css'].forEach(addCss);
-const load=src=>new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src+'?v=j1';s.async=false;s.onload=resolve;s.onerror=reject;document.body.appendChild(s);});
+const load=src=>new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src+'?v='+V;s.async=false;s.onload=resolve;s.onerror=reject;document.body.appendChild(s);});
 (async()=>{
  try{
   await load('app-core-v39.js');
