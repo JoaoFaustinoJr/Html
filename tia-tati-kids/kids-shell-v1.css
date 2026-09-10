@@ -23,7 +23,10 @@ body{background:
   radial-gradient(circle at 94% 8%,rgba(197,239,248,.42),transparent 24%),
   linear-gradient(180deg,#fffdfd,#f7fbfd 58%,#fff8fb)}
 
-.topbar{padding-bottom:10px}
+/* O portal já apresenta a marca. Dentro do Kids, o cabeçalho superior é dispensável.
+   Ele é apenas ocultado; continua no DOM para preservar o runtime original. */
+.topbar{display:none!important}
+.app{padding-top:0!important}
 .brand strong{color:var(--kids-blue)}
 .brand small{color:#74869a;font-weight:800}
 
@@ -80,7 +83,6 @@ body{background:
 @media(max-width:650px){
   html,body{overscroll-behavior-y:auto}
   body{touch-action:pan-y}
-  .topbar{backdrop-filter:none;background:rgba(248,247,245,.96)}
   .kids-portal-link{min-height:40px;padding:0 10px;font-size:10px}
   .home-v22-hero{border-radius:24px;padding:16px}
   .home-v22-copy h1{font-size:35px}
