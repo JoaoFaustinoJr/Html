@@ -1,7 +1,7 @@
-const CACHE='tia-tati-v57-route-20260910';
+const CACHE='tia-tati-v57-samedoc-20260910b';
 const CORE=[
  './index.html','./home-v51.css?v=54','./home-v51-polish.css?v=54','./home-v53.css?v=54','./home-v53-linkfix.css?v=54','./home-v54.css?v=54','./home-v54.js?v=57','./manifest.webmanifest?v=54',
- './activity-v54.html','./activity-v56.html','./activity-v57.html','./activity.html','./styles.css?v=54','./app.js?v=57','./direct-route-v57.js?v=57',
+ './activity-v54.html','./activity-v56.html','./activity-v57.html','./activity.html','./styles.css?v=57','./app.js?v=57','./direct-route-v57.js?v=57',
  './app-base-v39.js?v=57','./sensory-v40.js?v=57','./remaining-v41.js?v=57','./naming-v42.js?v=57','./final-v44.js?v=57','./identity-v45.js?v=57',
  './styles-base-v39.css?v=47','./sensory-v40.css?v=47','./remaining-v41.css?v=47','./polish-v43.css?v=47','./final-v44.css?v=47','./identity-v45.css?v=47',
  './assets/tati-approved-avatar.webp','./assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp',
@@ -14,9 +14,9 @@ self.addEventListener('fetch',event=>{
  if(event.request.method!=='GET')return;
  const url=new URL(event.request.url);if(url.origin!==location.origin)return;
  if(event.request.mode==='navigate'){
-  // Compatibilidade: links antigos activity.html?open=... recebem o shell V57.
   if(url.pathname.endsWith('/activity.html')&&url.searchParams.has('open')){
-   event.respondWith(fetch('./activity-v57.html?sw=57&t='+Date.now(),{cache:'no-store'}).catch(()=>caches.match('./activity-v57.html')));
+   const open=url.searchParams.get('open')||'road';
+   event.respondWith(fetch('./activity-v57.html?open='+encodeURIComponent(open)+'&sw=57&t='+Date.now(),{cache:'no-store'}).catch(()=>caches.match('./activity-v57.html')));
    return;
   }
   event.respondWith(fetch(event.request,{cache:'no-store'}).catch(async()=>{
