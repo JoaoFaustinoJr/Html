@@ -1,13 +1,7 @@
 (()=>{
 'use strict';
-const VERSION='49';
+const VERSION='50';
 const toast=document.getElementById('shellToast');
-const routes={
- road:'[data-mission="road"]',bee:'[data-mission="bee"]',target:'[data-mission="target"]',hands:'[data-mission="hands"]',sensory:'[data-mission="sensory"]',breathe:'[data-mission="breathe"]',
- react:'[data-youth-light="react"]',memory:'[data-youth-light="memory"]',beat:'[data-youth-light="beat"]',pulse:'[data-youth-sensory]',restart:'[data-youth-breathe]',movequest:'[data-youth-physical]',
- circuit:'[data-nav="circuit"]',voice:'[data-nav="voice"]',reports:'[data-nav="reports"]',fisio:'[data-nav="fisio"]',interventions:'#interventionsBtn'
-};
-const cardRoutes={welcome:'[data-card="welcome"]',guide:'[data-card="guide"]',success:'[data-card="success"]',celebrate:'[data-card="celebrate"]'};
 
 function showToast(msg){
  if(!toast)return;
@@ -15,49 +9,54 @@ function showToast(msg){
  showToast.t=setTimeout(()=>toast.classList.remove('show'),1800);
 }
 
-/* Cabeçalho: usa a identidade já aprovada dos cards da Tia Tati,
-   recortando o retrato em vez de exibir a arte inteira em miniatura. */
-function applyApprovedHeaderAvatar(){
+function applyApprovedIdentity(){
+ /* A arte Boas-vindas não é mais usada como imagem principal do hero. */
+ const hero=document.querySelector('.hero-tati>img');
+ if(hero){
+  hero.src='assets/success.webp';
+  hero.alt='Tia Tati';
+  Object.assign(hero.style,{objectPosition:'center 18%',filter:'none'});
+ }
  const brand=document.querySelector('.shell-brand');
- const img=brand&&brand.querySelector('img');
- if(!brand||!img||img.dataset.v49Crop)return;
- img.dataset.v49Crop='1';
- const crop=document.createElement('span');
- crop.setAttribute('aria-hidden','true');
- Object.assign(crop.style,{width:'50px',height:'50px',borderRadius:'17px',overflow:'hidden',position:'relative',display:'block',flex:'0 0 50px',background:'#fff',border:'3px solid #fff',boxShadow:'0 6px 18px rgba(33,74,105,.12)'});
- img.parentNode.insertBefore(crop,img);crop.appendChild(img);
- Object.assign(img.style,{position:'absolute',width:'88px',height:'88px',maxWidth:'none',left:'53%',top:'49%',transform:'translate(-50%,-50%)',objectFit:'cover',objectPosition:'center 22%',border:'0',borderRadius:'0',boxShadow:'none'});
+ const avatar=brand&&brand.querySelector('img');
+ if(avatar&&!avatar.dataset.v50Crop){
+  avatar.dataset.v50Crop='1';avatar.src='assets/success.webp';
+  const crop=document.createElement('span');crop.setAttribute('aria-hidden','true');
+  Object.assign(crop.style,{width:'50px',height:'50px',borderRadius:'17px',overflow:'hidden',position:'relative',display:'block',flex:'0 0 50px',background:'#fff',border:'3px solid #fff',boxShadow:'0 6px 18px rgba(33,74,105,.12)'});
+  avatar.parentNode.insertBefore(crop,avatar);crop.appendChild(avatar);
+  Object.assign(avatar.style,{position:'absolute',width:'92px',height:'92px',maxWidth:'none',left:'50%',top:'46%',transform:'translate(-50%,-50%)',objectFit:'cover',objectPosition:'center 18%',border:'0',borderRadius:'0',boxShadow:'none'});
+ }
+
+ /* Os três cards jovens deixam de ampliar miniaturas rasterizadas e passam a usar arte neon nítida. */
+ const youth=[
+  ['react','⚡','🧠','#19e7ff','#ff39b8'],
+  ['memory','1 2 3 4','✦','#8d5cff','#2eefff'],
+  ['beat','♫','♪','#ff35bb','#34e8ff']
+ ];
+ youth.forEach(([key,main,side,c1,c2])=>{
+  const card=document.querySelector(`[data-open="${key}"]`);const art=card&&card.querySelector('.yart');
+  if(!art||art.dataset.v50)return;art.dataset.v50='1';
+  art.innerHTML=`<span style="position:absolute;inset:0;background:radial-gradient(circle at 28% 35%,${c1}55,transparent 24%),radial-gradient(circle at 76% 62%,${c2}55,transparent 26%),linear-gradient(145deg,#07133e,#10165e)"></span><b style="position:relative;z-index:2;font-size:${key==='memory'?'25px':'52px'};letter-spacing:${key==='memory'?'.12em':'0'};color:#fff;text-shadow:0 0 9px ${c1},0 0 22px ${c2}">${main}</b><i style="position:absolute;right:14px;top:10px;z-index:2;font-style:normal;font-size:22px;color:#fff;text-shadow:0 0 12px ${c2}">${side}</i><span style="position:absolute;left:10%;right:10%;bottom:10px;height:2px;background:linear-gradient(90deg,transparent,${c1},${c2},transparent);box-shadow:0 0 8px ${c1}"></span>`;
+  Object.assign(art.style,{background:'#07133e',imageRendering:'auto'});
+ });
 }
 
-function openLegacy(key,selectorOverride){
+function openActivity(key){
  if(key==='home'){window.scrollTo({top:0,behavior:'smooth'});return;}
- const selector=selectorOverride||routes[key];
- if(!selector){showToast('Atividade indisponível.');return;}
  const url=new URL('./index.html',location.href);
- url.searchParams.set('legacy','1');
- url.searchParams.set('shell',VERSION);
- url.searchParams.set('open',key);
- if(selectorOverride)url.searchParams.set('selector',selectorOverride);
- url.searchParams.set('t',Date.now().toString());
- location.href=url.href;
+ url.searchParams.set('legacy','1');url.searchParams.set('shell',VERSION);url.searchParams.set('open',key);url.searchParams.set('t',Date.now().toString());
+ location.assign(url.href);
 }
 
 document.addEventListener('click',e=>{
  const scroll=e.target.closest('[data-scroll]');
- if(scroll){
-  const id=scroll.dataset.scroll;
-  if(id==='top')window.scrollTo({top:0,behavior:'smooth'});
-  else document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
-  return;
- }
+ if(scroll){const id=scroll.dataset.scroll;if(id==='top')window.scrollTo({top:0,behavior:'smooth'});else document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
  const open=e.target.closest('[data-open]');
- if(open){e.preventDefault();openLegacy(open.dataset.open);return;}
+ if(open){e.preventDefault();e.stopPropagation();openActivity(open.dataset.open);return;}
  const card=e.target.closest('[data-card-open]');
- if(card){e.preventDefault();openLegacy('card',cardRoutes[card.dataset.cardOpen]);}
-});
+ if(card){e.preventDefault();openActivity('interventions');}
+},true);
 
-applyApprovedHeaderAvatar();
-if('serviceWorker' in navigator){
- window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v='+VERSION).catch(()=>{}));
-}
+applyApprovedIdentity();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v='+VERSION).catch(()=>{}));
 })();
