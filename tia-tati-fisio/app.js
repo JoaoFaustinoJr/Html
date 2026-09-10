@@ -114,9 +114,9 @@ function syncBeeSummary(){
  const el=$('#beeActionSummary');if(el)el.textContent='Caminho '+(Number(state.beeRoute)||2)+' • '+flower+' • '+control;
 }
 function syncBeeSetup(){
- $('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
- $('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
- $('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
+ $$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
+ $$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
+ $$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
  syncBeeSummary();
 }
 function syncTargetSummary(){
@@ -718,7 +718,7 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):startCircuit([b.dataset.mission]));
+$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
@@ -741,5 +741,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=29').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=30').catch(()=>{});
 })();
