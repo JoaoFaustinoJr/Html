@@ -1,8 +1,8 @@
-const CACHE='tia-tati-v49-direct-activity-20260910';
+const CACHE='tia-tati-v50-direct-screens-20260910';
 const CORE=[
- './shell-v48.html?v=48','./shell-v48.css?v=48','./shell-v48.js?v=48','./manifest.webmanifest',
- './index.html?legacy=1&offline=1','./styles.css?v=39','./app.js?v=39','./legacy-bridge-v49.js?v=49',
- './app-base-v39.js?v=49','./sensory-v40.js?v=49','./remaining-v41.js?v=49','./naming-v42.js?v=49','./final-v44.js?v=49','./identity-v45.js?v=49',
+ './shell-v48.html?v=48','./shell-v48.css?v=48','./shell-v48.js?v=50','./manifest.webmanifest',
+ './index.html?legacy=1&offline=1','./styles.css?v=39','./app.js?v=50','./legacy-bridge-v49.js?v=50',
+ './app-base-v39.js?v=50','./sensory-v40.js?v=50','./remaining-v41.js?v=50','./naming-v42.js?v=50','./final-v44.js?v=50','./identity-v45.js?v=50',
  './styles-base-v39.css?v=47','./sensory-v40.css?v=47','./remaining-v41.css?v=47','./polish-v43.css?v=47','./final-v44.css?v=47','./identity-v45.css?v=47',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp',
  './assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg',
