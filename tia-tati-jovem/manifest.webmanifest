@@ -1,18 +1,18 @@
 {
   "id":"./",
-  "name":"Tia Tati – Fisio Sensorial",
-  "short_name":"Tia Tati",
-  "description":"Experiências terapêuticas com movimento, psicopedagogia, acessibilidade, tutoria visual e voz da Dra. Tatiana — com Área Kids e Área Jovem.",
+  "name":"Tia Tati Jovem – Fisio Sensorial",
+  "short_name":"Tia Tati Jovem",
+  "description":"Desafios terapêuticos para jovens e adultos com foco, ritmo, memória, regulação e movimento.",
   "start_url":"./",
   "scope":"./",
   "display":"standalone",
   "orientation":"any",
-  "background_color":"#f8f7f5",
-  "theme_color":"#ff5aa5",
+  "background_color":"#07132f",
+  "theme_color":"#111b55",
   "lang":"pt-BR",
   "categories":["health","education","lifestyle"],
   "icons":[
-    {"src":"assets/welcome.webp","sizes":"512x512","type":"image/webp","purpose":"any"},
-    {"src":"assets/welcome.webp","sizes":"512x512","type":"image/webp","purpose":"maskable"}
+    {"src":"assets/cards/reflexo-neon.webp","sizes":"512x512","type":"image/webp","purpose":"any"},
+    {"src":"assets/cards/reflexo-neon.webp","sizes":"512x512","type":"image/webp","purpose":"maskable"}
   ]
 }
