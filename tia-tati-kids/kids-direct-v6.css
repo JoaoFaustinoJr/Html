@@ -1,0 +1,30 @@
+/* Tia Tati Kids v6 — camada visual direta. Sem JS de roteamento e sem injeção por Service Worker. */
+#screen-home .youth-challenges,
+#screen-home [data-mission="light"],
+#screen-home [data-mission="physical"],
+#screen-home .audience-v44{display:none!important}
+
+/* Identidade Kids alinhada aos mockups. */
+#screen-home .hero-v45{
+  background:radial-gradient(circle at 14% 16%,rgba(255,215,233,.58),transparent 23%),radial-gradient(circle at 86% 18%,rgba(184,236,255,.58),transparent 27%),linear-gradient(135deg,#fffefa 0%,#f2fbff 54%,#fff2f8 100%)!important;
+}
+#screen-home .hero-v45 .home-v22-script{color:#1455aa!important}
+#screen-home .hero-v45 h1{color:#164f9a!important}
+#screen-home .hero-v45 h1 em{color:#ff4f9f!important}
+#screen-home .hero-v45 .home-v22-pill{background:#ff4f9f!important}
+#screen-home .kids-v45{background:linear-gradient(180deg,#fff,#fffafd)!important}
+#screen-home .kids-v45 .home-v22-mission{background:#fff!important;touch-action:manipulation}
+
+/* Rolagem natural no celular. */
+html{scroll-behavior:auto!important}
+body,#app,#screen-home{overflow-x:hidden!important;overscroll-behavior-y:auto!important}
+#screen-home{touch-action:pan-y pinch-zoom!important}
+#screen-home button{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent}
+#screen-home [data-mission] img{pointer-events:none}
+
+@media(max-width:760px){
+ .topbar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:rgba(250,252,255,.98)!important}
+ #screen-home.screen.active{animation:none!important}
+ #screen-home .hero-v45 .home-v22-portrait-wrap>img{-webkit-mask-image:none!important;mask-image:none!important;filter:none!important}
+ #screen-home .kids-v45 .home-v22-mission{transform:none!important}
+}
