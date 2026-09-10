@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8fbff">
+<title>Tia Tati – Atividade</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+#frame{position:fixed;inset:0;width:100%;height:100dvh;border:0;background:#f8fbff;opacity:0;transition:opacity .14s ease}
+#frame.ready{opacity:1}
+#boot{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:linear-gradient(135deg,#fff8fc,#eefaff);color:#164b87;text-align:center}
+#boot.hide{display:none}#boot>div{display:grid;gap:9px;place-items:center;padding:24px}#boot b{font-size:42px}#boot strong{font-size:19px}#boot small{color:#71849a}#error{display:none;max-width:320px;line-height:1.45;margin-top:14px}#error a{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:999px;background:#ff4fa3;color:#fff;text-decoration:none;font-weight:850}
+</style>
+</head>
+<body>
+<div id="boot"><div><b>💗</b><strong>Abrindo sua atividade…</strong><small>Tia Tati • Fisio Sensorial</small><div id="error">A atividade demorou mais do que o esperado para abrir.<br><a href="./?v=57">Voltar ao início</a></div></div></div>
+<iframe id="frame" title="Atividade Tia Tati" src="about:blank" allow="autoplay; fullscreen"></iframe>
+<script>
+(()=>{
+'use strict';
+const p=new URLSearchParams(location.search);
+const key=p.get('open')||'road';
+const frame=document.getElementById('frame');
+const boot=document.getElementById('boot');
+const error=document.getElementById('error');
+const src=new URL('./activity.html',location.href);
+src.searchParams.set('route',key);
+src.searchParams.set('shell','57');
+src.searchParams.set('t',Date.now().toString());
+frame.src=src.href;
+let done=false;
+function reveal(){if(done)return;done=true;frame.classList.add('ready');boot.classList.add('hide');}
+function fail(){if(done)return;error.style.display='block';}
+window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='tia-tati-route-ready'&&e.data.route===key)reveal();});
+frame.addEventListener('load',()=>{
+ const started=Date.now();
+ const timer=setInterval(()=>{
+  if(done){clearInterval(timer);return;}
+  try{
+   const d=frame.contentDocument||frame.contentWindow.document;
+   const active=d.querySelector('.screen.active');
+   if(active&&active.id!=='screen-home'){clearInterval(timer);reveal();return;}
+  }catch(_){ }
+  if(Date.now()-started>6500){clearInterval(timer);fail();}
+ },90);
+});
+setTimeout(fail,7500);
+})();
+</script>
+</body>
+</html>
