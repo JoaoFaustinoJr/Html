@@ -1,16 +1,16 @@
 (()=>{
 'use strict';
-const VERSION='57';
+const VERSION='58';
 
 document.addEventListener('click',e=>{
- const a=e.target.closest('a[href*="activity-v54.html?open="],a[href*="activity-v56.html?open="],a[href*="activity-v57.html?open="],a[href*="activity.html?open="]');
+ const a=e.target.closest('a[href*="activity-v54.html?open="],a[href*="activity-v56.html?open="],a[href*="activity-v57.html?open="],a[href*="activity-v58.html?open="],a[href*="activity.html?open="]');
  if(a){
   e.preventDefault();
   e.stopPropagation();
   const u=new URL(a.href,location.href);
   const open=u.searchParams.get('open');
   if(open){
-   location.href='./activity-v57.html?open='+encodeURIComponent(open)+'&v='+VERSION+'&t='+Date.now();
+   location.href='./activity-v58.html?open='+encodeURIComponent(open)+'&v='+VERSION+'&t='+Date.now();
    return;
   }
  }
