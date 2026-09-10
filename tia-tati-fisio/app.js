@@ -741,5 +741,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=28').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=29').catch(()=>{});
 })();
