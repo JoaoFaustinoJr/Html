@@ -694,7 +694,7 @@ function hands(){
  const mode=state.handsMode||'together';
  const rounds=Math.max(3,Math.min(7,Number(state.handsRounds)||3));
  const pace=state.handsPace||'calm';
- const windowMs={calm:2400,medium:1800,challenge:1200}[pace]||2400;
+ const windowMs={calm:3200,medium:2200,challenge:1500}[pace]||3200;
  const modeLabel={together:'Juntas',alternate:'Alternadas',cross:'Cruzadas'}[mode]||'Juntas';
  const paceLabel={calm:'Calma',medium:'Moderada',challenge:'Desafio'}[pace]||'Calma';
 
@@ -782,14 +782,14 @@ function hands(){
   }
 
   if(!firstSide){
-   firstSide=side;firstAt=now;pad.classList.add('waiting');pads[side==='left'?'right':'left'].classList.add('waiting');hint.textContent=mode==='cross'?'❌ Agora toque o outro lado mantendo as mãos cruzadas.':'🤲 Agora toque o outro lado.';
+   firstSide=side;firstAt=now;pad.classList.add('waiting');pads[side==='left'?'right':'left'].classList.add('waiting','guided');hint.textContent=mode==='cross'?'✅ Primeiro toque! Agora o lado oposto com as mãos cruzadas.':'✅ Primeiro toque! Agora toque o outro lado.';showPraise('1º toque ✓ Agora o outro lado.');
    timeout=setTimeout(failTiming,windowMs);return;
   }
   if(side===firstSide){pad.classList.add('guided');hint.textContent='💗 Falta o outro lado.';return;}
   if(now-firstAt<=windowMs){clearTimeout(timeout);pads[firstSide].classList.add('pressed');completeRound();}else failTiming();
  };
 
- const activeTouchSides=new Set();
+ const activePointers=new Map();
  const sideFromPoint=(clientX,clientY)=>{
   const r=stage.getBoundingClientRect();
   if(clientX<r.left||clientX>r.right||clientY<r.top||clientY>r.bottom)return null;
@@ -799,50 +799,63 @@ function hands(){
   const pad=pads[side];if(!pad)return;
   pad.classList.add('pressed');
   clearTimeout(pad._releaseTimer);
-  pad._releaseTimer=setTimeout(()=>pad.classList.remove('pressed'),260);
+  pad._releaseTimer=setTimeout(()=>pad.classList.remove('pressed'),320);
  };
- const handleSide=side=>{
+ const acknowledgeTouch=side=>{
   if(!side||finished||state.paused)return;
   flashSide(side);
+  const other=side==='left'?'right':'left';
+  if(mode!=='alternate' && !firstSide){
+    hint.textContent='✅ Primeiro lado! Agora toque o '+(other==='left'?'lado esquerdo.':'lado direito.');
+  }
   press(side);
  };
- const onStageTouchStart=e=>{
+ const onPointerDown=e=>{
   if(finished||state.paused)return;
-  if(e.cancelable)e.preventDefault();
-  // changedTouches permite reconhecer dois dedos colocados praticamente ao mesmo tempo.
-  const seen=new Set();
-  [...e.changedTouches].forEach(t=>{
-   const side=sideFromPoint(t.clientX,t.clientY);
-   if(side&&!seen.has(side)){seen.add(side);activeTouchSides.add(side);handleSide(side);}
-  });
- };
- const onStageTouchMove=e=>{if(e.cancelable)e.preventDefault();};
- const onStageTouchEnd=e=>{
-  if(e.cancelable)e.preventDefault();
-  [...e.changedTouches].forEach(t=>{
-   const side=sideFromPoint(t.clientX,t.clientY);
-   if(side)activeTouchSides.delete(side);
-  });
- };
- const onStagePointerDown=e=>{
-  if(e.pointerType==='touch'||finished||state.paused)return;
   const side=sideFromPoint(e.clientX,e.clientY);
   if(!side)return;
-  e.preventDefault();handleSide(side);
+  if(e.cancelable)e.preventDefault();
+  activePointers.set(e.pointerId,side);
+  try{stage.setPointerCapture?.(e.pointerId);}catch(_){}
+  acknowledgeTouch(side);
  };
- // Captura no palco inteiro: funciona mesmo se o navegador não entregar o toque diretamente ao botão.
- stage.addEventListener('touchstart',onStageTouchStart,{passive:false,capture:true});
- stage.addEventListener('touchmove',onStageTouchMove,{passive:false,capture:true});
- stage.addEventListener('touchend',onStageTouchEnd,{passive:false,capture:true});
- stage.addEventListener('touchcancel',onStageTouchEnd,{passive:false,capture:true});
- stage.addEventListener('pointerdown',onStagePointerDown,{passive:false,capture:true});
+ const onPointerUp=e=>{
+  activePointers.delete(e.pointerId);
+  try{stage.releasePointerCapture?.(e.pointerId);}catch(_){}
+ };
+ const onPointerMove=e=>{
+  if(activePointers.has(e.pointerId) && e.cancelable)e.preventDefault();
+ };
+
+ // Pointer Events é o caminho principal no Chrome/Android/PWA e reconhece cada dedo separadamente.
+ stage.addEventListener('pointerdown',onPointerDown,{passive:false,capture:true});
+ stage.addEventListener('pointermove',onPointerMove,{passive:false,capture:true});
+ stage.addEventListener('pointerup',onPointerUp,{passive:true,capture:true});
+ stage.addEventListener('pointercancel',onPointerUp,{passive:true,capture:true});
+
+ // Fallback para navegadores antigos sem PointerEvent.
+ let onLegacyTouchStart=null;
+ if(!window.PointerEvent){
+  onLegacyTouchStart=e=>{
+   if(finished||state.paused)return;
+   if(e.cancelable)e.preventDefault();
+   const seen=new Set();
+   [...e.changedTouches].forEach(t=>{
+    const side=sideFromPoint(t.clientX,t.clientY);
+    if(side&&!seen.has(side)){seen.add(side);acknowledgeTouch(side);}
+   });
+  };
+  stage.addEventListener('touchstart',onLegacyTouchStart,{passive:false,capture:true});
+ }
+
  const handsInputCleanup=()=>{
-  stage.removeEventListener('touchstart',onStageTouchStart,true);
-  stage.removeEventListener('touchmove',onStageTouchMove,true);
-  stage.removeEventListener('touchend',onStageTouchEnd,true);
-  stage.removeEventListener('touchcancel',onStageTouchEnd,true);
-  stage.removeEventListener('pointerdown',onStagePointerDown,true);
+  stage.removeEventListener('pointerdown',onPointerDown,true);
+  stage.removeEventListener('pointermove',onPointerMove,true);
+  stage.removeEventListener('pointerup',onPointerUp,true);
+  stage.removeEventListener('pointercancel',onPointerUp,true);
+  if(onLegacyTouchStart)stage.removeEventListener('touchstart',onLegacyTouchStart,true);
   [left,right].forEach(p=>clearTimeout(p._releaseTimer));
+  activePointers.clear();
  };
  scene.querySelector('.hands-exit-btn').onclick=()=>show('handssetup');
  scene.querySelector('.hands-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';if(state.paused){clearLocalTimers();hint.textContent='⏸️ Pausado. Continue quando estiver pronto.';}else{hint.textContent='🤲 Vamos continuar no seu tempo.';resetAttempt(false);}};
@@ -915,5 +928,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=33').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=34').catch(()=>{});
 })();
