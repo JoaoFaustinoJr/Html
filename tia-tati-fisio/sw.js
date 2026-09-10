@@ -1,7 +1,7 @@
-const CACHE='tia-tati-v26-20260909';
+const CACHE='tia-tati-v27-20260909';
 const CORE=[
- './','./index.html','./styles.css?v=26','./app.js?v=26','./manifest.webmanifest',
- './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp','./assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg','./assets/bee-game.svg','./assets/bee-garden.svg'
+ './','./index.html','./styles.css?v=27','./app.js?v=27','./manifest.webmanifest',
+ './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp','./assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg','./assets/bee-game.svg','./assets/bee-garden.svg','./assets/target-board.svg'
 ];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
