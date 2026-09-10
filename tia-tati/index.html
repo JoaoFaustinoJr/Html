@@ -7,128 +7,39 @@
 <meta name="description" content="Tia Tati – Fisio Sensorial. Portal para Área Kids e Modo Jovem.">
 <title>Tia Tati – Fisio Sensorial</title>
 <style>
-:root{
-  --blue:#0f4d8c;--blue2:#173b72;--pink:#f64f9e;--pink2:#e94791;
-  --ink:#173b67;--muted:#60758d;--line:#dbeaf2;--white:#fff;
-  --cyan:#22d4ee;--shadow:0 18px 48px rgba(31,74,105,.12)
-}
-*{box-sizing:border-box}
-html{min-height:100%;background:#eef9ff}
-body{
-  margin:0;min-height:100vh;overflow-x:hidden;
-  font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--ink);
-  background:
-    radial-gradient(circle at 7% 5%,rgba(255,210,230,.58),transparent 24%),
-    radial-gradient(circle at 94% 7%,rgba(180,239,241,.68),transparent 28%),
-    linear-gradient(180deg,#eefaff 0%,#fbfeff 52%,#fff6fa 100%)
-}
-a{-webkit-tap-highlight-color:transparent}.portal{width:min(1180px,100%);margin:auto;padding:12px 14px 28px}
-
-/* Cabeçalho simples: marca + nome profissional. */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
-  min-height:72px;padding:10px 16px;border-radius:24px;
-  background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.98);
-  box-shadow:0 9px 28px rgba(34,76,102,.07);backdrop-filter:blur(10px)
-}
-.brand{display:flex;align-items:center;gap:13px;min-width:0}.brand-mark{display:grid;line-height:1;min-width:0}
-.brand-script{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:clamp(1.8rem,3.2vw,2.55rem);font-weight:950;letter-spacing:-.07em;color:var(--blue);white-space:nowrap}
-.brand-pill{display:inline-flex;width:max-content;margin-top:4px;padding:4px 9px;border-radius:999px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font-size:.58rem;font-weight:950;letter-spacing:.12em}
-.professional{text-align:right;line-height:1.25}.professional strong{display:block;font-size:.9rem;color:var(--blue2)}.professional small{display:block;margin-top:3px;color:#718397;font-size:.72rem;font-weight:750}
-
-.hero{
-  display:grid;grid-template-columns:minmax(330px,.9fr) minmax(0,1.1fr);gap:22px;
-  margin-top:14px;padding:22px;border-radius:34px;
-  background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(237,250,255,.96) 55%,rgba(255,241,248,.97));
-  border:1px solid rgba(255,255,255,.98);box-shadow:var(--shadow);overflow:hidden
-}
-
-/* A arte fica sozinha: nenhum texto sobreposto ao rosto ou à imagem. */
-.art-panel{
-  position:relative;display:flex;align-items:center;justify-content:center;
-  min-height:590px;padding:12px;border-radius:28px;overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 46%,#fff 0 28%,rgba(255,255,255,.74) 48%,transparent 66%),
-    linear-gradient(180deg,#dff7ff 0%,#fff4f9 70%,#e7f7e8 100%)
-}
-.art-panel:after{content:"";position:absolute;left:-8%;right:-8%;bottom:-18%;height:36%;border-radius:50%;background:rgba(172,222,178,.35);pointer-events:none}
-.tati-art{position:relative;z-index:2;width:100%;height:565px;object-fit:contain;object-position:center;display:block;filter:drop-shadow(0 16px 24px rgba(31,69,95,.12))}
-.art-caption{position:absolute;z-index:3;left:16px;right:16px;bottom:14px;text-align:center;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid #efdfe8;color:var(--blue);font-family:"Segoe Print","Comic Sans MS",cursive;font-weight:900;font-size:.82rem;box-shadow:0 7px 18px rgba(31,72,98,.08)}
-
-.content{display:flex;flex-direction:column;justify-content:center;padding:20px 10px 14px 4px}.eyebrow{display:inline-flex;width:max-content;padding:7px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#718296;font-size:.65rem;font-weight:950;letter-spacing:.12em}
-.content h1{margin:14px 0 10px;font-family:"Segoe Print","Comic Sans MS",cursive;font-size:clamp(2.75rem,5.2vw,4.85rem);line-height:.93;letter-spacing:-.055em;color:#123f7f}.content h1 em{display:block;color:var(--pink);font-style:normal}.lead{max-width:640px;margin:0;color:#5b7188;font-size:1rem;line-height:1.55;font-weight:650}
-
-.choices{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:25px}.choice{position:relative;display:flex;flex-direction:column;min-height:260px;padding:18px;border-radius:27px;text-decoration:none;overflow:hidden;transition:.18s ease}.choice:hover{transform:translateY(-3px)}.choice:active{transform:scale(.985)}
-.choice-kids{color:#174f8c;background:linear-gradient(145deg,#fff8bd,#e5f9ff 54%,#ffe8f2);border:2px solid #fff;box-shadow:0 13px 30px rgba(54,91,113,.11)}
-.choice-youth{color:#fff;background:radial-gradient(circle at 82% 16%,rgba(0,232,255,.25),transparent 26%),radial-gradient(circle at 18% 80%,rgba(255,56,194,.24),transparent 31%),linear-gradient(145deg,#081533,#1d215c 56%,#35145f);border:2px solid rgba(66,227,255,.42);box-shadow:0 15px 34px rgba(14,29,79,.23)}
-.choice-top{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:72px}.choice-icons{font-size:1.8rem;letter-spacing:.08em}.choice-youth .choice-icons{text-shadow:0 0 12px #22d8f0}.choice-badge{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.88);font-size:.64rem;font-weight:950;letter-spacing:.1em}.choice-youth .choice-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff}
-.choice h2{margin:4px 0 7px;font-size:clamp(2rem,3.6vw,2.85rem);line-height:.95;letter-spacing:-.05em}.choice p{margin:0 0 14px;font-size:.82rem;line-height:1.42;font-weight:680}.choice-kids p{color:#5a7187}.choice-youth p{color:#d9e5ff}.enter{margin-top:auto;display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:10px 12px 10px 15px;border-radius:999px;font-size:.82rem;font-weight:950}.choice-kids .enter{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 9px 20px rgba(246,79,158,.2)}.choice-youth .enter{background:linear-gradient(90deg,#19daed,#2ba8ff);color:#082b56;box-shadow:0 0 22px rgba(25,218,237,.22)}.enter b{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.27);font-size:1.1rem}.choice-youth .enter b{background:rgba(255,255,255,.6)}
-
+:root{--blue:#0f4d8c;--blue2:#173b72;--pink:#f64f9e;--pink2:#e94791;--ink:#173b67;--muted:#60758d;--line:#dbeaf2;--cyan:#22d4ee;--shadow:0 18px 48px rgba(31,74,105,.12)}
+*{box-sizing:border-box}html{min-height:100%;background:#eef9ff}body{margin:0;min-height:100vh;overflow-x:hidden;font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 7% 5%,rgba(255,210,230,.58),transparent 24%),radial-gradient(circle at 94% 7%,rgba(180,239,241,.68),transparent 28%),linear-gradient(180deg,#eefaff 0%,#fbfeff 52%,#fff6fa 100%)}a{-webkit-tap-highlight-color:transparent}.portal{width:min(1180px,100%);margin:auto;padding:12px 14px 28px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:72px;padding:10px 16px;border-radius:24px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.98);box-shadow:0 9px 28px rgba(34,76,102,.07)}.brand-mark{display:grid;line-height:1}.brand-script{font-family:"Segoe Print","Comic Sans MS",cursive;font-size:clamp(1.8rem,3.2vw,2.55rem);font-weight:950;letter-spacing:-.07em;color:var(--blue);white-space:nowrap}.brand-pill{display:inline-flex;width:max-content;margin-top:4px;padding:4px 9px;border-radius:999px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font-size:.58rem;font-weight:950;letter-spacing:.12em}.professional{text-align:right;line-height:1.25}.professional strong{display:block;font-size:.9rem;color:var(--blue2)}.professional small{display:block;margin-top:3px;color:#718397;font-size:.72rem;font-weight:750}
+.hero{display:grid;grid-template-columns:minmax(330px,.9fr) minmax(0,1.1fr);gap:22px;margin-top:14px;padding:22px;border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(237,250,255,.96) 55%,rgba(255,241,248,.97));border:1px solid rgba(255,255,255,.98);box-shadow:var(--shadow);overflow:hidden}.art-panel{position:relative;display:flex;align-items:center;justify-content:center;min-height:590px;border-radius:28px;overflow:hidden;background:radial-gradient(circle at 50% 42%,#fff 0 25%,rgba(255,255,255,.72) 48%,transparent 66%),linear-gradient(180deg,#dff7ff 0%,#fff4f9 72%,#e7f7e8 100%)}.tati-art{width:112%;height:590px;object-fit:cover;object-position:center 37%;transform:scale(1.08);display:block;filter:drop-shadow(0 16px 24px rgba(31,69,95,.10))}
+.content{display:flex;flex-direction:column;justify-content:center;padding:20px 10px 14px 4px}.eyebrow{display:inline-flex;width:max-content;padding:7px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#718296;font-size:.65rem;font-weight:950;letter-spacing:.12em}.content h1{margin:14px 0 10px;font-family:"Segoe Print","Comic Sans MS",cursive;font-size:clamp(2.75rem,5.2vw,4.85rem);line-height:.93;letter-spacing:-.055em;color:#123f7f}.content h1 em{display:block;color:var(--pink);font-style:normal}.lead{max-width:640px;margin:0;color:#5b7188;font-size:1rem;line-height:1.55;font-weight:650}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:25px}.choice{display:flex;flex-direction:column;min-height:260px;padding:18px;border-radius:27px;text-decoration:none;overflow:hidden;transition:.18s ease}.choice:hover{transform:translateY(-3px)}.choice:active{transform:scale(.985)}.choice-kids{color:#174f8c;background:linear-gradient(145deg,#fff8bd,#e5f9ff 54%,#ffe8f2);border:2px solid #fff;box-shadow:0 13px 30px rgba(54,91,113,.11)}.choice-youth{color:#fff;background:radial-gradient(circle at 82% 16%,rgba(0,232,255,.25),transparent 26%),radial-gradient(circle at 18% 80%,rgba(255,56,194,.24),transparent 31%),linear-gradient(145deg,#081533,#1d215c 56%,#35145f);border:2px solid rgba(66,227,255,.42);box-shadow:0 15px 34px rgba(14,29,79,.23)}.choice-top{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:72px}.choice-icons{font-size:1.8rem;letter-spacing:.08em}.choice-youth .choice-icons{text-shadow:0 0 12px #22d8f0}.choice-badge{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.88);font-size:.64rem;font-weight:950;letter-spacing:.1em}.choice-youth .choice-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff}.choice h2{margin:4px 0 7px;font-size:clamp(2rem,3.6vw,2.85rem);line-height:.95;letter-spacing:-.05em}.choice p{margin:0 0 14px;font-size:.82rem;line-height:1.42;font-weight:680}.choice-kids p{color:#5a7187}.choice-youth p{color:#d9e5ff}.enter{margin-top:auto;display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:10px 12px 10px 15px;border-radius:999px;font-size:.82rem;font-weight:950}.choice-kids .enter{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 9px 20px rgba(246,79,158,.2)}.choice-youth .enter{background:linear-gradient(90deg,#19daed,#2ba8ff);color:#082b56;box-shadow:0 0 22px rgba(25,218,237,.22)}.enter b{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.27);font-size:1.1rem}.choice-youth .enter b{background:rgba(255,255,255,.6)}
 .values{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.values span{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.88);border:1px solid #e4edf2;color:#526a83;font-size:.72rem;font-weight:850}.footer{text-align:center;margin:14px 0 0;color:#778b9f;font-size:.75rem}.footer strong{color:var(--pink)}
-
-@media(max-width:900px){.hero{grid-template-columns:300px 1fr}.art-panel{min-height:540px}.tati-art{height:515px}.content h1{font-size:3.45rem}.choice{min-height:235px}}
-@media(max-width:720px){
-  .portal{padding:8px 8px 22px}.topbar{min-height:66px;padding:9px 11px;border-radius:20px}.brand-script{font-size:1.7rem}.brand-pill{font-size:.5rem}.professional strong{font-size:.72rem;max-width:190px}.professional small{font-size:.62rem}
-  .hero{grid-template-columns:1fr;gap:0;padding:12px;border-radius:26px}.art-panel{min-height:380px;border-radius:21px;padding:5px}.tati-art{height:355px;width:100%;object-fit:contain}.art-caption{position:static;margin:5px 8px 8px;font-size:.72rem;border-radius:16px;padding:8px 10px}
-  .content{text-align:center;align-items:center;padding:15px 6px 8px}.eyebrow{font-size:.56rem}.content h1{font-size:2.55rem;margin:11px 0 9px}.lead{font-size:.86rem;line-height:1.48}
-  .choices{grid-template-columns:1fr;width:100%;gap:10px;margin-top:17px}.choice{min-height:205px;padding:15px;border-radius:22px;text-align:left}.choice-top{min-height:55px}.choice-icons{font-size:1.45rem}.choice h2{font-size:2rem}.choice p{font-size:.76rem}.enter{min-height:44px;font-size:.77rem}
-  .values{justify-content:center}.values span{font-size:.66rem;padding:7px 9px}
-}
-@media(max-width:440px){
-  .professional strong{font-size:.68rem;max-width:165px}.professional small{display:none}.art-panel{min-height:350px}.tati-art{height:325px}.content h1{font-size:2.28rem}.choice{min-height:195px}
-}
+@media(max-width:900px){.hero{grid-template-columns:300px 1fr}.art-panel{min-height:520px}.tati-art{height:520px}.content h1{font-size:3.45rem}.choice{min-height:235px}}
+@media(max-width:720px){.portal{padding:8px 8px 22px}.topbar{min-height:62px;padding:8px 11px;border-radius:20px}.brand-script{font-size:1.7rem}.brand-pill{font-size:.5rem}.professional strong{font-size:.72rem;max-width:190px}.professional small{font-size:.62rem}.hero{grid-template-columns:1fr;gap:0;padding:10px;border-radius:26px}.art-panel{min-height:310px;border-radius:21px}.tati-art{height:310px;width:115%;object-fit:cover;object-position:center 39%;transform:scale(1.15)}.content{text-align:center;align-items:center;padding:16px 6px 8px}.eyebrow{font-size:.56rem}.content h1{font-size:2.45rem;margin:10px 0 8px}.lead{font-size:.86rem;line-height:1.48}.choices{grid-template-columns:1fr;width:100%;gap:10px;margin-top:17px}.choice{min-height:195px;padding:15px;border-radius:22px;text-align:left}.choice-top{min-height:52px}.choice-icons{font-size:1.4rem}.choice h2{font-size:2rem}.choice p{font-size:.76rem}.enter{min-height:44px;font-size:.77rem}.values{justify-content:center}.values span{font-size:.66rem;padding:7px 9px}}
+@media(max-width:440px){.professional strong{font-size:.68rem;max-width:165px}.professional small{display:none}.art-panel{min-height:285px}.tati-art{height:285px}.content h1{font-size:2.18rem}.choice{min-height:188px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <main class="portal">
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">
-        <span class="brand-script">Tia Tati</span>
-        <span class="brand-pill">FISIO SENSORIAL</span>
-      </div>
-    </div>
-    <div class="professional">
-      <strong>Dra. Tatiana de Oliveira Machado</strong>
-      <small>Fisioterapia • movimento que inclui</small>
-    </div>
+    <div class="brand-mark"><span class="brand-script">Tia Tati</span><span class="brand-pill">FISIO SENSORIAL</span></div>
+    <div class="professional"><strong>Dra. Tatiana de Oliveira Machado</strong><small>Fisioterapia • movimento que inclui</small></div>
   </header>
 
   <section class="hero" aria-labelledby="portal-title">
-    <div class="art-panel">
-      <img class="tati-art" src="../tia-tati-kids/assets/welcome.webp" alt="Dra. Tatiana de Oliveira Machado, Tia Tati, dando boas-vindas">
-      <div class="art-caption">Juntos por mais conquistas! ♥</div>
-    </div>
-
+    <div class="art-panel"><img class="tati-art" src="../tia-tati-kids/assets/welcome.webp" alt="Dra. Tatiana de Oliveira Machado, Tia Tati, dando boas-vindas"></div>
     <div class="content">
       <span class="eyebrow">TIA TATI • FISIO SENSORIAL</span>
       <h1 id="portal-title">Pequenas conquistas<em>movem grandes caminhos!</em></h1>
       <p class="lead">Missões terapêuticas para um amanhã mais independente. Escolha a experiência mais adequada para este momento.</p>
-
       <div class="choices" aria-label="Escolha a experiência">
-        <a class="choice choice-kids" href="launch-kids.html" aria-label="Entrar na Área Kids">
-          <div class="choice-top"><span class="choice-badge">🌈 ÁREA KIDS</span><span class="choice-icons" aria-hidden="true">🚗 🐝 🌸</span></div>
-          <h2>Área Kids</h2>
-          <p>Brincar, aprender, movimentar e se desenvolver com leveza em cada missão.</p>
-          <span class="enter">Entrar na Área Kids <b>→</b></span>
-        </a>
-
-        <a class="choice choice-youth" href="launch-jovem.html" aria-label="Entrar no Modo Jovem">
-          <div class="choice-top"><span class="choice-badge">🎮 MODO JOVEM</span><span class="choice-icons" aria-hidden="true">⚡ 🎵 🧠</span></div>
-          <h2>Modo Jovem</h2>
-          <p>Ritmo, foco, memória e resposta motora em desafios com uma identidade neon.</p>
-          <span class="enter">Entrar no Modo Jovem <b>→</b></span>
-        </a>
+        <a class="choice choice-kids" href="launch-kids.html" aria-label="Entrar na Área Kids"><div class="choice-top"><span class="choice-badge">🌈 ÁREA KIDS</span><span class="choice-icons" aria-hidden="true">🚗 🐝 🌸</span></div><h2>Área Kids</h2><p>Brincar, aprender, movimentar e se desenvolver com leveza em cada missão.</p><span class="enter">Entrar na Área Kids <b>→</b></span></a>
+        <a class="choice choice-youth" href="launch-jovem.html" aria-label="Entrar no Modo Jovem"><div class="choice-top"><span class="choice-badge">🎮 MODO JOVEM</span><span class="choice-icons" aria-hidden="true">⚡ 🎵 🧠</span></div><h2>Modo Jovem</h2><p>Ritmo, foco, memória e resposta motora em desafios com uma identidade neon.</p><span class="enter">Entrar no Modo Jovem <b>→</b></span></a>
       </div>
-
-      <div class="values" aria-label="Valores do projeto">
-        <span>🧠 Atenção</span><span>🏃 Movimento</span><span>💗 Autonomia</span><span>🌱 Inclusão</span>
-      </div>
+      <div class="values"><span>🧠 Atenção</span><span>🏃 Movimento</span><span>💗 Autonomia</span><span>🌱 Inclusão</span></div>
     </div>
   </section>
-
   <footer class="footer"><strong>Tia Tati</strong> • Fisio Sensorial • cada passo importa ♥</footer>
 </main>
 </body>
