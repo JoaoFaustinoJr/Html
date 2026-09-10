@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=22">
+<link rel="stylesheet" href="styles.css?v=23">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -245,6 +245,62 @@
   </div>
 </section>
 
+<section class="screen" id="screen-beesetup">
+  <div class="bee-setup-head">
+    <button class="back-btn" data-home type="button">←</button>
+    <div><span class="kicker">MISSÃO TERAPÊUTICA + NATUREZA</span><h2>Abelhinha e a Flor</h2><p>Ajude a abelhinha a levar o pólen até a flor.</p></div>
+    <div class="bee-setup-tutor"><img src="assets/guide.webp" alt="Tia Tati"><span>Vamos juntos? 💗</span></div>
+  </div>
+
+  <section class="bee-setup-hero panel">
+    <div>
+      <span class="mission-badge">🐝 DESAFIO DA TIA TATI</span>
+      <h1>Voe com cuidado<br><em>até a flor!</em></h1>
+      <p>Observe a trilha, acompanhe com os olhos e conduza a abelhinha com calma. A ajuda aparece aos poucos quando necessário.</p>
+      <div class="road-learning-pills"><span>👀 Rastreamento</span><span>🎯 Precisão</span><span>🧠 Planejamento</span><span>🌸 Causa e propósito</span></div>
+    </div>
+    <div class="bee-hero-scene">
+      <img class="bee-hero-garden" src="assets/bee-garden.svg" alt="">
+      <img class="bee-hero-bee" src="assets/bee-game.svg" alt="Abelhinha">
+      <div class="bee-hero-flower">🌸</div>
+      <div class="bee-hero-bubble">“Siga a trilha!”</div>
+    </div>
+  </section>
+
+  <section class="bee-setup-section">
+    <div class="road-v18-section-title"><span>1</span><div><strong>Escolha o caminho</strong><small>Progressão gradual do movimento.</small></div></div>
+    <div class="bee-route-grid">
+      <button class="bee-route-card" data-bee-route="1" type="button"><span class="pick-check">✓</span><span class="bee-route-preview straight">➜</span><strong>Caminho 1</strong><small>Curto e simples</small></button>
+      <button class="bee-route-card active" data-bee-route="2" type="button"><span class="pick-check">✓</span><span class="bee-route-preview curve">〰</span><strong>Caminho 2</strong><small>Curvas suaves</small></button>
+      <button class="bee-route-card" data-bee-route="3" type="button"><span class="pick-check">✓</span><span class="bee-route-preview cross">⌁</span><strong>Caminho 3</strong><small>Cruza a linha média</small></button>
+    </div>
+  </section>
+
+  <section class="bee-setup-section">
+    <div class="road-v18-section-title"><span>2</span><div><strong>Escolha a flor</strong><small>Autonomia e escolha.</small></div></div>
+    <div class="bee-flower-grid">
+      <button class="bee-flower-card active" data-bee-flower="pink" type="button"><span class="pick-check">✓</span><span>🌸</span><strong>Flor rosa</strong></button>
+      <button class="bee-flower-card" data-bee-flower="sun" type="button"><span class="pick-check">✓</span><span>🌻</span><strong>Girassol</strong></button>
+      <button class="bee-flower-card" data-bee-flower="white" type="button"><span class="pick-check">✓</span><span>🌼</span><strong>Margarida</strong></button>
+    </div>
+  </section>
+
+  <section class="bee-setup-section">
+    <div class="road-v18-section-title"><span>3</span><div><strong>Como conduzir</strong><small>Escolha a forma mais confortável.</small></div></div>
+    <div class="control-grid v18">
+      <button class="control-card active" data-bee-control="drag" type="button"><span class="pick-check">✓</span><span>☝️</span><strong>Arrastar</strong><small>Conduza com o dedo.</small></button>
+      <button class="control-card" data-bee-control="tap" type="button"><span class="pick-check">✓</span><span>👆</span><strong>Tocar nos pontos</strong><small>Siga as folhinhas.</small></button>
+    </div>
+  </section>
+
+  <div class="bee-learning panel"><span>🌼</span><p><strong>Aprender com a natureza.</strong><br>As abelhas ajudam as flores ao transportar pólen de uma para outra.</p></div>
+
+  <div class="bee-action-dock">
+    <div><small>Pronto para começar</small><strong id="beeActionSummary">Caminho 2 • Flor rosa • Arrastar</strong></div>
+    <button class="primary" id="startBeeMission" type="button">🐝 Iniciar o voo</button>
+  </div>
+</section>
+
 <section class="screen" id="screen-game">
   <div class="game-top">
     <button class="back-btn" id="exitGame" type="button">←</button>
@@ -367,6 +423,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=22"></script>
+<script src="app.js?v=23"></script>
 </body>
 </html>
