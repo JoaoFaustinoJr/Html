@@ -1,14 +1,15 @@
-const CACHE='tia-tati-v42-20260910';
+const CACHE='tia-tati-v43-20260910';
 const CORE=[
- './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest','./sensory-v40.css','./sensory-v40.js','./remaining-v41.css','./remaining-v41.js','./naming-v42.js',
+ './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest','./sensory-v40.css','./sensory-v40.js','./remaining-v41.css','./remaining-v41.js','./naming-v42.js?v=43','./polish-v43.css',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp','./assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg','./assets/bee-game.svg','./assets/bee-garden.svg','./assets/target-board.svg','./assets/hands-board.svg','./assets/pulse-lab.svg','./assets/cards/beat-move.webp','./assets/cards/memorize.webp','./assets/cards/reflexo-neon.webp'
 ];
 const inject=html=>{
  if(!html.includes('sensory-v40.css'))html=html.replace('</head>','<link rel="stylesheet" href="sensory-v40.css"></head>');
  if(!html.includes('remaining-v41.css'))html=html.replace('</head>','<link rel="stylesheet" href="remaining-v41.css"></head>');
+ if(!html.includes('polish-v43.css'))html=html.replace('</head>','<link rel="stylesheet" href="polish-v43.css"></head>');
  if(!html.includes('sensory-v40.js'))html=html.replace('</body>','<script src="sensory-v40.js"></script></body>');
  if(!html.includes('remaining-v41.js'))html=html.replace('</body>','<script src="remaining-v41.js"></script></body>');
- if(!html.includes('naming-v42.js'))html=html.replace('</body>','<script src="naming-v42.js"></script></body>');
+ if(!html.includes('naming-v42.js?v=43'))html=html.replace('</body>','<script src="naming-v42.js?v=43"></script></body>');
  return html;
 };
 const enhancedResponse=async response=>{
