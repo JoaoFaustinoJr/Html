@@ -4,28 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f8fbff">
-<title>Tia Tati – Atividade</title>
+<title>Tia Tati – Abrindo atividade</title>
 <style>
-html,body{margin:0;min-height:100%;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.boot{min-height:100vh;display:grid;place-items:center;text-align:center;color:#164b87;background:linear-gradient(135deg,#fff8fc,#eefaff)}.boot div{display:grid;gap:10px;place-items:center}.boot span{font-size:44px}.boot strong{font-size:18px}.boot small{color:#71849a}.boot a{margin-top:10px;color:#176fd6;font-weight:800;text-decoration:none}
+html,body{margin:0;min-height:100%;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.boot{min-height:100vh;display:grid;place-items:center;text-align:center;color:#164b87;background:linear-gradient(135deg,#fff8fc,#eefaff)}.boot div{display:grid;gap:10px;place-items:center}.boot span{font-size:44px}.boot strong{font-size:18px}.boot small{color:#71849a}
 </style>
 </head>
 <body>
-<div class="boot"><div><span>💗</span><strong>Preparando sua atividade…</strong><small>Tia Tati • Fisio Sensorial</small></div></div>
+<div class="boot"><div><span>💗</span><strong>Abrindo sua atividade…</strong><small>Tia Tati • Fisio Sensorial</small></div></div>
 <script>
-(async()=>{
- try{
-  const source=new URL('./activity.html',location.href);
-  source.searchParams.set('source','54');
-  source.searchParams.set('t',Date.now().toString());
-  const response=await fetch(source.href,{cache:'no-store'});
-  if(!response.ok)throw new Error('Falha ao carregar a atividade');
-  let html=await response.text();
-  html=html.replace('styles.css?v=39','styles.css?v=54');
-  html=html.replace('<script src="app.js?v=39"></'+'script>','<script src="app.js?v=54"></'+'script>');
-  document.open();document.write(html);document.close();
- }catch(err){
-  document.body.innerHTML='<div class="boot"><div><span>💗</span><strong>Não foi possível abrir a atividade.</strong><small>Volte ao início e tente novamente.</small><a href="./?v=54">← Voltar ao início</a></div></div>';
- }
+(()=>{
+ const p=new URLSearchParams(location.search);
+ const open=p.get('open')||'road';
+ const target=new URL('./activity.html',location.href);
+ target.searchParams.set('open',open);
+ target.searchParams.set('v','55');
+ target.searchParams.set('t',Date.now().toString());
+ location.replace(target.href);
 })();
 </script>
 </body>
