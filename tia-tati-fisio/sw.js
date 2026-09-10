@@ -1,4 +1,4 @@
-const CACHE='tia-tati-v56-shell-20260910b';
+const CACHE='tia-tati-v56-shell-20260910c';
 const CORE=[
  './index.html','./home-v51.css?v=54','./home-v51-polish.css?v=54','./home-v53.css?v=54','./home-v53-linkfix.css?v=54','./home-v54.css?v=54','./home-v54.js?v=56','./manifest.webmanifest?v=54',
  './activity-v54.html','./activity-v56.html','./activity.html','./styles.css?v=54','./app.js?v=54','./direct-route-v54.js?v=54',
@@ -14,8 +14,7 @@ self.addEventListener('fetch',event=>{
  if(event.request.method!=='GET')return;
  const url=new URL(event.request.url);if(url.origin!==location.origin)return;
  if(event.request.mode==='navigate'){
-  // Compatibilidade: versões antigas da home enviavam direto para activity.html?open=...
-  // Nesse caso servimos o shell v56 sem mudar a URL. O iframe interno usa activity.html sem ?open.
+  // v56 compatibility: even a stale home that sends activity.html?open=... gets the deterministic selector shell.
   if(url.pathname.endsWith('/activity.html')&&url.searchParams.has('open')){
    event.respondWith(fetch('./activity-v56.html?sw=56&t='+Date.now(),{cache:'no-store'}).catch(()=>caches.match('./activity-v56.html')));
    return;
