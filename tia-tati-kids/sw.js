@@ -1,6 +1,6 @@
-const CACHE='tia-tati-kids-v3-20260910';
+const CACHE='tia-tati-kids-v4-20260910';
 const CORE=[
- './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest','./kids-only-v1.js','./kids-home-v3.css?v=3',
+ './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest','./kids-home-v3.css?v=4','./kids-stability-v4.css?v=4','./kids-stability-v4.js?v=4',
  './sensory-v40.css','./sensory-v40.js','./remaining-v41.css','./remaining-v41.js',
  './naming-v42.js?v=43','./polish-v43.css','./final-v44.css','./final-v44.js','./identity-v45.css','./identity-v45.js',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp',
@@ -13,13 +13,14 @@ const inject=html=>{
  if(!html.includes('polish-v43.css'))html=html.replace('</head>','<link rel="stylesheet" href="polish-v43.css"></head>');
  if(!html.includes('final-v44.css'))html=html.replace('</head>','<link rel="stylesheet" href="final-v44.css"></head>');
  if(!html.includes('identity-v45.css'))html=html.replace('</head>','<link rel="stylesheet" href="identity-v45.css"></head>');
- if(!html.includes('kids-home-v3.css'))html=html.replace('</head>','<link rel="stylesheet" href="kids-home-v3.css?v=3"></head>');
+ if(!html.includes('kids-home-v3.css'))html=html.replace('</head>','<link rel="stylesheet" href="kids-home-v3.css?v=4"></head>');
+ if(!html.includes('kids-stability-v4.css'))html=html.replace('</head>','<link rel="stylesheet" href="kids-stability-v4.css?v=4"></head>');
  if(!html.includes('sensory-v40.js'))html=html.replace('</body>','<script src="sensory-v40.js"></script></body>');
  if(!html.includes('remaining-v41.js'))html=html.replace('</body>','<script src="remaining-v41.js"></script></body>');
  if(!html.includes('naming-v42.js?v=43'))html=html.replace('</body>','<script src="naming-v42.js?v=43"></script></body>');
  if(!html.includes('final-v44.js'))html=html.replace('</body>','<script src="final-v44.js"></script></body>');
  if(!html.includes('identity-v45.js'))html=html.replace('</body>','<script src="identity-v45.js"></script></body>');
- if(!html.includes('kids-only-v1.js'))html=html.replace('</body>','<script src="kids-only-v1.js?v=3"></script></body>');
+ if(!html.includes('kids-stability-v4.js'))html=html.replace('</body>','<script src="kids-stability-v4.js?v=4"></script></body>');
  return html;
 };
 const enhancedResponse=async response=>{
@@ -45,5 +46,5 @@ self.addEventListener('fetch',e=>{
   })());
   return;
  }
- e.respondWith(caches.match(e.request,{cacheName:CACHE}).then(hit=>hit||fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r;})));
+ e.respondWith(caches.match(e.request,{cacheName:CACHE}).then(hit=>hit||fetch(e.request,{cache:'no-store'}).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r;})));
 });
