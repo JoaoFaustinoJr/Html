@@ -1,98 +1,42 @@
 /* Tia Tati Kids — camada visual segura.
    Somente apresentação: não altera eventos, DOM ou lógica dos jogos. */
 
-:root{
-  --kids-blue:#165b9f;
-  --kids-pink:#ef5b9c;
-  --kids-ink:#213a55;
-  --kids-soft:#f7fbff;
-}
+:root{--kids-blue:#165b9f;--kids-pink:#ef5b9c;--kids-ink:#213a55;--kids-soft:#f7fbff}
 
-/* O app Kids mostra somente as seis missões infantis. Os elementos continuam
-   no DOM para não interferir no runtime original. */
 #screen-home .home-v22-mission[data-mission="light"],
 #screen-home .home-v22-mission[data-mission="physical"],
 #screen-home .youth-challenges{display:none!important}
 
-/* Também evita opções Jovem/Mundo Real no montador de circuito, sem remover nós. */
 #circuitPicker .circuit-item:has(input[value="light"]),
 #circuitPicker .circuit-item:has(input[value="physical"]){display:none!important}
 
-body{background:
-  radial-gradient(circle at 8% 4%,rgba(255,214,231,.34),transparent 22%),
-  radial-gradient(circle at 94% 8%,rgba(197,239,248,.42),transparent 24%),
-  linear-gradient(180deg,#fffdfd,#f7fbfd 58%,#fff8fb)}
+body{background:radial-gradient(circle at 8% 4%,rgba(255,214,231,.34),transparent 22%),radial-gradient(circle at 94% 8%,rgba(197,239,248,.42),transparent 24%),linear-gradient(180deg,#fffdfd,#f7fbfd 58%,#fff8fb)}
 
-/* O portal já apresenta a marca. Dentro do Kids, o cabeçalho superior é dispensável.
-   Ele é apenas ocultado; continua no DOM para preservar o runtime original. */
-.topbar{display:none!important}
-.app{padding-top:0!important}
-.brand strong{color:var(--kids-blue)}
-.brand small{color:#74869a;font-weight:800}
+/* O portal já apresenta a marca. Dentro do Kids, o cabeçalho superior é dispensável. */
+.topbar{display:none!important}.app{padding-top:0!important}
 
-.kids-portal-link{
-  display:inline-flex;align-items:center;justify-content:center;min-height:42px;
-  padding:0 12px;border:1px solid #dce8ed;border-radius:14px;background:#fff;
-  color:var(--kids-blue);text-decoration:none;font-size:11px;font-weight:900;
-  box-shadow:0 4px 14px rgba(25,70,98,.05)
-}
+.home-v22-hero{margin-top:0!important;border-radius:30px;background:radial-gradient(circle at 84% 18%,rgba(255,255,255,.95),transparent 27%),linear-gradient(135deg,#eaf8ff 0%,#fff 45%,#fff0f7 100%);border:1px solid #e3edf2;box-shadow:0 18px 42px rgba(27,73,98,.10)}
+.home-v22-script{color:var(--kids-blue)}.home-v22-pill{background:linear-gradient(135deg,var(--kids-pink),#f04f91)}.home-v22-kicker{color:#6f8495}.home-v22-copy h1{color:var(--kids-ink)}.home-v22-copy h1 em{color:var(--kids-pink)}.home-v22-phrase{background:#fff8cf;border-color:#f0e4a1}
+.home-v22-section-head{align-items:center}.home-v22-section-head h2{color:var(--kids-ink)}.home-v22-circuit{background:#eef8ff;color:var(--kids-blue);border:1px solid #d5eaf6}
 
-.home-v22-hero{
-  border-radius:30px;
-  background:
-    radial-gradient(circle at 84% 18%,rgba(255,255,255,.95),transparent 27%),
-    linear-gradient(135deg,#eaf8ff 0%,#fff 45%,#fff0f7 100%);
-  border:1px solid #e3edf2;
-  box-shadow:0 18px 42px rgba(27,73,98,.10)
-}
-.home-v22-script{color:var(--kids-blue)}
-.home-v22-pill{background:linear-gradient(135deg,var(--kids-pink),#f04f91)}
-.home-v22-kicker{color:#6f8495}
-.home-v22-copy h1{color:var(--kids-ink)}
-.home-v22-copy h1 em{color:var(--kids-pink)}
-.home-v22-phrase{background:#fff8cf;border-color:#f0e4a1}
+.home-v22-missions{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.home-v22-mission{min-height:220px;border-radius:24px;border:1px solid #deeaef;box-shadow:0 9px 22px rgba(24,67,91,.07)}.home-v22-mission .home-v22-visual{height:130px}.home-v22-mission-copy strong{font-size:15px;color:#263e58}.home-v22-mission-copy small{font-size:9.5px;line-height:1.42}.home-v22-mission.road{background:linear-gradient(180deg,#fff,#f2f9ff)}.home-v22-mission.bee{background:linear-gradient(180deg,#fff,#fffbdf)}.home-v22-mission.target{background:linear-gradient(180deg,#fff,#effaf3)}.home-v22-mission.hands{background:linear-gradient(180deg,#fff,#fff2f7)}.home-v22-mission.sensory{background:linear-gradient(180deg,#fff,#eefbf9)}.home-v22-mission.breathe{background:linear-gradient(180deg,#fff,#f2f9ed)}
+.home-v22-autonomy{border-radius:24px}.home-v22-cards button,.home-v22-tool{border-color:#deeaef}.home-v22-footer-phrase{background:linear-gradient(135deg,#eef9ff,#fff5fa)}
 
-.home-v22-section-head{align-items:center}
-.home-v22-section-head h2{color:var(--kids-ink)}
-.home-v22-circuit{background:#eef8ff;color:var(--kids-blue);border:1px solid #d5eaf6}
-
-/* Seis cards com leitura rápida e toque confortável. */
-.home-v22-missions{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.home-v22-mission{
-  min-height:220px;border-radius:24px;border:1px solid #deeaef;
-  box-shadow:0 9px 22px rgba(24,67,91,.07)
-}
-.home-v22-mission .home-v22-visual{height:130px}
-.home-v22-mission-copy strong{font-size:15px;color:#263e58}
-.home-v22-mission-copy small{font-size:9.5px;line-height:1.42}
-.home-v22-mission.road{background:linear-gradient(180deg,#fff,#f2f9ff)}
-.home-v22-mission.bee{background:linear-gradient(180deg,#fff,#fffbdf)}
-.home-v22-mission.target{background:linear-gradient(180deg,#fff,#effaf3)}
-.home-v22-mission.hands{background:linear-gradient(180deg,#fff,#fff2f7)}
-.home-v22-mission.sensory{background:linear-gradient(180deg,#fff,#eefbf9)}
-.home-v22-mission.breathe{background:linear-gradient(180deg,#fff,#f2f9ed)}
-
-.home-v22-autonomy{border-radius:24px}
-.home-v22-cards button,.home-v22-tool{border-color:#deeaef}
-.home-v22-footer-phrase{background:linear-gradient(135deg,#eef9ff,#fff5fa)}
-
-@media(max-width:900px){
-  .home-v22-missions{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
+@media(max-width:900px){.home-v22-missions{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media(max-width:650px){
-  html,body{overscroll-behavior-y:auto}
-  body{touch-action:pan-y}
-  .kids-portal-link{min-height:40px;padding:0 10px;font-size:10px}
-  .home-v22-hero{border-radius:24px;padding:16px}
-  .home-v22-copy h1{font-size:35px}
-  .home-v22-portrait-wrap{box-shadow:0 10px 24px rgba(23,67,90,.10)}
-  .home-v22-missions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .home-v22-mission{min-height:0;border-radius:18px;padding:6px}
-  .home-v22-mission .home-v22-visual{height:94px}
-  .home-v22-mission-copy strong{font-size:11.5px}
-  .home-v22-mission-copy small{font-size:8px}
-  .home-v22-mission:hover{transform:none}
-  .home-v22-mission:active{transform:scale(.985)}
-  .home-v22-section-head{align-items:flex-end}
+  html,body{overscroll-behavior-y:auto}body{touch-action:pan-y}.app{padding-left:10px!important;padding-right:10px!important}
+  /* Sem cabeçalho, o hero começa limpo e compacto. */
+  .home-v22-hero{margin-top:8px!important;border-radius:22px!important;padding:14px!important;gap:10px!important}
+  .home-v22-logo{margin:0!important}.home-v22-script{display:none!important}.home-v22-pill{margin:0 0 5px!important;font-size:10px!important;padding:5px 9px!important}
+  .home-v22-kicker{display:block!important;margin:0 0 5px!important;font-size:10px!important;letter-spacing:.1em!important}
+  .home-v22-copy h1{font-size:30px!important;line-height:1.02!important;margin:4px 0 8px!important;letter-spacing:-.035em!important}
+  .home-v22-copy p{font-size:13px!important;line-height:1.45!important;margin-bottom:8px!important}
+  .home-v22-values{gap:5px!important;margin-top:7px!important}.home-v22-values span{font-size:9.5px!important;padding:6px 8px!important}
+  .home-v22-phrase{font-size:10.5px!important;line-height:1.35!important;margin-top:8px!important;padding:8px 10px!important}
+  .home-v22-tutor{margin-top:4px!important}.home-v22-portrait-wrap{max-height:245px!important;overflow:hidden!important;border-radius:19px!important;box-shadow:0 9px 22px rgba(23,67,90,.09)!important}.home-v22-portrait-wrap>img{height:245px!important;width:100%!important;object-fit:cover!important;object-position:center 38%!important}.home-v22-bubble{font-size:10px!important;padding:7px 9px!important;right:8px!important;top:8px!important;bottom:auto!important}.home-v22-side-note{font-size:9px!important;margin-top:5px!important}.home-v22-hearts{display:none!important}
+  .home-v22-section-head{margin-top:19px!important;align-items:flex-end}.home-v22-section-head h2{font-size:26px!important;margin:3px 0!important}.home-v22-section-head p{font-size:11px!important}.home-v22-circuit{font-size:10px!important;padding:9px 10px!important}
+  .home-v22-missions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.home-v22-mission{min-height:0;border-radius:18px;padding:6px}.home-v22-mission .home-v22-visual{height:94px}.home-v22-mission-copy strong{font-size:11.5px}.home-v22-mission-copy small{font-size:8px}.home-v22-mission:hover{transform:none}.home-v22-mission:active{transform:scale(.985)}
 }
+
+@media(max-width:390px){.home-v22-copy h1{font-size:28px!important}.home-v22-portrait-wrap,.home-v22-portrait-wrap>img{height:220px!important;max-height:220px!important}.home-v22-section-head h2{font-size:24px!important}}
