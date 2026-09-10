@@ -10,13 +10,8 @@ function showToast(msg){
 }
 
 function applyApprovedIdentity(){
- /* A arte Boas-vindas não é mais usada como imagem principal do hero. */
  const hero=document.querySelector('.hero-tati>img');
- if(hero){
-  hero.src='assets/success.webp';
-  hero.alt='Tia Tati';
-  Object.assign(hero.style,{objectPosition:'center 18%',filter:'none'});
- }
+ if(hero){hero.src='assets/success.webp';hero.alt='Tia Tati';Object.assign(hero.style,{objectPosition:'center 18%',filter:'none'});}
  const brand=document.querySelector('.shell-brand');
  const avatar=brand&&brand.querySelector('img');
  if(avatar&&!avatar.dataset.v50Crop){
@@ -26,13 +21,7 @@ function applyApprovedIdentity(){
   avatar.parentNode.insertBefore(crop,avatar);crop.appendChild(avatar);
   Object.assign(avatar.style,{position:'absolute',width:'92px',height:'92px',maxWidth:'none',left:'50%',top:'46%',transform:'translate(-50%,-50%)',objectFit:'cover',objectPosition:'center 18%',border:'0',borderRadius:'0',boxShadow:'none'});
  }
-
- /* Os três cards jovens deixam de ampliar miniaturas rasterizadas e passam a usar arte neon nítida. */
- const youth=[
-  ['react','⚡','🧠','#19e7ff','#ff39b8'],
-  ['memory','1 2 3 4','✦','#8d5cff','#2eefff'],
-  ['beat','♫','♪','#ff35bb','#34e8ff']
- ];
+ const youth=[['react','⚡','🧠','#19e7ff','#ff39b8'],['memory','1 2 3 4','✦','#8d5cff','#2eefff'],['beat','♫','♪','#ff35bb','#34e8ff']];
  youth.forEach(([key,main,side,c1,c2])=>{
   const card=document.querySelector(`[data-open="${key}"]`);const art=card&&card.querySelector('.yart');
   if(!art||art.dataset.v50)return;art.dataset.v50='1';
@@ -43,7 +32,7 @@ function applyApprovedIdentity(){
 
 function openActivity(key){
  if(key==='home'){window.scrollTo({top:0,behavior:'smooth'});return;}
- const url=new URL('./index.html',location.href);
+ const url=new URL('./activity.html',location.href);
  url.searchParams.set('legacy','1');url.searchParams.set('shell',VERSION);url.searchParams.set('open',key);url.searchParams.set('t',Date.now().toString());
  location.assign(url.href);
 }
