@@ -125,9 +125,9 @@ function syncTargetSummary(){
  const el=$('#targetActionSummary');if(el)el.textContent=reach+' • '+(Number(state.targetCount)||5)+' alvos • '+theme;
 }
 function syncTargetSetup(){
- $('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
- $('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
- $('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
+ $$('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
+ $$('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
+ $$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
  syncTargetSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
@@ -730,9 +730,9 @@ $$('[data-bee-route]').forEach(b=>b.onclick=()=>{state.beeRoute=Number(b.dataset
 $$('[data-bee-flower]').forEach(b=>b.onclick=()=>{state.beeFlower=b.dataset.beeFlower;$$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();playVoice('choice',false);});
 $$('[data-bee-control]').forEach(b=>b.onclick=()=>{state.beeControl=b.dataset.beeControl;$$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
 $('#startBeeMission').onclick=()=>startCircuit(['bee']);
-$('[data-target-reach]').forEach(b=>b.onclick=()=>{state.targetReach=b.dataset.targetReach;$('[data-target-reach]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
-$('[data-target-count]').forEach(b=>b.onclick=()=>{state.targetCount=Number(b.dataset.targetCount)||5;$('[data-target-count]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
-$('[data-target-theme]').forEach(b=>b.onclick=()=>{state.targetTheme=b.dataset.targetTheme;$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();playVoice('choice',false);});
+$$('[data-target-reach]').forEach(b=>b.onclick=()=>{state.targetReach=b.dataset.targetReach;$$('[data-target-reach]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
+$$('[data-target-count]').forEach(b=>b.onclick=()=>{state.targetCount=Number(b.dataset.targetCount)||5;$$('[data-target-count]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
+$$('[data-target-theme]').forEach(b=>b.onclick=()=>{state.targetTheme=b.dataset.targetTheme;$$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();playVoice('choice',false);});
 $('#startTargetMission').onclick=()=>startCircuit(['target']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
@@ -741,5 +741,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=27').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=28').catch(()=>{});
 })();
