@@ -1,8 +1,8 @@
-const CACHE='tia-tati-v48-structural-shell-20260910';
+const CACHE='tia-tati-v49-direct-activity-20260910';
 const CORE=[
  './shell-v48.html?v=48','./shell-v48.css?v=48','./shell-v48.js?v=48','./manifest.webmanifest',
- './index.html?legacy=1&offline=1','./styles.css?v=39','./app.js?v=39',
- './app-base-v39.js?v=47','./sensory-v40.js?v=47','./remaining-v41.js?v=47','./naming-v42.js?v=47','./final-v44.js?v=47','./identity-v45.js?v=47',
+ './index.html?legacy=1&offline=1','./styles.css?v=39','./app.js?v=39','./legacy-bridge-v49.js?v=49',
+ './app-base-v39.js?v=49','./sensory-v40.js?v=49','./remaining-v41.js?v=49','./naming-v42.js?v=49','./final-v44.js?v=49','./identity-v45.js?v=49',
  './styles-base-v39.css?v=47','./sensory-v40.css?v=47','./remaining-v41.css?v=47','./polish-v43.css?v=47','./final-v44.css?v=47','./identity-v45.css?v=47',
  './assets/welcome.webp','./assets/guide.webp','./assets/success.webp','./assets/retry.webp','./assets/relax.webp','./assets/celebrate.webp',
  './assets/road-school.svg','./assets/road-home.svg','./assets/road-park.svg','./assets/argo-hgt-blue.svg','./assets/argo-hgt-game.svg',
@@ -17,10 +17,6 @@ self.addEventListener('activate',event=>{
   const keys=await caches.keys();
   await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));
   await self.clients.claim();
-  const clients=await self.clients.matchAll({type:'window',includeUncontrolled:true});
-  for(const client of clients){
-   try{const u=new URL(client.url);if(u.pathname.includes('/tia-tati-fisio/')&&!u.searchParams.has('legacy'))await client.navigate(client.url);}catch(_){}
-  }
  })());
 });
 async function shellResponse(){
@@ -38,7 +34,7 @@ self.addEventListener('fetch',event=>{
   return;
  }
  if(url.origin!==location.origin)return;
- const fresh=/\/(shell-v48\.(?:css|js)|app\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css))$/.test(url.pathname);
+ const fresh=/\/(shell-v48\.(?:css|js)|app\.js|legacy-bridge-v49\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css))$/.test(url.pathname);
  if(fresh){
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;}).catch(()=>caches.match(event.request)));
   return;
