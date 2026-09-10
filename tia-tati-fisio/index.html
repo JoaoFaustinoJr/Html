@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f8f4f5">
 <meta name="description" content="Tia Tati – Fisio Sensorial: missões terapêuticas lúdicas, psicopedagogia, voz da Dra. Tatiana e modo projeção.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=26">
+<link rel="stylesheet" href="styles.css?v=27">
 <title>Tia Tati – Fisio Sensorial</title>
 </head>
 <body>
@@ -301,6 +301,69 @@
   </div>
 </section>
 
+<section class="screen" id="screen-targetsetup">
+  <div class="target-setup-head">
+    <button class="back-btn" data-home type="button">←</button>
+    <div>
+      <span class="kicker">MISSÃO TERAPÊUTICA + ATENÇÃO VISUAL</span>
+      <h2>Alcance ao Alvo</h2>
+      <p>Toque nos alvos no seu tempo e acompanhe cada conquista.</p>
+    </div>
+    <div class="target-setup-tutor"><img src="assets/guide.webp" alt="Tia Tati"><span>Olhe primeiro... depois toque! 💗</span></div>
+  </div>
+
+  <section class="target-setup-hero panel">
+    <div>
+      <span class="mission-badge">🎯 DESAFIO DA TIA TATI</span>
+      <h1>Encontre, alcance<br><em>e conquiste!</em></h1>
+      <p>Os alvos aparecem um de cada vez. A atividade pode estimular alcance funcional, atenção, lateralidade e cruzamento da linha média.</p>
+      <div class="road-learning-pills"><span>👀 Atenção</span><span>🎯 Alcance</span><span>↔️ Lateralidade</span><span>🧠 Planejamento</span></div>
+    </div>
+    <div class="target-hero-scene">
+      <img src="assets/target-board.svg" alt="">
+      <span class="target-hero-dot one"></span>
+      <span class="target-hero-dot two"></span>
+      <span class="target-hero-dot three"></span>
+      <div class="target-hero-bubble">“Você consegue!”</div>
+    </div>
+  </section>
+
+  <section class="target-setup-section">
+    <div class="road-v18-section-title"><span>1</span><div><strong>Escolha a região</strong><small>Onde os alvos vão aparecer?</small></div></div>
+    <div class="target-region-grid">
+      <button class="target-region-card active" data-target-reach="all" type="button"><span class="pick-check">✓</span><span class="target-region-preview all">•••••</span><strong>Tela inteira</strong><small>Distribuição ampla</small></button>
+      <button class="target-region-card" data-target-reach="left" type="button"><span class="pick-check">✓</span><span class="target-region-preview left">•••</span><strong>Lado esquerdo</strong><small>Alcance unilateral</small></button>
+      <button class="target-region-card" data-target-reach="right" type="button"><span class="pick-check">✓</span><span class="target-region-preview right">•••</span><strong>Lado direito</strong><small>Alcance unilateral</small></button>
+      <button class="target-region-card" data-target-reach="cross" type="button"><span class="pick-check">✓</span><span class="target-region-preview cross">↔</span><strong>Cruzado</strong><small>Cruza a linha média</small></button>
+    </div>
+  </section>
+
+  <section class="target-setup-section">
+    <div class="road-v18-section-title"><span>2</span><div><strong>Escolha a sequência</strong><small>Progressão simples e gradual.</small></div></div>
+    <div class="target-count-grid">
+      <button class="target-count-card active" data-target-count="5" type="button"><span class="pick-check">✓</span><strong>5 alvos</strong><small>Início tranquilo</small></button>
+      <button class="target-count-card" data-target-count="7" type="button"><span class="pick-check">✓</span><strong>7 alvos</strong><small>Desafio moderado</small></button>
+      <button class="target-count-card" data-target-count="9" type="button"><span class="pick-check">✓</span><strong>9 alvos</strong><small>Maior sustentação</small></button>
+    </div>
+  </section>
+
+  <section class="target-setup-section">
+    <div class="road-v18-section-title"><span>3</span><div><strong>Escolha o visual</strong><small>O mesmo objetivo, com estímulos diferentes.</small></div></div>
+    <div class="target-theme-grid">
+      <button class="target-theme-card active" data-target-theme="rings" type="button"><span class="pick-check">✓</span><span>🎯</span><strong>Alvo clássico</strong></button>
+      <button class="target-theme-card" data-target-theme="stars" type="button"><span class="pick-check">✓</span><span>⭐</span><strong>Estrelas</strong></button>
+      <button class="target-theme-card" data-target-theme="flowers" type="button"><span class="pick-check">✓</span><span>🌸</span><strong>Flores</strong></button>
+    </div>
+  </section>
+
+  <div class="target-learning panel"><span>💗</span><p><strong>Sem pressa e sem “errar”.</strong><br>O alvo recebe pista visual progressiva quando necessário e cada toque válido gera reforço positivo.</p></div>
+
+  <div class="target-action-dock">
+    <div><small>Pronto para começar</small><strong id="targetActionSummary">Tela inteira • 5 alvos • Alvo clássico</strong></div>
+    <button class="primary" id="startTargetMission" type="button">🎯 Iniciar desafio</button>
+  </div>
+</section>
+
 <section class="screen" id="screen-game">
   <div class="game-top">
     <button class="back-btn" id="exitGame" type="button">←</button>
@@ -423,6 +486,6 @@
 
 <div class="toast" id="toast" aria-live="polite"></div>
 </div>
-<script src="app.js?v=26"></script>
+<script src="app.js?v=27"></script>
 </body>
 </html>
