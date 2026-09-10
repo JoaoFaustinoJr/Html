@@ -47,69 +47,45 @@ function hookHome(doc){
   top.location.href='./?v=56&t='+Date.now();
  },true);
 }
-
-function visibleAwayFromHome(doc){
- const h=doc.querySelector('#screen-home');
- return !h || !h.classList.contains('active');
-}
-
-function click(doc,sel){
- const el=doc.querySelector(sel);
- if(!el)return false;
- el.click();
- return true;
-}
-
+function awayFromHome(doc){const h=doc.querySelector('#screen-home');return !h||!h.classList.contains('active');}
+function click(doc,sel){const el=doc.querySelector(sel);if(!el)return false;el.click();return true;}
 function route(doc){
  const sel=direct[key];
- if(sel && click(doc,sel))return true;
-
- // Fallbacks das atividades jovens adicionadas por módulos posteriores.
- if(key==='pulse'){
-  const base=doc.querySelector('[data-mission="sensory"]');
-  if(base){base.click();return true;}
- }
- if(key==='restart'){
-  const base=doc.querySelector('[data-mission="breathe"]');
-  if(base){base.click();return true;}
- }
- if(key==='movequest'){
-  const base=doc.querySelector('[data-mission="physical"]');
-  if(base){base.click();return true;}
- }
+ if(sel&&click(doc,sel))return true;
+ if(key==='pulse'){const base=doc.querySelector('[data-mission="sensory"]');if(base){base.click();return true;}}
+ if(key==='restart'){const base=doc.querySelector('[data-mission="breathe"]');if(base){base.click();return true;}}
+ if(key==='movequest'){const base=doc.querySelector('[data-mission="physical"]');if(base){base.click();return true;}}
  if(['react','memory','beat'].includes(key)){
   const base=doc.querySelector('[data-mission="light"]');
-  if(base){base.click();setTimeout(()=>doc.querySelector('[data-light-mode="'+key+'"]')?.click(),80);return true;}
+  if(base){base.click();setTimeout(()=>doc.querySelector('[data-light-mode="'+key+'"]')?.click(),70);return true;}
  }
  return false;
 }
+function reveal(){frame.classList.add('ready');boot.classList.add('hide');try{frame.contentWindow.scrollTo(0,0);}catch(_){}}
+function showError(){frame.classList.remove('ready');error.style.display='block';boot.classList.remove('hide');}
 
 frame.addEventListener('load',()=>{
- let doc;
- try{doc=frame.contentDocument||frame.contentWindow.document;}catch(_){showError();return;}
+ let doc;try{doc=frame.contentDocument||frame.contentWindow.document;}catch(_){showError();return;}
  hookHome(doc);
- let attempts=0;
+ let attempts=0,checking=false;
  const timer=setInterval(()=>{
   attempts++;
-  let ok=false;
-  try{ok=route(doc);}catch(_){ }
-  if(ok){
+  if(checking)return;
+  let clicked=false;try{clicked=route(doc);}catch(_){ }
+  if(clicked){
+   checking=true;
    setTimeout(()=>{
-    frame.classList.add('ready');boot.classList.add('hide');
-    try{frame.contentWindow.scrollTo(0,0);}catch(_){ }
-   },100);
-   clearInterval(timer);
-   return;
+    checking=false;
+    if(awayFromHome(doc)){clearInterval(timer);reveal();}
+   },80);
   }
-  if(attempts>=30){clearInterval(timer);showError();}
+  if(attempts>=45){
+   setTimeout(()=>{
+    if(!awayFromHome(doc)){clearInterval(timer);showError();}
+   },120);
+  }
  },100);
 });
-
-function showError(){
- frame.classList.remove('ready');
- error.style.display='block';
- boot.classList.remove('hide');
-}
 })();
 </script>
 </body>
