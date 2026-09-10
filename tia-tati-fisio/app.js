@@ -68,7 +68,7 @@ const state={
  paused:false,currentPhrase:null,currentText:'',cleanup:null,idleTimers:[],lastObservation:''
 };
 try{Object.assign(state,JSON.parse(localStorage.getItem(prefsKey)||'{}'));}catch(e){}
-function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic}));}catch(e){}}
+function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl}));}catch(e){}}
 
 function show(name){
  if(state.cleanup){state.cleanup();state.cleanup=null;}
@@ -113,9 +113,9 @@ function syncBeeSummary(){
  const el=$('#beeActionSummary');if(el)el.textContent='Caminho '+(Number(state.beeRoute)||2)+' • '+flower+' • '+control;
 }
 function syncBeeSetup(){
- $$$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
- $$$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
- $$$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
+ $$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
+ $$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
+ $$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
  syncBeeSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
@@ -461,25 +461,39 @@ function bee(){
  const flowerIcon={pink:'🌸',sun:'🌻',white:'🌼'}[state.beeFlower]||'🌸';
  const flowerName={pink:'flor rosa',sun:'girassol',white:'margarida'}[state.beeFlower]||'flor rosa';
 
- const routeControls={
-  1:[[.16,.86],[.32,.70],[.48,.55],[.65,.39],[.82,.20]],
-  2:[[.16,.86],[.34,.78],[.25,.59],[.57,.52],[.74,.35],[.82,.20]],
-  3:[[.16,.86],[.70,.76],[.28,.59],[.72,.48],[.30,.33],[.82,.20]]
+ const routeWaypoints={
+  // Caminho 1: diagonal simples, sem curva em S.
+  1:[[.16,.86],[.32,.70],[.48,.54],[.64,.38],[.82,.20]],
+  // Caminho 2: curva em S suave.
+  2:[[.16,.86],[.57,.77],[.30,.61],[.67,.47],[.48,.33],[.82,.20]],
+  // Caminho 3: maior amplitude lateral e cruzamentos repetidos da linha média.
+  3:[[.16,.86],[.76,.74],[.24,.59],[.77,.45],[.23,.31],[.82,.20]]
  };
- const controls=(routeControls[level]||routeControls[2]).map(p=>[p[0],p[1]]);
+ const controls=(routeWaypoints[level]||routeWaypoints[2]).map(p=>[p[0],p[1]]);
  const vw=420,vh=720;
- const quad=(a,c,b,t)=>[(1-t)*(1-t)*a[0]+2*(1-t)*t*c[0]+t*t*b[0],(1-t)*(1-t)*a[1]+2*(1-t)*t*c[1]+t*t*b[1]];
- const midpoint=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
- const samples=[];let path='M '+(controls[0][0]*vw)+' '+(controls[0][1]*vh);let segStart=controls[0];
- for(let i=1;i<controls.length-1;i++){
-  const control=controls[i],segEnd=midpoint(controls[i],controls[i+1]);
-  path+=' Q '+(control[0]*vw)+' '+(control[1]*vh)+' '+(segEnd[0]*vw)+' '+(segEnd[1]*vh);
-  for(let k=0;k<22;k++)samples.push(quad(segStart,control,segEnd,k/22));
-  segStart=segEnd;
+ const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+ const catmull=(p0,p1,p2,p3,t)=>{
+  const t2=t*t,t3=t2*t;
+  return [
+   .5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),
+   .5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)
+  ];
+ };
+ const samples=[];
+ if(level===1){
+  // Rota 1 intencionalmente reta/segmentada para ficar visualmente inequívoca.
+  for(let i=0;i<controls.length-1;i++){
+   for(let k=0;k<24;k++)samples.push(lerp(controls[i],controls[i+1],k/24));
+  }
+  samples.push(controls.at(-1));
+ }else{
+  for(let i=0;i<controls.length-1;i++){
+   const p0=controls[Math.max(0,i-1)],p1=controls[i],p2=controls[i+1],p3=controls[Math.min(controls.length-1,i+2)];
+   for(let k=0;k<26;k++)samples.push(catmull(p0,p1,p2,p3,k/26));
+  }
+  samples.push(controls.at(-1));
  }
- const lc=controls[controls.length-2],le=controls[controls.length-1];
- path+=' Q '+(lc[0]*vw)+' '+(lc[1]*vh)+' '+(le[0]*vw)+' '+(le[1]*vh);
- for(let k=0;k<=28;k++)samples.push(quad(segStart,lc,le,k/28));
+ const path='M '+samples.map((p,i)=>(i?'L ':'')+(p[0]*vw).toFixed(1)+' '+(p[1]*vh).toFixed(1)).join(' ');
 
  const leafFractions=level===1?[.27,.54,.78]:level===2?[.22,.43,.64,.82]:[.18,.36,.54,.70,.84];
  const pollenFractions=level===1?[.20,.48,.74]:level===2?[.18,.47,.76]:[.16,.38,.60,.80];
@@ -499,7 +513,7 @@ function bee(){
      '<path class="bee-trail-soft" d="'+path+'" fill="none" stroke="#fff" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" opacity=".56"/>'+
      '<path class="bee-trail" d="'+path+'" fill="none" stroke="#f4a9c8" stroke-width="5" stroke-dasharray="12 13" stroke-linecap="round"/>'+
    '</svg>'+
-   '<div class="bee-route-chip">🐝 Caminho '+level+'</div>'+
+   '<div class="bee-route-chip">🐝 Caminho '+level+' • '+(level===1?'reto':level===2?'curvas suaves':'cruza a linha média')+'</div>'+
    '<div class="bee-focus-chip">👀 Siga com os olhos</div>'+
    '<div class="bee-bzzz">BZZZ!</div>'+
    '<div class="bee-hint-bubble">🌿 Leve a abelhinha até a '+flowerName+'.</div>'+
