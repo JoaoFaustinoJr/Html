@@ -1019,3 +1019,17 @@ body.light-game-active .app.light-game-mode{max-width:none!important;width:100%!
  .youth-card-copy,.youth-card.beat .youth-card-copy{padding:10px 8px}.youth-card-copy strong{font-size:13px}.youth-card-copy small{font-size:7.5px}
  .youth-card-go,.youth-card.beat .youth-card-go{font-size:0;padding:9px}.youth-card-go:after{content:"›";font-size:23px}
 }
+
+/* V39 — artes aprovadas nos cards jovens */
+.home-v22-visual.neon.neon-photo{padding:0!important;background:#0b1027!important;overflow:hidden}
+.home-v22-visual.neon.neon-photo img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 37%;filter:saturate(1.03) contrast(1.02)}
+.youth-card-art.youth-card-photo{background:#0b1027!important}
+.youth-card-art.youth-card-photo img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center;z-index:1}
+.youth-card-art.youth-card-photo:after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,transparent 55%,rgba(5,9,28,.76));pointer-events:none}
+.youth-card-art.youth-card-photo em{z-index:3;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.youth-card.react .youth-card-art.youth-card-photo{box-shadow:inset 0 0 0 1px rgba(66,240,255,.28)}
+.youth-card.memory .youth-card-art.youth-card-photo{box-shadow:inset 0 0 0 1px rgba(174,126,255,.28)}
+.youth-card.beat .youth-card-art.youth-card-photo{box-shadow:inset 0 0 0 1px rgba(255,79,201,.28)}
+@media(max-width:470px){
+ .youth-card-art.youth-card-photo img{object-position:center 38%}
+}
