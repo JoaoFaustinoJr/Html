@@ -126,9 +126,9 @@ function syncTargetSummary(){
  const el=$('#targetActionSummary');if(el)el.textContent=reach+' • '+(Number(state.targetCount)||5)+' alvos • '+theme;
 }
 function syncTargetSetup(){
- $('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
- $('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
- $('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
+ document.querySelectorAll('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
+ document.querySelectorAll('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
+ document.querySelectorAll('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
  syncTargetSummary();
 }
 function syncHandsSummary(){
@@ -137,9 +137,9 @@ function syncHandsSummary(){
  const el=$('#handsActionSummary');if(el)el.textContent=mode+' • '+(Number(state.handsRounds)||3)+' rodadas • '+pace;
 }
 function syncHandsSetup(){
- $('[data-hands-mode]').forEach(x=>x.classList.toggle('active',x.dataset.handsMode===state.handsMode));
- $('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',Number(x.dataset.handsRounds)===(Number(state.handsRounds)||3)));
- $('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x.dataset.handsPace===state.handsPace));
+ document.querySelectorAll('[data-hands-mode]').forEach(x=>x.classList.toggle('active',x.dataset.handsMode===state.handsMode));
+ document.querySelectorAll('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',Number(x.dataset.handsRounds)===(Number(state.handsRounds)||3)));
+ document.querySelectorAll('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x.dataset.handsPace===state.handsPace));
  syncHandsSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
@@ -855,13 +855,13 @@ $$('[data-bee-route]').forEach(b=>b.onclick=()=>{state.beeRoute=Number(b.dataset
 $$('[data-bee-flower]').forEach(b=>b.onclick=()=>{state.beeFlower=b.dataset.beeFlower;$$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();playVoice('choice',false);});
 $$('[data-bee-control]').forEach(b=>b.onclick=()=>{state.beeControl=b.dataset.beeControl;$$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
 $('#startBeeMission').onclick=()=>startCircuit(['bee']);
-$$('[data-target-reach]').forEach(b=>b.onclick=()=>{state.targetReach=b.dataset.targetReach;$$('[data-target-reach]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
-$$('[data-target-count]').forEach(b=>b.onclick=()=>{state.targetCount=Number(b.dataset.targetCount)||5;$$('[data-target-count]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
-$$('[data-target-theme]').forEach(b=>b.onclick=()=>{state.targetTheme=b.dataset.targetTheme;$$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();playVoice('choice',false);});
+$document.querySelectorAll('[data-target-reach]').forEach(b=>b.onclick=()=>{state.targetReach=b.dataset.targetReach;$document.querySelectorAll('[data-target-reach]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
+$document.querySelectorAll('[data-target-count]').forEach(b=>b.onclick=()=>{state.targetCount=Number(b.dataset.targetCount)||5;$document.querySelectorAll('[data-target-count]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
+$document.querySelectorAll('[data-target-theme]').forEach(b=>b.onclick=()=>{state.targetTheme=b.dataset.targetTheme;$document.querySelectorAll('[data-target-theme]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();playVoice('choice',false);});
 $('#startTargetMission').onclick=()=>startCircuit(['target']);
-$('[data-hands-mode]').forEach(b=>b.onclick=()=>{state.handsMode=b.dataset.handsMode;$('[data-hands-mode]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
-$('[data-hands-rounds]').forEach(b=>b.onclick=()=>{state.handsRounds=Number(b.dataset.handsRounds)||3;$('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
-$('[data-hands-pace]').forEach(b=>b.onclick=()=>{state.handsPace=b.dataset.handsPace;$('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
+document.querySelectorAll('[data-hands-mode]').forEach(b=>b.onclick=()=>{state.handsMode=b.dataset.handsMode;document.querySelectorAll('[data-hands-mode]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
+document.querySelectorAll('[data-hands-rounds]').forEach(b=>b.onclick=()=>{state.handsRounds=Number(b.dataset.handsRounds)||3;document.querySelectorAll('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
+document.querySelectorAll('[data-hands-pace]').forEach(b=>b.onclick=()=>{state.handsPace=b.dataset.handsPace;document.querySelectorAll('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
 $('#startHandsMission').onclick=()=>startCircuit(['hands']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
@@ -870,5 +870,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=31').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=32').catch(()=>{});
 })();
