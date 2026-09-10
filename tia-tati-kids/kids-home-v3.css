@@ -1,0 +1,186 @@
+/* Tia Tati Kids v3 — identidade visual alinhada aos mockups, sem alterar a lógica dos jogos */
+:root{
+  --kids-pink:#ff4f9f;
+  --kids-pink-soft:#ffe8f2;
+  --kids-blue:#2f7be8;
+  --kids-blue-soft:#eaf4ff;
+  --kids-mint:#dff8f1;
+  --kids-yellow:#fff1a8;
+  --kids-ink:#183a62;
+  --kids-muted:#667b91;
+  --kids-line:#dce8f0;
+  --kids-shadow:0 18px 45px rgba(36,84,119,.11);
+}
+
+html.tia-kids-v3 body{
+  background:
+    radial-gradient(circle at 8% 2%,rgba(255,196,223,.32),transparent 23%),
+    radial-gradient(circle at 93% 6%,rgba(170,231,255,.32),transparent 24%),
+    linear-gradient(180deg,#fbfdff 0%,#fff9fc 54%,#f7fbff 100%);
+}
+
+/* Kids somente: os módulos jovens continuam no código, mas não aparecem nesta home. */
+html.tia-kids-v3 #screen-home .youth-challenges,
+html.tia-kids-v3 #screen-home [data-mission="light"],
+html.tia-kids-v3 #screen-home [data-mission="physical"],
+html.tia-kids-v3 #screen-home .audience-v44{
+  display:none!important;
+}
+
+html.tia-kids-v3 .topbar{
+  background:linear-gradient(180deg,rgba(250,252,255,.98),rgba(250,252,255,.88) 72%,transparent)!important;
+}
+html.tia-kids-v3 .brand-avatar{
+  width:56px!important;height:56px!important;border-radius:18px!important;
+  box-shadow:0 8px 22px rgba(255,79,159,.16)!important;
+}
+html.tia-kids-v3 .brand strong{color:#1550a0!important;font-size:19px!important}
+html.tia-kids-v3 .brand small{color:#d9438b!important;font-weight:800!important}
+
+/* Hero — mesma linguagem do mockup: azul + rosa, Tia Tati presente, balão e frase afetiva. */
+html.tia-kids-v3 .hero-v45{
+  min-height:410px!important;
+  padding:28px 30px!important;
+  border:1px solid rgba(222,234,243,.95)!important;
+  border-radius:32px!important;
+  background:
+    radial-gradient(circle at 14% 16%,rgba(255,215,233,.62),transparent 23%),
+    radial-gradient(circle at 86% 18%,rgba(184,236,255,.62),transparent 27%),
+    linear-gradient(135deg,#fffefa 0%,#f2fbff 54%,#fff2f8 100%)!important;
+  box-shadow:var(--kids-shadow)!important;
+}
+html.tia-kids-v3 .hero-v45:after{
+  content:"";position:absolute;right:-95px;bottom:-110px;width:260px;height:260px;border-radius:50%;
+  background:linear-gradient(145deg,rgba(255,108,177,.10),rgba(64,176,236,.12));pointer-events:none;
+}
+html.tia-kids-v3 .hero-v45 .home-v22-script{
+  color:#1455aa!important;font-size:58px!important;letter-spacing:-.045em!important;
+}
+html.tia-kids-v3 .hero-v45 .home-v22-pill{
+  background:linear-gradient(135deg,var(--kids-pink),#ff79bd)!important;
+  letter-spacing:.12em!important;box-shadow:0 6px 18px rgba(255,79,159,.18)!important;
+}
+html.tia-kids-v3 .hero-v45 .home-v22-kicker{color:#65819b!important;font-weight:850!important}
+html.tia-kids-v3 .hero-v45 h1{color:#164f9a!important}
+html.tia-kids-v3 .hero-v45 h1 em{color:var(--kids-pink)!important}
+html.tia-kids-v3 .hero-v45 .home-v22-copy>p{color:#60778e!important;max-width:530px!important}
+html.tia-kids-v3 .hero-v45 .home-v22-values span{
+  background:rgba(255,255,255,.92)!important;border-color:#e1eaf2!important;color:#24537d!important;
+  box-shadow:0 6px 16px rgba(39,78,108,.06)!important;
+}
+html.tia-kids-v3 .hero-v45 .home-v22-phrase{
+  background:linear-gradient(90deg,#fff6bc,#ffe77f)!important;color:#6a5417!important;
+  border:1px solid #f5df77!important;
+}
+html.tia-kids-v3 .hero-v45 .home-v22-bubble{
+  background:rgba(255,255,255,.96)!important;border:2px solid #ffd8ea!important;color:#194e98!important;
+  box-shadow:0 12px 28px rgba(40,75,110,.12)!important;
+}
+html.tia-kids-v3 .hero-v45 .home-v22-bubble strong{color:var(--kids-pink)!important}
+html.tia-kids-v3 .hero-v45-note{color:#1752a0!important}
+html.tia-kids-v3 .hero-v45-note b{color:var(--kids-pink)!important}
+
+/* Área Kids — cartões grandes, claros e touch-friendly. */
+html.tia-kids-v3 .kids-v45{
+  margin-top:18px!important;padding:18px!important;border-radius:30px!important;
+  background:rgba(255,255,255,.94)!important;border:1px solid var(--kids-line)!important;
+  box-shadow:var(--kids-shadow)!important;
+}
+html.tia-kids-v3 .kids-v45 .kids-v44-banner{padding:2px 6px 14px!important}
+html.tia-kids-v3 .kids-v45 .kids-v44-title h2{color:#1654a4!important;letter-spacing:-.03em!important}
+html.tia-kids-v3 .kids-v45 .kids-v44-title p{color:#5d7893!important}
+html.tia-kids-v3 .kids-v45 .home-v22-missions{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;
+}
+html.tia-kids-v3 .kids-v45 .home-v22-mission{
+  min-height:226px!important;border-radius:23px!important;border:1px solid #dfeaf2!important;
+  background:linear-gradient(180deg,#fff,#fbfdff)!important;
+  box-shadow:0 10px 25px rgba(36,78,110,.08)!important;
+  transition:transform .16s ease,box-shadow .16s ease!important;
+}
+html.tia-kids-v3 .kids-v45 .home-v22-mission:hover{transform:translateY(-3px)!important;box-shadow:0 15px 30px rgba(36,78,110,.12)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission:active{transform:scale(.985)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-visual{
+  height:142px!important;margin:8px 8px 0!important;border-radius:18px!important;
+  border:1px solid rgba(220,233,241,.8)!important;
+}
+html.tia-kids-v3 .kids-v45 .home-v22-mission-copy{padding:10px 11px 9px!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission-copy strong{font-size:15px!important;color:#174d92!important;letter-spacing:-.01em!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission-copy small{font-size:9px!important;line-height:1.35!important;color:#62798f!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission.road .home-v22-visual{background:linear-gradient(145deg,#e9f7ff,#f7fcff)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission.bee .home-v22-visual{background:linear-gradient(145deg,#fff9d9,#fffdf1)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission.target .home-v22-visual{background:linear-gradient(145deg,#e8f8ec,#f8fff9)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission.hands .home-v22-visual{background:linear-gradient(145deg,#ffeaf4,#fff8fb)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission.sensory .home-v22-visual{background:linear-gradient(145deg,#e4f9ff,#f7fdff)!important}
+html.tia-kids-v3 .kids-v45 .home-v22-mission.breathe .home-v22-visual{background:linear-gradient(145deg,#eaf8e4,#fbfff9)!important}
+html.tia-kids-v3 .kids-v45-cheer{
+  background:linear-gradient(120deg,#edf9ff,#fff2f8)!important;border:1px solid #dfeaf2!important;
+  border-radius:22px!important;
+}
+
+/* Bloco de apoio mantém o espírito do mockup, com cards e voz no mesmo universo visual. */
+html.tia-kids-v3 .support-v45{margin-top:18px!important;gap:14px!important}
+html.tia-kids-v3 .support-v45 .support-v44-cards,
+html.tia-kids-v3 .support-v45 .support-v44-voice{
+  border:1px solid var(--kids-line)!important;border-radius:24px!important;
+  box-shadow:0 10px 26px rgba(36,78,110,.07)!important;background:#fff!important;
+}
+html.tia-kids-v3 .support-v45 .support-v44-cards{padding:14px!important}
+html.tia-kids-v3 .support-v45 .support-v44-cards .home-v22-section-head h2{font-size:20px!important;color:#174f9a!important}
+html.tia-kids-v3 .support-v45 .home-v22-cards{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+html.tia-kids-v3 .support-v45 .home-v22-cards img{height:105px!important;border-radius:14px!important}
+html.tia-kids-v3 .support-v45 .home-v22-cards button{border-radius:17px!important;background:#fff!important}
+html.tia-kids-v3 .support-v45 .support-v44-voice strong{color:#1753a2!important}
+
+html.tia-kids-v3 .home-v22-autonomy{
+  border-radius:26px!important;border:1px solid var(--kids-line)!important;
+  background:linear-gradient(135deg,#fff,#f5fbff)!important;box-shadow:0 10px 26px rgba(36,78,110,.07)!important;
+}
+html.tia-kids-v3 .home-v22-tools{gap:12px!important}
+html.tia-kids-v3 .home-v22-tool{
+  border-radius:20px!important;border:1px solid var(--kids-line)!important;background:#fff!important;
+  box-shadow:0 9px 22px rgba(36,78,110,.07)!important;
+}
+html.tia-kids-v3 .home-v22-footer-phrase{color:#164f98!important}
+html.tia-kids-v3 .nav-v45{border-color:#dfe9f0!important}
+
+@media(max-width:860px){
+  html.tia-kids-v3 .kids-v45 .home-v22-missions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(max-width:640px){
+  html.tia-kids-v3 .app{padding-left:10px!important;padding-right:10px!important}
+  html.tia-kids-v3 .hero-v45{
+    min-height:365px!important;padding:18px 16px!important;border-radius:25px!important;
+  }
+  html.tia-kids-v3 .hero-v45 .home-v22-copy{max-width:62%!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-script{font-size:40px!important}
+  html.tia-kids-v3 .hero-v45 h1{font-size:34px!important;line-height:.96!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-copy>p{font-size:10px!important;line-height:1.38!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-values{gap:5px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-values span{font-size:7px!important;padding:5px 7px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-phrase{font-size:8px!important;padding:7px 9px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-tutor{width:47%!important;right:0!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-portrait-wrap>img{width:100%!important;height:96%!important;object-position:center top!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-bubble{right:2px!important;top:38px!important;padding:8px 9px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-bubble strong{font-size:14px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-bubble small{font-size:7px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-side-note{display:none!important}
+  html.tia-kids-v3 .kids-v45{padding:12px!important;border-radius:24px!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-missions{grid-template-columns:1fr!important;gap:11px!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-mission{min-height:0!important;display:grid!important;grid-template-columns:42% 1fr!important;align-items:center!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-visual{height:112px!important;margin:7px!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-mission-copy{padding:10px 10px 10px 2px!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-mission-copy strong{font-size:16px!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-mission-copy small{font-size:9px!important}
+  html.tia-kids-v3 .kids-v45-cheer{grid-column:auto!important}
+  html.tia-kids-v3 .support-v45 .home-v22-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html.tia-kids-v3 .support-v45 .home-v22-cards img{height:118px!important}
+}
+
+@media(max-width:390px){
+  html.tia-kids-v3 .hero-v45{min-height:340px!important}
+  html.tia-kids-v3 .hero-v45 .home-v22-copy{max-width:64%!important}
+  html.tia-kids-v3 .hero-v45 h1{font-size:30px!important}
+  html.tia-kids-v3 .kids-v45 .home-v22-mission{grid-template-columns:39% 1fr!important}
+}
