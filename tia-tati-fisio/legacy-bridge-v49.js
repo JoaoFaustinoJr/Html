@@ -2,26 +2,19 @@
 'use strict';
 const p=new URLSearchParams(location.search);
 if(!p.has('legacy'))return;
-document.documentElement.dataset.shellLegacy='49';
-
-const routes={
- road:'[data-mission="road"]',bee:'[data-mission="bee"]',target:'[data-mission="target"]',hands:'[data-mission="hands"]',sensory:'[data-mission="sensory"]',breathe:'[data-mission="breathe"]',
- react:'[data-youth-light="react"]',memory:'[data-youth-light="memory"]',beat:'[data-youth-light="beat"]',pulse:'[data-youth-sensory]',restart:'[data-youth-breathe]',movequest:'[data-youth-physical]',
- circuit:'[data-nav="circuit"]',voice:'[data-nav="voice"]',reports:'[data-nav="reports"]',fisio:'[data-nav="fisio"]',interventions:'#interventionsBtn'
-};
+document.documentElement.dataset.shellLegacy='50';
 
 const style=document.createElement('style');
 style.textContent=`
-html[data-shell-legacy="49"] .topbar{display:none!important}
-html[data-shell-legacy="49"] .bottom-nav{display:none!important}
-html[data-shell-legacy="49"] .app{padding-top:8px!important;padding-bottom:26px!important}
-html[data-shell-legacy="49"] body{overscroll-behavior:none}
+html[data-shell-legacy="50"] .topbar{display:none!important}
+html[data-shell-legacy="50"] .bottom-nav{display:none!important}
+html[data-shell-legacy="50"] .app{padding-top:8px!important;padding-bottom:26px!important}
+html[data-shell-legacy="50"] body{overscroll-behavior:none}
 `;
 document.head.appendChild(style);
 
 function backToShell(){
- const url=new URL('./',location.href);
- location.href=url.href;
+ location.href=new URL('./',location.href).href;
 }
 
 document.addEventListener('click',e=>{
@@ -30,18 +23,54 @@ document.addEventListener('click',e=>{
  }
 },true);
 
-function openRequested(tries=0){
- const key=p.get('open');
- const selector=p.get('selector')||routes[key];
- if(!selector)return;
- const el=document.querySelector(selector);
- if(el){
-  try{el.click();}catch(_){el.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));}
-  return;
+const screenMap={
+ road:'roadsetup',bee:'beesetup',target:'targetsetup',hands:'handssetup',
+ react:'lightsetup',memory:'lightsetup',beat:'lightsetup',
+ sensory:'sensorysetup',pulse:'sensorysetup',
+ breathe:'breathesetup',restart:'breathesetup',
+ movequest:'physicalsetup',
+ circuit:'circuit',voice:'voice',reports:'reports',fisio:'fisio',interventions:'interventions'
+};
+
+function activateScreen(name){
+ const target=document.getElementById('screen-'+name);
+ if(!target)return false;
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ target.classList.add('active');
+ const app=document.getElementById('app');
+ if(app){
+  app.classList.toggle('road-setup-mode',name==='roadsetup');
+  app.classList.toggle('bee-setup-mode',name==='beesetup');
+  app.classList.toggle('target-setup-mode',name==='targetsetup');
+  app.classList.toggle('hands-setup-mode',name==='handssetup');
+  app.classList.toggle('light-setup-mode',name==='lightsetup');
  }
- if(tries<80)setTimeout(()=>openRequested(tries+1),100);
+ window.scrollTo({top:0,behavior:'auto'});
+ return true;
 }
 
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>openRequested(),120),{once:true});
-else setTimeout(()=>openRequested(),120);
+function applyPreset(key){
+ const selectors={
+  react:'[data-light-mode="react"]',memory:'[data-light-mode="memory"]',beat:'[data-light-mode="beat"]',
+  pulse:'[data-sensory-profile="pulse"]',restart:'[data-breathe-mode="reset"]',movequest:'[data-physical-profile="quest"]'
+ };
+ const s=selectors[key];
+ if(!s)return;
+ const el=document.querySelector(s);
+ if(el){try{el.click();}catch(_){}}
+}
+
+function openRequested(tries=0){
+ const key=p.get('open');
+ const name=screenMap[key];
+ if(!name)return;
+ if(activateScreen(name)){
+  setTimeout(()=>applyPreset(key),60);
+  return;
+ }
+ if(tries<100)setTimeout(()=>openRequested(tries+1),80);
+}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>openRequested(),80),{once:true});
+else setTimeout(()=>openRequested(),80);
 })();
