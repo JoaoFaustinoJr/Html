@@ -1,0 +1,67 @@
+/* Tia Tati Kids v4 — estabilidade mobile sem alterar a mecânica dos jogos */
+html.tia-kids-v3,
+html.tia-kids-v3 body{
+  scroll-behavior:auto!important;
+  overscroll-behavior-y:auto!important;
+}
+
+html.tia-kids-v3 body,
+html.tia-kids-v3 #app,
+html.tia-kids-v3 #screen-home{
+  touch-action:pan-y pinch-zoom!important;
+  overflow-x:hidden!important;
+}
+
+html.tia-kids-v3 #screen-home button,
+html.tia-kids-v3 #screen-home [data-mission]{
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+  z-index:2;
+}
+
+html.tia-kids-v3 #screen-home [data-mission] img,
+html.tia-kids-v3 #screen-home [data-mission] .home-v22-visual,
+html.tia-kids-v3 #screen-home [data-mission] .home-v22-visual *{
+  pointer-events:none!important;
+}
+
+/* Jovem permanece montado internamente para não quebrar a arquitetura V44/V45. */
+html.tia-kids-v3 #screen-home .youth-challenges,
+html.tia-kids-v3 #screen-home [data-mission="light"],
+html.tia-kids-v3 #screen-home [data-mission="physical"],
+html.tia-kids-v3 #screen-home .audience-v44{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  html.tia-kids-v3 .topbar{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+    background:rgba(250,252,255,.98)!important;
+  }
+
+  html.tia-kids-v3 #screen-home.screen.active{
+    animation:none!important;
+  }
+
+  html.tia-kids-v3 .hero-v45 .home-v22-portrait-wrap>img{
+    filter:none!important;
+    -webkit-mask-image:none!important;
+    mask-image:none!important;
+  }
+
+  html.tia-kids-v3 .hero-v45,
+  html.tia-kids-v3 .kids-v45,
+  html.tia-kids-v3 .support-v45 .support-v44-cards,
+  html.tia-kids-v3 .support-v45 .support-v44-voice,
+  html.tia-kids-v3 .home-v22-tool{
+    box-shadow:0 6px 16px rgba(36,78,110,.06)!important;
+  }
+
+  html.tia-kids-v3 .kids-v45 .home-v22-mission,
+  html.tia-kids-v3 .kids-v45 .home-v22-mission:hover,
+  html.tia-kids-v3 .kids-v45 .home-v22-mission:focus-visible{
+    transform:none!important;
+  }
+}
