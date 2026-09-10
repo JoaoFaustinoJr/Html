@@ -1,8 +1,75 @@
 
 (()=>{
- const APP_VERSION='15.7.3';
+ const APP_VERSION='15.7.4';
  const PERMANENT_PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,reloading=false;
+
+ // v15.7.4 — recupera a viewport móvel após a reconstrução dinâmica do documento.
+ function isHandheld(){
+   try{
+     const ua=navigator.userAgent||'';
+     const mobileUA=/Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(ua);
+     const uaData=!!(navigator.userAgentData&&navigator.userAgentData.mobile);
+     const coarse=!!(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches);
+     return mobileUA||uaData||(navigator.maxTouchPoints>0&&coarse);
+   }catch(e){return false}
+ }
+ function mobileViewportWidth(){
+   try{
+     const sw=Number(screen.width)||0,sh=Number(screen.height)||0;
+     if(!sw||!sh)return 0;
+     const short=Math.min(sw,sh),long=Math.max(sw,sh);
+     if(short>640)return 0;
+     const portrait=window.matchMedia?window.matchMedia('(orientation: portrait)').matches:innerHeight>=innerWidth;
+     return Math.round(portrait?short:long);
+   }catch(e){return 0}
+ }
+ function setViewport(width){
+   let vp=document.querySelector('meta[name="viewport"]');
+   if(!vp){vp=document.createElement('meta');vp.name='viewport';document.head.prepend(vp)}
+   const value=width>0?'width='+width+',initial-scale=1,viewport-fit=cover':'width=device-width,initial-scale=1,viewport-fit=cover';
+   vp.setAttribute('content',value);
+ }
+ function repairViewport(){
+   if(!isHandheld())return;
+   try{
+     const width=mobileViewportWidth();
+     setViewport(width);
+     requestAnimationFrame(()=>setViewport(width));
+     setTimeout(()=>{
+       if(width>0&&window.innerWidth>width*1.45){
+         const old=document.querySelector('meta[name="viewport"]');
+         if(old)old.remove();
+         const fresh=document.createElement('meta');
+         fresh.name='viewport';
+         fresh.content='width='+width+',initial-scale=1,viewport-fit=cover';
+         document.head.prepend(fresh);
+       }
+       window.__raiViewport={
+         innerWidth:window.innerWidth,
+         innerHeight:window.innerHeight,
+         screenWidth:screen.width,
+         screenHeight:screen.height,
+         dpr:window.devicePixelRatio||1,
+         requestedWidth:width,
+         handheld:true
+       };
+     },220);
+   }catch(e){}
+ }
+ function syncVisibleVersion(){
+   try{
+     const el=document.querySelector('#tangram-levels .tl-brand-credit,#tangram-levels .tl-sub');
+     if(el)el.textContent=el.textContent.replace(/v\d+(?:\.\d+)+/,'v'+APP_VERSION);
+   }catch(e){}
+ }
+ syncVisibleVersion();
+ repairViewport();
+ setTimeout(repairViewport,40);
+ setTimeout(repairViewport,320);
+ window.addEventListener('pageshow',repairViewport);
+ window.addEventListener('orientationchange',()=>setTimeout(repairViewport,140));
+ if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>setTimeout(repairViewport,80),{passive:true});
 
  function tools(){return document.querySelector('#tangram-levels .tl-brand-tools')}
  function ensureButton(){
@@ -99,9 +166,9 @@
    navigator.serviceWorker.addEventListener('controllerchange',()=>{
      if(reloading)return;reloading=true;location.reload();
    });
-   window.addEventListener('focus',check);
-   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check()});
+   window.addEventListener('focus',()=>{repairViewport();check()});
+   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){repairViewport();check()}});
    setInterval(check,30*60*1000);
  }
- window.__raiUpdate={version:APP_VERSION,path:PERMANENT_PATH,check};
+ window.__raiUpdate={version:APP_VERSION,path:PERMANENT_PATH,check,repairViewport};
 })();
