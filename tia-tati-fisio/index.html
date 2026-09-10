@@ -5,29 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f8fbff">
 <meta name="description" content="Tia Tati – Fisio Sensorial">
-<link rel="manifest" href="manifest.webmanifest?v=60">
+<link rel="manifest" href="manifest.webmanifest?v=61">
 <title>Tia Tati – Fisio Sensorial</title>
-<style>html,body{margin:0;min-height:100%;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.recover{min-height:100vh;display:grid;place-items:center;text-align:center;color:#164b87;background:linear-gradient(135deg,#fff8fc,#eefaff)}.recover div{display:grid;gap:9px;place-items:center;padding:24px}.recover b{font-size:44px}.recover strong{font-size:19px}.recover small{color:#71849a}</style>
+<style>html,body{margin:0;min-height:100%;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.go{min-height:100vh;display:grid;place-items:center;text-align:center;color:#164b87;background:linear-gradient(135deg,#fff8fc,#eefaff)}.go div{display:grid;gap:8px;place-items:center;padding:24px}.go b{font-size:44px}.go strong{font-size:19px}.go small{color:#71849a}</style>
 </head>
 <body>
-<div class="recover"><div><b>💗</b><strong>Tia Tati – Fisio Sensorial</strong><small>Restaurando o aplicativo integrado…</small></div></div>
+<div class="go"><div><b>💗</b><strong>Tia Tati – Fisio Sensorial</strong><small>Abrindo aplicativo…</small></div></div>
 <script>
-(async()=>{
- try{
-  if(localStorage.getItem('tiaTatiV60Repair')!=='1'){
-   if('serviceWorker' in navigator){
-    const regs=await navigator.serviceWorker.getRegistrations();
-    await Promise.all(regs.map(r=>r.unregister()));
-   }
-   if('caches' in window){
-    const keys=await caches.keys();
-    await Promise.all(keys.map(k=>caches.delete(k)));
-   }
-   localStorage.setItem('tiaTatiV60Repair','1');
-  }
- }catch(_){ }
- location.replace('./activity.html?v=60&t='+Date.now());
+(function(){
+  var target='./activity.html?v=61&t='+Date.now();
+  try{ location.replace(target); }
+  catch(_){ location.href=target; }
 })();
 </script>
+<noscript><p><a href="./activity.html?v=61">Abrir Tia Tati – Fisio Sensorial</a></p></noscript>
 </body>
 </html>
