@@ -63,12 +63,12 @@ const INTERVENTIONS=[
 
 const prefsKey='tiaTatiV12Prefs', reportsKey='tiaTatiV12Reports';
 const state={
- screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag',
+ screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag', targetReach:'all', targetCount:5, targetTheme:'rings',
  size:92,speed:2,amplitude:3,stimuli:2,reach:'all',context:'APAE',easy:true,guide:true,projection:false,reduced:false,therapeutic:true,
  paused:false,currentPhrase:null,currentText:'',cleanup:null,idleTimers:[],lastObservation:''
 };
 try{Object.assign(state,JSON.parse(localStorage.getItem(prefsKey)||'{}'));}catch(e){}
-function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl}));}catch(e){}}
+function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl,targetReach:state.targetReach,targetCount:state.targetCount,targetTheme:state.targetTheme}));}catch(e){}}
 
 function show(name){
  if(state.cleanup){state.cleanup();state.cleanup=null;}
@@ -76,12 +76,13 @@ function show(name){
  $$('.screen').forEach(s=>s.classList.remove('active'));
  $('#screen-'+name)?.classList.add('active'); state.screen=name;
  $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
- app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup');
+ app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup'); app.classList.toggle('target-setup-mode',name==='targetsetup');
  window.scrollTo({top:0,behavior:'smooth'});
  if(name==='reports')renderReports();
  if(name==='voice')renderVoice();
  if(name==='roadsetup')syncRoadSetup();
  if(name==='beesetup')syncBeeSetup();
+ if(name==='targetsetup')syncTargetSetup();
 }
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2300);}
 function buzz(p=20){if(navigator.vibrate)navigator.vibrate(p);}
@@ -113,10 +114,21 @@ function syncBeeSummary(){
  const el=$('#beeActionSummary');if(el)el.textContent='Caminho '+(Number(state.beeRoute)||2)+' • '+flower+' • '+control;
 }
 function syncBeeSetup(){
- $$('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
- $$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
- $$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
+ $('[data-bee-route]').forEach(x=>x.classList.toggle('active',Number(x.dataset.beeRoute)===(Number(state.beeRoute)||2)));
+ $('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x.dataset.beeFlower===state.beeFlower));
+ $('[data-bee-control]').forEach(x=>x.classList.toggle('active',x.dataset.beeControl===state.beeControl));
  syncBeeSummary();
+}
+function syncTargetSummary(){
+ const reach={all:'Tela inteira',left:'Lado esquerdo',right:'Lado direito',cross:'Cruzado'}[state.targetReach]||'Tela inteira';
+ const theme={rings:'Alvo clássico',stars:'Estrelas',flowers:'Flores'}[state.targetTheme]||'Alvo clássico';
+ const el=$('#targetActionSummary');if(el)el.textContent=reach+' • '+(Number(state.targetCount)||5)+' alvos • '+theme;
+}
+function syncTargetSetup(){
+ $('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
+ $('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
+ $('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
+ syncTargetSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
 
@@ -575,11 +587,93 @@ function bee(){
  state.cleanup=()=>{finished=true;try{beeInputCleanup?.();}catch(_){}window.removeEventListener('resize',place);screen.classList.remove('bee-immersive');app.classList.remove('bee-game-mode');document.body.classList.remove('bee-game-active');area.classList.remove('bee-activity');};
 }
 function targetMission(){
- const f=document.createElement('div');f.className='playfield';$('#activityArea').appendChild(f);
- const sets={all:[[.18,.22],[.80,.20],[.50,.48],[.20,.77],[.80,.76]],left:[[.16,.20],[.28,.38],[.14,.62],[.31,.77],[.23,.50]],right:[[.72,.20],[.86,.38],[.70,.62],[.86,.78],[.78,.50]],top:[[.15,.17],[.33,.13],[.50,.20],[.68,.13],[.85,.17]],bottom:[[.15,.78],[.33,.72],[.50,.82],[.68,.72],[.85,.78]],cross:[[.18,.22],[.78,.30],[.22,.48],[.80,.64],[.25,.79]]};
- let i=0;const colors=['#ff596f','#40a1ff','#52bd77','#ffc848','#9b78ed'];const b=document.createElement('button');b.className='game-object target-dot';b.type='button';const s=targetSize();b.style.width=b.style.height=s+'px';f.appendChild(b);
- const pos=()=>{const p=(sets[state.reach]||sets.all)[i];b.style.left=(p[0]*100)+'%';b.style.top=(p[1]*100)+'%';b.style.transform='translate(-50%,-50%)';b.style.background=colors[i%colors.length];};pos();
- b.onclick=()=>{state.interactions++;i++;buzz();i>=5?finishStep():(pos(),feedback('Muito bem! Procure o próximo alvo.'));};
+ const area=$('#activityArea'),screen=$('#screen-game');
+ screen.classList.add('target-immersive');app.classList.add('target-game-mode');document.body.classList.add('target-game-active');area.classList.add('target-activity');
+
+ const reach=state.targetReach||state.reach||'all';
+ const total=Math.max(5,Math.min(9,Number(state.targetCount)||5));
+ const theme=state.targetTheme||'rings';
+ const label={all:'Tela inteira',left:'Lado esquerdo',right:'Lado direito',cross:'Cruzando o centro'}[reach]||'Tela inteira';
+ const positions={
+  all:[[.20,.22],[.78,.20],[.52,.42],[.18,.61],[.81,.67],[.50,.79],[.30,.38],[.69,.52],[.35,.75]],
+  left:[[.22,.20],[.35,.36],[.18,.53],[.37,.70],[.22,.82],[.41,.24],[.16,.39],[.33,.58],[.18,.73]],
+  right:[[.78,.20],[.65,.36],[.82,.53],[.63,.70],[.78,.82],[.59,.24],[.84,.39],[.67,.58],[.82,.73]],
+  cross:[[.20,.22],[.79,.30],[.22,.43],[.80,.55],[.24,.68],[.78,.80],[.31,.34],[.70,.47],[.33,.75]]
+ };
+ const seq=(positions[reach]||positions.all).slice(0,total);
+ const palette=['coral','blue','green','yellow','purple','pink','teal','orange','sky'];
+
+ const scene=document.createElement('div');scene.className='target-game-shell';
+ scene.innerHTML=
+ '<div class="target-game-top">'+
+   '<div class="target-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="target-tutor-msg">Olhe primeiro... depois toque.</strong><em>Um alvo de cada vez 💗</em></div></div>'+
+   '<div class="target-score"><span>⭐ <b class="target-points">0</b><small>pontos</small></span><span>🎯 <b class="target-step">1</b>/'+total+'<small>alvos</small></span></div>'+
+   '<div class="target-game-actions"><button class="target-exit-btn" type="button">←</button><button class="target-pause-btn" type="button">⏸️</button></div>'+
+ '</div>'+
+ '<div class="target-stage '+(reach==='cross'?'cross-mode':'')+'">'+
+   '<img class="target-board-bg" src="assets/target-board.svg" alt="">'+
+   '<div class="target-region-chip">↔️ '+label+'</div>'+
+   '<div class="target-focus-chip">👀 Procure o alvo</div>'+
+   '<div class="target-center-guide"></div>'+
+   '<div class="target-hit-pop">✨</div>'+
+   '<div class="target-hint-bubble">🎯 Toque no alvo quando estiver pronto.</div>'+
+ '</div>'+
+ '<div class="target-praise" aria-live="polite">Muito bem!</div>'+
+ '<div class="target-game-footer">'+
+   '<div class="target-progress-track"><span class="target-progress-fill"></span></div>'+
+   '<div class="target-progress-nodes">'+Array.from({length:total},(_,i)=>'<i data-target-node="'+i+'"></i>').join('')+'<b>🏁</b></div>'+
+   '<div class="target-footer-copy"><span>🎯 Alcance com calma</span><span>Pequenas conquistas, grandes caminhos 💗</span></div>'+
+ '</div>';
+ area.appendChild(scene);
+
+ const stage=scene.querySelector('.target-stage'),pointsEl=scene.querySelector('.target-points'),stepEl=scene.querySelector('.target-step'),fill=scene.querySelector('.target-progress-fill'),nodes=[...scene.querySelectorAll('[data-target-node]')],msg=scene.querySelector('.target-tutor-msg'),hint=scene.querySelector('.target-hint-bubble'),praise=scene.querySelector('.target-praise'),pop=scene.querySelector('.target-hit-pop');
+ const target=document.createElement('button');target.type='button';target.className='game-object target-v27 '+theme;target.setAttribute('aria-label','Alvo');stage.appendChild(target);
+ let index=0,finished=false,assistLevel=0,guideTimer=null,strongGuideTimer=null;
+
+ const themeContent=()=>theme==='stars'?'⭐':theme==='flowers'?'🌸':'';
+ target.textContent=themeContent();
+
+ const showPraise=(text,kind='good')=>{praise.textContent=text;praise.className='target-praise show '+kind;clearTimeout(praise._timer);praise._timer=setTimeout(()=>praise.classList.remove('show'),1450);};
+ const clearGuideTimers=()=>{clearTimeout(guideTimer);clearTimeout(strongGuideTimer);guideTimer=strongGuideTimer=null;};
+ const armGuide=()=>{
+  clearGuideTimers();if(!state.guide||finished||state.paused)return;
+  guideTimer=setTimeout(()=>{target.classList.add('guided');hint.textContent='👀 Olhe para o alvo que está pulsando.';},4300);
+  strongGuideTimer=setTimeout(()=>{assistLevel++;state.assists++;target.classList.add('strong-guide');msg.textContent='Aqui está o alvo. Alcance no seu tempo.';hint.textContent='💗 A área de toque foi ampliada para ajudar.';},7600);
+ };
+ const place=()=>{
+  if(finished)return;const p=seq[index],r=stage.getBoundingClientRect(),size=targetSize();
+  target.style.width=target.style.height=size+'px';
+  target.style.left=(p[0]*r.width)+'px';target.style.top=(p[1]*r.height)+'px';
+  target.className='game-object target-v27 '+theme+' '+palette[index%palette.length];
+  target.textContent=themeContent();
+  requestAnimationFrame(()=>target.classList.add('enter'));
+  armGuide();
+ };
+ const markProgress=()=>{
+  nodes.forEach((n,k)=>n.classList.toggle('done',k<index));
+  fill.style.width=(index/total*100)+'%';pointsEl.textContent=String(index*20);stepEl.textContent=String(Math.min(total,index+1));
+ };
+ const celebrateHit=()=>{
+  const tr=target.getBoundingClientRect(),sr=stage.getBoundingClientRect();
+  pop.style.left=(tr.left-sr.left+tr.width/2)+'px';pop.style.top=(tr.top-sr.top+tr.height/2)+'px';pop.classList.remove('show');void pop.offsetWidth;pop.classList.add('show');
+ };
+ const finishTarget=()=>{
+  if(finished)return;finished=true;clearGuideTimers();nodes.forEach(n=>n.classList.add('done'));fill.style.width='100%';stepEl.textContent=String(total);target.classList.add('complete');msg.textContent='Você encontrou todos os alvos!';hint.textContent='💗 Missão concluída no seu tempo.';showPraise('🏁 Que conquista linda! Parabéns!');setTutor('success',MISSIONS.target.name,'Você encontrou todos os alvos!','target_success',false);playVoice('target_success',false);setTimeout(finishStep,900);
+ };
+ target.onclick=e=>{
+  e.stopPropagation();if(state.paused||finished)return;clearGuideTimers();state.interactions++;celebrateHit();buzz(18);index++;markProgress();
+  if(index>=total){finishTarget();return;}
+  showPraise(index%2?'⭐ Muito bem! Procure o próximo.':'💗 Ótimo alcance! Continue assim.');
+  msg.textContent=index%2?'Muito bem! Agora procure o próximo.':'Isso! Alcance com calma.';
+  target.classList.add('hit');setTimeout(()=>{target.classList.remove('hit');place();},180);resetIdle();
+ };
+ stage.addEventListener('pointerdown',e=>{if(state.paused||finished||e.target===target)return;const r=stage.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;if(x<0||y<0||x>r.width||y>r.height)return;hint.textContent='🌟 Sem problema. Procure o alvo colorido.';target.classList.add('guided');setTimeout(()=>target.classList.remove('guided'),900);});
+ scene.querySelector('.target-exit-btn').onclick=()=>show('targetsetup');
+ scene.querySelector('.target-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';hint.textContent=state.paused?'⏸️ Pausado. Continue quando estiver pronto.':'🎯 Vamos continuar no seu tempo.';if(state.paused)clearGuideTimers();else armGuide();};
+
+ const resize=()=>place();window.addEventListener('resize',resize,{passive:true});
+ requestAnimationFrame(()=>{markProgress();place();});
+ state.cleanup=()=>{finished=true;clearGuideTimers();window.removeEventListener('resize',resize);screen.classList.remove('target-immersive');app.classList.remove('target-game-mode');document.body.classList.remove('target-game-active');area.classList.remove('target-activity');};
 }
 function hands(){
  const g=document.createElement('div');g.className='hands-board';const a=document.createElement('button'),b=document.createElement('button');a.type=b.type='button';a.className=b.className='hand-pad';a.textContent='✋';b.textContent='🤚';g.append(a,b);$('#activityArea').appendChild(g);
@@ -607,7 +701,7 @@ function physical(){
 function reports(){try{return JSON.parse(localStorage.getItem(reportsKey)||'[]');}catch(e){return[];}}
 function saveReports(list){try{localStorage.setItem(reportsKey,JSON.stringify(list.slice(0,30)));}catch(e){}}
 function finishSession(){
- clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,roadRoute:state.circuit.includes('road')?state.roadRoute:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
+ clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,roadRoute:state.circuit.includes('road')?state.roadRoute:null,targetReach:state.circuit.includes('target')?state.targetReach:null,targetCount:state.circuit.includes('target')?state.targetCount:null,targetTheme:state.circuit.includes('target')?state.targetTheme:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
  $('#doneStats').innerHTML='<div class="summary-box"><strong>'+state.circuit.length+'</strong><small>missões</small></div><div class="summary-box"><strong>'+state.interactions+'</strong><small>interações</small></div><div class="summary-box"><strong>'+duration+' min</strong><small>duração</small></div>';
  $('#gameProgressFill').style.width='100%';show('done');playVoice('celebrate',false);
 }
@@ -624,7 +718,7 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):startCircuit([b.dataset.mission]));
+$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
@@ -636,6 +730,10 @@ $$('[data-bee-route]').forEach(b=>b.onclick=()=>{state.beeRoute=Number(b.dataset
 $$('[data-bee-flower]').forEach(b=>b.onclick=()=>{state.beeFlower=b.dataset.beeFlower;$$('[data-bee-flower]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();playVoice('choice',false);});
 $$('[data-bee-control]').forEach(b=>b.onclick=()=>{state.beeControl=b.dataset.beeControl;$$('[data-bee-control]').forEach(x=>x.classList.toggle('active',x===b));syncBeeSummary();});
 $('#startBeeMission').onclick=()=>startCircuit(['bee']);
+$('[data-target-reach]').forEach(b=>b.onclick=()=>{state.targetReach=b.dataset.targetReach;$('[data-target-reach]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
+$('[data-target-count]').forEach(b=>b.onclick=()=>{state.targetCount=Number(b.dataset.targetCount)||5;$('[data-target-count]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
+$('[data-target-theme]').forEach(b=>b.onclick=()=>{state.targetTheme=b.dataset.targetTheme;$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();playVoice('choice',false);});
+$('#startTargetMission').onclick=()=>startCircuit(['target']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
 [['targetSize','targetSizeValue',' px'],['speed','speedValue','/5'],['amplitude','amplitudeValue','/5'],['stimuli','stimuliValue','/5']].forEach(([id,out,suf])=>$('#'+id).oninput=e=>$('#'+out).textContent=e.target.value+suf);
@@ -643,5 +741,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=26').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=27').catch(()=>{});
 })();
