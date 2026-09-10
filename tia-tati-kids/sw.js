@@ -1,4 +1,4 @@
-const CACHE='tia-tati-v45-identity-20260910';
+const CACHE='tia-tati-kids-v1-20260910';
 const CORE=[
  './','./index.html','./styles.css?v=39','./app.js?v=39','./manifest.webmanifest',
  './sensory-v40.css','./sensory-v40.js','./remaining-v41.css','./remaining-v41.js',
@@ -25,11 +25,12 @@ const enhancedResponse=async response=>{
  const html=inject(await response.text());
  return new Response(html,{status:response.status,statusText:response.statusText,headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-cache'}});
 };
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>Promise.allSettled(CORE.map(url=>c.add(url)))).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-kids-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{
  if(e.request.method!=='GET')return;
  const url=new URL(e.request.url);
+ if(url.origin!==location.origin)return;
  if(e.request.mode==='navigate'){
   e.respondWith((async()=>{
    try{
@@ -37,13 +38,11 @@ self.addEventListener('fetch',e=>{
     const raw=net.clone();caches.open(CACHE).then(c=>c.put('./index.html',raw));
     return enhancedResponse(net);
    }catch(_){
-    const cached=await caches.match('./index.html');
+    const cached=await caches.match('./index.html',{cacheName:CACHE});
     return cached?enhancedResponse(cached):Response.error();
    }
   })());
   return;
  }
- if(url.origin===location.origin){
-  e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r;})));
- }
+ e.respondWith(caches.match(e.request,{cacheName:CACHE}).then(hit=>hit||fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r;})));
 });
