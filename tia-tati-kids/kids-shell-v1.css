@@ -12,8 +12,12 @@
 
 body{background:radial-gradient(circle at 8% 4%,rgba(255,214,231,.34),transparent 22%),radial-gradient(circle at 94% 8%,rgba(197,239,248,.42),transparent 24%),linear-gradient(180deg,#fffdfd,#f7fbfd 58%,#fff8fb)}
 
-/* O portal já apresenta a marca. Dentro do Kids, o cabeçalho superior é dispensável. */
-.topbar{display:none!important}.app{padding-top:0!important}
+/* O portal já apresenta a marca. Dentro do Kids o cabeçalho não aparece. */
+#app>header.topbar,header.topbar,.app .topbar,body .topbar{display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important}
+.app{padding-top:0!important}
+
+/* A tutoria afetiva é contextual: os botões continuam no DOM, mas não ficam expostos como catálogo na home. */
+#screen-home .home-v22-section-head.compact,#screen-home .home-v22-cards{display:none!important}
 
 .home-v22-hero{margin-top:0!important;border-radius:30px;background:radial-gradient(circle at 84% 18%,rgba(255,255,255,.95),transparent 27%),linear-gradient(135deg,#eaf8ff 0%,#fff 45%,#fff0f7 100%);border:1px solid #e3edf2;box-shadow:0 18px 42px rgba(27,73,98,.10)}
 .home-v22-script{color:var(--kids-blue)}.home-v22-pill{background:linear-gradient(135deg,var(--kids-pink),#f04f91)}.home-v22-kicker{color:#6f8495}.home-v22-copy h1{color:var(--kids-ink)}.home-v22-copy h1 em{color:var(--kids-pink)}.home-v22-phrase{background:#fff8cf;border-color:#f0e4a1}
@@ -26,7 +30,6 @@ body{background:radial-gradient(circle at 8% 4%,rgba(255,214,231,.34),transparen
 
 @media(max-width:650px){
   html,body{overscroll-behavior-y:auto}body{touch-action:pan-y}.app{padding-left:10px!important;padding-right:10px!important}
-  /* Sem cabeçalho, o hero começa limpo e compacto. */
   .home-v22-hero{margin-top:8px!important;border-radius:22px!important;padding:14px!important;gap:10px!important}
   .home-v22-logo{margin:0!important}.home-v22-script{display:none!important}.home-v22-pill{margin:0 0 5px!important;font-size:10px!important;padding:5px 9px!important}
   .home-v22-kicker{display:block!important;margin:0 0 5px!important;font-size:10px!important;letter-spacing:.1em!important}
