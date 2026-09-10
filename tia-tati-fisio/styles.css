@@ -821,3 +821,10 @@ body.hands-game-active .app.hands-game-mode{max-width:none!important;width:100%!
  .hands-v31-pad .hands-pad-hand{font-size:54px}
  .hands-stage{gap:6px;padding-left:6px;padding-right:6px}
 }
+
+/* V35 — Duas Mãos: entrada de toque simplificada e universal */
+body.hands-game-active{touch-action:manipulation!important}
+.hands-stage{touch-action:manipulation!important}
+.hands-v31-pad{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent}
+.hands-v31-pad:active{transform:scale(.96)!important;filter:brightness(1.03)}
+.hands-v31-pad.waiting.guided{box-shadow:0 18px 34px rgba(35,68,88,.15),0 0 0 13px rgba(255,213,76,.24)!important}
