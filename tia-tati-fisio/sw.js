@@ -1,6 +1,6 @@
-const CACHE='tia-tati-v53-native-links-20260910c';
+const CACHE='tia-tati-v53-native-links-20260910d';
 const CORE=[
- './index.html','./home-v51.css?v=53','./home-v51-polish.css?v=53','./home-v53.css?v=53','./home-v53.js?v=53','./manifest.webmanifest?v=53',
+ './index.html','./home-v51.css?v=53','./home-v51-polish.css?v=53','./home-v53.css?v=53','./home-v53-linkfix.css?v=53','./home-v53.js?v=53','./manifest.webmanifest?v=53',
  './activity-v53.html','./activity.html','./styles.css?v=53','./app.js?v=53','./activity-router-v53.js?v=53',
  './app-base-v39.js?v=53','./sensory-v40.js?v=53','./remaining-v41.js?v=53','./naming-v42.js?v=53','./final-v44.js?v=53','./identity-v45.js?v=53',
  './styles-base-v39.css?v=47','./sensory-v40.css?v=47','./remaining-v41.css?v=47','./polish-v43.css?v=47','./final-v44.css?v=47','./identity-v45.css?v=47',
@@ -37,7 +37,7 @@ self.addEventListener('fetch',event=>{
   return;
  }
 
- const fresh=/\/(home-v51(?:-polish)?\.css|home-v53\.(?:css|js)|activity-v53\.html|app\.js|activity-router-v53\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css)|tati-approved-(?:avatar|hero)\.webp|assets\/cards\/(?:reflexo-neon|memorize|beat-move)\.webp)$/.test(url.pathname);
+ const fresh=/\/(home-v51(?:-polish)?\.css|home-v53(?:-linkfix)?\.(?:css|js)|activity-v53\.html|app\.js|activity-router-v53\.js|styles\.css|app-base-v39\.js|sensory-v40\.(?:js|css)|remaining-v41\.(?:js|css)|naming-v42\.js|polish-v43\.css|final-v44\.(?:js|css)|identity-v45\.(?:js|css)|tati-approved-(?:avatar|hero)\.webp|assets\/cards\/(?:reflexo-neon|memorize|beat-move)\.webp)$/.test(url.pathname);
  if(fresh){
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
    const copy=response.clone();
