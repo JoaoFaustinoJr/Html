@@ -63,12 +63,12 @@ const INTERVENTIONS=[
 
 const prefsKey='tiaTatiV12Prefs', reportsKey='tiaTatiV12Reports';
 const state={
- screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag', targetReach:'all', targetCount:5, targetTheme:'rings',
+ screen:'home', circuit:['road'], lastCircuit:['road'], step:0, interactions:0, assists:0, collisions:0, started:0, checkpoints:0, roadDestination:'school', roadControl:'drag', roadRoute:2, beeRoute:2, beeFlower:'pink', beeControl:'drag', targetReach:'all', targetCount:5, targetTheme:'rings', handsMode:'together', handsRounds:3, handsPace:'calm',
  size:92,speed:2,amplitude:3,stimuli:2,reach:'all',context:'APAE',easy:true,guide:true,projection:false,reduced:false,therapeutic:true,
  paused:false,currentPhrase:null,currentText:'',cleanup:null,idleTimers:[],lastObservation:''
 };
 try{Object.assign(state,JSON.parse(localStorage.getItem(prefsKey)||'{}'));}catch(e){}
-function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl,targetReach:state.targetReach,targetCount:state.targetCount,targetTheme:state.targetTheme}));}catch(e){}}
+function savePrefs(){try{localStorage.setItem(prefsKey,JSON.stringify({size:state.size,speed:state.speed,amplitude:state.amplitude,stimuli:state.stimuli,reach:state.reach,context:state.context,easy:state.easy,guide:state.guide,projection:state.projection,reduced:state.reduced,therapeutic:state.therapeutic,beeRoute:state.beeRoute,beeFlower:state.beeFlower,beeControl:state.beeControl,targetReach:state.targetReach,targetCount:state.targetCount,targetTheme:state.targetTheme,handsMode:state.handsMode,handsRounds:state.handsRounds,handsPace:state.handsPace}));}catch(e){}}
 
 function show(name){
  if(state.cleanup){state.cleanup();state.cleanup=null;}
@@ -76,13 +76,14 @@ function show(name){
  $$('.screen').forEach(s=>s.classList.remove('active'));
  $('#screen-'+name)?.classList.add('active'); state.screen=name;
  $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
- app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup'); app.classList.toggle('target-setup-mode',name==='targetsetup');
+ app.classList.toggle('projection',state.projection); app.classList.toggle('road-setup-mode',name==='roadsetup'); app.classList.toggle('bee-setup-mode',name==='beesetup'); app.classList.toggle('target-setup-mode',name==='targetsetup'); app.classList.toggle('hands-setup-mode',name==='handssetup');
  window.scrollTo({top:0,behavior:'smooth'});
  if(name==='reports')renderReports();
  if(name==='voice')renderVoice();
  if(name==='roadsetup')syncRoadSetup();
  if(name==='beesetup')syncBeeSetup();
  if(name==='targetsetup')syncTargetSetup();
+ if(name==='handssetup')syncHandsSetup();
 }
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2300);}
 function buzz(p=20){if(navigator.vibrate)navigator.vibrate(p);}
@@ -125,10 +126,21 @@ function syncTargetSummary(){
  const el=$('#targetActionSummary');if(el)el.textContent=reach+' • '+(Number(state.targetCount)||5)+' alvos • '+theme;
 }
 function syncTargetSetup(){
- $$('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
- $$('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
- $$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
+ $('[data-target-reach]').forEach(x=>x.classList.toggle('active',x.dataset.targetReach===state.targetReach));
+ $('[data-target-count]').forEach(x=>x.classList.toggle('active',Number(x.dataset.targetCount)===(Number(state.targetCount)||5)));
+ $('[data-target-theme]').forEach(x=>x.classList.toggle('active',x.dataset.targetTheme===state.targetTheme));
  syncTargetSummary();
+}
+function syncHandsSummary(){
+ const mode={together:'Juntas',alternate:'Alternadas',cross:'Cruzadas'}[state.handsMode]||'Juntas';
+ const pace={calm:'Calma',medium:'Moderada',challenge:'Desafio'}[state.handsPace]||'Calma';
+ const el=$('#handsActionSummary');if(el)el.textContent=mode+' • '+(Number(state.handsRounds)||3)+' rodadas • '+pace;
+}
+function syncHandsSetup(){
+ $('[data-hands-mode]').forEach(x=>x.classList.toggle('active',x.dataset.handsMode===state.handsMode));
+ $('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',Number(x.dataset.handsRounds)===(Number(state.handsRounds)||3)));
+ $('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x.dataset.handsPace===state.handsPace));
+ syncHandsSummary();
 }
 function feedback(msg){$('#feedback').textContent=msg;resetIdle();}
 
@@ -676,9 +688,122 @@ function targetMission(){
  state.cleanup=()=>{finished=true;clearGuideTimers();window.removeEventListener('resize',resize);screen.classList.remove('target-immersive');app.classList.remove('target-game-mode');document.body.classList.remove('target-game-active');area.classList.remove('target-activity');};
 }
 function hands(){
- const g=document.createElement('div');g.className='hands-board';const a=document.createElement('button'),b=document.createElement('button');a.type=b.type='button';a.className=b.className='hand-pad';a.textContent='✋';b.textContent='🤚';g.append(a,b);$('#activityArea').appendChild(g);
- let ta=0,tb=0,done=false;const check=()=>{if(!done&&ta&&tb&&Math.abs(ta-tb)<1900){done=true;state.interactions+=2;finishStep();}};
- a.onpointerdown=()=>{ta=Date.now();a.classList.add('pulse');check();resetIdle();};b.onpointerdown=()=>{tb=Date.now();b.classList.add('pulse');check();resetIdle();};
+ const area=$('#activityArea'),screen=$('#screen-game');
+ screen.classList.add('hands-immersive');app.classList.add('hands-game-mode');document.body.classList.add('hands-game-active');area.classList.add('hands-activity');
+
+ const mode=state.handsMode||'together';
+ const rounds=Math.max(3,Math.min(7,Number(state.handsRounds)||3));
+ const pace=state.handsPace||'calm';
+ const windowMs={calm:2400,medium:1800,challenge:1200}[pace]||2400;
+ const modeLabel={together:'Juntas',alternate:'Alternadas',cross:'Cruzadas'}[mode]||'Juntas';
+ const paceLabel={calm:'Calma',medium:'Moderada',challenge:'Desafio'}[pace]||'Calma';
+
+ const scene=document.createElement('div');scene.className='hands-game-shell';
+ scene.innerHTML=
+ '<div class="hands-game-top">'+
+   '<div class="hands-mini-tutor"><img src="assets/guide.webp" alt="Tia Tati"><div><small>TIA TATI</small><strong class="hands-tutor-msg">'+(mode==='alternate'?'Uma mão de cada vez.':mode==='cross'?'Experimente cruzar as mãos.':'Toque os dois lados juntos.')+'</strong><em>Eu espero você 💗</em></div></div>'+
+   '<div class="hands-score"><span>💗 <b class="hands-points">0</b><small>pontos</small></span><span>🤲 <b class="hands-round">1</b>/'+rounds+'<small>rodadas</small></span></div>'+
+   '<div class="hands-game-actions"><button class="hands-exit-btn" type="button">←</button><button class="hands-pause-btn" type="button">⏸️</button></div>'+
+ '</div>'+
+ '<div class="hands-stage '+mode+'">'+
+   '<img class="hands-board-bg" src="assets/hands-board.svg" alt="">'+
+   '<div class="hands-mode-chip">🤲 '+modeLabel+'</div>'+
+   '<div class="hands-pace-chip">⏱️ '+paceLabel+'</div>'+
+   '<div class="hands-cross-arrows"><span>↗</span><span>↖</span></div>'+
+   '<div class="hands-center-heart">♥</div>'+
+   '<button class="hand-pad hands-v31-pad left" data-side="left" type="button"><span class="hands-pad-hand">'+(mode==='cross'?'🤚':'✋')+'</span><strong>'+(mode==='cross'?'MÃO DIREITA':'LADO ESQUERDO')+'</strong><small>'+(mode==='cross'?'toque o lado oposto':'toque aqui')+'</small></button>'+
+   '<button class="hand-pad hands-v31-pad right" data-side="right" type="button"><span class="hands-pad-hand">'+(mode==='cross'?'✋':'🤚')+'</span><strong>'+(mode==='cross'?'MÃO ESQUERDA':'LADO DIREITO')+'</strong><small>'+(mode==='cross'?'toque o lado oposto':'toque aqui')+'</small></button>'+
+   '<div class="hands-hint-bubble">'+(mode==='alternate'?'↔️ Siga o lado que acender.':mode==='cross'?'❌ Cruze as mãos e toque os dois lados.':'🤲 Toque os dois lados quase ao mesmo tempo.')+'</div>'+
+   '<div class="hands-spark">✨</div>'+
+ '</div>'+
+ '<div class="hands-praise" aria-live="polite">Muito bem!</div>'+
+ '<div class="hands-game-footer">'+
+   '<div class="hands-progress-track"><span class="hands-progress-fill"></span></div>'+
+   '<div class="hands-progress-nodes">'+Array.from({length:rounds},(_,i)=>'<i data-hands-node="'+i+'"></i>').join('')+'<b>🏁</b></div>'+
+   '<div class="hands-footer-copy"><span>⏱️ Janela: '+(windowMs/1000).toFixed(1).replace('.',',')+' s</span><span>Coordenação com acolhimento 💗</span></div>'+
+ '</div>';
+ area.appendChild(scene);
+
+ const stage=scene.querySelector('.hands-stage'),left=scene.querySelector('[data-side="left"]'),right=scene.querySelector('[data-side="right"]'),pads={left,right};
+ const pointsEl=scene.querySelector('.hands-points'),roundEl=scene.querySelector('.hands-round'),fill=scene.querySelector('.hands-progress-fill'),nodes=[...scene.querySelectorAll('[data-hands-node]')],msg=scene.querySelector('.hands-tutor-msg'),hint=scene.querySelector('.hands-hint-bubble'),praise=scene.querySelector('.hands-praise'),spark=scene.querySelector('.hands-spark');
+ let round=0,firstSide=null,firstAt=0,timeout=null,assistTimer=null,strongAssistTimer=null,finished=false,alternateExpected=round%2===0?'left':'right',alternateStep=0;
+
+ const showPraise=(text,kind='good')=>{praise.textContent=text;praise.className='hands-praise show '+kind;clearTimeout(praise._t);praise._t=setTimeout(()=>praise.classList.remove('show'),1450);};
+ const clearLocalTimers=()=>{clearTimeout(timeout);clearTimeout(assistTimer);clearTimeout(strongAssistTimer);timeout=assistTimer=strongAssistTimer=null;};
+ const setActivePads=()=>{
+  left.classList.remove('expected','pressed','waiting','guided');right.classList.remove('expected','pressed','waiting','guided');
+  if(mode==='alternate'){
+   pads[alternateExpected].classList.add('expected');
+   hint.textContent='↔️ Agora toque o '+(alternateExpected==='left'?'lado esquerdo.':'lado direito.');
+  }else{
+   left.classList.add('expected');right.classList.add('expected');
+  }
+ };
+ const armAssist=()=>{
+  clearTimeout(assistTimer);clearTimeout(strongAssistTimer);if(!state.guide||state.paused||finished)return;
+  assistTimer=setTimeout(()=>{if(mode==='alternate')pads[alternateExpected].classList.add('guided');else{left.classList.add('guided');right.classList.add('guided');}hint.textContent='👀 Veja o lado que está pulsando.';},4300);
+  strongAssistTimer=setTimeout(()=>{state.assists++;msg.textContent=mode==='alternate'?'Siga o lado iluminado.':'Um toque de cada lado. Vá no seu tempo.';hint.textContent='💗 A pista visual ficou mais forte para ajudar.';if(mode==='alternate')pads[alternateExpected].classList.add('strong-guide');else{left.classList.add('strong-guide');right.classList.add('strong-guide');}},7600);
+ };
+ const updateProgress=()=>{
+  nodes.forEach((n,k)=>n.classList.toggle('done',k<round));fill.style.width=(round/rounds*100)+'%';pointsEl.textContent=String(round*30);roundEl.textContent=String(Math.min(rounds,round+1));
+ };
+ const resetAttempt=(guided=false)=>{
+  clearTimeout(timeout);timeout=null;firstSide=null;firstAt=0;alternateStep=0;alternateExpected=round%2===0?'left':'right';left.classList.remove('pressed','waiting','strong-guide');right.classList.remove('pressed','waiting','strong-guide');setActivePads();if(guided){showPraise('💗 Quase! Vamos tentar a mesma rodada.','retry');hint.textContent='Sem pressa. A mesma rodada está pronta novamente.';}armAssist();
+ };
+ const sparkle=()=>{
+  const r=stage.getBoundingClientRect();spark.style.left=(r.width/2)+'px';spark.style.top=(r.height/2)+'px';spark.classList.remove('show');void spark.offsetWidth;spark.classList.add('show');
+ };
+ const completeRound=()=>{
+  clearLocalTimers();round++;state.interactions+=2;buzz([20,25,20]);sparkle();updateProgress();showPraise(round===rounds?'🏁 Conseguimos juntos!':'✨ Muito bem! Duas mãos, uma conquista!');
+  msg.textContent=round===rounds?'Parabéns! Você completou todas as rodadas.':'Muito bem! Vamos para a próxima.';
+  if(round>=rounds){
+   finished=true;left.classList.add('celebrate');right.classList.add('celebrate');fill.style.width='100%';nodes.forEach(n=>n.classList.add('done'));hint.textContent='💗 Missão concluída no seu tempo.';setTutor('success',MISSIONS.hands.name,'Duas mãos, uma conquista!','hands_success',false);playVoice('hands_success',false);setTimeout(finishStep,900);return;
+  }
+  setTimeout(()=>resetAttempt(false),520);
+ };
+ const failTiming=()=>{
+  if(finished||state.paused)return;state.collisions++;showPraise('💗 Quase! Tente novamente no seu tempo.','retry');msg.textContent='Foi quase. Vamos repetir juntos.';resetAttempt(true);
+ };
+
+ const press=(side)=>{
+  if(finished||state.paused)return;clearTimeout(assistTimer);clearTimeout(strongAssistTimer);const pad=pads[side],now=Date.now();
+  pad.classList.add('pressed');buzz(12);
+
+  if(mode==='alternate'){
+   if(side!==alternateExpected){
+    pad.classList.remove('pressed');pads[alternateExpected].classList.add('guided');hint.textContent='↔️ Agora é o '+(alternateExpected==='left'?'lado esquerdo.':'lado direito.');showPraise('👀 Procure o lado iluminado.','retry');return;
+   }
+   if(alternateStep===0){
+    firstAt=now;alternateStep=1;alternateExpected=side==='left'?'right':'left';pad.classList.remove('expected');pads[alternateExpected].classList.add('expected','waiting');hint.textContent='Muito bem! Agora o outro lado.';
+    timeout=setTimeout(failTiming,windowMs);armAssist();return;
+   }
+   if(now-firstAt<=windowMs){clearTimeout(timeout);completeRound();}else failTiming();
+   return;
+  }
+
+  if(!firstSide){
+   firstSide=side;firstAt=now;pad.classList.add('waiting');pads[side==='left'?'right':'left'].classList.add('waiting');hint.textContent=mode==='cross'?'❌ Agora toque o outro lado mantendo as mãos cruzadas.':'🤲 Agora toque o outro lado.';
+   timeout=setTimeout(failTiming,windowMs);return;
+  }
+  if(side===firstSide){pad.classList.add('guided');hint.textContent='💗 Falta o outro lado.';return;}
+  if(now-firstAt<=windowMs){clearTimeout(timeout);pads[firstSide].classList.add('pressed');completeRound();}else failTiming();
+ };
+
+ const touchHandlers=[];
+ [left,right].forEach(pad=>{
+  const side=pad.dataset.side;
+  const onTouch=e=>{if(e.cancelable)e.preventDefault();press(side);};
+  const onPointer=e=>{if(e.pointerType==='touch')return;e.preventDefault();press(side);};
+  pad.addEventListener('touchstart',onTouch,{passive:false});
+  pad.addEventListener('pointerdown',onPointer,{passive:false});
+  touchHandlers.push([pad,onTouch,onPointer]);
+ });
+
+ scene.querySelector('.hands-exit-btn').onclick=()=>show('handssetup');
+ scene.querySelector('.hands-pause-btn').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️':'⏸️';if(state.paused){clearLocalTimers();hint.textContent='⏸️ Pausado. Continue quando estiver pronto.';}else{hint.textContent='🤲 Vamos continuar no seu tempo.';resetAttempt(false);}};
+
+ setActivePads();updateProgress();armAssist();
+ state.cleanup=()=>{finished=true;clearLocalTimers();touchHandlers.forEach(([pad,t,p])=>{pad.removeEventListener('touchstart',t);pad.removeEventListener('pointerdown',p);});screen.classList.remove('hands-immersive');app.classList.remove('hands-game-mode');document.body.classList.remove('hands-game-active');area.classList.remove('hands-activity');};
 }
 function light(){
  const f=document.createElement('div');f.className='playfield';const b=document.createElement('button');b.type='button';b.className='game-object target-dot';b.textContent='⭐';b.style.fontSize='42px';b.style.width=b.style.height=targetSize()+'px';b.style.background='#fff0a8';f.appendChild(b);$('#activityArea').appendChild(f);let n=0,timer=null,stopped=false;
@@ -701,7 +826,7 @@ function physical(){
 function reports(){try{return JSON.parse(localStorage.getItem(reportsKey)||'[]');}catch(e){return[];}}
 function saveReports(list){try{localStorage.setItem(reportsKey,JSON.stringify(list.slice(0,30)));}catch(e){}}
 function finishSession(){
- clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,roadRoute:state.circuit.includes('road')?state.roadRoute:null,targetReach:state.circuit.includes('target')?state.targetReach:null,targetCount:state.circuit.includes('target')?state.targetCount:null,targetTheme:state.circuit.includes('target')?state.targetTheme:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
+ clearActivity();const duration=Math.max(1,Math.round((Date.now()-state.started)/60000));const rec={id:Date.now(),date:new Date().toISOString(),activities:state.circuit.map(id=>MISSIONS[id].name),duration,interactions:state.interactions,assists:state.assists,collisions:state.collisions,checkpoints:state.checkpoints,roadDestination:state.circuit.includes('road')?state.roadDestination:null,roadRoute:state.circuit.includes('road')?state.roadRoute:null,targetReach:state.circuit.includes('target')?state.targetReach:null,targetCount:state.circuit.includes('target')?state.targetCount:null,targetTheme:state.circuit.includes('target')?state.targetTheme:null,handsMode:state.circuit.includes('hands')?state.handsMode:null,handsRounds:state.circuit.includes('hands')?state.handsRounds:null,handsPace:state.circuit.includes('hands')?state.handsPace:null,context:state.context,observation:''};const list=reports();list.unshift(rec);saveReports(list);
  $('#doneStats').innerHTML='<div class="summary-box"><strong>'+state.circuit.length+'</strong><small>missões</small></div><div class="summary-box"><strong>'+state.interactions+'</strong><small>interações</small></div><div class="summary-box"><strong>'+duration+' min</strong><small>duração</small></div>';
  $('#gameProgressFill').style.width='100%';show('done');playVoice('celebrate',false);
 }
@@ -718,7 +843,7 @@ function saveObservation(){
 buildCircuitPicker();buildInterventions();syncSettings();syncRoadSummary();
 $('#homeBrand').onclick=()=>show('home');$$('[data-home]').forEach(b=>b.onclick=()=>show('home'));
 $$('#bottomNav button').forEach(b=>b.onclick=()=>show(b.dataset.nav));
-$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):startCircuit([b.dataset.mission]));
+$$('[data-mission]').forEach(b=>b.onclick=()=>b.dataset.mission==='road'?show('roadsetup'):b.dataset.mission==='bee'?show('beesetup'):b.dataset.mission==='target'?show('targetsetup'):b.dataset.mission==='hands'?show('handssetup'):startCircuit([b.dataset.mission]));
 $$('[data-card]').forEach(b=>b.onclick=()=>{const id=b.dataset.card,c=CARDS[id];toast(c.label+': '+c.text);playVoice(id,false);});
 $('#circuitBtn').onclick=()=>show('circuit');$('#settingsTopBtn').onclick=()=>{syncSettings();show('fisio');};$('#voiceStatusBtn').onclick=$('#voiceStudioBtn').onclick=()=>show('voice');$('#interventionsBtn').onclick=()=>show('interventions');$('#reportsBtn').onclick=()=>show('reports');
 $('#projectionBtn').onclick=()=>{state.projection=!state.projection;savePrefs();app.classList.toggle('projection',state.projection);toast(state.projection?'Modo projeção ativado.':'Modo projeção desativado.');};
@@ -734,6 +859,10 @@ $$('[data-target-reach]').forEach(b=>b.onclick=()=>{state.targetReach=b.dataset.
 $$('[data-target-count]').forEach(b=>b.onclick=()=>{state.targetCount=Number(b.dataset.targetCount)||5;$$('[data-target-count]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();});
 $$('[data-target-theme]').forEach(b=>b.onclick=()=>{state.targetTheme=b.dataset.targetTheme;$$('[data-target-theme]').forEach(x=>x.classList.toggle('active',x===b));syncTargetSummary();playVoice('choice',false);});
 $('#startTargetMission').onclick=()=>startCircuit(['target']);
+$('[data-hands-mode]').forEach(b=>b.onclick=()=>{state.handsMode=b.dataset.handsMode;$('[data-hands-mode]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
+$('[data-hands-rounds]').forEach(b=>b.onclick=()=>{state.handsRounds=Number(b.dataset.handsRounds)||3;$('[data-hands-rounds]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
+$('[data-hands-pace]').forEach(b=>b.onclick=()=>{state.handsPace=b.dataset.handsPace;$('[data-hands-pace]').forEach(x=>x.classList.toggle('active',x===b));syncHandsSummary();});
+$('#startHandsMission').onclick=()=>startCircuit(['hands']);
 $('#startCircuit').onclick=()=>{const ids=$$('#circuitPicker input:checked').map(x=>x.value);if(ids.length<2){$('#circuitMsg').textContent='Escolha pelo menos duas missões.';return;}$('#circuitMsg').textContent='';startCircuit(ids);};
 $('#fisioForm').onsubmit=e=>{e.preventDefault();state.size=+$('#targetSize').value;state.speed=+$('#speed').value;state.amplitude=+$('#amplitude').value;state.stimuli=+$('#stimuli').value;state.reach=$('#reachRegion').value;state.context=$('#contextUse').value;state.easy=$('#easyTouch').checked;state.guide=$('#guideAssist').checked;state.projection=$('#projectionMode').checked;state.reduced=$('#reducedMotion').checked;state.therapeutic=$('#therapeuticMode').checked;savePrefs();show('home');toast('Configurações terapêuticas salvas.');};
 [['targetSize','targetSizeValue',' px'],['speed','speedValue','/5'],['amplitude','amplitudeValue','/5'],['stimuli','stimuliValue','/5']].forEach(([id,out,suf])=>$('#'+id).oninput=e=>$('#'+out).textContent=e.target.value+suf);
@@ -741,5 +870,5 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=30').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=31').catch(()=>{});
 })();
