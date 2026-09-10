@@ -1,17 +1,16 @@
 (()=>{
 'use strict';
-const VERSION='56';
+const VERSION='57';
 
-// v56: toda atividade abre pelo shell determinístico, nunca diretamente pela home antiga.
 document.addEventListener('click',e=>{
- const a=e.target.closest('a[href*="activity-v54.html?open="],a[href*="activity-v56.html?open="]');
+ const a=e.target.closest('a[href*="activity-v54.html?open="],a[href*="activity-v56.html?open="],a[href*="activity-v57.html?open="],a[href*="activity.html?open="]');
  if(a){
   e.preventDefault();
   e.stopPropagation();
   const u=new URL(a.href,location.href);
   const open=u.searchParams.get('open');
   if(open){
-   location.href='./activity-v56.html?open='+encodeURIComponent(open)+'&v='+VERSION+'&t='+Date.now();
+   location.href='./activity-v57.html?open='+encodeURIComponent(open)+'&v='+VERSION+'&t='+Date.now();
    return;
   }
  }
