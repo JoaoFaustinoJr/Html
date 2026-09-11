@@ -7,7 +7,7 @@ const PREF='tiaTatiJovemMusic';
 let enabled=localStorage.getItem(PREF)!=='0';
 let ctx=null, musicBus=null, master=null, timer=null, nextStepTime=0, step=0, started=false, duckUntil=0;
 const BPM=118;
-const STEP=60/BPM/4; // semicolcheia
+const STEP=60/BPM/4;
 
 function ensureAudio(){
   if(!enabled)return null;
@@ -54,24 +54,17 @@ function kick(at){
   o.connect(g);g.connect(musicBus);o.start(at);o.stop(at+.2);
 }
 function snare(at){noise(at,.11,.036,1700);osc(190,at,.08,'triangle',.018,120);}
-function hat(at,accent=false){noise(at,.035,accent?.022:.012,6200);}
+function hat(at,accent=false){noise(at,.035,accent ? .022 : .012,6200);}
 
-const bass=[55,55,65.41,55,73.42,65.41,49,55]; // A1,C2,D2,G1 feel
+const bass=[55,55,65.41,55,73.42,65.41,49,55];
 const arp=[220,261.63,329.63,392,329.63,261.63,246.94,329.63];
 function scheduleStep(s,at){
-  // 4/4 kick/snare
   const pos=s%16;
   if(pos===0||pos===8)kick(at);
   if(pos===4||pos===12)snare(at);
   if(pos%2===0)hat(at,pos%4===0);
-
-  // bass every 2 steps
   if(pos%2===0){const n=bass[(Math.floor(s/2))%bass.length];osc(n,at,.21,'sawtooth',.027,n*.98);}
-
-  // neon arpeggio off-beat
   if(pos%2===1){const n=arp[Math.floor(s/2)%arp.length];osc(n,at,.11,'triangle',.018,n*1.002);}
-
-  // small pulse motif at bar end
   if(pos===14){osc(659.25,at,.09,'sine',.022);osc(783.99,at+.07,.12,'sine',.018);}
 }
 function scheduler(){
@@ -82,9 +75,9 @@ function scheduler(){
     nextStepTime+=STEP;
   }
   const ducked=performance.now()<duckUntil;
-  const target=ducked?.045:.16;
+  const target=ducked ? .045 : .16;
   musicBus.gain.cancelScheduledValues(ctx.currentTime);
-  musicBus.gain.setTargetAtTime(enabled?target:.0001,ctx.currentTime,.08);
+  musicBus.gain.setTargetAtTime(enabled ? target : .0001,ctx.currentTime,.08);
 }
 function start(){
   if(!enabled||started)return;
@@ -104,11 +97,8 @@ function setEnabled(v){
   if(enabled)start(); else stop();
   updateBtn();
 }
-function duck(ms=2600){
-  duckUntil=Math.max(duckUntil,performance.now()+ms);
-}
+function duck(ms=2600){duckUntil=Math.max(duckUntil,performance.now()+ms);}
 
-// Compact persistent control
 const btn=document.createElement('button');
 btn.type='button';btn.id='jovemMusicToggle';btn.setAttribute('aria-label','Ligar ou desligar música');
 btn.style.cssText='position:fixed;z-index:90000;right:12px;top:max(84px,calc(env(safe-area-inset-top) + 70px));width:44px;height:44px;border-radius:50%;border:1px solid rgba(69,232,255,.45);background:rgba(7,19,47,.82);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.28),0 0 18px rgba(54,220,255,.16);color:#fff;font:700 20px/1 system-ui;display:grid;place-items:center;cursor:pointer';
@@ -117,12 +107,10 @@ updateBtn();
 btn.addEventListener('click',e=>{e.stopPropagation();if(!ctx)ensureAudio();setEnabled(!enabled);});
 document.body.appendChild(btn);
 
-// Browser requires a user gesture before audio can begin.
 const firstGesture=()=>{if(enabled)start();};
 document.addEventListener('pointerdown',firstGesture,{capture:true,once:true,passive:true});
 document.addEventListener('keydown',firstGesture,{capture:true,once:true});
 
-// Duck music whenever the existing Tia Tati voice function is used.
 function wrapVoice(){
   if(typeof window.playVoice==='function'&&!window.playVoice.__musicWrapped){
     const original=window.playVoice;
@@ -132,8 +120,6 @@ function wrapVoice(){
 }
 wrapVoice();
 window.addEventListener('tia:jovem-modules-ready',()=>setTimeout(wrapVoice,50));
-
-// Also duck for any HTML audio playback used by future packaged voices.
 document.addEventListener('play',e=>{if(e.target instanceof HTMLMediaElement)duck(3500);},true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx?.state==='running')ctx.suspend().catch(()=>{});else if(!document.hidden&&enabled&&started)ctx?.resume().catch(()=>{});});
 
