@@ -49,7 +49,7 @@ function fixHomeCards(){
 }
 
 function isSharedTutor(src){
-  return /\/assets\/(welcome|guide|success|retry|relax|celebrate)\.webp(?:[?#]|$)/i.test(src||'');
+  return /(?:^|\/)assets\/(welcome|guide|success|retry|relax|celebrate)\.webp(?:[?#]|$)/i.test(src||'');
 }
 function fixImage(img){
   if(!(img instanceof HTMLImageElement))return;
