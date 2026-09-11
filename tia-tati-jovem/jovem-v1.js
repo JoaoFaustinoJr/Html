@@ -14,7 +14,7 @@ function buildHero(){
  if(!home||!section||q('.jovem-home-hero',home))return;
  const hero=document.createElement('section');
  hero.className='jovem-home-hero';
- hero.innerHTML=`<div class="jovem-home-copy"><a class="jovem-home-back" href="../tia-tati/?v=j4">← Portal Tia Tati</a><span class="jovem-home-kicker">TIA TATI • FISIO SENSORIAL</span><h1>Modo <em>Jovem</em></h1><p>No seu ritmo, você evolui. Desafios terapêuticos com uma linguagem visual mais madura, vibrante e direta.</p><div class="jovem-home-pills"><span>⚡ Resposta</span><span>🧠 Foco</span><span>🎵 Ritmo</span><span>🏁 Autonomia</span></div></div><div class="jovem-home-art" aria-hidden="true"><img src="assets/cards/reflexo-neon.webp" alt=""><img src="assets/cards/beat-move.webp" alt=""></div>`;
+ hero.innerHTML=`<div class="jovem-home-copy"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><a class="jovem-home-back" href="../tia-tati/?v=j16">← Portal Tia Tati</a><a class="jovem-home-back" href="manual-jovem.html?v=j16">📘 Manual dos jogos</a></div><span class="jovem-home-kicker">TIA TATI • FISIO SENSORIAL</span><h1>Modo <em>Jovem</em></h1><p>No seu ritmo, você evolui. Desafios terapêuticos com uma linguagem visual mais madura, vibrante e direta.</p><div class="jovem-home-pills"><span>⚡ Resposta</span><span>🧠 Foco</span><span>🎵 Ritmo</span><span>🏁 Autonomia</span></div></div><div class="jovem-home-art" aria-hidden="true"><img src="assets/cards/reflexo-neon-v2.webp?v=j16" alt=""><img src="assets/cards/ritmo-movimento-v2.webp?v=j16" alt=""></div>`;
  home.insertBefore(hero,section);
 }
 
@@ -32,9 +32,9 @@ function makeCard(kind,title,desc,art,badge){
 function ensureSixCards(){
  const grid=q('.youth-card-grid');
  if(!grid)return;
- if(!q('[data-youth-sensory]',grid))grid.appendChild(makeCard('pulse-lab','Pulse Lab','Exploração • foco • causa e efeito','assets/pulse-lab.svg','PULSE LAB'));
+ if(!q('[data-youth-sensory]',grid))grid.appendChild(makeCard('pulse-lab','Laboratório do Pulso','Exploração • foco • causa e efeito','assets/pulse-lab.svg','LABORATÓRIO DO PULSO'));
  if(!q('[data-youth-breathe]',grid))grid.appendChild(makeCard('recomeco-j4','Recomeço','Pausa • foco • respiração guiada','assets/relax.webp','RECOMEÇO'));
- if(!q('[data-youth-physical]',grid))grid.appendChild(makeCard('movequest-j4','Move Quest','Movimento real • sequência • checkpoints','','MOVE QUEST'));
+ if(!q('[data-youth-physical]',grid))grid.appendChild(makeCard('movequest-j4','Missão Movimento','Movimento real • sequência • etapas','','MISSÃO MOVIMENTO'));
 }
 
 function tuneCards(){
@@ -46,10 +46,10 @@ function tuneCards(){
  const map=[
   ['[data-youth-light="react"]','Reflexo Neon','Resposta rápida • atenção • alcance'],
   ['[data-youth-light="memory"]','Memorize','Sequência visual • memória de trabalho'],
-  ['[data-youth-light="beat"]','Beat & Move','Ritmo • coordenação • tempo de resposta'],
-  ['[data-youth-sensory]','Pulse Lab','Exploração • foco • causa e efeito'],
+  ['[data-youth-light="beat"]','Ritmo e Movimento','Ritmo • coordenação • tempo de resposta'],
+  ['[data-youth-sensory]','Laboratório do Pulso','Exploração • foco • causa e efeito'],
   ['[data-youth-breathe]','Recomeço','Pausa • foco • respiração guiada'],
-  ['[data-youth-physical]','Move Quest','Movimento real • sequência • checkpoints']
+  ['[data-youth-physical]','Missão Movimento','Movimento real • sequência • etapas']
  ];
  map.forEach(([sel,name,desc])=>{
   const c=q(sel,s);if(!c)return;
@@ -67,9 +67,9 @@ function hideSectionContaining(el){
 function isolateSensory(){
  const s=q('#screen-sensorysetup');if(!s)return;
  s.classList.add('jovem-shared-screen','jovem-pulse-screen');
- setText(q('.sensory-v40-head h2',s),'Pulse Lab');
+ setText(q('.sensory-v40-head h2',s),'Laboratório do Pulso');
  setText(q('.sensory-v40-head p',s),'Exploração visual, alcance e causa e efeito em linguagem neon.');
- setText(q('.mission-badge',s),'⚡ PULSE LAB');
+ setText(q('.mission-badge',s),'⚡ LABORATÓRIO DO PULSO');
  setHTML(q('.sensory-v40-hero h1',s),'Toque. Conecte.<br><em>Crie seu padrão.</em>');
  const profile=q('[data-sensory-profile="pulse"]',s);if(profile){profile.classList.add('active');hideSectionContaining(profile);}
 }
@@ -87,9 +87,9 @@ function isolateBreathe(){
 function isolatePhysical(){
  const s=q('#screen-physicalsetup');if(!s)return;
  s.classList.add('jovem-shared-screen','jovem-movequest-screen');
- setText(q('.v41-head h2',s),'Move Quest');
- setText(q('.v41-head p',s),'Checkpoints, sequência e movimento real em uma linguagem de desafio.');
- setText(q('.mission-badge',s),'🏁 MOVE QUEST');
+ setText(q('.v41-head h2',s),'Missão Movimento');
+ setText(q('.v41-head p',s),'Etapas, sequência e movimento real em uma linguagem de desafio.');
+ setText(q('.mission-badge',s),'🏁 MISSÃO MOVIMENTO');
  setHTML(q('.physical-v41-hero h1',s),'Movimento.<br><em>Missão. Conquista.</em>');
  const profile=q('[data-physical-profile="quest"]',s);if(profile){profile.classList.add('active');hideSectionContaining(profile);}
 }
