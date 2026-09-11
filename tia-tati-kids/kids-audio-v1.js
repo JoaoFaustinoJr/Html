@@ -12,12 +12,7 @@ function unlock(){
   if(!enabled)return null;
   const AC=window.AudioContext||window.webkitAudioContext;
   if(!AC)return null;
-  if(!ctx){
-    ctx=new AC();
-    master=ctx.createGain();
-    master.gain.value=.24;
-    master.connect(ctx.destination);
-  }
+  if(!ctx){ctx=new AC();master=ctx.createGain();master.gain.value=.24;master.connect(ctx.destination);}
   if(ctx.state==='suspended')ctx.resume().catch(()=>{});
   return ctx;
 }
@@ -46,25 +41,48 @@ function stopEngine(){if(engineTimer){clearInterval(engineTimer);engineTimer=nul
 function startBee(){if(beeTimer)return;SFX.bee();beeTimer=setInterval(()=>{if(!document.hidden)SFX.bee();},260);}
 function stopBee(){if(beeTimer){clearInterval(beeTimer);beeTimer=null;}}
 
+const missingVoice=new Set();
+async function hasLocalVoice(id){try{return await new Promise(resolve=>{const r=indexedDB.open('TiaTatiVoiceV12',1);r.onerror=()=>resolve(false);r.onupgradeneeded=()=>resolve(false);r.onsuccess=()=>{try{const q=r.result.transaction('clips').objectStore('clips').get(id);q.onsuccess=()=>resolve(!!q.result?.blob);q.onerror=()=>resolve(false);}catch(_){resolve(false);}};});}catch(_){return false;}}
+async function playPackedVoice(id){if(!id||missingVoice.has(id)||await hasLocalVoice(id))return false;for(const ext of ['mp3','m4a','webm']){const url='audio/voice/'+encodeURIComponent(id)+'.'+ext;try{const r=await fetch(url,{cache:'force-cache'});if(!r.ok)continue;const blob=await r.blob();const a=new Audio(URL.createObjectURL(blob));a.onended=a.onerror=()=>URL.revokeObjectURL(a.src);await a.play();return true;}catch(_){}}missingVoice.add(id);return false;}
+function norm(s=''){return s.normalize?.('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()||'';}
+const VOICE_RULES=[
+  [/crash|voltar para a pista|ponto seguro/,'road_crash'],
+  [/cuidado com a curva/,'traffic_curve'],
+  [/faixa de pedestres/,'traffic_crosswalk'],
+  [/zona escolar|perto da escola/,'traffic_school'],
+  [/devagar tambem|reduza a velocidade/,'traffic_slow'],
+  [/chegamos.*escola|chegamos ao destino/,'road_finish'],
+  [/abelhinha.*flor|siga a trilha/,'bee_hint'],
+  [/alcancar os alvos|alvo colorido/,'target_hint'],
+  [/duas maos|uma mao de cada lado/,'hands_hint'],
+  [/respira comigo|inspire|solte o ar/,'breathe_in'],
+  [/muito bem.*conseguiu/,'success'],
+  [/voce consegue/,'retry'],
+  [/vamos juntos|eu sou a tia tati/,'welcome']
+];
+function voiceIdFor(text){const n=norm(text);for(const [rx,id] of VOICE_RULES)if(rx.test(n))return id;return null;}
+let lastPackedText='';
+function maybePackedVoice(text){const n=norm(text);if(!n||n===lastPackedText)return;lastPackedText=n;const id=voiceIdFor(text);if(id)setTimeout(()=>playPackedVoice(id),90);}
+
 function wireRoad(shell){if(!shell||shell.dataset.audioWired)return;shell.dataset.audioWired='1';const stage=shell.querySelector('.road-game-stage'),crash=shell.querySelector('.road-crash'),points=shell.querySelector('.road-points'),msg=shell.querySelector('.road-tutor-msg'),praise=shell.querySelector('.road-praise');
   stage?.addEventListener('pointerdown',startEngine,{passive:true});window.addEventListener('pointerup',stopEngine,{passive:true});window.addEventListener('pointercancel',stopEngine,{passive:true});
   if(crash)new MutationObserver(()=>{if(crash.classList.contains('show')){stopEngine();SFX.brake();setTimeout(()=>SFX.crash(),80);}}).observe(crash,{attributes:true,attributeFilter:['class']});
   if(points){let old=Number(points.textContent)||0;new MutationObserver(()=>{const n=Number(points.textContent)||0;if(n>old)SFX.collect();old=n;}).observe(points,{childList:true,characterData:true,subtree:true});}
-  if(msg){let last='';new MutationObserver(()=>{const t=(msg.textContent||'').toLowerCase();if(t!==last&&/(curva|devagar|reduza|atenção)/.test(t))SFX.brake();last=t;}).observe(msg,{childList:true,characterData:true,subtree:true});}
-  if(praise)new MutationObserver(()=>{const t=(praise.textContent||'').toLowerCase();if(/chegamos|conquista|muito bem/.test(t))SFX.success();}).observe(praise,{childList:true,characterData:true,subtree:true});
+  if(msg){let last='';new MutationObserver(()=>{const t=msg.textContent||'',n=norm(t);if(n!==last&&/(curva|devagar|reduza|atencao)/.test(n))SFX.brake();if(n!==last)maybePackedVoice(t);last=n;}).observe(msg,{childList:true,characterData:true,subtree:true});}
+  if(praise)new MutationObserver(()=>{const t=norm(praise.textContent||'');if(/chegamos|conquista|muito bem/.test(t))SFX.success();}).observe(praise,{childList:true,characterData:true,subtree:true});
 }
-function wireBee(shell){if(!shell||shell.dataset.audioWired)return;shell.dataset.audioWired='1';const stage=shell.querySelector('.bee-stage'),count=shell.querySelector('.bee-pollen-count'),praise=shell.querySelector('.bee-praise');
+function wireBee(shell){if(!shell||shell.dataset.audioWired)return;shell.dataset.audioWired='1';const stage=shell.querySelector('.bee-stage'),count=shell.querySelector('.bee-pollen-count'),praise=shell.querySelector('.bee-praise'),msg=shell.querySelector('.bee-tutor-msg');
   stage?.addEventListener('pointerdown',startBee,{passive:true});window.addEventListener('pointerup',stopBee,{passive:true});window.addEventListener('pointercancel',stopBee,{passive:true});
   if(count){let old=Number(count.textContent)||0;new MutationObserver(()=>{const n=Number(count.textContent)||0;if(n>old)SFX.collect();old=n;}).observe(count,{childList:true,characterData:true,subtree:true});}
-  if(praise)new MutationObserver(()=>{const t=(praise.textContent||'').toLowerCase();if(/muito bem|chegou|parabéns/.test(t))SFX.success();}).observe(praise,{childList:true,characterData:true,subtree:true});
+  if(praise)new MutationObserver(()=>{const t=norm(praise.textContent||'');if(/muito bem|chegou|parabens/.test(t))SFX.success();}).observe(praise,{childList:true,characterData:true,subtree:true});
+  if(msg)new MutationObserver(()=>maybePackedVoice(msg.textContent||'')).observe(msg,{childList:true,characterData:true,subtree:true});
 }
 function scan(){document.querySelectorAll('.road-game-shell').forEach(wireRoad);document.querySelectorAll('.bee-game-shell').forEach(wireBee);}
 
-const rootObserver=new MutationObserver(muts=>{
-  let needScan=false;
-  for(const m of muts){if(m.type==='childList'&&m.addedNodes.length){needScan=true;break;}if(m.type==='attributes'&&m.target?.id==='screen-done'&&m.target.classList.contains('active'))SFX.finish();}
-  if(needScan)scan();
-});
+const speech=document.querySelector('#speechBubble');
+if(speech)new MutationObserver(()=>maybePackedVoice(speech.textContent||'')).observe(speech,{childList:true,characterData:true,subtree:true});
+
+const rootObserver=new MutationObserver(muts=>{let needScan=false;for(const m of muts){if(m.type==='childList'&&m.addedNodes.length)needScan=true;if(m.type==='attributes'&&m.target?.id==='screen-done'&&m.target.classList.contains('active'))SFX.finish();}if(needScan)scan();});
 rootObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
 
 function clickHandler(e){unlock();const t=e.target.closest?.('button,.target-dot,.hand-pad,.breath-circle');if(!t)return;
@@ -80,16 +98,5 @@ document.addEventListener('click',clickHandler,{capture:true,passive:true});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopEngine();stopBee();}});
 scan();
 
-// Pacote de falas: gravações locais da Tatiana continuam tendo prioridade.
-// Quando arquivos forem adicionados em audio/voice/<id>.mp3, este helper permite reproduzi-los.
-const missingVoice=new Set();
-async function hasLocalVoice(id){try{return await new Promise((resolve)=>{const r=indexedDB.open('TiaTatiVoiceV12',1);r.onerror=()=>resolve(false);r.onupgradeneeded=()=>resolve(false);r.onsuccess=()=>{try{const q=r.result.transaction('clips').objectStore('clips').get(id);q.onsuccess=()=>resolve(!!q.result?.blob);q.onerror=()=>resolve(false);}catch(_){resolve(false);}};});}catch(_){return false;}}
-async function playPackedVoice(id){if(!id||missingVoice.has(id)||await hasLocalVoice(id))return false;for(const ext of ['mp3','m4a','webm']){const url='audio/voice/'+encodeURIComponent(id)+'.'+ext;try{const r=await fetch(url,{cache:'force-cache'});if(!r.ok)continue;const blob=await r.blob();const a=new Audio(URL.createObjectURL(blob));a.onended=a.onerror=()=>URL.revokeObjectURL(a.src);await a.play();return true;}catch(_){}}missingVoice.add(id);return false;}
-
-window.TiaTatiAudio={
-  effectsEnabled:()=>enabled,
-  setEffectsEnabled(v){enabled=!!v;localStorage.setItem(PREF,enabled?'1':'0');if(!enabled){stopEngine();stopBee();}},
-  sfx:SFX,
-  playPackedVoice
-};
+window.TiaTatiAudio={effectsEnabled:()=>enabled,setEffectsEnabled(v){enabled=!!v;localStorage.setItem(PREF,enabled?'1':'0');if(!enabled){stopEngine();stopBee();}},sfx:SFX,playPackedVoice};
 })();
