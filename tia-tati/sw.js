@@ -1,9 +1,9 @@
-const CACHE='tia-tati-portal-pwa-v2';
+const CACHE='tia-tati-portal-pwa-v3';
 const SHELL=[
   './',
   './index.html',
   './manifest.webmanifest',
-  './assets/icon-tia-tati.svg',
+  './assets/icon-tia-tati-v2.svg',
   './assets/tatiana-portal-v3.webp',
   './launch-kids.html'
 ];
@@ -27,7 +27,7 @@ const INSTALL_VISIBILITY_PATCH=`
     padding:11px 20px!important;
     border:2px solid rgba(242,71,154,.22)!important;
     background:rgba(255,255,255,.98)!important;
-    box-shadow:0 10px 30px rgba(17,61,109,.22)!important;
+    box-shadow:0 10px 30px rgba(23,61,113,.22)!important;
     color:#0b4382!important;
     font-size:.82rem!important;
     font-weight:900!important;
@@ -44,8 +44,17 @@ const INSTALL_VISIBILITY_PATCH=`
 </style>`;
 
 function patchPortalHtml(html){
-  if(!html || html.includes('portalInstallVisibilityV2')) return html;
-  return html.replace('</head>',INSTALL_VISIBILITY_PATCH+'\n</head>');
+  if(!html)return html;
+  let patched=html
+    .replace(/manifest\.webmanifest\?v=\d+/g,'manifest.webmanifest?v=2')
+    .replace(/assets\/icon-tia-tati\.svg/g,'assets/icon-tia-tati-v2.svg?v=2');
+  if(!patched.includes('apple-touch-icon')){
+    patched=patched.replace('</head>','<link rel="apple-touch-icon" href="assets/icon-tia-tati-v2.svg?v=2">\n</head>');
+  }
+  if(!patched.includes('portalInstallVisibilityV2')){
+    patched=patched.replace('</head>',INSTALL_VISIBILITY_PATCH+'\n</head>');
+  }
+  return patched;
 }
 
 self.addEventListener('install',event=>{
