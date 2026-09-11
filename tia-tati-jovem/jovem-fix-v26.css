@@ -1,0 +1,29 @@
+/* Tia Tati Jovem v26 — hero estável e acabamento mobile. */
+.jovem-home-art:before{
+  inset:8% 7%!important;
+  border-radius:28px!important;
+  border:1px solid rgba(56,229,255,.24)!important;
+  box-shadow:0 0 0 8px rgba(45,229,255,.025),0 0 36px rgba(45,229,255,.11)!important;
+}
+.jovem-home-art img.j24-hero-illustration{
+  width:min(82%,320px)!important;
+  height:auto!important;
+  max-height:86%!important;
+  aspect-ratio:1/1!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border-radius:28px!important;
+  border:2px solid rgba(70,229,255,.32)!important;
+  background:#0b1737!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.28),0 0 30px rgba(44,224,255,.10)!important;
+  filter:none!important;
+}
+#jovemMusicToggle{right:14px!important;top:max(56px,calc(env(safe-area-inset-top) + 50px))!important;width:42px!important;height:42px!important;font-size:19px!important}
+@media(max-width:760px){
+  .jovem-home-art:before{inset:9% 6%!important;border-radius:20px!important}
+  .jovem-home-art img.j24-hero-illustration{width:88%!important;max-height:82%!important;border-radius:20px!important}
+  #jovemMusicToggle{right:12px!important;top:max(54px,calc(env(safe-area-inset-top) + 48px))!important}
+}
+@media(max-width:400px){
+  .jovem-home-art img.j24-hero-illustration{width:90%!important}
+}
