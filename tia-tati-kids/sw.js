@@ -6,6 +6,7 @@ const AUDIO_VERSION='kids-audio-v3';
 const MUSIC_VERSION='kids-music-v1';
 const VOICE_EXPORT_VERSION='voice-export-v1';
 const FINAL_CARD_VERSION='completion-v2';
+const LAYOUT_VERSION='kids-layout-v4';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
@@ -21,13 +22,31 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const url=new URL(event.request.url);
 
+  /* Layout v4: evita que o PWA instalado mantenha o CSS antigo do hero Kids. */
+  if(url.pathname.endsWith('/tia-tati-kids/styles.css') || url.pathname.endsWith('/tia-tati-kids/kids-shell-v1.css')){
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(event.request,{cache:'no-store'});
+        if(!response.ok)return response;
+        const headers=new Headers(response.headers);
+        headers.set('cache-control','no-store, max-age=0');
+        headers.delete('content-length');
+        headers.delete('content-encoding');
+        return new Response(await response.text(),{status:response.status,statusText:response.statusText,headers});
+      }catch(_){
+        return fetch(event.request,{cache:'reload'});
+      }
+    })());
+    return;
+  }
+
   if(url.pathname.endsWith('/tia-tati-kids/app.js')){
     event.respondWith((async()=>{
       try{
         const response=await fetch(event.request,{cache:'no-store'});
         if(!response.ok)return response;
         const source=await response.text();
-        const loader='\n;(()=>{if(window.__TIA_TATI_KIDS_AUDIO_LOADER__)return;window.__TIA_TATI_KIDS_AUDIO_LOADER__=true;const a=document.createElement("script");a.src="kids-audio-v1.js?'+AUDIO_VERSION+'";a.async=true;document.head.appendChild(a);const m=document.createElement("script");m.src="kids-music-v1.js?'+MUSIC_VERSION+'";m.async=true;document.head.appendChild(m);const v=document.createElement("script");v.src="voice-export-v1.js?'+VOICE_EXPORT_VERSION+'";v.async=true;document.head.appendChild(v);const f=document.createElement("script");f.src="final-avatar-v1.js?'+FINAL_CARD_VERSION+'";f.async=true;document.head.appendChild(f);})();\n';
+        const loader='\n;(()=>{if(window.__TIA_TATI_KIDS_AUDIO_LOADER__)return;window.__TIA_TATI_KIDS_AUDIO_LOADER__=true;const a=document.createElement("script");a.src="kids-audio-v1.js?'+AUDIO_VERSION+'";a.async=true;document.head.appendChild(a);const m=document.createElement("script");m.src="kids-music-v1.js?'+MUSIC_VERSION+'";m.async=true;document.head.appendChild(m);const v=document.createElement("script");v.src="voice-export-v1.js?'+VOICE_EXPORT_VERSION+'";v.async=true;document.head.appendChild(v);const f=document.createElement("script");f.src="final-avatar-v1.js?'+FINAL_CARD_VERSION+'";f.async=true;document.head.appendChild(f);document.documentElement.dataset.kidsLayout="'+LAYOUT_VERSION+'";})();\n';
         const headers=new Headers(response.headers);
         headers.set('content-type','application/javascript; charset=utf-8');
         headers.set('cache-control','no-store, max-age=0');
