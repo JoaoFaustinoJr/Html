@@ -108,7 +108,53 @@ function addFinishStamp(){
  footer.parentNode.insertBefore(stamp,footer);
 }
 
-function enhance(){updateHero();buildAudienceSwitch();buildKidsArea();polishYouth();buildSupportHub();addFinishStamp();document.documentElement.classList.add('tia-v44-ready');}
+// V62 — corrige o card de missão concluída da Área Kids.
+// A imagem de conclusão Kids passa a usar o card de incentivo (success.webp),
+// mantendo a conclusão jovem intacta. Também força visibilidade e aplica fallback.
+let completionAudience='kids';
+function saveCompletionAudience(value){
+ completionAudience=value;
+ try{sessionStorage.setItem('tiaTatiCompletionAudience',value);}catch(_){}
+}
+function readCompletionAudience(){
+ try{return sessionStorage.getItem('tiaTatiCompletionAudience')||completionAudience;}catch(_){return completionAudience;}
+}
+function syncCompletionCard(){
+ const screen=q('#screen-done'),img=screen&&q('.done > img',screen);if(!screen||!img)return;
+ const audience=readCompletionAudience();
+ img.style.display='block';img.style.opacity='1';img.style.visibility='visible';img.style.objectFit='cover';
+ img.loading='eager';
+ if(!img.dataset.v62OriginalSrc)img.dataset.v62OriginalSrc=img.getAttribute('src')||'assets/celebrate.webp';
+ if(audience==='kids'){
+  const wanted='assets/success.webp?v=62';
+  if(!img.getAttribute('src')?.includes('success.webp'))img.setAttribute('src',wanted);
+  img.alt='Tia Tati comemorando a conquista';
+  img.onerror=()=>{img.onerror=null;img.setAttribute('src','assets/welcome.webp?v=62');};
+ }else{
+  const original=(img.dataset.v62OriginalSrc||'assets/celebrate.webp').split('?')[0];
+  if(!img.getAttribute('src')?.includes('celebrate.webp'))img.setAttribute('src',original+'?v=62');
+  img.alt='Tia Tati comemorando';
+  img.onerror=null;
+ }
+}
+function fixCompletionCard(){
+ const screen=q('#screen-done');if(!screen)return;
+ if(!document.documentElement.dataset.v62CompletionTrack){
+  document.documentElement.dataset.v62CompletionTrack='1';
+  document.addEventListener('click',e=>{
+   const target=e.target instanceof Element?e.target:null;if(!target)return;
+   if(target.closest('[data-area-jump="kids"], .kids-v44 [data-mission], .kids-v44 #circuitBtn'))saveCompletionAudience('kids');
+   if(target.closest('[data-area-jump="young"], .youth-challenges [data-youth-light], .youth-challenges [data-youth-sensory], .youth-challenges [data-youth-breathe], .youth-challenges [data-youth-physical]'))saveCompletionAudience('youth');
+  },true);
+ }
+ if(!screen.dataset.v62DoneWatch){
+  screen.dataset.v62DoneWatch='1';
+  new MutationObserver(()=>{if(screen.classList.contains('active'))syncCompletionCard();}).observe(screen,{attributes:true,attributeFilter:['class']});
+ }
+ syncCompletionCard();
+}
+
+function enhance(){updateHero();buildAudienceSwitch();buildKidsArea();polishYouth();buildSupportHub();addFinishStamp();fixCompletionCard();document.documentElement.classList.add('tia-v44-ready');}
 function start(){setTimeout(enhance,0);setTimeout(enhance,220);setTimeout(enhance,700);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
