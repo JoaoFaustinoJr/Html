@@ -1,14 +1,14 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_ASSETS_J16__)return;
-window.__TIA_TATI_JOVEM_ASSETS_J16__=true;
+if(window.__TIA_TATI_JOVEM_ASSETS_J19__)return;
+window.__TIA_TATI_JOVEM_ASSETS_J19__=true;
 
-const STABLE_TATI='../tia-tati/assets/tatiana-portal-v3.webp?v=j16';
+const STABLE_TATI='../tia-tati/assets/tatiana-portal-v3.webp?v=j19';
 const CARD_SOURCES={
-  '[data-youth-light="react"]':'assets/cards/reflexo-neon-v2.webp?v=j16',
-  '[data-youth-light="memory"]':'assets/cards/memorize-v2.webp?v=j16',
-  '[data-youth-light="beat"]':'assets/cards/ritmo-movimento-v2.webp?v=j16',
-  '[data-youth-sensory]':'assets/pulse-lab.svg?v=j16'
+  '[data-youth-light="react"]':'assets/cards/reflexo-neon.webp?v=j19',
+  '[data-youth-light="memory"]':'assets/cards/memorize.webp?v=j19',
+  '[data-youth-light="beat"]':'assets/cards/beat-move.webp?v=j19',
+  '[data-youth-sensory]':'assets/pulse-lab.svg?v=j19'
 };
 
 function ensureArt(card,src,badge){
@@ -16,10 +16,15 @@ function ensureArt(card,src,badge){
   let art=card.querySelector('.youth-card-art');
   if(!art){art=document.createElement('span');art.className='youth-card-art';card.prepend(art);}
   card.classList.remove('j13-symbol-card');
+  art.querySelectorAll('.j17-card-visual,.j18-card-visual').forEach(n=>n.remove());
   let img=art.querySelector('img');
   if(!img){img=document.createElement('img');art.prepend(img);}
-  img.src=src; img.alt=''; img.loading='eager'; img.decoding='async';
-  let em=art.querySelector('em');
+  img.src=src;
+  img.alt='';
+  img.loading='eager';
+  img.decoding='async';
+  img.style.removeProperty('display');
+  let em=art.querySelector(':scope > em');
   if(!em){em=document.createElement('em');art.appendChild(em);}
   em.textContent=badge;
 }
@@ -61,8 +66,8 @@ function apply(){fixHomeCards();fixSharedImages();}
 
 function installTargetedObserver(){
   const app=document.getElementById('app');
-  if(!app||app.dataset.j16AssetObserver)return;
-  app.dataset.j16AssetObserver='1';
+  if(!app||app.dataset.j19AssetObserver)return;
+  app.dataset.j19AssetObserver='1';
   const obs=new MutationObserver(muts=>{
     muts.forEach(m=>{
       if(m.type==='attributes'&&m.target instanceof HTMLImageElement)fixImage(m.target);
