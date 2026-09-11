@@ -1,9 +1,10 @@
 /* Tia Tati Kids — service worker de estabilidade.
    Mantém o runtime funcional, corrige o avatar final e injeta
-   a camada leve de efeitos sonoros sem alterar a lógica dos jogos. */
+   as camadas leves de efeitos e música sem alterar a lógica dos jogos. */
 const LEGACY_CACHE='tia-tati-v45-identity-20260910';
 const FINAL_AVATAR_VERSION='kids-final-avatar-v4';
-const AUDIO_VERSION='kids-audio-v2';
+const AUDIO_VERSION='kids-audio-v3';
+const MUSIC_VERSION='kids-music-v1';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
@@ -34,7 +35,7 @@ self.addEventListener('fetch',event=>{
         const response=await fetch(event.request,{cache:'no-store'});
         if(!response.ok)return response;
         const source=await response.text();
-        const loader='\n;(()=>{if(window.__TIA_TATI_KIDS_AUDIO_LOADER__)return;window.__TIA_TATI_KIDS_AUDIO_LOADER__=true;const s=document.createElement("script");s.src="kids-audio-v1.js?'+AUDIO_VERSION+'";s.async=true;document.head.appendChild(s);})();\n';
+        const loader='\n;(()=>{if(window.__TIA_TATI_KIDS_AUDIO_LOADER__)return;window.__TIA_TATI_KIDS_AUDIO_LOADER__=true;const a=document.createElement("script");a.src="kids-audio-v1.js?'+AUDIO_VERSION+'";a.async=true;document.head.appendChild(a);const m=document.createElement("script");m.src="kids-music-v1.js?'+MUSIC_VERSION+'";m.async=true;document.head.appendChild(m);})();\n';
         const headers=new Headers(response.headers);
         headers.set('content-type','application/javascript; charset=utf-8');
         headers.set('cache-control','no-store, max-age=0');
