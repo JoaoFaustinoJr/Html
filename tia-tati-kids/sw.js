@@ -6,7 +6,7 @@ const AUDIO_VERSION='kids-audio-v3';
 const MUSIC_VERSION='kids-music-v2';
 const VOICE_EXPORT_VERSION='voice-export-v2';
 const FINAL_CARD_VERSION='completion-v2';
-const LAYOUT_VERSION='kids-layout-v4';
+const LAYOUT_VERSION='kids-layout-v5';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
@@ -22,7 +22,7 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const url=new URL(event.request.url);
 
-  if(url.pathname.endsWith('/tia-tati-kids/styles.css') || url.pathname.endsWith('/tia-tati-kids/kids-shell-v1.css')){
+  if(url.pathname.endsWith('/tia-tati-kids/styles.css') || url.pathname.endsWith('/tia-tati-kids/kids-shell-v1.css') || url.pathname.endsWith('/tia-tati-kids/kids-theme-v2.css')){
     event.respondWith((async()=>{
       try{
         const response=await fetch(event.request,{cache:'no-store'});
