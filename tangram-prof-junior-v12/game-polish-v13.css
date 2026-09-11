@@ -69,3 +69,158 @@
   #tangram-levels #board .piece.rai-piece-drop,
   #tangram-levels #board .piece.rai-piece-win{animation:none!important}
 }
+
+/* v15.8 — interface mais compacta no celular e estável no computador */
+#tangram-levels .rai-normal-timer{display:none!important}
+
+@media(max-width:640px){
+  #tangram-levels{
+    padding:5px!important;
+    border-radius:15px!important;
+  }
+  #tangram-levels .tl-head{
+    padding:6px 8px 7px!important;
+    margin-bottom:6px!important;
+    border-radius:13px!important;
+  }
+  #tangram-levels .tl-brand{
+    gap:4px!important;
+    row-gap:4px!important;
+  }
+  #tangram-levels .tl-brand-identity{
+    grid-template-columns:minmax(0,1fr) 40px!important;
+    column-gap:5px!important;
+    row-gap:2px!important;
+  }
+  #tangram-levels .tl-wordmark{
+    height:27px!important;
+    font-size:26px!important;
+  }
+  #tangram-levels .tl-wordmark-sub{
+    margin-top:1px!important;
+    font-size:9.5px!important;
+    letter-spacing:.21em!important;
+  }
+  #tangram-levels .tl-brand-rai-v15{
+    width:40px!important;
+    height:40px!important;
+  }
+  #tangram-levels .tl-brand-credit{
+    margin-top:0!important;
+    padding:3px 6px!important;
+    font-size:8.8px!important;
+    line-height:1!important;
+  }
+  #tangram-levels .tl-brand-tools{
+    margin-top:1px!important;
+    gap:4px!important;
+  }
+  #tangram-levels .tl-mini-action{
+    min-height:37px!important;
+    padding:3px 2px!important;
+    border-radius:10px!important;
+    font-size:13px!important;
+  }
+  #tangram-levels .tl-mini-action span{
+    font-size:7px!important;
+    line-height:1!important;
+  }
+  #tangram-levels .tl-stats{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:4px!important;
+    margin-top:6px!important;
+  }
+  #tangram-levels .tl-chip{
+    min-width:0!important;
+    padding:5px 5px!important;
+    border-radius:9px!important;
+    font-size:10.5px!important;
+    line-height:1.1!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  #tangram-levels .tl-layout{
+    gap:6px!important;
+  }
+  #tangram-levels .tl-stage{
+    border-radius:13px!important;
+  }
+  #tangram-levels .tl-toolbar{
+    padding:6px 8px!important;
+    gap:5px!important;
+  }
+  #tangram-levels .tl-title{
+    font-size:16px!important;
+    line-height:1.15!important;
+  }
+  #tangram-levels .tl-status{
+    font-size:10.5px!important;
+  }
+  #tangram-levels .tl-meter{
+    margin:5px 8px 0!important;
+  }
+  #tangram-levels .tl-metertext{
+    margin:4px 8px 5px!important;
+    font-size:10.5px!important;
+    line-height:1.15!important;
+  }
+  #tangram-levels .tl-board-scroll{
+    height:clamp(350px,46dvh,570px)!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  #tangram-levels .tl-board-scroll #board{
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+  }
+  #tangram-levels .tl-mobile-controls{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:5px!important;
+    padding:6px!important;
+  }
+  #tangram-levels .tl-mobile-controls button{
+    min-height:56px!important;
+    padding:5px 3px!important;
+    font-size:18px!important;
+    line-height:1!important;
+  }
+  #tangram-levels .tl-mobile-controls button span{
+    font-size:10px!important;
+    line-height:1.05!important;
+  }
+}
+
+@media(max-width:430px){
+  #tangram-levels .tl-head{padding:5px 7px 6px!important}
+  #tangram-levels .tl-brand-identity{grid-template-columns:minmax(0,1fr) 36px!important}
+  #tangram-levels .tl-wordmark{height:25px!important;font-size:24px!important}
+  #tangram-levels .tl-wordmark-sub{font-size:8.8px!important}
+  #tangram-levels .tl-brand-rai-v15{width:36px!important;height:36px!important}
+  #tangram-levels .tl-mini-action{min-height:35px!important;font-size:12px!important}
+  #tangram-levels .tl-chip{font-size:9.8px!important;padding:4px 4px!important}
+  #tangram-levels .tl-board-scroll{height:clamp(335px,45dvh,520px)!important}
+  #tangram-levels .tl-mobile-controls button{min-height:53px!important}
+}
+
+@media(min-width:641px) and (hover:hover) and (pointer:fine){
+  #tangram-levels.tl-v158-desktop-stable,
+  #tangram-levels.tl-v158-desktop-stable .tl-stage,
+  #tangram-levels.tl-v158-desktop-stable .tl-board-scroll,
+  #tangram-levels.tl-v158-desktop-stable .tl-v10-pop,
+  #tangram-levels.tl-v158-desktop-stable .tl-v10-success,
+  #tangram-levels.tl-v158-desktop-stable .tl-next-mission-guide,
+  #tangram-levels.tl-v158-desktop-stable #board .piece.rai-piece-drop,
+  #tangram-levels.tl-v158-desktop-stable #board .piece.rai-piece-win{
+    animation:none!important;
+  }
+  #tangram-levels.tl-v158-desktop-stable .tl-v10-pop,
+  #tangram-levels.tl-v158-desktop-stable #board .piece{
+    transition:none!important;
+  }
+}
