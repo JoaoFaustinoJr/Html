@@ -1,8 +1,11 @@
 (()=>{
 const root=document.getElementById('tangram-levels'),btn=document.getElementById('gamerApp');if(!root||!btn)return;
-const KEY='raiGamerOfficialV1',fmt=ms=>{const t=Math.floor(Math.max(0,ms)/100),d=t%10,s=Math.floor(t/10),m=Math.floor(s/60);return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+d};
+const KEY='raiGamerOfficialV1';
+const fmt=ms=>{const t=Math.floor(Math.max(0,ms)/100),d=t%10,s=Math.floor(t/10),m=Math.floor(s/60);return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+d};
 let data={records:{}};try{data={...data,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){};data.records=data.records||{};
-const name=()=>((root.querySelector('#title')?.textContent||'Missão').replace(/\s+/g,' ').trim()),key=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-'),save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const name=()=>((root.querySelector('#title')?.textContent||'Missão').replace(/\s+/g,' ').trim());
+const key=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const board=root.querySelector('#board');if(board?.tagName?.toLowerCase()==='svg')board.setAttribute('preserveAspectRatio','xMidYMid meet');
 let active=false,running=false,stopped=false,start=0,elapsed=0,raf=0,current=name(),lastVerify=0,pending=0;
 const hud=document.createElement('div');hud.className='rai-gamer-official-hud';hud.innerHTML='<div class="rai-gamer-badge">⚡ SPEED RUN</div><div class="rai-gamer-clock"><span>TEMPO</span><b class="rai-gamer-official-time">00:00.0</b><small>PARE PARA VALIDAR</small></div><button class="rai-gamer-official-stop" type="button">■ <span>PARAR</span></button><button class="rai-gamer-official-exit" type="button">×</button>';(root.querySelector('.tl-stage')||root).prepend(hud);
@@ -10,7 +13,9 @@ const cd=document.createElement('div');cd.className='rai-gamer-official-countdow
 const note=document.createElement('div');note.className='rai-gamer-official-notice';document.body.appendChild(note);
 const result=document.createElement('div');result.className='rai-gamer-official-result';result.innerHTML='<div class="ico">🏆</div><h3>Missão concluída!</h3><div class="tm">00:00.0</div><p></p><button type="button">Continuar</button>';document.body.appendChild(result);
 const time=hud.querySelector('.rai-gamer-official-time'),stop=hud.querySelector('.rai-gamer-official-stop'),hint=hud.querySelector('small'),native=root.querySelector('#timer');
-const show=(t,k='warn')=>{note.textContent=t;note.dataset.kind=k;note.classList.add('show');clearTimeout(note._t);note._t=setTimeout(()=>note.classList.remove('show'),1800)},setTime=t=>{time.textContent=t;if(native)native.textContent=t},v=p=>{try{navigator.vibrate?.(p)}catch(e){}};
+const show=(t,k='warn')=>{note.textContent=t;note.dataset.kind=k;note.classList.add('show');clearTimeout(note._t);note._t=setTimeout(()=>note.classList.remove('show'),1800)};
+const setTime=t=>{time.textContent=t;if(native)native.textContent=t};
+const v=p=>{try{navigator.vibrate?.(p)}catch(e){}};
 function ui(){document.body.classList.toggle('rai-gamer-stopped',active&&stopped&&!running);if(stopped&&!running){stop.innerHTML='▶ <span>RETOMAR</span>';hint.textContent='AGORA TOQUE EM VERIFICAR'}else{stop.innerHTML='■ <span>PARAR</span>';hint.textContent='PARE PARA VALIDAR'}}
 function focus(){if(root.classList.contains('tl-focus'))return;(document.getElementById('focusZoom')||document.getElementById('mFull'))?.click?.()}
 function tick(){if(!running)return;elapsed=performance.now()-start;setTime(fmt(elapsed));raf=requestAnimationFrame(tick)}
