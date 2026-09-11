@@ -1,34 +1,38 @@
 (()=>{
-const root=document.getElementById('tangram-levels'),btn=document.getElementById('gamerApp');if(!root||!btn)return;
-const KEY='raiGamerOfficialV1';
-const fmt=ms=>{const t=Math.floor(Math.max(0,ms)/100),d=t%10,s=Math.floor(t/10),m=Math.floor(s/60);return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+d};
-let data={records:{}};try{data={...data,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){};data.records=data.records||{};
-const name=()=>((root.querySelector('#title')?.textContent||'Missão').replace(/\s+/g,' ').trim());
-const key=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
-const board=root.querySelector('#board');if(board?.tagName?.toLowerCase()==='svg')board.setAttribute('preserveAspectRatio','xMidYMid meet');
-let active=false,running=false,stopped=false,start=0,elapsed=0,raf=0,current=name(),lastVerify=0,pending=0;
-const hud=document.createElement('div');hud.className='rai-gamer-official-hud';hud.innerHTML='<div class="rai-gamer-badge">⚡ SPEED RUN</div><div class="rai-gamer-clock"><span>TEMPO</span><b class="rai-gamer-official-time">00:00.0</b><small>PARE PARA VALIDAR</small></div><button class="rai-gamer-official-stop" type="button">■ <span>PARAR</span></button><button class="rai-gamer-official-exit" type="button">×</button>';(root.querySelector('.tl-stage')||root).prepend(hud);
-const cd=document.createElement('div');cd.className='rai-gamer-official-countdown';cd.innerHTML='<div>3</div>';document.body.appendChild(cd);
-const note=document.createElement('div');note.className='rai-gamer-official-notice';document.body.appendChild(note);
-const result=document.createElement('div');result.className='rai-gamer-official-result';result.innerHTML='<div class="ico">🏆</div><h3>Missão concluída!</h3><div class="tm">00:00.0</div><p></p><button type="button">Continuar</button>';document.body.appendChild(result);
-const time=hud.querySelector('.rai-gamer-official-time'),stop=hud.querySelector('.rai-gamer-official-stop'),hint=hud.querySelector('small'),native=root.querySelector('#timer');
-const show=(t,k='warn')=>{note.textContent=t;note.dataset.kind=k;note.classList.add('show');clearTimeout(note._t);note._t=setTimeout(()=>note.classList.remove('show'),1800)};
-const setTime=t=>{time.textContent=t;if(native)native.textContent=t};
-const v=p=>{try{navigator.vibrate?.(p)}catch(e){}};
-function ui(){document.body.classList.toggle('rai-gamer-stopped',active&&stopped&&!running);if(stopped&&!running){stop.innerHTML='▶ <span>RETOMAR</span>';hint.textContent='AGORA TOQUE EM VERIFICAR'}else{stop.innerHTML='■ <span>PARAR</span>';hint.textContent='PARE PARA VALIDAR'}}
-function focus(){if(root.classList.contains('tl-focus'))return;(document.getElementById('focusZoom')||document.getElementById('mFull'))?.click?.()}
-function tick(){if(!running)return;elapsed=performance.now()-start;setTime(fmt(elapsed));raf=requestAnimationFrame(tick)}
-function reset(){running=false;stopped=false;cancelAnimationFrame(raf);elapsed=0;setTime('00:00.0');ui()}
-function run(){start=performance.now()-elapsed;running=true;stopped=false;ui();raf=requestAnimationFrame(tick)}
-function pause(){if(!running)return;elapsed=performance.now()-start;running=false;stopped=true;cancelAnimationFrame(raf);setTime(fmt(elapsed));ui();v([15,30,15]);show('⏹ Tempo parado. Agora toque em Verificar.','ok')}
-async function countdown(){reset();focus();current=name();cd.classList.add('show');for(const x of ['3','2','1','GO!']){if(!active)return;const e=cd.firstElementChild;e.textContent=x;e.classList.toggle('go',x==='GO!');e.style.animation='none';void e.offsetWidth;e.style.animation='';v(x==='GO!'?30:10);await new Promise(r=>setTimeout(r,x==='GO!'?420:620))}if(!active)return;cd.classList.remove('show');run()}
-function enter(){active=true;document.body.classList.add('rai-gamer-running');btn.classList.add('active');hud.classList.add('show');countdown()}
-function exit(){active=running=stopped=false;pending++;cancelAnimationFrame(raf);cd.classList.remove('show');note.classList.remove('show');result.classList.remove('show');hud.classList.remove('show');document.body.classList.remove('rai-gamer-running','rai-gamer-stopped');btn.classList.remove('active');try{window.__tangramExitFocus?.(true)}catch(e){};setTimeout(()=>window.__tlRefreshMetrics?.(),80)}
-function complete(){if(!active||running||!stopped||Date.now()-lastVerify>3500)return;pending++;const k=key(current),a=data.records[k]||[],prior=a.length?Math.min(...a):null,rec=prior==null||elapsed<prior;a.push(Math.round(elapsed));data.records[k]=a.slice(-30);save();result.querySelector('h3').textContent=rec?'🏆 Novo recorde!':'✅ Missão concluída!';result.querySelector('.tm').textContent=fmt(elapsed);result.querySelector('p').textContent=prior==null?'Primeira marca registrada.':rec?fmt(prior-elapsed)+' mais rápido!':'Recorde: '+fmt(prior);result.classList.add('show');v(rec?[25,40,35]:20)}
-btn.addEventListener('click',()=>active?exit():enter());hud.querySelector('.rai-gamer-official-exit').addEventListener('click',exit);stop.addEventListener('click',()=>running?pause():stopped&&run());result.querySelector('button').addEventListener('click',()=>result.classList.remove('show'));
-document.addEventListener('click',e=>{if(!active)return;const b=e.target.closest?.('button');if(!b)return;const l=((b.textContent||'')+' '+(b.getAttribute('aria-label')||'')).toLowerCase();if(/verificar|check/.test(l)){if(running||!stopped){e.preventDefault();e.stopImmediatePropagation();stop.classList.remove('attention');void stop.offsetWidth;stop.classList.add('attention');show('⏱ Primeiro PARE o cronômetro. Depois toque em Verificar.');v([18,30,18]);return}lastVerify=Date.now();const token=++pending;setTimeout(()=>{if(active&&token===pending&&!result.classList.contains('show')&&stopped&&!running){show('Ainda não terminou — cronômetro retomado.');run()}},700)}},true);
-const msg=root.querySelector('#msg');if(msg)new MutationObserver(()=>{/miss[aã]o conclu[ií]da/i.test(msg.textContent||'')&&complete()}).observe(msg,{subtree:true,childList:true,characterData:true});
-const title=root.querySelector('#title');if(title)new MutationObserver(()=>{const n=name();if(n!==current){current=n;if(active)setTimeout(countdown,150)}}).observe(title,{subtree:true,childList:true,characterData:true});
-window.__raiGamerOfficial={enter,exit,pause,resume:run,get active(){return active}};
+ const root=document.getElementById('tangram-levels'),button=document.getElementById('gamerApp');
+ if(!root||!button)return;
+ const KEY='raiGamerOfficialV1';
+ const fmt=ms=>{const t=Math.floor(Math.max(0,ms)/100),d=t%10,s=Math.floor(t/10),m=Math.floor(s/60);return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+d};
+ let store={records:{}};try{store={...store,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){};store.records=store.records||{};
+ const missionName=()=>((root.querySelector('#title')?.textContent||'Missão').replace(/\s+/g,' ').trim());
+ const missionKey=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
+ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}};
+ let active=false,running=false,stopped=false,startAt=0,elapsed=0,raf=0,current=missionName(),verifyToken=0;
+ const board=root.querySelector('#board');if(board?.tagName?.toLowerCase()==='svg')board.setAttribute('preserveAspectRatio','xMidYMid meet');
+ const hud=document.createElement('div');hud.className='rai-gamer-official-hud';hud.innerHTML='<div class="rai-gamer-badge">⚡ SPEED RUN</div><div class="rai-gamer-clock"><span>TEMPO</span><b class="rai-gamer-official-time">00:00.0</b><small>PARAR = VALIDAR</small></div><button type="button" class="rai-gamer-official-stop">■ <span>PARAR</span></button><button type="button" class="rai-gamer-official-exit">×</button>';(root.querySelector('.tl-stage')||root).prepend(hud);
+ const countdown=document.createElement('div');countdown.className='rai-gamer-official-countdown';countdown.innerHTML='<div>3</div>';document.body.appendChild(countdown);
+ const notice=document.createElement('div');notice.className='rai-gamer-official-notice';document.body.appendChild(notice);
+ const result=document.createElement('div');result.className='rai-gamer-official-result';result.innerHTML='<div class="ico">🏆</div><h3>Missão concluída!</h3><div class="tm">00:00.0</div><p></p><button type="button">Continuar</button>';document.body.appendChild(result);
+ const timeEl=hud.querySelector('.rai-gamer-official-time'),stopBtn=hud.querySelector('.rai-gamer-official-stop'),hint=hud.querySelector('small'),nativeTimer=root.querySelector('#timer');
+ const setTime=v=>{timeEl.textContent=v;if(nativeTimer)nativeTimer.textContent=v};
+ const show=(text,kind='info')=>{notice.textContent=text;notice.dataset.kind=kind;notice.classList.add('show');clearTimeout(notice._t);notice._t=setTimeout(()=>notice.classList.remove('show'),1700)};
+ const vibrate=p=>{try{navigator.vibrate?.(p)}catch(e){}};
+ function focus(){if(root.classList.contains('tl-focus'))return;(document.getElementById('focusZoom')||document.getElementById('mFull'))?.click?.()}
+ function resetClock(){running=false;stopped=false;cancelAnimationFrame(raf);elapsed=0;setTime('00:00.0');stopBtn.innerHTML='■ <span>PARAR</span>';hint.textContent='PARAR = VALIDAR'}
+ function tick(){if(!running)return;elapsed=performance.now()-startAt;setTime(fmt(elapsed));raf=requestAnimationFrame(tick)}
+ function run(){startAt=performance.now()-elapsed;running=true;stopped=false;stopBtn.innerHTML='■ <span>PARAR</span>';hint.textContent='PARAR = VALIDAR';raf=requestAnimationFrame(tick)}
+ function restartMission(){const b=root.querySelector('#levels button.tl-level.active,#levels .tl-level.active,.tl-level.active');if(b&&!b.disabled){try{b.click();return true}catch(e){}}return false}
+ function verify(){const b=document.getElementById('mCheck')||[...root.querySelectorAll('button')].find(x=>/verificar|check/i.test((x.textContent||'')+' '+(x.getAttribute('aria-label')||'')));if(b)b.click()}
+ function pauseAndVerify(){if(!running)return;elapsed=performance.now()-startAt;running=false;stopped=true;cancelAnimationFrame(raf);setTime(fmt(elapsed));stopBtn.innerHTML='✓ <span>VALIDANDO</span>';hint.textContent='CONFERINDO MONTAGEM';vibrate([15,30,15]);show('⏹ Tempo parado — verificando automaticamente.','ok');const token=++verifyToken;setTimeout(verify,80);setTimeout(()=>{if(active&&stopped&&!running&&token===verifyToken&&!result.classList.contains('show')){show('Ainda não terminou — cronômetro retomado.');run()}},950)}
+ async function startCountdown(){resetClock();focus();current=missionName();countdown.classList.add('show');for(const value of ['3','2','1','GO!']){if(!active)return;const el=countdown.firstElementChild;el.textContent=value;el.classList.toggle('go',value==='GO!');el.style.animation='none';void el.offsetWidth;el.style.animation='';vibrate(value==='GO!'?30:10);await new Promise(r=>setTimeout(r,value==='GO!'?420:620))}if(!active)return;countdown.classList.remove('show');run()}
+ function enter(){if(active)return;active=true;document.body.classList.add('rai-gamer-running');button.classList.add('active');hud.classList.add('show');restartMission();setTimeout(startCountdown,180)}
+ function exit(){active=running=stopped=false;verifyToken++;cancelAnimationFrame(raf);countdown.classList.remove('show');notice.classList.remove('show');result.classList.remove('show');hud.classList.remove('show');document.body.classList.remove('rai-gamer-running','rai-gamer-stopped');button.classList.remove('active');try{window.__tangramExitFocus?.(true)}catch(e){};setTimeout(()=>window.__tlRefreshMetrics?.(),80)}
+ function complete(){if(!active||running||!stopped)return;verifyToken++;const k=missionKey(current),arr=store.records[k]||[],prior=arr.length?Math.min(...arr):null,isRecord=prior==null||elapsed<prior;arr.push(Math.round(elapsed));store.records[k]=arr.slice(-30);save();result.querySelector('h3').textContent=isRecord?'🏆 Novo recorde!':'✅ Missão concluída!';result.querySelector('.tm').textContent=fmt(elapsed);result.querySelector('p').textContent=prior==null?'Primeira marca registrada.':isRecord?fmt(prior-elapsed)+' mais rápido!':'Recorde: '+fmt(prior);result.classList.add('show');vibrate(isRecord?[25,40,35]:20)}
+ button.addEventListener('click',()=>active?exit():enter());
+ stopBtn.addEventListener('click',pauseAndVerify);
+ hud.querySelector('.rai-gamer-official-exit').addEventListener('click',exit);
+ result.querySelector('button').addEventListener('click',()=>result.classList.remove('show'));
+ const msg=root.querySelector('#msg');if(msg)new MutationObserver(()=>{/miss[aã]o conclu[ií]da/i.test(msg.textContent||'')&&complete()}).observe(msg,{subtree:true,childList:true,characterData:true});
+ const title=root.querySelector('#title');if(title)new MutationObserver(()=>{const n=missionName();if(n!==current){current=n;if(active){restartMission();setTimeout(startCountdown,180)}}}).observe(title,{subtree:true,childList:true,characterData:true});
+ window.__raiGamerOfficial={enter,exit,pause:pauseAndVerify,resume:run,restartMission,get active(){return active}};
 })();
