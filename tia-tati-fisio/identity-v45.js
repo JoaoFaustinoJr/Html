@@ -51,13 +51,10 @@ function support(){
  const v=q('.support-v44-voice',hub);if(v){const strong=q('strong',v);if(strong)strong.textContent='Voz da Tia Tati';const small=q('small',v);if(small)small.textContent='Orientações que acolhem e inspiram.';const phrases=q('.support-v44-phrases',v);if(phrases)phrases.innerHTML='<i>▶ Vamos com calma <b>0:28</b></i><i>▶ Atenção ao movimento <b>0:32</b></i><i>▶ Postura também importa <b>0:33</b></i><i>▶ Você consegue! <b>0:24</b></i>';}
 }
 
-// V63 — correção robusta do card de conclusão Kids.
-// O reparo fica nesta camada de identidade, que já é carregada na interface atual,
-// e força a imagem a permanecer visível mesmo se outra regra/rotina a alterar.
+// V64 — uma única imagem de conclusão para Kids e Jovem.
+// A Área Kids passa a reutilizar exatamente o card que já funciona na Área Jovem.
 function completionGuard(){
  const screen=q('#screen-done'),img=screen&&q('.done > img',screen);if(!screen||!img)return;
- const setAudience=value=>{try{sessionStorage.setItem('tiaTatiCompletionAudience',value);}catch(_){}};
- const getAudience=()=>{try{return sessionStorage.getItem('tiaTatiCompletionAudience')||'kids';}catch(_){return 'kids';}};
  const forceStyle=()=>{
   img.style.setProperty('display','block','important');
   img.style.setProperty('visibility','visible','important');
@@ -69,40 +66,23 @@ function completionGuard(){
   img.style.setProperty('object-position','center top','important');
   img.style.setProperty('margin','0 auto 18px','important');
   img.style.setProperty('border-radius','28px','important');
+  img.style.setProperty('background-image','url("assets/celebrate.webp?v=64")','important');
+  img.style.setProperty('background-size','cover','important');
+  img.style.setProperty('background-position','center top','important');
  };
  const repair=()=>{
   if(!screen.classList.contains('active'))return;
   forceStyle();
-  const audience=getAudience();
-  if(audience!=='youth'){
-   const wanted='assets/success.webp?v=63';
-   if(!img.getAttribute('src')?.includes('success.webp'))img.setAttribute('src',wanted);
-   img.alt='Tia Tati comemorando a conquista';
-   img.loading='eager';
-   img.decoding='sync';
-   img.onerror=()=>{
-    img.onerror=()=>{img.onerror=null;img.setAttribute('src','assets/welcome.webp?v=63');forceStyle();};
-    img.setAttribute('src','assets/celebrate.webp?v=63');
-    forceStyle();
-   };
-  }else{
-   if(!img.getAttribute('src')?.includes('celebrate.webp'))img.setAttribute('src','assets/celebrate.webp?v=63');
-   img.alt='Tia Tati comemorando';
-   img.onerror=null;
-  }
+  if(!img.getAttribute('src')?.includes('celebrate.webp'))img.setAttribute('src','assets/celebrate.webp?v=64');
+  img.alt='Tia Tati comemorando';
+  img.loading='eager';
+  img.decoding='sync';
+  img.onerror=()=>{img.onerror=null;img.setAttribute('src','assets/welcome.webp?v=64');forceStyle();};
  };
- if(!document.documentElement.dataset.v63AudienceTrack){
-  document.documentElement.dataset.v63AudienceTrack='1';
-  document.addEventListener('click',e=>{
-   const t=e.target instanceof Element?e.target:null;if(!t)return;
-   if(t.closest('[data-area-jump="kids"], .kids-v44 [data-mission], #areaKids [data-mission], .kids-v44 #circuitBtn'))setAudience('kids');
-   if(t.closest('[data-area-jump="young"], .youth-challenges [data-youth-light], .youth-challenges [data-youth-sensory], .youth-challenges [data-youth-breathe], .youth-challenges [data-youth-physical]'))setAudience('youth');
-  },true);
- }
- if(!screen.dataset.v63DoneWatch){
-  screen.dataset.v63DoneWatch='1';
+ if(!screen.dataset.v64DoneWatch){
+  screen.dataset.v64DoneWatch='1';
   new MutationObserver(()=>{
-   if(screen.classList.contains('active'))[0,80,250,700].forEach(ms=>setTimeout(repair,ms));
+   if(screen.classList.contains('active'))[0,60,180,500,900].forEach(ms=>setTimeout(repair,ms));
   }).observe(screen,{attributes:true,attributeFilter:['class']});
  }
  if(screen.classList.contains('active'))repair();
