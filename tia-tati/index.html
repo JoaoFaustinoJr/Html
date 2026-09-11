@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eaf8ff">
 <meta name="description" content="Tia Tati – Fisio Sensorial. Portal para Área Kids e Modo Jovem.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tia Tati">
 <title>Tia Tati – Fisio Sensorial</title>
+<link rel="manifest" href="manifest.webmanifest?v=1">
+<link rel="icon" href="assets/icon-tia-tati.svg" type="image/svg+xml">
 <style>
 :root{--blue:#0b4382;--pink:#f2479a;--ink:#173d71;--muted:#5c7288;--cyan:#22d8ef}
 *{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
@@ -21,10 +26,13 @@ a{-webkit-tap-highlight-color:transparent}
 .choices{position:absolute;z-index:6;left:3%;right:3%;top:48.1%;height:34.1%;display:grid;grid-template-columns:1fr 1fr;gap:2.1%}.choice{position:relative;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;border-radius:8%;padding:8%;overflow:hidden;box-shadow:0 12px 30px rgba(25,64,92,.15);border:3px solid rgba(255,255,255,.95);transition:transform .14s ease}.choice:active{transform:scale(.985)}.kids{background:radial-gradient(circle at 84% 12%,#fff9c9 0 13%,transparent 31%),linear-gradient(150deg,#dff8ff 0%,#f0ffd9 48%,#ffe2f0 100%);color:#145397}.young{background:radial-gradient(circle at 78% 18%,rgba(0,230,255,.26),transparent 23%),radial-gradient(circle at 22% 83%,rgba(255,50,211,.25),transparent 31%),linear-gradient(145deg,#061633,#14235b 57%,#35115e);color:#fff;border-color:rgba(90,232,255,.62)}
 .choice .icons{position:absolute;top:7%;left:7%;right:7%;display:flex;justify-content:space-around;font-size:clamp(1rem,5vw,2.1rem)}.young .icons{text-shadow:0 0 14px #20def4}.choice h2{margin:0 0 3%;font-size:clamp(1.75rem,8vw,4.4rem);line-height:.86;letter-spacing:-.065em}.kids h2 span{color:var(--pink)}.young h2 span{display:block;color:#ff4fe2;font-family:"Segoe Print","Comic Sans MS",cursive;font-style:italic;text-shadow:0 0 10px rgba(255,62,224,.45)}.choice p{margin:0 0 6%;min-height:2.5em;font-size:clamp(.56rem,2.35vw,.93rem);font-weight:760;line-height:1.22}.kids p{color:#315f86}.young p{color:#e8efff}.enter{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:15%;padding:4% 5%;border-radius:999px;font-size:clamp(.65rem,2.6vw,1rem);font-weight:900;color:#fff}.kids .enter{background:linear-gradient(90deg,#f53e93,#ee4aa0);box-shadow:0 5px 15px rgba(242,71,154,.28)}.young .enter{background:linear-gradient(90deg,#1bd8ea,#27abff);box-shadow:0 0 18px rgba(34,216,239,.28)}.enter b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.27);font-size:1rem}
 .values{position:absolute;z-index:7;left:5%;right:5%;top:83.7%;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2%}.values span{display:flex;align-items:center;justify-content:center;gap:4px;min-height:36px;padding:5px 4px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 5px 14px rgba(24,65,96,.06);border:1px solid #e2edf3;font-size:clamp(.46rem,1.9vw,.72rem);font-weight:850;white-space:nowrap}.values i{font-style:normal;font-size:1.1em}
-.footer{position:absolute;z-index:5;left:0;right:0;bottom:1.9%;text-align:center;font-family:"Segoe Print","Comic Sans MS",cursive;color:#17457b;font-size:clamp(.62rem,2.5vw,.95rem);font-weight:800}.footer b{color:var(--pink)}
+.install-zone{position:absolute;z-index:25;left:50%;top:89.2%;transform:translateX(-50%);display:flex;justify-content:center;pointer-events:auto}.install-btn{border:1px solid rgba(11,67,130,.16);border-radius:999px;padding:9px 17px;background:rgba(255,255,255,.96);box-shadow:0 7px 20px rgba(23,61,113,.10);color:var(--blue);font:850 clamp(.58rem,2vw,.78rem)/1 system-ui,-apple-system,"Segoe UI",sans-serif;white-space:nowrap;cursor:pointer}.install-btn b{color:var(--pink)}.install-btn:active{transform:scale(.98)}
+.footer{position:absolute;z-index:5;left:0;right:0;bottom:.8%;text-align:center;font-family:"Segoe Print","Comic Sans MS",cursive;color:#17457b;font-size:clamp(.54rem,2.05vw,.78rem);font-weight:800}.footer b{color:var(--pink)}
+.install-modal{position:fixed;z-index:99999;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(7,26,57,.48);backdrop-filter:blur(7px)}.install-modal.open{display:flex}.install-card{width:min(92vw,440px);border-radius:28px;padding:24px;background:#fff;box-shadow:0 24px 70px rgba(8,38,72,.30);color:#173d71;text-align:left}.install-card h2{margin:0 0 8px;font-size:1.45rem;color:#0b4382}.install-card p{margin:0 0 14px;line-height:1.45;color:#506a80}.install-card .device{display:inline-flex;align-items:center;gap:7px;margin-bottom:14px;padding:7px 11px;border-radius:999px;background:#eef9ff;color:#0b4382;font-weight:850;font-size:.8rem}.install-steps{margin:0 0 18px;padding-left:21px;color:#274e72;line-height:1.55}.install-actions{display:flex;gap:10px}.install-actions button{flex:1;border:0;border-radius:999px;padding:12px 15px;font-weight:850;cursor:pointer}.install-close{background:#eef3f7;color:#355875}.install-native{background:linear-gradient(90deg,#f2479a,#ff65ae);color:#fff}.install-native[hidden]{display:none}
+@media(display-mode:standalone){.install-zone{display:none!important}}
 @media(min-width:760px){.portal{border-radius:28px;box-shadow:0 18px 60px rgba(20,62,90,.18)}.hero-art{left:-1.5%;width:63%;height:47.5%}.copy{right:4%;width:49%}.choices{top:47.5%;height:34.5%}}
-@media(max-width:520px){.copy{right:1.2%;width:54.5%;top:10.7%}.copy h1{font-size:clamp(1.45rem,5.2vw,1.9rem);line-height:.96}.copy h1 em{font-size:.91em}.copy p{font-size:clamp(.64rem,2.25vw,.82rem);max-width:320px}.hero-art{width:69.5%;height:47.5%;left:-6%;top:8.2%}.quote{left:2.7%;top:10.7%;max-width:17%;font-size:clamp(.54rem,2.2vw,.82rem)}.choices{top:47.7%;height:34.6%}.values{top:83.8%}}
-@media(max-height:660px){.topbar{height:6.8%}.hero-art{top:7.5%;height:46.8%}.copy{top:9.2%}.choices{top:46.7%;height:35.2%}.values{top:82.9%}.footer{bottom:1%}}
+@media(max-width:520px){.copy{right:1.2%;width:54.5%;top:10.7%}.copy h1{font-size:clamp(1.45rem,5.2vw,1.9rem);line-height:.96}.copy h1 em{font-size:.91em}.copy p{font-size:clamp(.64rem,2.25vw,.82rem);max-width:320px}.hero-art{width:69.5%;height:47.5%;left:-6%;top:8.2%}.quote{left:2.7%;top:10.7%;max-width:17%;font-size:clamp(.54rem,2.2vw,.82rem)}.choices{top:47.7%;height:34.6%}.values{top:83.8%}.install-zone{top:89.45%}.install-btn{padding:8px 14px}}
+@media(max-height:660px){.topbar{height:6.8%}.hero-art{top:7.5%;height:46.8%}.copy{top:9.2%}.choices{top:46.7%;height:35.2%}.values{top:82.9%}.install-zone{top:88.7%}.footer{bottom:.4%}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -48,7 +56,7 @@ a{-webkit-tap-highlight-color:transparent}
       <p>Brincar, aprender e se desenvolver com leveza.</p>
       <span class="enter">Entrar na Área Kids <b>→</b></span>
     </a>
-    <a class="choice young" href="../tia-tati-jovem/entry-j12.html?v=j12" aria-label="Entrar no Modo Jovem">
+    <a class="choice young" href="../tia-tati-jovem/entry-j12.html?v=j14" aria-label="Entrar no Modo Jovem">
       <div class="icons" aria-hidden="true">🎮 ⚡ 🎵 🧠</div>
       <h2>Modo <span>Jovem</span></h2>
       <p>Ritmo, foco, memória e resposta motora.</p>
@@ -56,7 +64,94 @@ a{-webkit-tap-highlight-color:transparent}
     </a>
   </nav>
   <div class="values" aria-label="Valores do projeto"><span><i>🧠</i>Atenção</span><span><i>🏃</i>Movimento</span><span><i>💗</i>Autonomia</span><span><i>🌱</i>Inclusão</span></div>
+  <div class="install-zone" id="installZone"><button class="install-btn" id="installAppBtn" type="button">⬇ <b>Instalar</b> app</button></div>
   <footer class="footer"><b>♡</b> Cada passo importa! <b>♡</b></footer>
 </main>
+
+<div class="install-modal" id="installModal" role="dialog" aria-modal="true" aria-labelledby="installTitle">
+  <div class="install-card">
+    <div class="device" id="installDevice">📱 Instalação</div>
+    <h2 id="installTitle">Instalar Tia Tati</h2>
+    <p id="installIntro">Instale o Portal Tia Tati para abrir Kids e Jovem como um app, sem precisar procurar o link novamente.</p>
+    <ol class="install-steps" id="installSteps"></ol>
+    <div class="install-actions">
+      <button class="install-close" id="installClose" type="button">Agora não</button>
+      <button class="install-native" id="installNative" type="button" hidden>Instalar agora</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(()=>{
+  'use strict';
+  const zone=document.getElementById('installZone');
+  const btn=document.getElementById('installAppBtn');
+  const modal=document.getElementById('installModal');
+  const closeBtn=document.getElementById('installClose');
+  const nativeBtn=document.getElementById('installNative');
+  const device=document.getElementById('installDevice');
+  const steps=document.getElementById('installSteps');
+  let deferredPrompt=null;
+
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  if(standalone)zone.style.display='none';
+
+  const ua=navigator.userAgent||'';
+  const isiOS=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const isAndroid=/Android/i.test(ua);
+  const isMac=/Macintosh|Mac OS X/i.test(ua)&&!isiOS;
+  const isSafari=/Safari/i.test(ua)&&!/Chrome|CriOS|Edg|OPR|Firefox/i.test(ua);
+
+  function setSteps(items){steps.innerHTML=items.map(x=>'<li>'+x+'</li>').join('');}
+  function openHelp(){
+    nativeBtn.hidden=true;
+    if(deferredPrompt){
+      device.textContent='⬇ Instalação disponível';
+      setSteps(['Toque em “Instalar agora”.','Confirme a instalação quando o navegador perguntar.','O ícone Tia Tati aparecerá entre seus aplicativos.']);
+      nativeBtn.hidden=false;
+    }else if(isiOS){
+      device.textContent='🍎 iPhone / iPad';
+      setSteps(['Abra este portal no Safari.','Toque no botão Compartilhar ⤴︎.','Escolha “Adicionar à Tela de Início” e confirme em “Adicionar”.']);
+    }else if(isMac&&isSafari){
+      device.textContent='💻 Safari no Mac';
+      setSteps(['No Safari, abra o menu Arquivo.','Escolha “Adicionar ao Dock”.','Confirme para criar o app Tia Tati no Mac.']);
+    }else if(isAndroid){
+      device.textContent='📱 Android';
+      setSteps(['Abra o menu ⋮ do navegador.','Escolha “Instalar app” ou “Adicionar à tela inicial”.','Confirme a instalação.']);
+    }else{
+      device.textContent='💻 PC / Tablet';
+      setSteps(['Procure o ícone de instalação na barra de endereço ou abra o menu do navegador.','Escolha “Instalar Tia Tati” / “Instalar aplicativo”.','Confirme para criar um atalho em modo app.']);
+    }
+    modal.classList.add('open');
+  }
+
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();
+    deferredPrompt=e;
+    if(!standalone)zone.style.display='flex';
+  });
+
+  window.addEventListener('appinstalled',()=>{
+    deferredPrompt=null;
+    zone.style.display='none';
+    modal.classList.remove('open');
+  });
+
+  btn.addEventListener('click',openHelp);
+  closeBtn.addEventListener('click',()=>modal.classList.remove('open'));
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open');});
+  nativeBtn.addEventListener('click',async()=>{
+    if(!deferredPrompt)return;
+    const p=deferredPrompt;
+    deferredPrompt=null;
+    modal.classList.remove('open');
+    try{await p.prompt();await p.userChoice;}catch(_){}
+  });
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1',{scope:'./'}).catch(()=>{}));
+  }
+})();
+</script>
 </body>
 </html>
