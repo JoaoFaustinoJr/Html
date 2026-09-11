@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07132f">
+<title>Tia Tati Jovem</title>
+<style>
+html,body{margin:0;min-height:100%;background:#07132f;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#boot{min-height:100vh;display:grid;place-items:center;text-align:center;padding:28px}
+#boot b{display:block;color:#45e8ff;font-size:1.1rem;margin-bottom:6px}
+#boot small{color:#cbd7f5}
+</style>
+</head>
+<body>
+<div id="boot"><div><b>⚡ Tia Tati Jovem</b><span>Preparando os seis desafios…</span><small>Carregamento direto e isolado</small></div></div>
+<script>
+(async()=>{
+  try{
+    const response=await fetch('./index.html?source=j9&t='+Date.now(),{cache:'no-store',credentials:'same-origin'});
+    if(!response.ok)throw new Error('HTML base: HTTP '+response.status);
+    let html=await response.text();
+    if(!html.includes('id="screen-home"'))throw new Error('HTML base incompleto');
+
+    const css=`
+<link rel="stylesheet" href="sensory-v40.css?v=j9">
+<link rel="stylesheet" href="remaining-v41.css?v=j9">
+<link rel="stylesheet" href="polish-v43.css?v=j9">
+<link rel="stylesheet" href="jovem-v1.css?v=j9">
+<style id="jovem-critical-j9">
+body{background:#07132f!important}
+header.topbar,#bottomNav{display:none!important}
+#screen-home>.home-v22-hero,
+#screen-home>.audience-v44,
+#screen-home>.kids-v44,
+#screen-home>.home-v22-section-head,
+#screen-home>.home-v22-missions,
+#screen-home>.home-v22-autonomy,
+#screen-home>.support-v44,
+#screen-home>.home-v22-cards,
+#screen-home>.home-v22-tools,
+#screen-home>.finish-v44,
+#screen-home>.home-v22-footer-phrase{display:none!important}
+</style>`;
+
+    const scripts=`
+<script src="app-core-v39.js?v=j9"><\/script>
+<script src="sensory-v40.js?v=j9"><\/script>
+<script src="remaining-v41.js?v=j9"><\/script>
+<script src="naming-v42.js?v=j9"><\/script>
+<script src="jovem-v1.js?v=j9"><\/script>`;
+
+    html=html.replace('<link rel="stylesheet" href="styles.css?v=39">','<link rel="stylesheet" href="styles.css?v=39">'+css);
+    html=html.replace('<script src="app.js?v=39"><\/script>',scripts);
+    if(!html.includes('jovem-v1.js?v=j9'))throw new Error('Não foi possível substituir o bootstrap antigo');
+
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    console.error('Tia Tati Jovem entry j9',err);
+    document.getElementById('boot').innerHTML='<div><b>Não foi possível iniciar</b><span>'+String(err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';
+  }
+})();
+</script>
+</body>
+</html>
