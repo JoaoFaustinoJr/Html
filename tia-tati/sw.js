@@ -1,4 +1,4 @@
-const CACHE='tia-tati-portal-pwa-v5';
+const CACHE='tia-tati-portal-pwa-v6';
 const SHELL=[
   './',
   './index.html',
@@ -43,14 +43,14 @@ const INSTALL_VISIBILITY_PATCH=`
 </style>`;
 
 const ABOUT_TATIANA_PATCH=`
-<style id="portalAboutTatianaV1">
+<style id="portalAboutTatianaV2">
   .pro-about{display:inline-block;margin-top:2px;padding:0;border:0;background:transparent;color:#f2479a;font:900 .46rem/1.05 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.04em;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
   .about-tati-modal{position:fixed;z-index:100000;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,26,57,.56);backdrop-filter:blur(8px)}
   .about-tati-modal.open{display:flex}
   .about-tati-card{position:relative;width:min(92vw,520px);max-height:min(82svh,650px);overflow:auto;border-radius:28px;padding:22px;background:linear-gradient(180deg,#fff,#f8fcff);box-shadow:0 28px 80px rgba(8,38,72,.34);color:#173d71;text-align:left}
   .about-tati-close{position:absolute;right:13px;top:13px;width:36px;height:36px;border:0;border-radius:50%;background:#edf5f8;color:#345d7c;font-size:1.15rem;font-weight:900;cursor:pointer}
   .about-tati-head{display:grid;grid-template-columns:92px 1fr;gap:15px;align-items:center;padding-right:30px}
-  .about-tati-head img{width:92px;height:92px;object-fit:cover;object-position:center top;border-radius:24px;border:3px solid #fff;box-shadow:0 8px 22px rgba(21,69,105,.14)}
+  .about-tati-head img{width:92px;height:92px;object-fit:cover;object-position:center;border-radius:24px;border:3px solid #fff;box-shadow:0 8px 22px rgba(21,69,105,.14)}
   .about-tati-head small{display:block;color:#f2479a;font-size:.68rem;font-weight:950;letter-spacing:.11em;margin-bottom:4px}
   .about-tati-head h2{margin:0;color:#0b4382;font-size:1.35rem;line-height:1.08}
   .about-tati-head span{display:block;margin-top:5px;color:#687e91;font-size:.78rem;font-weight:800}
@@ -60,7 +60,7 @@ const ABOUT_TATIANA_PATCH=`
   .about-tati-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:12px}.about-tati-tags span{padding:6px 9px;border-radius:999px;background:#f4f9fb;border:1px solid #dce9ef;color:#58738a;font-size:.68rem;font-weight:850}
   @media(max-width:520px){.pro-about{font-size:.42rem}.about-tati-card{padding:19px;border-radius:24px}.about-tati-head{grid-template-columns:78px 1fr;gap:12px}.about-tati-head img{width:78px;height:78px;border-radius:20px}.about-tati-head h2{font-size:1.15rem}.about-tati-copy{font-size:.84rem;line-height:1.5}}
 </style>
-<script id="portalAboutTatianaScriptV1">
+<script id="portalAboutTatianaScriptV2">
 (()=>{
   const install=()=>{
     const pro=document.querySelector('.topbar .pro');
@@ -78,7 +78,7 @@ const ABOUT_TATIANA_PATCH=`
     modal.setAttribute('role','dialog');
     modal.setAttribute('aria-modal','true');
     modal.setAttribute('aria-labelledby','aboutTatianaTitle');
-    modal.innerHTML='<article class="about-tati-card"><button class="about-tati-close" type="button" aria-label="Fechar">×</button><div class="about-tati-head"><img src="assets/tatiana-portal-v3.webp?v=about1" alt="Dra. Tatiana de Oliveira Machado"><div><small>SOBRE A PROFISSIONAL</small><h2 id="aboutTatianaTitle">Dra. Tatiana de Oliveira Machado</h2><span>Fisioterapeuta • Tia Tati – Fisio Sensorial</span></div></div><div class="about-tati-copy"><p>Fisioterapeuta dedicada ao cuidado individualizado, Tatiana de Oliveira Machado desenvolve seu trabalho com atenção à funcionalidade, ao movimento e à autonomia de cada pessoa, respeitando necessidades, possibilidades e o tempo de cada paciente.</p><p>O <strong>Tia Tati – Fisio Sensorial</strong> nasce dessa experiência profissional: uma proposta que transforma objetivos terapêuticos em experiências lúdicas, acessíveis e motivadoras, aproximando tecnologia, movimento, atenção e aprendizagem.</p><p>Mais do que cumprir uma atividade, a proposta é valorizar cada pequena conquista e favorecer caminhos de participação, confiança e independência.</p></div><div class="about-tati-tags"><span>Fisioterapia</span><span>Movimento</span><span>Autonomia</span><span>Inclusão</span></div><div class="about-tati-sign">Cada passo importa. Cada conquista abre novos caminhos. 💗</div></article>';
+    modal.innerHTML='<article class="about-tati-card"><button class="about-tati-close" type="button" aria-label="Fechar">×</button><div class="about-tati-head"><img src="assets/icon-tia-tati-512.webp?v=about2" alt="Dra. Tatiana de Oliveira Machado"><div><small>SOBRE A PROFISSIONAL</small><h2 id="aboutTatianaTitle">Dra. Tatiana de Oliveira Machado</h2><span>Fisioterapeuta • Tia Tati – Fisio Sensorial</span></div></div><div class="about-tati-copy"><p>Fisioterapeuta dedicada ao cuidado individualizado, Tatiana de Oliveira Machado desenvolve seu trabalho com atenção à funcionalidade, ao movimento e à autonomia de cada pessoa, respeitando necessidades, possibilidades e o tempo de cada paciente.</p><p>O <strong>Tia Tati – Fisio Sensorial</strong> nasce dessa experiência profissional: uma proposta que transforma objetivos terapêuticos em experiências lúdicas, acessíveis e motivadoras, aproximando tecnologia, movimento, atenção e aprendizagem.</p><p>Mais do que cumprir uma atividade, a proposta é valorizar cada pequena conquista e favorecer caminhos de participação, confiança e independência.</p></div><div class="about-tati-tags"><span>Fisioterapia</span><span>Movimento</span><span>Autonomia</span><span>Inclusão</span></div><div class="about-tati-sign">Cada passo importa. Cada conquista abre novos caminhos. 💗</div></article>';
     document.body.appendChild(modal);
 
     const close=()=>modal.classList.remove('open');
@@ -105,7 +105,7 @@ function patchPortalHtml(html){
   if(!patched.includes('portalInstallVisibilityV2')){
     patched=patched.replace('</head>',INSTALL_VISIBILITY_PATCH+'\n</head>');
   }
-  if(!patched.includes('portalAboutTatianaV1')){
+  if(!patched.includes('portalAboutTatianaV2')){
     patched=patched.replace('</body>',ABOUT_TATIANA_PATCH+'\n</body>');
   }
   return patched;
