@@ -4,7 +4,7 @@
 const LEGACY_CACHE='tia-tati-v45-identity-20260910';
 const AUDIO_VERSION='kids-audio-v3';
 const MUSIC_VERSION='kids-music-v1';
-const VOICE_EXPORT_VERSION='voice-export-v1';
+const VOICE_EXPORT_VERSION='voice-export-v2';
 const FINAL_CARD_VERSION='completion-v2';
 const LAYOUT_VERSION='kids-layout-v4';
 
@@ -22,7 +22,6 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const url=new URL(event.request.url);
 
-  /* Layout v4: evita que o PWA instalado mantenha o CSS antigo do hero Kids. */
   if(url.pathname.endsWith('/tia-tati-kids/styles.css') || url.pathname.endsWith('/tia-tati-kids/kids-shell-v1.css')){
     event.respondWith((async()=>{
       try{
