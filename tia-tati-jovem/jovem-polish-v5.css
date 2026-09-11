@@ -1,0 +1,49 @@
+/* Tia Tati Jovem v5 — acabamento visual da home. Mantém os mesmos botões e motores. */
+.jovem-accent{color:#ff55da}
+.jovem-home-hero{grid-template-columns:minmax(0,1fr) 34%!important;gap:14px!important;padding:17px 18px!important;margin-bottom:12px!important}
+.jovem-home-art{min-height:205px!important;gap:8px!important}
+.jovem-home-art img{aspect-ratio:1/1.18!important;border-radius:18px!important}
+#screen-home .youth-challenges{padding:15px!important}
+#screen-home .youth-card-grid{align-items:stretch!important}
+#screen-home .youth-card.youth-v5-card{display:grid!important;grid-template-rows:auto 1fr auto!important;min-height:0!important;height:100%!important;overflow:hidden!important;padding:0!important}
+#screen-home .youth-v5-card .youth-card-art{display:block!important;position:relative!important;width:100%!important;aspect-ratio:1.52/1!important;overflow:hidden!important;background:linear-gradient(145deg,#07152f,#23105d)!important;border-bottom:1px solid rgba(88,226,255,.19)!important}
+#screen-home .youth-v5-card .youth-card-art img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+#screen-home .youth-v5-card .youth-card-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 52%,rgba(5,12,38,.74) 100%);pointer-events:none}
+#screen-home .youth-v5-card .youth-card-art em{z-index:2!important}
+#screen-home .youth-v5-card .youth-card-copy{padding:11px 11px 5px!important;align-self:start!important}
+#screen-home .youth-v5-card .youth-card-copy strong{font-size:1rem!important;line-height:1.08!important}
+#screen-home .youth-v5-card .youth-card-copy small{min-height:2.55em!important;font-size:.64rem!important;line-height:1.3!important;margin-top:5px!important}
+#screen-home .youth-v5-card .youth-card-go{align-self:end!important;margin:5px 10px 10px!important;min-height:38px!important;justify-content:center!important;gap:8px!important;font-size:.62rem!important}
+#screen-home .youth-v5-card .youth-card-go:after{content:"→";font-size:.95rem}
+
+/* Pulse Lab já possui arte vetorial própria. */
+#screen-home .youth-v5-card.pulse-lab .youth-card-art img{object-fit:cover!important}
+
+/* Recomeço: usa a tutoria existente, mas integrada à linguagem jovem/neon. */
+#screen-home .youth-v5-card.recomeco-j4 .youth-card-art{background:radial-gradient(circle at 78% 20%,rgba(255,80,213,.34),transparent 34%),linear-gradient(145deg,#081630,#2e155d)!important}
+#screen-home .youth-v5-card.recomeco-j4 .youth-card-art img{filter:saturate(.76) contrast(1.05) brightness(.72)!important;transform:scale(1.03)}
+#screen-home .youth-v5-card.recomeco-j4 .youth-card-art:before{content:"RECOMEÇO";position:absolute;right:8px;top:8px;z-index:3;padding:5px 7px;border-radius:999px;background:rgba(8,17,48,.78);border:1px solid rgba(255,90,218,.48);color:#fff;font-size:.45rem;font-weight:950;letter-spacing:.08em}
+
+/* Move Quest: arte criada em CSS para não depender de imagem infantil. */
+#screen-home .youth-v5-card.movequest-j4 .youth-card-art{display:grid!important;place-items:center!important;background:radial-gradient(circle at 76% 24%,rgba(36,220,255,.24),transparent 27%),radial-gradient(circle at 20% 78%,rgba(255,68,218,.22),transparent 30%),linear-gradient(145deg,#06152f,#18215b 58%,#36125f)!important}
+.youth-v5-quest{position:absolute;inset:0;overflow:hidden}
+.youth-v5-quest .track{position:absolute;left:11%;right:11%;top:52%;height:5px;border-radius:999px;background:linear-gradient(90deg,#29def5,#895dff,#ff4bd5);box-shadow:0 0 14px rgba(42,220,245,.62)}
+.youth-v5-quest i{position:absolute;top:calc(52% - 8px);width:18px;height:18px;border-radius:50%;background:#07142f;border:4px solid #34e4f5;box-shadow:0 0 14px rgba(52,228,245,.8)}
+.youth-v5-quest i:nth-child(2){left:16%}.youth-v5-quest i:nth-child(3){left:43%;border-color:#9d6cff}.youth-v5-quest i:nth-child(4){left:69%;border-color:#ff51d8}
+.youth-v5-quest b{position:absolute;right:10%;top:26%;font-size:2.3rem;filter:drop-shadow(0 0 10px rgba(255,255,255,.28))}
+.youth-v5-quest span{position:absolute;left:10%;top:22%;font-size:.65rem;font-weight:950;letter-spacing:.12em;color:#57efff;text-shadow:0 0 10px rgba(87,239,255,.35)}
+
+@media(max-width:760px){
+ .jovem-home-hero{grid-template-columns:minmax(0,1fr) 35%!important;gap:7px!important;padding:11px 12px!important;margin-bottom:9px!important;border-radius:20px!important}
+ .jovem-home-kicker{margin-top:9px!important}.jovem-home-hero h1{font-size:1.95rem!important}.jovem-home-hero p{font-size:.64rem!important;line-height:1.28!important}.jovem-home-pills{margin-top:7px!important}.jovem-home-pills span{font-size:.48rem!important;padding:4px 6px!important}
+ .jovem-home-art{min-height:132px!important;gap:4px!important}.jovem-home-art img{border-radius:11px!important}.jovem-home-art img:nth-child(2){transform:translateY(7px)!important}
+ #screen-home .youth-challenges{padding:10px!important}.youth-challenges-head h2{font-size:1.35rem!important}.youth-challenges-head p{font-size:.61rem!important}
+ #screen-home .youth-card-grid{gap:7px!important}
+ #screen-home .youth-v5-card .youth-card-art{aspect-ratio:1.55/1!important}
+ #screen-home .youth-v5-card .youth-card-copy{padding:8px 8px 3px!important}
+ #screen-home .youth-v5-card .youth-card-copy strong{font-size:.82rem!important}
+ #screen-home .youth-v5-card .youth-card-copy small{font-size:.52rem!important;min-height:2.5em!important}
+ #screen-home .youth-v5-card .youth-card-go{min-height:33px!important;margin:4px 7px 7px!important;padding:6px 7px!important;font-size:.52rem!important}
+ .youth-v5-quest b{font-size:1.7rem}.youth-v5-quest span{font-size:.47rem}
+}
+@media(max-width:390px){.jovem-home-hero h1{font-size:1.8rem!important}.jovem-home-art{min-height:122px!important}}
