@@ -1,0 +1,21 @@
+/* J17: visuais nítidos e independentes dos WebP problemáticos */
+#screen-home .j17-card-visual{position:absolute;inset:0;overflow:hidden;background:radial-gradient(circle at 78% 22%,rgba(40,220,255,.28),transparent 25%),radial-gradient(circle at 18% 88%,rgba(255,73,215,.22),transparent 34%),linear-gradient(145deg,#06142e,#151b55 58%,#32105f)}
+#screen-home .j17-card-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(83,231,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(83,231,255,.05) 1px,transparent 1px);background-size:22px 22px}
+#screen-home .youth-card-art .j17-tati{position:absolute!important;z-index:2!important;left:-5%!important;bottom:-16%!important;width:61%!important;height:116%!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 9px 18px rgba(0,0,0,.35))!important}
+#screen-home .j17-title{position:absolute;z-index:5;right:7%;bottom:12%;text-align:right;color:#fff;font:950 clamp(.66rem,2vw,1.05rem)/1 system-ui;letter-spacing:.02em;text-shadow:0 0 10px #25dfff}
+#screen-home .j17-title b{display:block;color:#ff70df;font:900 1.08em/1 "Segoe Print","Comic Sans MS",cursive;text-shadow:0 0 10px #ff49d7}
+#screen-home .j17-orb{position:absolute;z-index:3;right:8%;top:17%;width:31%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff 0 10%,#58f5ff 11% 24%,#ff56dc 25% 40%,#4820d2 41% 57%,#2ae6ff 58% 63%,transparent 64%);box-shadow:0 0 18px #2ae6ff}
+#screen-home .j17-hand{position:absolute;z-index:5;right:4%;top:38%;font-size:clamp(1.35rem,4vw,2.4rem);transform:rotate(-12deg);filter:drop-shadow(0 0 8px #2ae6ff)}
+#screen-home .j17-memory-grid{position:absolute;z-index:4;right:6%;top:14%;width:43%;display:grid;grid-template-columns:1fr 1fr;gap:5px;transform:rotate(3deg)}
+#screen-home .j17-memory-grid i{display:grid;place-items:center;aspect-ratio:1;border-radius:10px;font:950 clamp(.75rem,2.7vw,1.35rem)/1 system-ui;color:#fff;font-style:normal;background:linear-gradient(145deg,#20cffa,#342079);border:2px solid #6eeeff;box-shadow:0 0 12px rgba(40,220,255,.45)}
+#screen-home .j17-memory-grid i:nth-child(2),#screen-home .j17-memory-grid i:nth-child(3){background:linear-gradient(145deg,#ff4bd7,#3d1b78);border-color:#ff86e9}
+#screen-home .j17-eq{position:absolute;z-index:3;right:7%;top:18%;width:39%;height:31%;display:flex;align-items:flex-end;gap:4px}
+#screen-home .j17-eq i{flex:1;border-radius:4px 4px 1px 1px;background:linear-gradient(#ff50d8,#31eaff);box-shadow:0 0 7px #29dfff}
+#screen-home .j17-eq i:nth-child(1){height:35%}#screen-home .j17-eq i:nth-child(2){height:72%}#screen-home .j17-eq i:nth-child(3){height:50%}#screen-home .j17-eq i:nth-child(4){height:91%}#screen-home .j17-eq i:nth-child(5){height:62%}#screen-home .j17-eq i:nth-child(6){height:79%}
+#screen-home .j17-notes{position:absolute;z-index:5;right:5%;top:5%;font-size:clamp(.9rem,3vw,1.75rem);letter-spacing:6px;text-shadow:0 0 9px #ff4fd8,0 0 11px #2deaff}
+.jovem-home-art .j17-hero-card{position:relative;overflow:hidden;aspect-ratio:1/1.18;border-radius:22px;border:2px solid rgba(87,228,255,.35);background:radial-gradient(circle at 72% 22%,rgba(40,220,255,.24),transparent 26%),radial-gradient(circle at 24% 83%,rgba(255,73,215,.22),transparent 34%),linear-gradient(145deg,#07152f,#171c54 55%,#33105e);box-shadow:0 10px 28px rgba(0,0,0,.24)}
+.jovem-home-art .j17-hero-card:nth-child(2){transform:translateY(18px);border-color:rgba(255,73,215,.45)}
+.jovem-home-art .j17-hero-card img{position:absolute!important;left:-12%!important;bottom:-5%!important;width:80%!important;height:80%!important;object-fit:contain!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:drop-shadow(0 10px 18px rgba(0,0,0,.32))!important}
+.jovem-home-art .j17-hero-card strong{position:absolute;z-index:5;left:7%;right:7%;bottom:6%;color:#fff;font:950 clamp(.52rem,1.3vw,.86rem)/1.05 system-ui;text-transform:uppercase;letter-spacing:.04em;text-shadow:0 0 10px #26dfff}
+.jovem-home-art .j17-hero-card .j17-orb{right:8%;top:18%;width:38%}
+@media(max-width:760px){#screen-home .youth-card-art .j17-tati{bottom:-12%!important;width:58%!important;height:110%!important}.jovem-home-art .j17-hero-card{border-radius:14px}.jovem-home-art .j17-hero-card:nth-child(2){transform:translateY(10px)}}
