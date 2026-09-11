@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07132f">
 <meta name="description" content="Tia Tati Jovem – desafios terapêuticos de atenção, ritmo, memória, regulação e movimento.">
-<link rel="manifest" href="manifest.webmanifest?v=20">
-<link rel="icon" href="assets/cards/reflexo-neon-v2.webp?v=20" type="image/webp">
+<link rel="manifest" href="manifest.webmanifest?v=25">
+<link rel="icon" href="assets/cards/reflexo-neon.webp?v=25" type="image/webp">
 <title>Tia Tati Jovem – Fisio Sensorial</title>
-<link rel="stylesheet" href="styles.css?v=20">
-<link rel="stylesheet" href="sensory-v40.css?v=20">
-<link rel="stylesheet" href="remaining-v41.css?v=20">
-<link rel="stylesheet" href="polish-v43.css?v=20">
-<link rel="stylesheet" href="jovem-v1.css?v=20">
-<link rel="stylesheet" href="jovem-refine-j12.css?v=20">
-<link rel="stylesheet" href="jovem-assets-j13.css?v=20">
-<link rel="stylesheet" href="jovem-layout-j15.css?v=20">
+<link rel="stylesheet" href="styles.css?v=25">
+<link rel="stylesheet" href="sensory-v40.css?v=25">
+<link rel="stylesheet" href="remaining-v41.css?v=25">
+<link rel="stylesheet" href="polish-v43.css?v=25">
+<link rel="stylesheet" href="jovem-v1.css?v=25">
+<link rel="stylesheet" href="jovem-refine-j12.css?v=25">
+<link rel="stylesheet" href="jovem-assets-j13.css?v=25">
+<link rel="stylesheet" href="jovem-layout-j15.css?v=25">
 <style>
-html,body{margin:0;min-height:100%;background:#07132f;color:#fff}
+html,body{margin:0;min-height:100%;max-width:100%;overflow-x:hidden;background:#07132f;color:#fff}
 #j20Boot{position:fixed;z-index:999999;inset:0;display:grid;place-items:center;background:linear-gradient(145deg,#06132f,#16195a 58%,#301057);font:700 15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:#eefcff;text-align:center;padding:24px}
 #j20Boot .box{width:min(86vw,360px);padding:24px 20px;border:1px solid rgba(64,224,255,.35);border-radius:24px;background:rgba(9,20,58,.93);box-shadow:0 18px 55px rgba(0,0,0,.38)}
 #j20Boot b{display:block;font-size:1.25rem;color:#45e8ff;margin-bottom:6px}#j20Boot small{display:block;color:#c8d5f4;margin-top:7px;font-weight:600}
@@ -28,15 +28,15 @@ html:not(.j20-ready) #screen-home>.youth-challenges{visibility:hidden!important}
 </style>
 </head>
 <body>
-<div id="j20Boot"><div class="box"><b>⚡ Tia Tati Jovem</b><span id="j20Status">Preparando os seis desafios…</span><small>Versão 20 • consolidada</small></div></div>
+<div id="j20Boot"><div class="box"><b>⚡ Tia Tati Jovem</b><span id="j20Status">Preparando os seis desafios…</span><small>Versão 25 • estabilizada</small></div></div>
 <div id="j20Mount"></div>
 <script>
 (async()=>{
  const status=document.getElementById('j20Status');
  const setStatus=t=>{if(status)status.textContent=t};
- const fail=err=>{console.error('Tia Tati Jovem v20',err);const boot=document.getElementById('j20Boot');if(boot)boot.innerHTML='<div class="box"><b>Não foi possível iniciar</b><span>'+String(err&&err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';};
- const getTemplate=async()=>{setStatus('Carregando estrutura…');const r=await fetch('index.html?template=20&t='+Date.now(),{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw new Error('estrutura: HTTP '+r.status);const t=await r.text();if(!t||!t.includes('id="screen-home"'))throw new Error('estrutura incompleta');return t;};
- const loadScript=(src,label)=>new Promise((resolve,reject)=>{setStatus('Carregando '+label+'…');const s=document.createElement('script');s.src=src+'?v=20&t='+Date.now();s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error(label+': falha ao carregar'));document.body.appendChild(s);});
+ const fail=err=>{console.error('Tia Tati Jovem v25',err);const boot=document.getElementById('j20Boot');if(boot)boot.innerHTML='<div class="box"><b>Não foi possível iniciar</b><span>'+String(err&&err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';};
+ const getTemplate=async()=>{setStatus('Carregando estrutura…');const r=await fetch('index.html?template=25&t='+Date.now(),{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw new Error('estrutura: HTTP '+r.status);const t=await r.text();if(!t||!t.includes('id="screen-home"'))throw new Error('estrutura incompleta');return t;};
+ const loadScript=(src,label)=>new Promise((resolve,reject)=>{setStatus('Carregando '+label+'…');const s=document.createElement('script');s.src=src+'?v=25&t='+Date.now();s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error(label+': falha ao carregar'));document.body.appendChild(s);});
  try{
   const html=await getTemplate();
   const doc=new DOMParser().parseFromString(html,'text/html');
@@ -53,7 +53,7 @@ html:not(.j20-ready) #screen-home>.youth-challenges{visibility:hidden!important}
   document.documentElement.classList.add('j20-ready');
   window.dispatchEvent(new Event('tia:jovem-modules-ready'));
   setTimeout(()=>document.getElementById('j20Boot')?.remove(),200);
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=20').catch(()=>{});
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=25').catch(()=>{});
  }catch(err){fail(err);}
 })();
 </script>
