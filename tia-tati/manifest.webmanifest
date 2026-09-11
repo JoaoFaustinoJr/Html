@@ -3,7 +3,7 @@
   "name": "Tia Tati – Fisio Sensorial",
   "short_name": "Tia Tati",
   "description": "Portal terapêutico com Área Kids e Modo Jovem para movimento, atenção, autonomia e inclusão.",
-  "start_url": "./?source=pwa&icon=v2",
+  "start_url": "./?source=pwa&icon=v3",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -13,15 +13,21 @@
   "categories": ["health", "education", "lifestyle"],
   "icons": [
     {
-      "src": "assets/icon-tia-tati-v2.svg?v=2",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
+      "src": "assets/icon-tia-tati-192.webp?v=3",
+      "sizes": "192x192",
+      "type": "image/webp",
       "purpose": "any"
     },
     {
-      "src": "assets/icon-tia-tati-v2.svg?v=2",
+      "src": "assets/icon-tia-tati-512.webp?v=3",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-tia-tati-512.webp?v=3",
+      "sizes": "512x512",
+      "type": "image/webp",
       "purpose": "maskable"
     }
   ]
