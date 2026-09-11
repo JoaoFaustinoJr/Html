@@ -3,7 +3,8 @@
 if(window.__TIA_TATI_JOVEM_ILLUSTRATED_V24__)return;
 window.__TIA_TATI_JOVEM_ILLUSTRATED_V24__=true;
 const q=(s,r=document)=>r.querySelector(s);
-const addTheme=()=>{if(document.querySelector('link[data-j24-theme]'))return;const l=document.createElement('link');l.rel='stylesheet';l.href='jovem-theme-v24.css?v=26&t='+Date.now();l.dataset.j24Theme='1';document.head.appendChild(l);};
+const addStyle=(href,key)=>{if(document.querySelector(`link[data-${key}]`))return;const l=document.createElement('link');l.rel='stylesheet';l.href=href;l.setAttribute(`data-${key}`,'1');document.head.appendChild(l);};
+const addTheme=()=>{addStyle('jovem-theme-v24.css?v=26&t='+Date.now(),'j24-theme');addStyle('jovem-fix-v26.css?v=26&t='+Date.now(),'j26-fix');};
 const safeImg=(src,alt='')=>{const img=document.createElement('img');img.src=src;img.alt=alt;img.decoding='async';img.loading='eager';img.onerror=()=>{img.onerror=null;img.style.display='none';};return img;};
 function setArt(card,src,badge){
  if(!card)return;let box=q('.youth-card-art',card);if(!box){box=document.createElement('span');box.className='youth-card-art';card.prepend(box);}card.classList.remove('j13-symbol-card');box.textContent='';const img=safeImg(src,'');box.appendChild(img);const em=document.createElement('em');em.className='j24-badge';em.textContent=badge;box.appendChild(em);
