@@ -1,10 +1,5 @@
-/* Tia Tati Jovem — service worker neutro de estabilidade.
-   Não intercepta navegação nem injeta scripts. */
-self.addEventListener('install',()=>self.skipWaiting());
-self.addEventListener('activate',event=>{
-  event.waitUntil(
-    caches.keys()
-      .then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-jovem-')||k==='tia-tati-v45-identity-20260910').map(k=>caches.delete(k))))
-      .then(()=>self.clients.claim())
-  );
-});
+const CACHE='tia-tati-jovem-pwa-v20';
+const SHELL=['./entry-j20.html','./index.html','./manifest.webmanifest','./manual-jovem.html','./styles.css','./sensory-v40.css','./remaining-v41.css','./polish-v43.css','./jovem-v1.css','./jovem-refine-j12.css','./jovem-assets-j13.css','./jovem-layout-j15.css','./app-core-v39.js','./sensory-v40.js','./remaining-v41.js','./jovem-v20.js','./jovem-ptbr-j16.js','./jovem-assets-j20.js','./jovem-music-v1.js','./assets/cards/reflexo-neon-v2.webp','./assets/cards/memorize-v2.webp','./assets/cards/ritmo-movimento-v2.webp','./assets/pulse-lab.svg','./assets/relax.webp'];
+self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-jovem-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin||!url.pathname.includes('/Html/tia-tati-jovem/'))return;event.respondWith((async()=>{try{const fresh=await fetch(event.request);if(fresh.ok){const cache=await caches.open(CACHE);cache.put(event.request,fresh.clone()).catch(()=>{});}return fresh;}catch(_){const cached=(await caches.match(event.request,{ignoreSearch:true}))||(event.request.mode==='navigate'?await caches.match('./entry-j20.html'):null);return cached||Response.error();}})());});
