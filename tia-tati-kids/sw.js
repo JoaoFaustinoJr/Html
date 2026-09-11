@@ -3,7 +3,7 @@
    a camada leve de efeitos sonoros sem alterar a lógica dos jogos. */
 const LEGACY_CACHE='tia-tati-v45-identity-20260910';
 const FINAL_AVATAR_VERSION='kids-final-avatar-v4';
-const AUDIO_VERSION='kids-audio-v1';
+const AUDIO_VERSION='kids-audio-v2';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
@@ -41,9 +41,7 @@ self.addEventListener('fetch',event=>{
         headers.delete('content-length');
         headers.delete('content-encoding');
         return new Response(source+loader,{status:response.status,statusText:response.statusText,headers});
-      }catch(_){
-        return fetch(event.request,{cache:'reload'});
-      }
+      }catch(_){return fetch(event.request,{cache:'reload'});}
     })());
   }
 });
