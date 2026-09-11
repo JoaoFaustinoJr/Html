@@ -3,7 +3,7 @@
   "name":"Tia Tati – Fisio Sensorial",
   "short_name":"Tia Tati",
   "description":"Experiências terapêuticas com movimento, psicopedagogia, acessibilidade, tutoria visual e voz da Dra. Tatiana — com Área Kids e Área Jovem.",
-  "start_url":"./activity.html?v=64",
+  "start_url":"./index.html?v=65",
   "scope":"./",
   "display":"standalone",
   "orientation":"any",
