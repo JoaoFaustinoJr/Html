@@ -3,8 +3,6 @@
 if(window.__TIA_TATI_JOVEM_LOADER__)return;
 window.__TIA_TATI_JOVEM_LOADER__=true;
 
-/* Isolamento crítico: entra antes dos módulos compartilhados para que a home Kids
-   nunca seja exibida como interface do Modo Jovem. */
 document.documentElement.classList.add('tia-jovem-boot');
 const critical=document.createElement('style');
 critical.id='tia-jovem-critical';
@@ -26,37 +24,50 @@ html.tia-jovem-boot #screen-home>.home-v22-footer-phrase{display:none!important}
 `;
 document.head.appendChild(critical);
 
-const V='j3';
+const V='j4';
+const stamp=Date.now();
 const addCss=href=>{
- if(document.querySelector(`link[href^="${href}"]`))return;
+ const old=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>(x.getAttribute('href')||'').startsWith(href));
+ if(old)old.remove();
  const l=document.createElement('link');
  l.rel='stylesheet';
- l.href=href+'?v='+V;
+ l.href=`${href}?v=${V}&t=${stamp}`;
  document.head.appendChild(l);
 };
-/* V44/V45 eram camadas de apresentação combinada Kids+Jovem. Não são necessárias
-   para os motores e não devem participar da home independente do Jovem. */
 ['sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css'].forEach(addCss);
 
-const load=src=>new Promise((resolve,reject)=>{
+const loadOnce=src=>new Promise((resolve,reject)=>{
  const s=document.createElement('script');
- s.src=src+'?v='+V;
+ s.src=`${src}?v=${V}&t=${stamp}`;
  s.async=false;
- s.onload=resolve;
- s.onerror=reject;
+ s.onload=()=>resolve(src);
+ s.onerror=()=>reject(new Error('Falha ao carregar '+src));
  document.body.appendChild(s);
 });
 
-(async()=>{
- try{
-  await load('app-core-v39.js');
-  await load('sensory-v40.js');
-  await load('remaining-v41.js');
-  await load('naming-v42.js');
-  await load('jovem-v1.js');
-  document.documentElement.classList.add('tia-jovem-ready');
- }catch(err){
-  console.error('Tia Tati Jovem: falha ao carregar módulo',err);
+const loadSafe=async src=>{
+ try{return await loadOnce(src);}
+ catch(first){
+  console.warn('Tia Tati Jovem: tentando novamente',src);
+  try{
+   const s=document.createElement('script');
+   s.src=`${src}?v=${V}&retry=${Date.now()}`;
+   s.async=false;
+   await new Promise((resolve,reject)=>{s.onload=resolve;s.onerror=reject;document.body.appendChild(s);});
+   return src;
+  }catch(second){console.error('Tia Tati Jovem: módulo indisponível',src,second);return null;}
  }
+};
+
+(async()=>{
+ /* A camada Jovem entra primeiro para que hero e seis cards não dependam dos motores. */
+ await loadSafe('jovem-v1.js');
+ /* O motor base é preservado; os módulos especializados podem falhar isoladamente sem abortar a home. */
+ await loadSafe('app-core-v39.js');
+ await loadSafe('sensory-v40.js');
+ await loadSafe('remaining-v41.js');
+ await loadSafe('naming-v42.js');
+ document.documentElement.classList.add('tia-jovem-ready');
+ window.dispatchEvent(new Event('tia:jovem-modules-ready'));
 })();
 })();
