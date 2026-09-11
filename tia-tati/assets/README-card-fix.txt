@@ -1,0 +1,1 @@
+A página compartilhar.html usa card-tia-tati.jpg para a prévia Open Graph. Este arquivo auxiliar registra a correção do preview do WhatsApp.
