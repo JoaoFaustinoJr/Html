@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07132f">
 <meta name="description" content="Tia Tati Jovem – desafios terapêuticos de atenção, ritmo, memória, regulação e movimento.">
-<link rel="manifest" href="manifest.webmanifest?v=27">
-<link rel="icon" href="assets/jovem-v27/reflexo-neon.webp?v=27" type="image/webp">
+<link rel="manifest" href="manifest.webmanifest?v=28">
+<link rel="icon" href="assets/jovem-v27/reflexo-neon.webp?v=28" type="image/webp">
 <title>Tia Tati Jovem – Fisio Sensorial</title>
-<link rel="stylesheet" href="styles.css?v=27">
-<link rel="stylesheet" href="sensory-v40.css?v=27">
-<link rel="stylesheet" href="remaining-v41.css?v=27">
-<link rel="stylesheet" href="polish-v43.css?v=27">
-<link rel="stylesheet" href="jovem-v1.css?v=27">
-<link rel="stylesheet" href="jovem-refine-j12.css?v=27">
-<link rel="stylesheet" href="jovem-assets-j13.css?v=27">
-<link rel="stylesheet" href="jovem-layout-j15.css?v=27">
+<link rel="stylesheet" href="styles.css?v=28">
+<link rel="stylesheet" href="sensory-v40.css?v=28">
+<link rel="stylesheet" href="remaining-v41.css?v=28">
+<link rel="stylesheet" href="polish-v43.css?v=28">
+<link rel="stylesheet" href="jovem-v1.css?v=28">
+<link rel="stylesheet" href="jovem-refine-j12.css?v=28">
+<link rel="stylesheet" href="jovem-assets-j13.css?v=28">
+<link rel="stylesheet" href="jovem-layout-j15.css?v=28">
 <style>
 html,body{margin:0;min-height:100%;max-width:100%;overflow-x:hidden;background:#07132f;color:#fff}
 #j20Boot{position:fixed;z-index:999999;inset:0;display:grid;place-items:center;background:linear-gradient(145deg,#06132f,#16195a 58%,#301057);font:700 15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:#eefcff;text-align:center;padding:24px}
@@ -28,15 +28,15 @@ html:not(.j20-ready) #screen-home>.youth-challenges{visibility:hidden!important}
 </style>
 </head>
 <body>
-<div id="j20Boot"><div class="box"><b>⚡ Tia Tati Jovem</b><span id="j20Status">Preparando os seis desafios…</span><small>Versão 27 • visual do mockup</small></div></div>
+<div id="j20Boot"><div class="box"><b>⚡ Tia Tati Jovem</b><span id="j20Status">Preparando os seis desafios…</span><small>Versão 28 • visual refinado</small></div></div>
 <div id="j20Mount"></div>
 <script>
 (async()=>{
  const status=document.getElementById('j20Status');
  const setStatus=t=>{if(status)status.textContent=t};
- const fail=err=>{console.error('Tia Tati Jovem v27',err);const boot=document.getElementById('j20Boot');if(boot)boot.innerHTML='<div class="box"><b>Não foi possível iniciar</b><span>'+String(err&&err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';};
- const getTemplate=async()=>{setStatus('Carregando estrutura…');const r=await fetch('index.html?template=27&t='+Date.now(),{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw new Error('estrutura: HTTP '+r.status);const t=await r.text();if(!t||!t.includes('id="screen-home"'))throw new Error('estrutura incompleta');return t;};
- const loadScript=(src,label)=>new Promise((resolve,reject)=>{setStatus('Carregando '+label+'…');const s=document.createElement('script');s.src=src+'?v=27&t='+Date.now();s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error(label+': falha ao carregar'));document.body.appendChild(s);});
+ const fail=err=>{console.error('Tia Tati Jovem v28',err);const boot=document.getElementById('j20Boot');if(boot)boot.innerHTML='<div class="box"><b>Não foi possível iniciar</b><span>'+String(err&&err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';};
+ const getTemplate=async()=>{setStatus('Carregando estrutura…');const r=await fetch('index.html?template=28&t='+Date.now(),{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw new Error('estrutura: HTTP '+r.status);const t=await r.text();if(!t||!t.includes('id="screen-home"'))throw new Error('estrutura incompleta');return t;};
+ const loadScript=(src,label)=>new Promise((resolve,reject)=>{setStatus('Carregando '+label+'…');const s=document.createElement('script');s.src=src+'?v=28&t='+Date.now();s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error(label+': falha ao carregar'));document.body.appendChild(s);});
  try{
   const html=await getTemplate();
   const doc=new DOMParser().parseFromString(html,'text/html');
@@ -53,7 +53,7 @@ html:not(.j20-ready) #screen-home>.youth-challenges{visibility:hidden!important}
   document.documentElement.classList.add('j20-ready');
   window.dispatchEvent(new Event('tia:jovem-modules-ready'));
   setTimeout(()=>document.getElementById('j20Boot')?.remove(),200);
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=27').catch(()=>{});
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=28').catch(()=>{});
  }catch(err){fail(err);}
 })();
 </script>
