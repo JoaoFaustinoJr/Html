@@ -3,7 +3,7 @@ name: Tia Tati Card Preview
 on:
   push:
     paths:
-      - 'tia-tati/assets/card-tia-tati.webp'
+      - 'tia-tati/assets/icon-tia-tati-512.webp'
       - '.github/workflows/tia-tati-card-preview.yml'
   workflow_dispatch:
 
@@ -20,15 +20,75 @@ jobs:
       - name: Install Pillow
         run: python -m pip install --quiet pillow
 
-      - name: Convert official WebP card to baseline JPEG
+      - name: Build official WhatsApp card
         run: |
           python - <<'PY'
-          from PIL import Image
-          src='tia-tati/assets/card-tia-tati.webp'
+          from PIL import Image, ImageDraw, ImageFont, ImageFilter
+          from pathlib import Path
+
+          W,H=1200,630
+          out=Image.new('RGB',(W,H),'#f8fbff')
+          px=out.load()
+          top=(226,248,255); bottom=(255,239,248)
+          for y in range(H):
+              t=y/(H-1)
+              row=tuple(int(top[i]*(1-t)+bottom[i]*t) for i in range(3))
+              for x in range(W): px[x,y]=row
+
+          draw=ImageDraw.Draw(out)
+          draw.rounded_rectangle((38,38,W-38,H-38),radius=46,fill='#ffffff',outline='#d7edf7',width=3)
+          draw.ellipse((60,420,270,630),fill='#e8fbf3')
+          draw.ellipse((990,-80,1240,170),fill='#e8f7ff')
+
+          # Avatar / identidade
+          avatar_path=Path('tia-tati/assets/icon-tia-tati-512.webp')
+          avatar=None
+          try:
+              avatar=Image.open(avatar_path).convert('RGB')
+          except Exception as e:
+              print('avatar fallback:',e)
+          if avatar:
+              avatar.thumbnail((420,420),Image.Resampling.LANCZOS)
+              mask=Image.new('L',avatar.size,0)
+              md=ImageDraw.Draw(mask); md.rounded_rectangle((0,0,*avatar.size),radius=70,fill=255)
+              ax,ay=90,105
+              shadow=Image.new('RGBA',out.size,(0,0,0,0))
+              sd=ImageDraw.Draw(shadow)
+              sd.rounded_rectangle((ax+10,ay+16,ax+avatar.width+10,ay+avatar.height+16),radius=72,fill=(54,122,173,48))
+              shadow=shadow.filter(ImageFilter.GaussianBlur(15))
+              out.paste(shadow,(0,0),shadow)
+              out.paste(avatar,(ax,ay),mask)
+          else:
+              draw.rounded_rectangle((90,105,510,525),radius=70,fill='#e9f8ff')
+              draw.text((210,255),'Tia Tati',fill='#0b4b85')
+
+          def font(size,bold=False):
+              candidates=[
+                  '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+                  '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf'
+              ]
+              for p in candidates:
+                  if Path(p).exists(): return ImageFont.truetype(p,size)
+              return ImageFont.load_default()
+
+          navy='#0b4b85'; pink='#f2479a'; slate='#49677c'; cyan='#15c7e9'
+          draw.text((555,92),'Tia Tati',font=font(78,True),fill=navy)
+          draw.rounded_rectangle((555,177,842,224),radius=23,fill=pink)
+          draw.text((584,185),'FISIO SENSORIAL',font=font(25,True),fill='white')
+          draw.text((555,255),'Pequenas conquistas,',font=font(39,True),fill=navy)
+          draw.text((555,302),'grandes caminhos!',font=font(39,True),fill=pink)
+          draw.text((555,373),'Atividades terapêuticas para crianças e jovens,',font=font(24),fill=slate)
+          draw.text((555,406),'com acolhimento, movimento e autonomia.',font=font(24),fill=slate)
+
+          draw.rounded_rectangle((555,470,885,536),radius=33,fill=pink)
+          draw.text((616,486),'ACESSAR PORTAL  →',font=font(24,True),fill='white')
+          draw.rounded_rectangle((902,470,1125,536),radius=33,fill='#eaf9ff',outline='#bdebf6',width=2)
+          draw.text((935,486),'Kids • Jovem',font=font(23,True),fill=navy)
+          draw.text((555,565),'Celular • tablet • PC',font=font(20,True),fill='#78909f')
+
           dst='tia-tati/assets/card-tia-tati.jpg'
-          img=Image.open(src).convert('RGB')
-          img.save(dst,'JPEG',quality=91,optimize=True,progressive=False,subsampling=0)
-          print('saved', dst, img.size)
+          out.save(dst,'JPEG',quality=92,optimize=True,progressive=False,subsampling=0)
+          print('saved',dst,out.size)
           PY
           file tia-tati/assets/card-tia-tati.jpg
 
@@ -40,6 +100,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Card JPEG já está atualizado."
           else
-            git commit -m "Tia Tati: corrige JPEG do card social"
+            git commit -m "Tia Tati: gera card social WhatsApp limpo"
             git push
           fi
