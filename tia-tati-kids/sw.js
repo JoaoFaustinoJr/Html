@@ -5,7 +5,7 @@ const LEGACY_CACHE='tia-tati-v45-identity-20260910';
 const AUDIO_VERSION='kids-audio-v3';
 const MUSIC_VERSION='kids-music-v1';
 const VOICE_EXPORT_VERSION='voice-export-v1';
-const FINAL_CARD_VERSION='completion-v1';
+const FINAL_CARD_VERSION='completion-v2';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
