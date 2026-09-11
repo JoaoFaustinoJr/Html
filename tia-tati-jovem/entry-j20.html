@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07132f">
+<meta name="description" content="Tia Tati Jovem – desafios terapêuticos de atenção, ritmo, memória, regulação e movimento.">
+<link rel="manifest" href="manifest.webmanifest?v=20">
+<link rel="icon" href="assets/cards/reflexo-neon-v2.webp?v=20" type="image/webp">
+<title>Tia Tati Jovem – Fisio Sensorial</title>
+<link rel="stylesheet" href="styles.css?v=20">
+<link rel="stylesheet" href="sensory-v40.css?v=20">
+<link rel="stylesheet" href="remaining-v41.css?v=20">
+<link rel="stylesheet" href="polish-v43.css?v=20">
+<link rel="stylesheet" href="jovem-v1.css?v=20">
+<link rel="stylesheet" href="jovem-refine-j12.css?v=20">
+<link rel="stylesheet" href="jovem-assets-j13.css?v=20">
+<link rel="stylesheet" href="jovem-layout-j15.css?v=20">
+<style>
+html,body{margin:0;min-height:100%;background:#07132f;color:#fff}
+#j20Boot{position:fixed;z-index:999999;inset:0;display:grid;place-items:center;background:linear-gradient(145deg,#06132f,#16195a 58%,#301057);font:700 15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:#eefcff;text-align:center;padding:24px}
+#j20Boot .box{width:min(86vw,360px);padding:24px 20px;border:1px solid rgba(64,224,255,.35);border-radius:24px;background:rgba(9,20,58,.93);box-shadow:0 18px 55px rgba(0,0,0,.38)}
+#j20Boot b{display:block;font-size:1.25rem;color:#45e8ff;margin-bottom:6px}#j20Boot small{display:block;color:#c8d5f4;margin-top:7px;font-weight:600}
+html.j20-ready #j20Boot{display:none!important}
+header.topbar,#bottomNav{display:none!important}
+#screen-home>.home-v22-hero,#screen-home>.audience-v44,#screen-home>.kids-v44,#screen-home>.home-v22-section-head,#screen-home>.home-v22-missions,#screen-home>.home-v22-autonomy,#screen-home>.support-v44,#screen-home>.home-v22-cards,#screen-home>.home-v22-tools,#screen-home>.finish-v44,#screen-home>.home-v22-footer-phrase{display:none!important}
+html:not(.j20-ready) #screen-home>.youth-challenges{visibility:hidden!important}
+</style>
+</head>
+<body>
+<div id="j20Boot"><div class="box"><b>⚡ Tia Tati Jovem</b><span id="j20Status">Preparando os seis desafios…</span><small>Versão 20 • consolidada</small></div></div>
+<div id="j20Mount"></div>
+<script>
+(async()=>{
+ const status=document.getElementById('j20Status');
+ const setStatus=t=>{if(status)status.textContent=t};
+ const fail=err=>{console.error('Tia Tati Jovem v20',err);const boot=document.getElementById('j20Boot');if(boot)boot.innerHTML='<div class="box"><b>Não foi possível iniciar</b><span>'+String(err&&err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';};
+ const getTemplate=async()=>{setStatus('Carregando estrutura…');const r=await fetch('index.html?template=20&t='+Date.now(),{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw new Error('estrutura: HTTP '+r.status);const t=await r.text();if(!t||!t.includes('id="screen-home"'))throw new Error('estrutura incompleta');return t;};
+ const loadScript=(src,label)=>new Promise((resolve,reject)=>{setStatus('Carregando '+label+'…');const s=document.createElement('script');s.src=src+'?v=20&t='+Date.now();s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error(label+': falha ao carregar'));document.body.appendChild(s);});
+ try{
+  const html=await getTemplate();
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  const sourceApp=doc.getElementById('app');
+  if(!sourceApp)throw new Error('estrutura: #app não encontrado');
+  document.getElementById('j20Mount').replaceWith(document.importNode(sourceApp,true));
+  await loadScript('app-core-v39.js','motor principal');
+  await loadScript('sensory-v40.js','Laboratório do Pulso');
+  await loadScript('remaining-v41.js','Recomeço e Missão Movimento');
+  await loadScript('jovem-v20.js','interface Jovem');
+  await loadScript('jovem-ptbr-j16.js','interface em português');
+  await loadScript('jovem-assets-j20.js','artes visuais');
+  await loadScript('jovem-music-v1.js','trilha musical');
+  document.documentElement.classList.add('j20-ready');
+  window.dispatchEvent(new Event('tia:jovem-modules-ready'));
+  setTimeout(()=>document.getElementById('j20Boot')?.remove(),200);
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=20').catch(()=>{});
+ }catch(err){fail(err);}
+})();
+</script>
+</body>
+</html>
