@@ -39,9 +39,6 @@ document.head.appendChild(critical);
   document.head.appendChild(l);
 });
 
-/* document.write é usado aqui intencionalmente porque app.js é executado
-   pelo parser no fim do HTML. Os módulos externos são então executados
-   sequencialmente, sem corrida de carregamento. */
 const scripts=[
   'app-core-v39.js',
   'sensory-v40.js',
@@ -50,6 +47,6 @@ const scripts=[
   'jovem-v1.js'
 ];
 for(const src of scripts){
-  document.write('<script src="'+src+'?v='+V+'"><\\/script>');
+  document.write('<script src="'+src+'?v='+V+'"></'+'script>');
 }
 })();
