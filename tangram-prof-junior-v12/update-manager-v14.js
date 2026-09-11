@@ -1,5 +1,5 @@
 (()=>{
- const APP_VERSION='15.8.2';
+ const APP_VERSION='15.8.3';
  const PERMANENT_PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,reloading=false;
  function isHandheld(){try{const ua=navigator.userAgent||'',mobileUA=/Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(ua),uaData=!!(navigator.userAgentData&&navigator.userAgentData.mobile),coarse=!!(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches);return mobileUA||uaData||(navigator.maxTouchPoints>0&&coarse)}catch(e){return false}}
