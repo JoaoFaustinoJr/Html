@@ -1,9 +1,10 @@
-const CACHE='tia-tati-portal-pwa-v3';
+const CACHE='tia-tati-portal-pwa-v4';
 const SHELL=[
   './',
   './index.html',
   './manifest.webmanifest',
-  './assets/icon-tia-tati-v2.svg',
+  './assets/icon-tia-tati-192.webp',
+  './assets/icon-tia-tati-512.webp',
   './assets/tatiana-portal-v3.webp',
   './launch-kids.html'
 ];
@@ -46,10 +47,13 @@ const INSTALL_VISIBILITY_PATCH=`
 function patchPortalHtml(html){
   if(!html)return html;
   let patched=html
-    .replace(/manifest\.webmanifest\?v=\d+/g,'manifest.webmanifest?v=2')
-    .replace(/assets\/icon-tia-tati\.svg/g,'assets/icon-tia-tati-v2.svg?v=2');
+    .replace(/manifest\.webmanifest\?v=\d+/g,'manifest.webmanifest?v=3')
+    .replace(/assets\/icon-tia-tati(?:-v2)?\.svg(?:\?v=\d+)?/g,'assets/icon-tia-tati-192.webp?v=3')
+    .replace(/assets\/icon-tia-tati-192\.webp(?:\?v=\d+)?/g,'assets/icon-tia-tati-192.webp?v=3');
   if(!patched.includes('apple-touch-icon')){
-    patched=patched.replace('</head>','<link rel="apple-touch-icon" href="assets/icon-tia-tati-v2.svg?v=2">\n</head>');
+    patched=patched.replace('</head>','<link rel="apple-touch-icon" href="assets/icon-tia-tati-192.webp?v=3">\n</head>');
+  }else{
+    patched=patched.replace(/<link rel="apple-touch-icon"[^>]*>/g,'<link rel="apple-touch-icon" href="assets/icon-tia-tati-192.webp?v=3">');
   }
   if(!patched.includes('portalInstallVisibilityV2')){
     patched=patched.replace('</head>',INSTALL_VISIBILITY_PATCH+'\n</head>');
