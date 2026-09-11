@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07132f">
+<meta name="description" content="Tia Tati Jovem – desafios terapêuticos de atenção, ritmo, memória, regulação e movimento.">
+<title>Tia Tati Jovem – Fisio Sensorial</title>
+<link rel="stylesheet" href="styles.css?v=j11">
+<link rel="stylesheet" href="sensory-v40.css?v=j11">
+<link rel="stylesheet" href="remaining-v41.css?v=j11">
+<link rel="stylesheet" href="polish-v43.css?v=j11">
+<link rel="stylesheet" href="jovem-v1.css?v=j11">
+<link rel="stylesheet" href="jovem-refine-j12.css?v=j12">
+<style>
+html,body{margin:0;min-height:100%;background:#07132f;color:#fff}
+#j11Boot{position:fixed;z-index:999999;inset:0;display:grid;place-items:center;background:linear-gradient(145deg,#06132f,#16195a 58%,#301057);font:700 15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:#eefcff;text-align:center;padding:24px}
+#j11Boot .box{width:min(86vw,360px);padding:24px 20px;border:1px solid rgba(64,224,255,.35);border-radius:24px;background:rgba(9,20,58,.93);box-shadow:0 18px 55px rgba(0,0,0,.38)}
+#j11Boot b{display:block;font-size:1.25rem;color:#45e8ff;margin-bottom:6px}#j11Boot small{display:block;color:#c8d5f4;margin-top:7px;font-weight:600}
+html.j11-ready #j11Boot{display:none!important}
+header.topbar,#bottomNav{display:none!important}
+#screen-home>.home-v22-hero,
+#screen-home>.audience-v44,
+#screen-home>.kids-v44,
+#screen-home>.home-v22-section-head,
+#screen-home>.home-v22-missions,
+#screen-home>.home-v22-autonomy,
+#screen-home>.support-v44,
+#screen-home>.home-v22-cards,
+#screen-home>.home-v22-tools,
+#screen-home>.finish-v44,
+#screen-home>.home-v22-footer-phrase{display:none!important}
+html:not(.j11-ready) #screen-home>.youth-challenges{visibility:hidden!important}
+</style>
+</head>
+<body>
+<div id="j11Boot"><div class="box"><b>⚡ Tia Tati Jovem</b><span id="j11Status">Preparando os seis desafios…</span><small>Entrada isolada • j12</small></div></div>
+<div id="j11Mount"></div>
+<script>
+(async()=>{
+  const status=document.getElementById('j11Status');
+  const setStatus=t=>{if(status)status.textContent=t};
+  const fail=err=>{
+    console.error('Tia Tati Jovem j12',err);
+    const boot=document.getElementById('j11Boot');
+    if(boot)boot.innerHTML='<div class="box"><b>Não foi possível iniciar</b><span>'+String(err&&err.message||err)+'</span><small>Volte ao Portal Tia Tati e tente novamente.</small></div>';
+  };
+  const getTemplate=async()=>{
+    setStatus('Carregando estrutura…');
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),10000);
+    try{
+      const r=await fetch('index.html?template=j12&t='+Date.now(),{cache:'no-store',credentials:'same-origin',signal:ctrl.signal});
+      if(!r.ok)throw new Error('estrutura: HTTP '+r.status);
+      const t=await r.text();
+      if(!t||!t.includes('id="screen-home"'))throw new Error('estrutura incompleta');
+      return t;
+    } finally { clearTimeout(timer); }
+  };
+  const loadScript=(src,label)=>new Promise((resolve,reject)=>{
+    setStatus('Carregando '+label+'…');
+    const s=document.createElement('script');
+    s.src=src+'?v=j11&t='+Date.now();
+    s.async=false;
+    const timer=setTimeout(()=>{s.remove();reject(new Error(label+': tempo excedido'));},10000);
+    s.onload=()=>{clearTimeout(timer);resolve();};
+    s.onerror=()=>{clearTimeout(timer);s.remove();reject(new Error(label+': falha ao carregar'));};
+    document.body.appendChild(s);
+  });
+  try{
+    const html=await getTemplate();
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    const sourceApp=doc.getElementById('app');
+    if(!sourceApp)throw new Error('estrutura: #app não encontrado');
+    const mount=document.getElementById('j11Mount');
+    mount.replaceWith(document.importNode(sourceApp,true));
+
+    await loadScript('app-core-v39.js','motor principal');
+    await loadScript('sensory-v40.js','Pulse Lab');
+    await loadScript('remaining-v41.js','Recomeço e Move Quest');
+    await loadScript('jovem-v1.js','home Jovem');
+
+    document.documentElement.classList.add('j11-ready');
+    window.dispatchEvent(new Event('tia:jovem-modules-ready'));
+    setTimeout(()=>document.getElementById('j11Boot')?.remove(),200);
+  } catch(err) { fail(err); }
+})();
+</script>
+</body>
+</html>
