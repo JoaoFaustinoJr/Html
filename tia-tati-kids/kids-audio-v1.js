@@ -12,7 +12,7 @@ function unlock(){
   if(!enabled)return null;
   const AC=window.AudioContext||window.webkitAudioContext;
   if(!AC)return null;
-  if(!ctx){ctx=new AC();master=ctx.createGain();master.gain.value=.24;master.connect(ctx.destination);}
+  if(!ctx){ctx=new AC();master=ctx.createGain();master.gain.value=.30;master.connect(ctx.destination);}
   if(ctx.state==='suspended')ctx.resume().catch(()=>{});
   return ctx;
 }
