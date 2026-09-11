@@ -1,8 +1,9 @@
 /* Tia Tati Kids — service worker de estabilidade.
-   Mantém o runtime intacto e corrige apenas o avatar final,
-   evitando a cópia antiga em cache do celebrate.webp. */
+   Mantém o runtime funcional, corrige o avatar final e injeta
+   a camada leve de efeitos sonoros sem alterar a lógica dos jogos. */
 const LEGACY_CACHE='tia-tati-v45-identity-20260910';
 const FINAL_AVATAR_VERSION='kids-final-avatar-v4';
+const AUDIO_VERSION='kids-audio-v1';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
@@ -17,11 +18,32 @@ self.addEventListener('activate',event=>{
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const url=new URL(event.request.url);
-  if(!url.pathname.endsWith('/tia-tati-kids/assets/celebrate.webp')) return;
 
-  const avatarUrl=new URL('./assets/guide.webp?'+FINAL_AVATAR_VERSION,self.location.href);
-  event.respondWith(
-    fetch(avatarUrl.toString(),{cache:'no-store',credentials:'same-origin'})
-      .catch(()=>fetch(event.request,{cache:'reload'}))
-  );
+  if(url.pathname.endsWith('/tia-tati-kids/assets/celebrate.webp')){
+    const avatarUrl=new URL('./assets/guide.webp?'+FINAL_AVATAR_VERSION,self.location.href);
+    event.respondWith(
+      fetch(avatarUrl.toString(),{cache:'no-store',credentials:'same-origin'})
+        .catch(()=>fetch(event.request,{cache:'reload'}))
+    );
+    return;
+  }
+
+  if(url.pathname.endsWith('/tia-tati-kids/app.js')){
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(event.request,{cache:'no-store'});
+        if(!response.ok)return response;
+        const source=await response.text();
+        const loader='\n;(()=>{if(window.__TIA_TATI_KIDS_AUDIO_LOADER__)return;window.__TIA_TATI_KIDS_AUDIO_LOADER__=true;const s=document.createElement("script");s.src="kids-audio-v1.js?'+AUDIO_VERSION+'";s.async=true;document.head.appendChild(s);})();\n';
+        const headers=new Headers(response.headers);
+        headers.set('content-type','application/javascript; charset=utf-8');
+        headers.set('cache-control','no-store, max-age=0');
+        headers.delete('content-length');
+        headers.delete('content-encoding');
+        return new Response(source+loader,{status:response.status,statusText:response.statusText,headers});
+      }catch(_){
+        return fetch(event.request,{cache:'reload'});
+      }
+    })());
+  }
 });
