@@ -5,19 +5,63 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f8fbff">
 <meta name="description" content="Tia Tati – Fisio Sensorial">
-<link rel="manifest" href="manifest.webmanifest?v=64">
+<link rel="manifest" href="manifest.webmanifest?v=65">
 <title>Tia Tati – Fisio Sensorial</title>
 <style>html,body{margin:0;min-height:100%;background:#f8fbff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.go{min-height:100vh;display:grid;place-items:center;text-align:center;color:#164b87;background:linear-gradient(135deg,#fff8fc,#eefaff)}.go div{display:grid;gap:8px;place-items:center;padding:24px}.go b{font-size:44px}.go strong{font-size:19px}.go small{color:#71849a}</style>
 </head>
 <body>
-<div class="go"><div><b>💗</b><strong>Tia Tati – Fisio Sensorial</strong><small>Abrindo aplicativo…</small></div></div>
+<div class="go"><div><b>💗</b><strong>Tia Tati – Fisio Sensorial</strong><small>Atualizando aplicativo…</small></div></div>
 <script>
-(function(){
-  var target='./activity.html?v=64&t='+Date.now();
-  try{ location.replace(target); }
-  catch(_){ location.href=target; }
+(async function(){
+  const V='65';
+  try{
+    const res=await fetch('./activity.html?v='+V+'&t='+Date.now(),{cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    let html=await res.text();
+    html=html.replace(/manifest\.webmanifest(?:\?v=\d+)?/g,'manifest.webmanifest?v='+V);
+    html=html.replace(/styles\.css(?:\?v=\d+)?/g,'styles.css?v='+V+'&t='+Date.now());
+    html=html.replace(/app\.js(?:\?v=\d+)?/g,'app.js?v='+V+'&t='+Date.now());
+    const hotfix=`<script>(function(){
+      const VERSION='65';
+      function installDoneFix(){
+        const screen=document.getElementById('screen-done');
+        if(!screen||screen.dataset.doneV65==='1')return;
+        screen.dataset.doneV65='1';
+        const apply=function(){
+          if(!screen.classList.contains('active'))return;
+          const img=screen.querySelector('.done > img');
+          if(!img)return;
+          img.style.setProperty('display','block','important');
+          img.style.setProperty('visibility','visible','important');
+          img.style.setProperty('opacity','1','important');
+          img.style.setProperty('width','220px','important');
+          img.style.setProperty('height','220px','important');
+          img.style.setProperty('max-width','74vw','important');
+          img.style.setProperty('object-fit','cover','important');
+          img.style.setProperty('object-position','center top','important');
+          img.style.setProperty('margin','0 auto 18px','important');
+          img.style.setProperty('border-radius','28px','important');
+          const wanted='assets/celebrate.webp?v='+VERSION;
+          if(!img.src.includes('celebrate.webp')||!img.src.includes('v='+VERSION)) img.src=wanted;
+          img.loading='eager';
+          img.onerror=function(){img.onerror=null;img.src='assets/welcome.webp?v='+VERSION;};
+        };
+        new MutationObserver(function(){if(screen.classList.contains('active'))[0,80,250,700].forEach(function(ms){setTimeout(apply,ms);});}).observe(screen,{attributes:true,attributeFilter:['class']});
+        apply();
+      }
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installDoneFix,{once:true});else installDoneFix();
+      setTimeout(installDoneFix,300);setTimeout(installDoneFix,1200);
+    })();<\/script>`;
+    html=html.replace('</body>',hotfix+'</body>');
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.querySelector('.go small').textContent='Abrindo versão atual…';
+    location.replace('./activity.html?v='+V+'&t='+Date.now());
+  }
 })();
 </script>
-<noscript><p><a href="./activity.html?v=64">Abrir Tia Tati – Fisio Sensorial</a></p></noscript>
+<noscript><p><a href="./activity.html?v=65">Abrir Tia Tati – Fisio Sensorial</a></p></noscript>
 </body>
 </html>
