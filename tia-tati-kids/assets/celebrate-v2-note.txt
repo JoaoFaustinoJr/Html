@@ -1,0 +1,1 @@
+Avatar final atualizado para o mesmo asset estável usado nos estados de orientação/motivação. Arquivo auxiliar de versão; pode ser removido futuramente.
