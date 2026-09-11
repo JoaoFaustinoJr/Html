@@ -3,7 +3,7 @@ name: Tia Tati Card Preview
 on:
   push:
     paths:
-      - 'tia-tati/assets/card-tia-tati-lite.b64.txt'
+      - 'tia-tati/assets/card-tia-tati.webp'
       - '.github/workflows/tia-tati-card-preview.yml'
   workflow_dispatch:
 
@@ -17,9 +17,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Decode JPEG preview
+      - name: Install Pillow
+        run: python -m pip install --quiet pillow
+
+      - name: Convert official WebP card to baseline JPEG
         run: |
-          base64 -d tia-tati/assets/card-tia-tati-lite.b64.txt > tia-tati/assets/card-tia-tati.jpg
+          python - <<'PY'
+          from PIL import Image
+          src='tia-tati/assets/card-tia-tati.webp'
+          dst='tia-tati/assets/card-tia-tati.jpg'
+          img=Image.open(src).convert('RGB')
+          img.save(dst,'JPEG',quality=91,optimize=True,progressive=False,subsampling=0)
+          print('saved', dst, img.size)
+          PY
           file tia-tati/assets/card-tia-tati.jpg
 
       - name: Commit JPEG
@@ -30,6 +40,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Card JPEG já está atualizado."
           else
-            git commit -m "Tia Tati: gera card JPEG para preview social"
+            git commit -m "Tia Tati: corrige JPEG do card social"
             git push
           fi
