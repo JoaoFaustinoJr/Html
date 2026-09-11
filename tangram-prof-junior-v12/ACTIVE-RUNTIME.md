@@ -5,7 +5,7 @@ Este arquivo documenta a composição da versão de produção para evitar dupli
 ## Produção
 
 - URL permanente: `/Html/tangram-prof-junior-v12/`
-- Versão lógica atual: **15.9.1**
+- Versão lógica atual: **15.9.2**
 - Gerenciador de atualização/versão: `update-manager-v14.js`
 - Service Worker: `sw.js`
 
@@ -68,6 +68,6 @@ O `index.html` ainda reconstrói o núcleo histórico a partir dos cinco `chunk*
 2. Antes de remover um arquivo antigo, conferir `index.html`, `sw.js` e este mapa de runtime.
 3. Toda mudança em um recurso offline essencial deve atualizar a chave `CACHE` do `sw.js`.
 4. A versão mostrada ao usuário deve ser controlada por `APP_VERSION` em `update-manager-v14.js`.
-5. A narração pedagógica deve passar pelo normalizador central: `R.A.I.` é falado como **Raí**, seta para a direita como **leva a** e `+` como **somado a**.
+5. A narração pedagógica deve passar pelo normalizador central: `R.A.I.` é falado como **Raí**, seta para a direita como **leva a** e `+` como **somado a**. A sequência `++` é preservada como **mais mais**, evitando transformar `C++` em uma soma.
 6. Não reintroduzir cronômetros, animações ou listeners duplicados sem verificar os módulos Gamer, Performance e Conforto.
 7. Para uma futura consolidação do núcleo histórico, gerar primeiro uma versão estática paralela e validar jogabilidade, PWA/offline, Gamer, aulas e instalação antes de substituir a produção.
