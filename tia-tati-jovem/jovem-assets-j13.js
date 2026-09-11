@@ -1,14 +1,14 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_ASSETS_J13__)return;
-window.__TIA_TATI_JOVEM_ASSETS_J13__=true;
+if(window.__TIA_TATI_JOVEM_ASSETS_J16__)return;
+window.__TIA_TATI_JOVEM_ASSETS_J16__=true;
 
-const STABLE_TATI='../tia-tati/assets/tatiana-portal-v3.webp?v=j13';
+const STABLE_TATI='../tia-tati/assets/tatiana-portal-v3.webp?v=j16';
 const CARD_SOURCES={
-  '[data-youth-light="react"]':'assets/cards/reflexo-neon.webp?v=j13',
-  '[data-youth-light="memory"]':'assets/cards/memorize.webp?v=j13',
-  '[data-youth-light="beat"]':'assets/cards/beat-move.webp?v=j13',
-  '[data-youth-sensory]':'assets/pulse-lab.svg?v=j13'
+  '[data-youth-light="react"]':'assets/cards/reflexo-neon-v2.webp?v=j16',
+  '[data-youth-light="memory"]':'assets/cards/memorize-v2.webp?v=j16',
+  '[data-youth-light="beat"]':'assets/cards/ritmo-movimento-v2.webp?v=j16',
+  '[data-youth-sensory]':'assets/pulse-lab.svg?v=j16'
 };
 
 function ensureArt(card,src,badge){
@@ -35,11 +35,11 @@ function ensureSymbolArt(card,symbol,badge){
 function fixHomeCards(){
   Object.entries(CARD_SOURCES).forEach(([sel,src])=>{
     const card=document.querySelector(sel);
-    const badge=sel.includes('react')?'REFLEXO':sel.includes('memory')?'MEMORIZE':sel.includes('beat')?'BEAT & MOVE':'PULSE LAB';
+    const badge=sel.includes('react')?'REFLEXO':sel.includes('memory')?'MEMORIZE':sel.includes('beat')?'RITMO E MOVIMENTO':'LABORATÓRIO DO PULSO';
     ensureArt(card,src,badge);
   });
   ensureSymbolArt(document.querySelector('[data-youth-breathe]'),'🌿','RECOMEÇO');
-  ensureSymbolArt(document.querySelector('[data-youth-physical]'),'🏁','MOVE QUEST');
+  ensureSymbolArt(document.querySelector('[data-youth-physical]'),'🏁','MISSÃO MOVIMENTO');
 }
 
 function isSharedBroken(src){
@@ -61,8 +61,8 @@ function apply(){fixHomeCards();fixSharedImages();}
 
 function installTargetedObserver(){
   const app=document.getElementById('app');
-  if(!app||app.dataset.j13AssetObserver)return;
-  app.dataset.j13AssetObserver='1';
+  if(!app||app.dataset.j16AssetObserver)return;
+  app.dataset.j16AssetObserver='1';
   const obs=new MutationObserver(muts=>{
     muts.forEach(m=>{
       if(m.type==='attributes'&&m.target instanceof HTMLImageElement)fixImage(m.target);
