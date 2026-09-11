@@ -41,10 +41,8 @@ function buildKidsArea(){
  const title=q('h2',head);if(title)title.textContent='Escolha uma missão';
  const kicker=q('.kicker',head);if(kicker)kicker.textContent='MISSÕES KIDS';
  const p=q('p',head);if(p)p.textContent='Uma tarefa de cada vez, com pistas visuais e reforço positivo.';
- // Reflexo Neon e Mundo Real têm acessos próprios na Área Jovem; evitamos duplicação visual na Área Kids.
  const neon=q('[data-mission="light"]',missions);if(neon)neon.classList.add('v44-young-only');
  const physical=q('[data-mission="physical"]',missions);if(physical)physical.classList.add('v44-young-only');
- // Destaques terapêuticos sem alterar a mecânica das atividades.
  const tags={road:['Atenção','Planejamento'],bee:['Coordenação','Precisão'],target:['Alcance','Lateralidade'],hands:['Coordenação','Autonomia'],sensory:['Atenção','Curiosidade'],breathe:['Respiração','Bem-estar']};
  Object.entries(tags).forEach(([id,vals])=>{
   const card=q(`[data-mission="${id}"]`,missions);if(!card||q('.kids-v44-tags',card))return;
@@ -64,14 +62,12 @@ function polishYouth(){
    const p=q('p',div);if(p)p.textContent='Desafios com identidade neon, foco, ritmo, memória e autonomia.';
   }
  }
- // Corrige qualquer vestígio visual do nome antigo sem alterar a chave interna de compatibilidade.
  qa('[data-youth-breathe]',section).forEach(card=>{
   card.classList.add('recomeco-v44');
   const title=q('.youth-card-copy strong',card);if(title)title.textContent='Recomeço';
   const badge=q('.youth-card-art em',card);if(badge)badge.textContent='RECOMEÇO';
   const img=q('img',card);if(img)img.alt='Recomeço';
  });
- // Microtags jovens: ajudam leitura rápida e aproximam a identidade do mockup aprovado.
  const map=[
   ['[data-youth-light="react"]',['Atenção','Tempo de resposta']],
   ['[data-youth-light="memory"]',['Memória','Concentração']],
@@ -108,48 +104,29 @@ function addFinishStamp(){
  footer.parentNode.insertBefore(stamp,footer);
 }
 
-// V62 — corrige o card de missão concluída da Área Kids.
-// A imagem de conclusão Kids passa a usar o card de incentivo (success.webp),
-// mantendo a conclusão jovem intacta. Também força visibilidade e aplica fallback.
-let completionAudience='kids';
-function saveCompletionAudience(value){
- completionAudience=value;
- try{sessionStorage.setItem('tiaTatiCompletionAudience',value);}catch(_){}
-}
-function readCompletionAudience(){
- try{return sessionStorage.getItem('tiaTatiCompletionAudience')||completionAudience;}catch(_){return completionAudience;}
-}
+// V64 — o card final Kids usa exatamente a mesma imagem comprovadamente funcional da Área Jovem.
+// A correção evita trocar para success.webp e força a renderização ao abrir a tela final.
 function syncCompletionCard(){
  const screen=q('#screen-done'),img=screen&&q('.done > img',screen);if(!screen||!img)return;
- const audience=readCompletionAudience();
- img.style.display='block';img.style.opacity='1';img.style.visibility='visible';img.style.objectFit='cover';
+ const wanted='assets/celebrate.webp?v=64';
+ img.onerror=()=>{img.onerror=null;img.src='assets/welcome.webp?v=64';};
+ if(!img.getAttribute('src')?.includes('celebrate.webp'))img.src=wanted;
+ img.alt='Tia Tati comemorando';
  img.loading='eager';
- if(!img.dataset.v62OriginalSrc)img.dataset.v62OriginalSrc=img.getAttribute('src')||'assets/celebrate.webp';
- if(audience==='kids'){
-  const wanted='assets/success.webp?v=62';
-  if(!img.getAttribute('src')?.includes('success.webp'))img.setAttribute('src',wanted);
-  img.alt='Tia Tati comemorando a conquista';
-  img.onerror=()=>{img.onerror=null;img.setAttribute('src','assets/welcome.webp?v=62');};
- }else{
-  const original=(img.dataset.v62OriginalSrc||'assets/celebrate.webp').split('?')[0];
-  if(!img.getAttribute('src')?.includes('celebrate.webp'))img.setAttribute('src',original+'?v=62');
-  img.alt='Tia Tati comemorando';
-  img.onerror=null;
- }
+ img.decoding='sync';
+ img.style.setProperty('display','block','important');
+ img.style.setProperty('visibility','visible','important');
+ img.style.setProperty('opacity','1','important');
+ img.style.setProperty('object-fit','cover','important');
+ img.style.setProperty('width','220px','important');
+ img.style.setProperty('height','220px','important');
+ img.style.setProperty('margin','0 auto 18px','important');
 }
 function fixCompletionCard(){
  const screen=q('#screen-done');if(!screen)return;
- if(!document.documentElement.dataset.v62CompletionTrack){
-  document.documentElement.dataset.v62CompletionTrack='1';
-  document.addEventListener('click',e=>{
-   const target=e.target instanceof Element?e.target:null;if(!target)return;
-   if(target.closest('[data-area-jump="kids"], .kids-v44 [data-mission], .kids-v44 #circuitBtn'))saveCompletionAudience('kids');
-   if(target.closest('[data-area-jump="young"], .youth-challenges [data-youth-light], .youth-challenges [data-youth-sensory], .youth-challenges [data-youth-breathe], .youth-challenges [data-youth-physical]'))saveCompletionAudience('youth');
-  },true);
- }
- if(!screen.dataset.v62DoneWatch){
-  screen.dataset.v62DoneWatch='1';
-  new MutationObserver(()=>{if(screen.classList.contains('active'))syncCompletionCard();}).observe(screen,{attributes:true,attributeFilter:['class']});
+ if(!screen.dataset.v64DoneWatch){
+  screen.dataset.v64DoneWatch='1';
+  new MutationObserver(()=>{if(screen.classList.contains('active')){syncCompletionCard();setTimeout(syncCompletionCard,80);setTimeout(syncCompletionCard,350);}}).observe(screen,{attributes:true,attributeFilter:['class']});
  }
  syncCompletionCard();
 }
