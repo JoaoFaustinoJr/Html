@@ -48,6 +48,7 @@
   },{passive:true});
 
   const successWave=()=>{
+    if(root.classList.contains('tl-v158-desktop-stable'))return;
     const pieces=[...board.querySelectorAll('.piece')];
     pieces.forEach((p,i)=>{
       setTimeout(()=>{
@@ -73,4 +74,28 @@
       setTimeout(successWave,120);
     }).observe(msg,{subtree:true,childList:true,characterData:true});
   }
+})();
+
+/* v15.8 — compactação responsiva, cronômetro apenas Gamer e estabilidade desktop */
+(()=>{
+  const root=document.getElementById('tangram-levels');
+  if(!root)return;
+  root.classList.add('tl-v158');
+
+  const fineDesktop=()=>window.matchMedia&&window.matchMedia('(min-width:641px) and (hover:hover) and (pointer:fine)').matches;
+  const syncDesktop=()=>root.classList.toggle('tl-v158-desktop-stable',!!fineDesktop());
+  syncDesktop();
+  window.addEventListener('resize',syncDesktop,{passive:true});
+
+  const markNormalTimer=()=>{
+    const chips=[...root.querySelectorAll('.tl-stats .tl-chip')];
+    chips.forEach(chip=>{
+      const text=(chip.textContent||'').replace(/\s+/g,' ').trim();
+      const isTimer=/⏱|cron[oô]metro|(^|\s)\d{1,2}:\d{2}(\s|$)/i.test(text);
+      chip.classList.toggle('rai-normal-timer',isTimer);
+    });
+  };
+  markNormalTimer();
+  const stats=root.querySelector('.tl-stats');
+  if(stats)new MutationObserver(markNormalTimer).observe(stats,{childList:true,subtree:true});
 })();
