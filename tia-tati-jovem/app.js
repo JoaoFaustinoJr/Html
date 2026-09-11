@@ -24,7 +24,7 @@ html.tia-jovem-boot #screen-home>.home-v22-footer-phrase{display:none!important}
 `;
 document.head.appendChild(critical);
 
-const V='j4';
+const V='j5';
 const stamp=Date.now();
 const addCss=href=>{
  const old=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>(x.getAttribute('href')||'').startsWith(href));
@@ -34,7 +34,7 @@ const addCss=href=>{
  l.href=`${href}?v=${V}&t=${stamp}`;
  document.head.appendChild(l);
 };
-['sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css'].forEach(addCss);
+['sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css','jovem-polish-v5.css'].forEach(addCss);
 
 const loadOnce=src=>new Promise((resolve,reject)=>{
  const s=document.createElement('script');
@@ -60,13 +60,14 @@ const loadSafe=async src=>{
 };
 
 (async()=>{
- /* A camada Jovem entra primeiro para que hero e seis cards não dependam dos motores. */
+ /* A camada Jovem entra primeiro para isolar a home antes dos motores. */
  await loadSafe('jovem-v1.js');
- /* O motor base é preservado; os módulos especializados podem falhar isoladamente sem abortar a home. */
  await loadSafe('app-core-v39.js');
  await loadSafe('sensory-v40.js');
  await loadSafe('remaining-v41.js');
  await loadSafe('naming-v42.js');
+ /* Acabamento entra por último e altera somente o interior visual dos mesmos botões. */
+ await loadSafe('jovem-polish-v5.js');
  document.documentElement.classList.add('tia-jovem-ready');
  window.dispatchEvent(new Event('tia:jovem-modules-ready'));
 })();
