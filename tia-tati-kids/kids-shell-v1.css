@@ -37,9 +37,23 @@ body{background:radial-gradient(circle at 8% 4%,rgba(255,214,231,.34),transparen
   .home-v22-copy p{font-size:13px!important;line-height:1.45!important;margin-bottom:8px!important}
   .home-v22-values{gap:5px!important;margin-top:7px!important}.home-v22-values span{font-size:9.5px!important;padding:6px 8px!important}
   .home-v22-phrase{font-size:10.5px!important;line-height:1.35!important;margin-top:8px!important;padding:8px 10px!important}
-  .home-v22-tutor{margin-top:4px!important}.home-v22-portrait-wrap{max-height:245px!important;overflow:hidden!important;border-radius:19px!important;box-shadow:0 9px 22px rgba(23,67,90,.09)!important}.home-v22-portrait-wrap>img{height:245px!important;width:100%!important;object-fit:cover!important;object-position:center 38%!important}.home-v22-bubble{font-size:10px!important;padding:7px 9px!important;right:8px!important;top:8px!important;bottom:auto!important}.home-v22-side-note{font-size:9px!important;margin-top:5px!important}.home-v22-hearts{display:none!important}
+
+  /* Layout v4: dá altura suficiente ao card para mostrar a arte completa da Tia Tati e os balões. */
+  .home-v22-tutor{margin-top:8px!important;min-height:clamp(320px,92vw,365px)!important}
+  .home-v22-portrait-wrap{width:100%!important;height:clamp(305px,90vw,350px)!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important;border-radius:19px!important;box-shadow:0 9px 22px rgba(23,67,90,.09)!important}
+  .home-v22-portrait-wrap>img{width:100%!important;height:100%!important;max-height:none!important;object-fit:contain!important;object-position:center bottom!important;background:linear-gradient(180deg,#fff,#fff9fc)!important}
+  .home-v22-bubble{font-size:10px!important;padding:7px 9px!important;right:10px!important;top:10px!important;bottom:auto!important;max-width:130px!important}
+  .home-v22-side-note{left:10px!important;bottom:12px!important;font-size:9px!important;max-width:130px!important;padding:7px 9px!important;margin:0!important}
+  .home-v22-hearts{display:none!important}
+
   .home-v22-section-head{margin-top:19px!important;align-items:flex-end}.home-v22-section-head h2{font-size:26px!important;margin:3px 0!important}.home-v22-section-head p{font-size:11px!important}.home-v22-circuit{font-size:10px!important;padding:9px 10px!important}
   .home-v22-missions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.home-v22-mission{min-height:0;border-radius:18px;padding:6px}.home-v22-mission .home-v22-visual{height:94px}.home-v22-mission-copy strong{font-size:11.5px}.home-v22-mission-copy small{font-size:8px}.home-v22-mission:hover{transform:none}.home-v22-mission:active{transform:scale(.985)}
 }
 
-@media(max-width:390px){.home-v22-copy h1{font-size:28px!important}.home-v22-portrait-wrap,.home-v22-portrait-wrap>img{height:220px!important;max-height:220px!important}.home-v22-section-head h2{font-size:24px!important}}
+@media(max-width:390px){
+  .home-v22-copy h1{font-size:28px!important}
+  .home-v22-tutor{min-height:315px!important}
+  .home-v22-portrait-wrap{height:clamp(295px,90vw,330px)!important;max-height:none!important}
+  .home-v22-portrait-wrap>img{height:100%!important;max-height:none!important}
+  .home-v22-section-head h2{font-size:24px!important}
+}
