@@ -3,7 +3,7 @@
   "name":"Tia Tati Jovem – Fisio Sensorial",
   "short_name":"Tia Tati Jovem",
   "description":"Desafios terapêuticos para jovens e adultos com foco, ritmo, memória, regulação e movimento.",
-  "start_url":"./",
+  "start_url":"./entry-j20.html?source=pwa",
   "scope":"./",
   "display":"standalone",
   "orientation":"any",
@@ -12,7 +12,7 @@
   "lang":"pt-BR",
   "categories":["health","education","lifestyle"],
   "icons":[
-    {"src":"assets/cards/reflexo-neon.webp","sizes":"512x512","type":"image/webp","purpose":"any"},
-    {"src":"assets/cards/reflexo-neon.webp","sizes":"512x512","type":"image/webp","purpose":"maskable"}
+    {"src":"assets/cards/reflexo-neon-v2.webp?v=20","sizes":"512x512","type":"image/webp","purpose":"any"},
+    {"src":"assets/cards/reflexo-neon-v2.webp?v=20","sizes":"512x512","type":"image/webp","purpose":"maskable"}
   ]
 }
