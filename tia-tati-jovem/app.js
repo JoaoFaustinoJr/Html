@@ -4,8 +4,17 @@ if(window.__TIA_TATI_JOVEM_J8__)return;
 window.__TIA_TATI_JOVEM_J8__=true;
 
 const V='j8';
+const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
+
+function applyCompletionAvatar(){
+  document.querySelectorAll('#screen-done .done > img').forEach(img=>{
+    if((img.getAttribute('src')||'')!==FINAL_AVATAR) img.setAttribute('src',FINAL_AVATAR);
+    img.setAttribute('alt','Tia Tati comemorando a conquista');
+    img.setAttribute('decoding','async');
+  });
+}
 
 const critical=document.createElement('style');
 critical.id='tia-jovem-critical';
@@ -95,6 +104,7 @@ function runCode(src,code){
       const code=await getCode(src);
       runCode(src,code);
     }
+    applyCompletionAvatar();
     root.classList.add('tia-jovem-ready');
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
   }catch(err){
@@ -102,4 +112,11 @@ function runCode(src,code){
     status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Volte ao Portal Tia Tati e tente novamente.</small>';
   }
 })();
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',applyCompletionAvatar,{once:true});
+}else{
+  applyCompletionAvatar();
+}
+window.addEventListener('pageshow',applyCompletionAvatar);
 })();
