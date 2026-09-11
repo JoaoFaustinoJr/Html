@@ -3,7 +3,7 @@
    sem alterar a lógica dos jogos. */
 const LEGACY_CACHE='tia-tati-v45-identity-20260910';
 const AUDIO_VERSION='kids-audio-v3';
-const MUSIC_VERSION='kids-music-v1';
+const MUSIC_VERSION='kids-music-v2';
 const VOICE_EXPORT_VERSION='voice-export-v2';
 const FINAL_CARD_VERSION='completion-v2';
 const LAYOUT_VERSION='kids-layout-v4';
