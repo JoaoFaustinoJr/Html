@@ -14,7 +14,7 @@ function buildHero(){
  if(!home||!section||q('.jovem-home-hero',home))return;
  const hero=document.createElement('section');
  hero.className='jovem-home-hero';
- hero.innerHTML=`<div class="jovem-home-copy"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><a class="jovem-home-back" href="../tia-tati/?v=j16">← Portal Tia Tati</a><a class="jovem-home-back" href="manual-jovem.html?v=j16">📘 Manual dos jogos</a></div><span class="jovem-home-kicker">TIA TATI • FISIO SENSORIAL</span><h1>Modo <em>Jovem</em></h1><p>No seu ritmo, você evolui. Desafios terapêuticos com uma linguagem visual mais madura, vibrante e direta.</p><div class="jovem-home-pills"><span>⚡ Resposta</span><span>🧠 Foco</span><span>🎵 Ritmo</span><span>🏁 Autonomia</span></div></div><div class="jovem-home-art" aria-hidden="true"><img src="assets/cards/reflexo-neon-v2.webp?v=j16" alt=""><img src="assets/cards/ritmo-movimento-v2.webp?v=j16" alt=""></div>`;
+ hero.innerHTML=`<div class="jovem-home-copy"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><a class="jovem-home-back" href="../tia-tati/?v=j19">← Portal Tia Tati</a><a class="jovem-home-back" href="manual-jovem.html?v=j19">📘 Manual dos jogos</a></div><span class="jovem-home-kicker">TIA TATI • FISIO SENSORIAL</span><h1>Modo <em>Jovem</em></h1><p>No seu ritmo, você evolui. Desafios terapêuticos com uma linguagem visual mais madura, vibrante e direta.</p><div class="jovem-home-pills"><span>⚡ Resposta</span><span>🧠 Foco</span><span>🎵 Ritmo</span><span>🏁 Autonomia</span></div></div><div class="jovem-home-art" aria-hidden="true"><img src="assets/cards/reflexo-neon.webp?v=j19" alt=""><img src="assets/cards/beat-move.webp?v=j19" alt=""></div>`;
  home.insertBefore(hero,section);
 }
 
