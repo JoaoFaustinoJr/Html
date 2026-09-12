@@ -6,9 +6,9 @@ const AUDIO_VERSION='kids-audio-v3';
 const MUSIC_VERSION='kids-music-v2';
 const VOICE_EXPORT_VERSION='voice-export-v2';
 const FINAL_CARD_VERSION='completion-v2';
-const LAYOUT_VERSION='kids-layout-v8';
-const CARDS_UI_VERSION='kids-cards-ui-v3';
-const CARDS_EXPORT_VERSION='kids-cards-export-v2';
+const LAYOUT_VERSION='kids-layout-v9';
+const CARDS_UI_VERSION='kids-cards-ui-v4';
+const CARDS_EXPORT_VERSION='kids-cards-export-v3';
 
 self.addEventListener('install',()=>self.skipWaiting());
 
