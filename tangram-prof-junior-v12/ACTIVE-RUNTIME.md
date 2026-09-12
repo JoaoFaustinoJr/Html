@@ -4,8 +4,8 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 
 ## Produção
 - URL: `/Html/tangram-prof-junior-v12/`
-- Versão lógica: **15.9.9**
-- Cache PWA: **tangram-rai-v12-62**
+- Versão lógica: **15.10.0**
+- Cache PWA: **tangram-rai-v12-63**
 - Atualização/PWA: `update-manager-v14.js` + `sw.js`
 - O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
@@ -19,6 +19,8 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 
 ## Conteúdo pedagógico
 Trilhas permanentes: `rai-fundamentos-v17.json`, `rai-pensamento-v17.json`, `rai-programacao-v17.json`, `rai-matematica-v17.json`, `rai-mundo-digital-v17.json`.
+
+A revisão curricular e conceitual está documentada em `CONTENT-AUDIT.md`. A auditoria de 12/09/2026 usou como referências primárias a BNCC Computação (Resolução CNE/CEB nº 1/2022 e Parecer CNE/CEB nº 2/2022), o CREP/Referencial Curricular do Paraná em Matemática e as matrizes/gabaritos oficiais recentes da Prova Paraná.
 
 ### Especial Prova Paraná 2026 — Matemática
 `prova-parana-6-v1.json`, `prova-parana-7-v1.json`, `prova-parana-8a-v1.json`, `prova-parana-8b-v1.json`, `prova-parana-8c-v1.json`, `prova-parana-8d-v1.json`, `prova-parana-9-v1.json` e `prova-parana-professor-v1.json`.
@@ -40,10 +42,17 @@ Os pacotes `pp-lp-7/8/9-v1.js` carregam dados codificados para contornar uma lim
 - O registro de Service Worker presente no núcleo legado foi mantido como redundância idempotente por segurança; consolidá-lo exige teste de entrada/PWA em todos os dispositivos.
 - O fallback de carregamento do tutor em `performance-v12.js` foi mantido porque serve como recuperação se a entrada principal do tutor falhar.
 
+## Auditoria de conteúdo — 12/09/2026
+- Matemática: referências CREP foram confrontadas com o objetivo efetivamente ensinado; associações indevidas foram removidas ou reclassificadas como integração interdisciplinar.
+- Programação: revisados tipos de dados, implementação, listas e recursão; códigos BNCC Computação foram refinados quando não eram o foco direto da aula.
+- Mundo/Cultura Digital: corrigida referência de cyberbullying/produção digital e refinadas definições de sistema operacional e criptografia.
+- Prova Paraná: mantido o princípio de trabalhar habilidades e recorrências sem afirmar antecipação de itens futuros.
+- Narração matemática: ampliada para raiz quadrada, aproximação, graus, porcentagem e relações de igualdade/desigualdade.
+
 ## Regras
 1. Atualizações offline essenciais exigem nova chave de cache em `sw.js`.
 2. A versão visível é controlada por `update-manager-v14.js`.
-3. Na narração: `R.A.I.` → **Raí**, seta à direita → **leva a**, `+` → **somado a**, `++` → **mais mais**; frações numéricas como `1/2` → **1 sobre 2**; `×` → **vezes**, `÷` → **dividido por**, `=` → **igual a**, `²` → **ao quadrado**, `³` → **ao cubo**. Barras em URLs e datas não devem ser convertidas como frações.
+3. Na narração: `R.A.I.` → **Raí**, seta à direita → **leva a**, `+` → **somado a**, `++` → **mais mais**; frações como `1/2` → **1 sobre 2**; `×` → **vezes**, `÷` → **dividido por**, `=` → **igual a**, `≈` → **aproximadamente**, `√2` → **raiz quadrada de 2**, `²` → **ao quadrado**, `³` → **ao cubo**, `45°` → **45 graus** e `%` → **por cento**. Barras em URLs e datas não devem ser convertidas como frações.
 4. O Especial Prova Paraná usa conteúdo autoral e fontes oficiais no botão **Professor**; não deve prometer antecipar itens da avaliação.
 5. No iOS, não tentar simular `beforeinstallprompt`; manter o fluxo nativo de Adicionar à Tela de Início e usar o assistente apenas para orientação.
 6. Antes de remover qualquer arquivo, conferir `index.html`, `sw.js` e este mapa.
