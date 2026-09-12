@@ -1,73 +1,29 @@
 # Tangram Educativo — runtime ativo
 
-Este arquivo documenta a composição da versão de produção para evitar duplicidades, exclusões acidentais e regressões.
+Mapa de produção para evitar duplicidades e exclusões acidentais.
 
 ## Produção
-
-- URL permanente: `/Html/tangram-prof-junior-v12/`
-- Versão lógica atual: **15.9.2**
-- Gerenciador de atualização/versão: `update-manager-v14.js`
-- Service Worker: `sw.js`
-
-## Núcleo carregado
-
-O `index.html` ainda reconstrói o núcleo histórico a partir dos cinco `chunk*.txt` da pasta `../tangram-prof-junior/` e depois aplica os patches atuais. Esses chunks são, portanto, dependências de produção e **não devem ser apagados** enquanto essa arquitetura permanecer.
+- URL: `/Html/tangram-prof-junior-v12/`
+- Versão lógica: **15.9.3**
+- Atualização/PWA: `update-manager-v14.js` + `sw.js`
+- O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
 ## JS ativo
-
-- `app-v10.js`
-- `comfort-v11.js`
-- `performance-v12.js`
-- `rai-tutor-v13.js`
-- `rai-aula-v17.js`
-- `game-polish-v13.js`
-- `gamer-official-v1.js`
-- `update-manager-v14.js`
+`app-v10.js`, `comfort-v11.js`, `performance-v12.js`, `rai-tutor-v13.js`, `rai-aula-v17.js`, `prova-parana-v1.js`, `game-polish-v13.js`, `gamer-official-v1.js`, `update-manager-v14.js`.
 
 ## CSS ativo
+`v10.css`, `comfort-v11.css`, `focus-v11.css`, `performance-v12.css`, `rai-tutor-v13.css`, `rai-aula-v14.css`, `rai-aula-v16.css`, `rai-aula-v17.css`, `prova-parana-v1.css`, `gamer-official-v1.css`, `shared-ui-v14.css`, `identity-v15.css`, `game-polish-v13.css`.
 
-- `v10.css`
-- `comfort-v11.css`
-- `focus-v11.css`
-- `performance-v12.css`
-- `rai-tutor-v13.css`
-- `rai-aula-v14.css`
-- `rai-aula-v16.css`
-- `rai-aula-v17.css`
-- `gamer-official-v1.css`
-- `shared-ui-v14.css`
-- `identity-v15.css`
-- `game-polish-v13.css`
+`rai-aula-v17.css` ainda herda estilos das versões 14 e 16; esses dois arquivos não são redundantes no runtime atual.
 
-### Atenção às aulas
+## Conteúdo pedagógico
+Trilhas permanentes: `rai-fundamentos-v17.json`, `rai-pensamento-v17.json`, `rai-programacao-v17.json`, `rai-matematica-v17.json`, `rai-mundo-digital-v17.json`.
 
-`rai-aula-v17.css` herda estilos-base de `rai-aula-v14.css` e `rai-aula-v16.css`. Apesar dos nomes antigos, os três CSS são atualmente necessários. Já o JS de aulas ativo é somente `rai-aula-v17.js`.
+Especial Prova Paraná 2026: `prova-parana-6-v1.json`, `prova-parana-7-v1.json`, `prova-parana-8a-v1.json`, `prova-parana-8b-v1.json`, `prova-parana-8c-v1.json`, `prova-parana-8d-v1.json`, `prova-parana-9-v1.json` e `prova-parana-professor-v1.json`.
 
-## Conteúdo pedagógico ativo
-
-- `rai-fundamentos-v17.json`
-- `rai-pensamento-v17.json`
-- `rai-programacao-v17.json`
-- `rai-matematica-v17.json`
-- `rai-mundo-digital-v17.json`
-- `content-v12.json`
-
-## PWA e identidade
-
-- `manifest.webmanifest`
-- `icon-192.png`
-- `icon-512.webp`
-- `apple-touch-icon.png`
-- `rai-icon.svg`
-- `tangram-share-v18.jpg`
-- `../tangram-prof-junior/rai-chalk.webp`
-
-## Regras de manutenção
-
-1. Não adicionar um novo arquivo versionado quando uma correção pequena puder ser feita no módulo funcional já ativo.
-2. Antes de remover um arquivo antigo, conferir `index.html`, `sw.js` e este mapa de runtime.
-3. Toda mudança em um recurso offline essencial deve atualizar a chave `CACHE` do `sw.js`.
-4. A versão mostrada ao usuário deve ser controlada por `APP_VERSION` em `update-manager-v14.js`.
-5. A narração pedagógica deve passar pelo normalizador central: `R.A.I.` é falado como **Raí**, seta para a direita como **leva a** e `+` como **somado a**. A sequência `++` é preservada como **mais mais**, evitando transformar `C++` em uma soma.
-6. Não reintroduzir cronômetros, animações ou listeners duplicados sem verificar os módulos Gamer, Performance e Conforto.
-7. Para uma futura consolidação do núcleo histórico, gerar primeiro uma versão estática paralela e validar jogabilidade, PWA/offline, Gamer, aulas e instalação antes de substituir a produção.
+## Regras
+1. Atualizações offline essenciais exigem nova chave de cache em `sw.js`.
+2. A versão visível é controlada por `update-manager-v14.js`.
+3. Na narração: `R.A.I.` → **Raí**, seta à direita → **leva a**, `+` → **somado a** e `++` → **mais mais**.
+4. O Especial Prova Paraná usa conteúdo autoral e fontes oficiais no botão **Professor**; não deve prometer antecipar itens da avaliação.
+5. Antes de remover qualquer arquivo, conferir `index.html`, `sw.js` e este mapa.
