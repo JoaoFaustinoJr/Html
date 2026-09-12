@@ -6,8 +6,8 @@ const AUDIO_VERSION='kids-audio-v3';
 const MUSIC_VERSION='kids-music-v2';
 const VOICE_EXPORT_VERSION='voice-export-v2';
 const FINAL_CARD_VERSION='completion-v2';
-const LAYOUT_VERSION='kids-layout-v6';
-const CARDS_UI_VERSION='kids-cards-ui-v1';
+const LAYOUT_VERSION='kids-layout-v7';
+const CARDS_UI_VERSION='kids-cards-ui-v2';
 const CARDS_EXPORT_VERSION='kids-cards-export-v1';
 
 self.addEventListener('install',()=>self.skipWaiting());
