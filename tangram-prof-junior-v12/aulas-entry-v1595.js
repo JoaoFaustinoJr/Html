@@ -1,10 +1,10 @@
 (()=>{
  if(window.__raiAulasEntry1595)return;window.__raiAulasEntry1595=true;
- const HIGHLIGHT_KEY='raiProvaParanaLaunch1596';
+ const HIGHLIGHT_KEY='raiProvaParanaLaunch1597';
  let queued=false,highlightDone=false;
  function showLaunchNotice(){
   let t=document.getElementById('raiPPLaunchNotice');
-  if(!t){t=document.createElement('div');t.id='raiPPLaunchNotice';t.className='rai-pp-launch-notice';t.setAttribute('role','status');t.setAttribute('aria-live','polite');t.innerHTML='<span>🎯</span><div><b>Especial Prova Paraná</b><small>Revisão de Matemática do 6º ao 9º ano</small></div>';document.body.appendChild(t)}
+  if(!t){t=document.createElement('div');t.id='raiPPLaunchNotice';t.className='rai-pp-launch-notice';t.setAttribute('role','status');t.setAttribute('aria-live','polite');t.innerHTML='<span>🎯</span><div><b>Especial Prova Paraná</b><small>Matemática e Língua Portuguesa • 6º ao 9º ano</small></div>';document.body.appendChild(t)}
   requestAnimationFrame(()=>t.classList.add('show'));
   clearTimeout(t._hide);t._hide=setTimeout(()=>t.classList.remove('show'),3200);
  }
