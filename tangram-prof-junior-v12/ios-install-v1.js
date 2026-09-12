@@ -42,13 +42,20 @@
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
 
+  // Intercepta no document durante a fase de captura. Assim o guia do iOS tem prioridade
+  // sobre o instalador universal legado do app-v10, sem duplicar listeners nos botões.
+  document.addEventListener('click',e=>{
+    const b=e.target?.closest?.('#installApp,#aboutInstall');
+    if(!b||standalone())return;
+    openGuide(e);
+  },true);
+
   function wire(){
     ['installApp','aboutInstall'].forEach(id=>{
-      const b=document.getElementById(id);if(!b||b.dataset.raiIosInstall==='1')return;
+      const b=document.getElementById(id);if(!b)return;
       b.dataset.raiIosInstall='1';
       if(id==='installApp')b.title='Instalar o Tangram no iPhone';
       if(id==='aboutInstall')b.textContent='＋ Instalar no iPhone';
-      b.addEventListener('click',openGuide,true);
     });
     if(standalone()){
       const a=document.getElementById('installApp');if(a)a.style.display='none';
