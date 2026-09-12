@@ -1,0 +1,3 @@
+@import url('./kids-cards-v8.css?v=8');
+/* Compatibilidade com a camada anterior enquanto o novo service worker assume. */
+#screen-home .tati-cutout-art{display:block!important;width:108%!important;height:108%!important;background-image:var(--tati-sprite)!important;background-repeat:no-repeat!important;background-size:200% 100%!important;background-position:var(--tati-pos) center!important;filter:saturate(1.03) contrast(1.02)!important}
