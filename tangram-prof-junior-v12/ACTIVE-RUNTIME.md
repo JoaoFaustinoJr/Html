@@ -4,8 +4,8 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 
 ## Produção
 - URL: `/Html/tangram-prof-junior-v12/`
-- Versão lógica: **15.9.8**
-- Cache PWA: **tangram-rai-v12-61**
+- Versão lógica: **15.9.9**
+- Cache PWA: **tangram-rai-v12-62**
 - Atualização/PWA: `update-manager-v14.js` + `sw.js`
 - O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
@@ -29,7 +29,16 @@ Trilhas permanentes: `rai-fundamentos-v17.json`, `rai-pensamento-v17.json`, `rai
 Os pacotes `pp-lp-7/8/9-v1.js` carregam dados codificados para contornar uma limitação de escrita do conector durante esta atualização. São dados pedagógicos estáticos, não executam lógica da aplicação. Em futura consolidação, preferir convertê-los para JSON comum.
 
 ## Instalação iPhone/iPad
-`ios-install-v1.js` e `ios-install-v1.css` interceptam o botão **Instalar** somente em iOS/iPadOS e mostram um assistente visual. No Safari, orienta Compartilhar → Adicionar à Tela de Início → Adicionar; em navegadores internos, orienta abrir no Safari e oferece cópia do endereço. O módulo injeta também metadados `apple-mobile-web-app-*` e não altera Android/Windows/Linux.
+`ios-install-v1.js` e `ios-install-v1.css` são carregados somente em iOS/iPadOS. O assistente intercepta o clique de instalação no `document` durante a fase de captura, portanto tem prioridade sobre o instalador universal legado de `app-v10.js` sem criar dois fluxos visíveis. No Safari, orienta Compartilhar → Adicionar à Tela de Início → Adicionar; em navegadores internos, orienta abrir no Safari e oferece cópia do endereço.
+
+## Auditoria de manutenção — 12/09/2026
+- Removido `INSTALL-FIX.txt`: nota histórica sem função no runtime.
+- Removido `brand-hero-v14.css`: folha antiga não carregada por `index.html`, `sw.js` nem pelo mapa ativo.
+- Assistente iOS deixou de registrar listeners duplicados diretamente nos botões de instalação.
+- `update-manager-v14.js` deixou de carregar CSS/JS do assistente iOS em Android, Windows e Linux.
+- Estrutura Base64/chunks foi preservada; nenhuma reconstrução do núcleo foi feita nesta limpeza.
+- O registro de Service Worker presente no núcleo legado foi mantido como redundância idempotente por segurança; consolidá-lo exige teste de entrada/PWA em todos os dispositivos.
+- O fallback de carregamento do tutor em `performance-v12.js` foi mantido porque serve como recuperação se a entrada principal do tutor falhar.
 
 ## Regras
 1. Atualizações offline essenciais exigem nova chave de cache em `sw.js`.
