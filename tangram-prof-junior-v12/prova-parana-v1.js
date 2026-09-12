@@ -13,25 +13,28 @@
       else{runtime.active=false;console.warn('Especial Prova Paraná: interface de Aulas não encontrada')}
       return;
     }
-    if(document.querySelector('.rai-pp-overlay')){runtime.mounted=true;ensureEntryPoints();return}
+    if(document.querySelector('.rai-pp-overlay')){runtime.mounted=true;runtime.ensureEntryPoints?.();return}
 
-    const DATA_FILES=['prova-parana-6-v1.json?v=1','prova-parana-7-v1.json?v=1','prova-parana-8a-v1.json?v=1','prova-parana-8b-v1.json?v=1','prova-parana-8c-v1.json?v=1','prova-parana-8d-v1.json?v=1','prova-parana-9-v1.json?v=1'];
-    const TEACHER_FILE='prova-parana-professor-v1.json?v=1';
-    const STORE='raiProvaParana2026V1';
-    let lessons=[],teacher=null,year=6,current=null,answered={};
+    const MATH_FILES=['prova-parana-6-v1.json?v=2','prova-parana-7-v1.json?v=2','prova-parana-8a-v1.json?v=2','prova-parana-8b-v1.json?v=2','prova-parana-8c-v1.json?v=2','prova-parana-8d-v1.json?v=2','prova-parana-9-v1.json?v=2'];
+    const STORE='raiProvaParana2026V2';
+    const banks={math:[],lp:[]},teachers={math:null,lp:null};
+    const subjectMeta={math:{icon:'🔢',label:'Matemática',short:'Matemática'},lp:{icon:'📖',label:'Língua Portuguesa',short:'Português'}};
+    let subject='math',year=6,current=null,answered={},ready=false;
     let saved={done:[]};
     try{saved={...saved,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
     if(!Array.isArray(saved.done))saved.done=[];
     const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(saved))}catch(e){}};
     const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const decodePack=v=>{const bin=atob(v||''),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return JSON.parse(new TextDecoder('utf-8').decode(bytes))};
 
     const overlay=document.createElement('div');
     overlay.className='rai-pp-overlay';
     overlay.innerHTML=`<div class="rai-pp-card" role="dialog" aria-modal="true" aria-labelledby="raiPPTitle">
-      <header class="rai-pp-head"><div class="rai-pp-mark">🎯</div><div><h3 id="raiPPTitle">Especial Prova Paraná 2026</h3><small>Matemática • revisão objetiva da Raí</small></div><button type="button" class="rai-pp-close" aria-label="Fechar">×</button></header>
+      <header class="rai-pp-head"><div class="rai-pp-mark">🎯</div><div><h3 id="raiPPTitle">Especial Prova Paraná 2026</h3><small id="raiPPSubtitle">Matemática + Língua Portuguesa • revisão objetiva da Raí</small></div><button type="button" class="rai-pp-close" aria-label="Fechar">×</button></header>
       <div class="rai-pp-body">
         <section id="raiPPHome">
-          <div class="rai-pp-intro"><b>Direto ao ponto.</b><span>Conteúdo curto, exemplo resolvido, atenção aos erros comuns e teste rápido. Priorização baseada em matrizes oficiais recentes.</span></div>
+          <div class="rai-pp-intro"><b>Direto ao ponto.</b><span>Revisão autoral por habilidades recorrentes: explicação curta, exemplo, erro comum e teste rápido.</span></div>
+          <div class="rai-pp-subjects" id="raiPPSubjects"></div>
           <div class="rai-pp-years" id="raiPPYears"></div>
           <div class="rai-pp-list" id="raiPPList"><div class="rai-pp-loading">Carregando especial...</div></div>
           <div class="rai-pp-note">Conteúdo autoral do Tangram Educativo. Não é material oficial da Seed-PR e não pretende antecipar questões da prova.</div>
@@ -44,14 +47,14 @@
     document.body.appendChild(overlay);
 
     const home=overlay.querySelector('#raiPPHome'),detail=overlay.querySelector('#raiPPDetail'),teacherView=overlay.querySelector('#raiPPTeacherView');
-    const years=overlay.querySelector('#raiPPYears'),list=overlay.querySelector('#raiPPList');
+    const subjects=overlay.querySelector('#raiPPSubjects'),years=overlay.querySelector('#raiPPYears'),list=overlay.querySelector('#raiPPList');
     const open=()=>{document.querySelector('.rai-lesson-overlay')?.classList.remove('show');overlay.classList.add('show');renderHome()};
     const close=()=>{overlay.classList.remove('show');try{window.__raiStopSpeak?.()}catch(e){}};
 
     function buildHero(){
       const hero=document.createElement('button');
       hero.type='button';hero.className='rai-pp-hero';hero.dataset.raiProvaParana='1';
-      hero.innerHTML='<span class="rai-pp-hero-ico">🎯</span><span><b>Especial Prova Paraná 2026</b><small>Revisão de Matemática • habilidades recorrentes • 6º ao 9º ano</small></span><em>ABRIR</em>';
+      hero.innerHTML='<span class="rai-pp-hero-ico">🎯</span><span><b>Especial Prova Paraná 2026</b><small>🔢 Matemática + 📖 Língua Portuguesa • habilidades recorrentes • 6º ao 9º ano</small></span><em>ABRIR</em>';
       hero.addEventListener('click',open);
       return hero;
     }
@@ -67,10 +70,7 @@
     runtime.ensureEntryPoints=ensureEntryPoints;
     ensureEntryPoints();
     let mountQueued=false;
-    const mountObserver=new MutationObserver(()=>{
-      if(mountQueued)return;mountQueued=true;
-      requestAnimationFrame(()=>{mountQueued=false;ensureEntryPoints()});
-    });
+    const mountObserver=new MutationObserver(()=>{if(mountQueued)return;mountQueued=true;requestAnimationFrame(()=>{mountQueued=false;ensureEntryPoints()})});
     mountObserver.observe(document.body,{childList:true,subtree:true});
     runtime.observer=mountObserver;
 
@@ -79,23 +79,25 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('show'))close()});
 
     function recurrenceClass(v){return /muito/i.test(v||'')?'very':'high'}
+    function renderSubjects(){subjects.innerHTML=Object.entries(subjectMeta).map(([k,m])=>`<button type="button" data-subject="${k}" class="${k===subject?'active':''}"><span>${m.icon}</span><b>${m.label}</b><small>${k==='math'?'números • álgebra • geometria':'leitura • interpretação • linguagem'}</small></button>`).join('')}
     function renderYears(){years.innerHTML=[6,7,8,9].map(y=>`<button type="button" data-year="${y}" class="${y===year?'active':''}">${y}º ano</button>`).join('')}
     function renderHome(){
-      current=null;answered={};home.hidden=false;detail.hidden=true;teacherView.hidden=true;renderYears();
-      const arr=lessons.filter(l=>Number(l.year)===year);
-      list.innerHTML=arr.length?arr.map((l,i)=>`<button type="button" class="rai-pp-item" data-id="${esc(l.id)}"><span class="n">${i+1}</span><span class="copy"><b>${esc(l.title)}</b><small>${esc(l.summary)}</small><u class="${recurrenceClass(l.recurrence)}">Recorrência ${esc(l.recurrence)}</u></span><em>${saved.done.includes(l.id)?'✓':'›'}</em></button>`).join(''):'<div class="rai-pp-loading">Conteúdo indisponível para este ano.</div>';
+      current=null;answered={};home.hidden=false;detail.hidden=true;teacherView.hidden=true;renderSubjects();renderYears();
+      const arr=banks[subject].filter(l=>Number(l.year)===year);
+      list.innerHTML=arr.length?arr.map((l,i)=>`<button type="button" class="rai-pp-item" data-id="${esc(l.id)}"><span class="n">${i+1}</span><span class="copy"><b>${esc(l.title)}</b><small>${esc(l.summary)}</small><u class="${recurrenceClass(l.recurrence)}">Recorrência ${esc(l.recurrence)}</u></span><em>${saved.done.includes(l.id)?'✓':'›'}</em></button>`).join(''):`<div class="rai-pp-loading">${ready?'Conteúdo indisponível para esta seleção.':'Carregando especial...'}</div>`;
     }
+    subjects.addEventListener('click',e=>{const b=e.target.closest('button[data-subject]');if(!b)return;subject=b.dataset.subject;renderHome()});
     years.addEventListener('click',e=>{const b=e.target.closest('button[data-year]');if(!b)return;year=Number(b.dataset.year);renderHome()});
     list.addEventListener('click',e=>{const b=e.target.closest('.rai-pp-item');if(!b)return;openLesson(b.dataset.id)});
 
     function openLesson(id){
-      current=lessons.find(l=>l.id===id);if(!current)return;answered={};
+      current=banks[subject].find(l=>l.id===id);if(!current)return;answered={};
       home.hidden=true;teacherView.hidden=true;detail.hidden=false;
       const rules=(current.rules||[]).map(x=>`<li>${esc(x)}</li>`).join('');
       const desc=(current.descriptors||[]).map(x=>`<span>${esc(x)}</span>`).join('');
       const quiz=(current.quiz||[]).map((q,i)=>`<div class="rai-pp-q" data-q="${i}"><p><b>${i+1}.</b> ${esc(q.q)}</p><div class="rai-pp-options">${q.options.map((o,j)=>`<button type="button" data-opt="${j}">${String.fromCharCode(65+j)}) ${esc(o)}</button>`).join('')}</div><div class="rai-pp-feedback"></div></div>`).join('');
-      detail.innerHTML=`<div class="rai-pp-crumb"><button type="button" data-back>← ${current.year}º ano</button><span>Especial Prova Paraná</span></div>
-        <div class="rai-pp-title-row"><div><small>${current.year}º ANO</small><h4>${esc(current.title)}</h4></div><u class="${recurrenceClass(current.recurrence)}">Recorrência ${esc(current.recurrence)}</u></div>
+      detail.innerHTML=`<div class="rai-pp-crumb"><button type="button" data-back>← ${current.year}º ano</button><span>${subjectMeta[subject].icon} ${subjectMeta[subject].label}</span></div>
+        <div class="rai-pp-title-row"><div><small>${current.year}º ANO • ${esc(subjectMeta[subject].label.toUpperCase())}</small><h4>${esc(current.title)}</h4></div><u class="${recurrenceClass(current.recurrence)}">Recorrência ${esc(current.recurrence)}</u></div>
         ${desc?`<div class="rai-pp-desc">${desc}</div>`:''}
         <div class="rai-pp-summary">${esc(current.summary)}</div>
         <div class="rai-pp-block"><b>⚡ Lembre disto</b><ul>${rules}</ul></div>
@@ -122,18 +124,18 @@
 
     function speakCurrent(){
       if(!current)return;
-      const parts=[`${current.year}º ano. ${current.title}.`,current.summary,'Lembre disto.',...(current.rules||[]),`Exemplo. ${current.example?.problem||''} ${current.example?.solution||''}`,`Atenção. ${current.pitfall||''}`];
+      const parts=[`${subjectMeta[subject].label}. ${current.year}º ano. ${current.title}.`,current.summary,'Lembre disto.',...(current.rules||[]),`Exemplo. ${current.example?.problem||''} ${current.example?.solution||''}`,`Atenção. ${current.pitfall||''}`];
       try{window.__raiSpeak?.(parts,{force:true,pause:330})}catch(e){}
     }
 
     overlay.querySelector('#raiPPTeacher').addEventListener('click',renderTeacher);
     function renderTeacher(){
-      home.hidden=true;detail.hidden=true;teacherView.hidden=false;
+      const teacher=teachers[subject];home.hidden=true;detail.hidden=true;teacherView.hidden=false;
       if(!teacher){teacherView.innerHTML='<div class="rai-pp-loading">Carregando orientações...</div>';return}
       const dirs=(teacher.directives||[]).map(x=>`<li>${esc(x)}</li>`).join('');
       const rec=(teacher.recurrences||[]).map(r=>`<div class="rai-pp-rec"><b>${esc(r.year)}</b><ul>${(r.items||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('');
       const sources=(teacher.sources||[]).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">↗ ${esc(s.label)}</a>`).join('');
-      teacherView.innerHTML=`<div class="rai-pp-crumb"><button type="button" data-back>← Especial</button><span>Professor</span></div><h4>ⓘ ${esc(teacher.title)}</h4>
+      teacherView.innerHTML=`<div class="rai-pp-crumb"><button type="button" data-back>← Especial</button><span>${subjectMeta[subject].icon} ${esc(subjectMeta[subject].label)}</span></div><h4>ⓘ ${esc(teacher.title)}</h4>
         <div class="rai-pp-teacher-block"><b>1. Diretrizes oficiais</b><ul>${dirs}</ul></div>
         <div class="rai-pp-teacher-block"><b>2. Recorrências priorizadas</b><p>Começamos por elas porque são as habilidades que mais justificam uma revisão concentrada.</p>${rec}</div>
         <div class="rai-pp-teacher-block"><b>3. Como a seleção foi feita</b><p>${esc(teacher.method)}</p></div>
@@ -144,18 +146,22 @@
       teacherView.scrollTop=0;
     }
 
+    const json=u=>fetch(u,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(u);return r.json()});
     Promise.all([
-      Promise.all(DATA_FILES.map(f=>fetch(f,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(f);return r.json()}))),
-      fetch(TEACHER_FILE,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(TEACHER_FILE);return r.json()})
-    ]).then(([sets,t])=>{
-      lessons=sets.flatMap(x=>Array.isArray(x.lessons)?x.lessons:[]);
-      teacher=t;
+      Promise.all(MATH_FILES.map(json)),
+      json('prova-parana-portugues-6-v1.json?v=2'),
+      Promise.all([import('./pp-lp-7-v1.js?v=2'),import('./pp-lp-8-v1.js?v=2'),import('./pp-lp-9-v1.js?v=2')]),
+      json('prova-parana-professor-v1.json?v=2'),
+      json('prova-parana-portugues-professor-v1.json?v=2')
+    ]).then(([mathSets,lp6,_packs,mathTeacher,lpTeacher])=>{
+      banks.math=mathSets.flatMap(x=>Array.isArray(x.lessons)?x.lessons:[]);
+      const lpSets=[lp6,decodePack(window.__raiPPLP7),decodePack(window.__raiPPLP8),decodePack(window.__raiPPLP9)];
+      banks.lp=lpSets.flatMap(x=>Array.isArray(x.lessons)?x.lessons:[]);
+      teachers.math=mathTeacher;teachers.lp=lpTeacher;ready=true;
       if(overlay.classList.contains('show'))renderHome();
     }).catch(err=>{console.warn('Especial Prova Paraná',err);list.innerHTML='<div class="rai-pp-loading">Não foi possível carregar o especial. Atualize o aplicativo e tente novamente.</div>'});
 
-    runtime.mounted=true;
-    runtime.open=open;
-    runtime.close=close;
+    runtime.mounted=true;runtime.open=open;runtime.close=close;
   }
 
   init();
