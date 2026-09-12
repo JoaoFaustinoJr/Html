@@ -1,28 +1,16 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_KIDS_CARDS_EXPORT_V3__)return;
-window.__TIA_TATI_KIDS_CARDS_EXPORT_V3__=true;
-const notice=t=>{if(window.TiaTatiCardsNotice)window.TiaTatiCardsNotice(t);};
+if(window.__TIA_TATI_KIDS_CARDS_EXPORT_V5__)return;
+window.__TIA_TATI_KIDS_CARDS_EXPORT_V5__=true;
+const q=(s,r=document)=>r.querySelector(s);const notice=t=>window.TiaTatiCardsNotice&&window.TiaTatiCardsNotice(t);
 function loadImage(src){return new Promise((resolve,reject)=>{const img=new Image();img.decoding='async';img.onload=()=>resolve(img);img.onerror=reject;img.src=src;});}
-async function stickerBlob(card){
- const img=await loadImage(card.sprite+'?v=4');
- const half=img.naturalWidth/2, sx=card.side?half:0, sy=0, sw=half, sh=img.naturalHeight;
- const scale=3, canvas=document.createElement('canvas');canvas.width=Math.round(sw*scale);canvas.height=Math.round(sh*scale);
- const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(img,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
- return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('blob')),'image/png',1));
-}
-async function downloadSticker(card){
- try{
-  const blob=await stickerBlob(card),url=URL.createObjectURL(blob),name='figurinha-tia-tati-'+card.id+'.png';
-  const a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),5000);notice('Figurinha enviada para Downloads 💗');
- }catch(err){
-  try{
-   const blob=await stickerBlob(card),file=new File([blob],'figurinha-tia-tati-'+card.id+'.png',{type:'image/png'});
-   if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){await navigator.share({title:card.title,files:[file]});return;}
-  }catch(_){}
-  notice('Não foi possível baixar agora. Tente novamente.');
- }
-}
-window.TiaTatiCardExport={downloadSticker};
+function blobPath(ctx){ctx.beginPath();ctx.moveTo(135,30);ctx.bezierCurveTo(230,6,325,28,400,18);ctx.bezierCurveTo(535,0,655,62,682,165);ctx.bezierCurveTo(704,250,675,318,692,402);ctx.bezierCurveTo(713,510,642,642,535,676);ctx.bezierCurveTo(430,710,356,682,278,696);ctx.bezierCurveTo(160,716,52,642,34,526);ctx.bezierCurveTo(18,430,48,363,34,277);ctx.bezierCurveTo(14,160,36,70,135,30);ctx.closePath();}
+async function stickerCanvas(card){const img=await loadImage(card.sprite+'?v=6'),half=img.naturalWidth/2,sx=card.side?half:0,sw=half,sh=img.naturalHeight,canvas=document.createElement('canvas');canvas.width=720;canvas.height=720;const c=canvas.getContext('2d');c.clearRect(0,0,720,720);c.save();c.shadowColor='rgba(21,70,105,.22)';c.shadowBlur=18;c.fillStyle='#fff';blobPath(c);c.fill();c.restore();c.save();blobPath(c);c.clip();const w=636,h=636,scale=Math.min(w/sw,h/sh),dw=sw*scale,dh=sh*scale;c.fillStyle='#fff8f3';c.fillRect(0,0,720,720);c.drawImage(img,sx,0,sw,sh,360-dw/2,360-dh/2,dw,dh);c.restore();c.lineWidth=15;c.strokeStyle='#fff';blobPath(c);c.stroke();return canvas;}
+function toBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('blob')),'image/png',1));}
+function saveBlob(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),15000);}
+function ensurePreview(){let m=q('#tatiStickerPreview');if(m)return m;m=document.createElement('div');m.id='tatiStickerPreview';m.className='tati-sticker-modal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.innerHTML=`<div class="tati-sticker-sheet"><div class="tati-sticker-modal-head"><div><strong>💗 Figurinha da Tia Tati</strong><small>Veja inteira e salve no aparelho.</small></div><button class="tati-sticker-close" type="button">×</button></div><div class="tati-sticker-preview-wrap"><img class="tati-sticker-preview-img" alt=""></div><strong class="tati-sticker-preview-title"></strong><p class="tati-sticker-preview-tip">Se o navegador não iniciar o download, pressione a imagem e escolha <b>Salvar imagem</b>.</p><button class="tati-sticker-save-again" type="button">⬇️ Baixar PNG</button></div>`;document.body.appendChild(m);m.querySelector('.tati-sticker-close').onclick=closePreview;m.addEventListener('click',e=>{if(e.target===m)closePreview();});return m;}
+function closePreview(){q('#tatiStickerPreview')?.classList.remove('open');document.body.classList.remove('tati-sticker-modal-open');}
+async function previewSticker(card){try{const canvas=await stickerCanvas(card),m=ensurePreview();m.querySelector('.tati-sticker-preview-img').src=canvas.toDataURL('image/png');m.querySelector('.tati-sticker-preview-img').alt=card.title;m.querySelector('.tati-sticker-preview-title').textContent=card.title;m.querySelector('.tati-sticker-save-again').onclick=async()=>{saveBlob(await toBlob(canvas),'figurinha-tia-tati-'+card.id+'.png');notice('Figurinha enviada para Downloads 💗');};m.classList.add('open');document.body.classList.add('tati-sticker-modal-open');}catch(_){notice('Não foi possível abrir a figurinha agora.');}}
+async function downloadSticker(card){try{const canvas=await stickerCanvas(card),blob=await toBlob(canvas),name='figurinha-tia-tati-'+card.id+'.png';if(window.showSaveFilePicker){try{const h=await window.showSaveFilePicker({suggestedName:name,types:[{description:'Imagem PNG',accept:{'image/png':['.png']}}]});const w=await h.createWritable();await w.write(blob);await w.close();notice('Figurinha salva 💗');return;}catch(e){if(e&&e.name==='AbortError')return;}}saveBlob(blob,name);notice('Figurinha enviada para Downloads 💗');setTimeout(()=>previewSticker(card),450);}catch(_){notice('Abra a figurinha e salve a imagem.');previewSticker(card);}}
+window.TiaTatiCardExport={downloadSticker,previewSticker,closePreview};
 })();
