@@ -10,7 +10,7 @@
     "keyTerm": "arquitetura básica",
     "keyDefinition": "Organização dos principais componentes de um sistema computacional: entrada, processamento, memória/armazenamento e saída.",
     "concept": "Computadores recebem dados por dispositivos de entrada, processam instruções, armazenam informações e apresentam resultados por dispositivos de saída. O sistema operacional gerencia recursos e permite a execução de programas.",
-    "example": "Teclado envia entrada; processador executa instruções; SSD guarda arquivos; monitor apresenta saída; sistema operacional coordena tudo.",
+    "example": "Teclado envia entrada; processador executa instruções; SSD guarda arquivos; monitor apresenta saída; o sistema operacional gerencia recursos e oferece serviços aos programas.",
     "formula": "entrada → processamento → armazenamento/saída",
     "representation": "teclado/sensor → CPU/memória → arquivo/tela/atuador",
     "use": "Computadores, celulares, tablets, consoles, robôs e sistemas embarcados.",
@@ -21,18 +21,9 @@
     "reference": "EF05CO05, EF05CO06 e EF05CO07; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Mostre componentes reais ou imagens; uma atividade desplugada pode simular o fluxo de dados entre estudantes.",
     "fixation": [
-      {
-        "q": "O que significa “arquitetura básica” nesta aula?",
-        "a": "Organização dos principais componentes de um sistema computacional: entrada, processamento, memória/armazenamento e saída."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Computadores, celulares, tablets, consoles, robôs e sistemas embarcados."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Hardware são componentes físicos; sistema operacional é software que gerencia recursos e programas."
-      }
+      {"q": "O que significa “arquitetura básica” nesta aula?", "a": "Organização dos principais componentes de um sistema computacional: entrada, processamento, memória/armazenamento e saída."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Computadores, celulares, tablets, consoles, robôs e sistemas embarcados."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Hardware são componentes físicos; sistema operacional é software que gerencia recursos e programas."}
     ]
   },
   {
@@ -57,18 +48,9 @@
     "reference": "EF05CO08, EF05CO09, EF05CO10 e EF05CO11; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Use exemplos reais sem expor dados pessoais dos estudantes.",
     "fixation": [
-      {
-        "q": "O que significa “confiabilidade da informação” nesta aula?",
-        "a": "Grau em que uma informação pode ser considerada consistente, verificável e sustentada por fonte adequada."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Pesquisas, trabalhos escolares, redes sociais, vídeos, imagens e produção de conteúdo."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Popularidade, número de compartilhamentos ou aparência profissional não garantem veracidade."
-      }
+      {"q": "O que significa “confiabilidade da informação” nesta aula?", "a": "Grau em que uma informação pode ser considerada consistente, verificável e sustentada por fonte adequada."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Pesquisas, trabalhos escolares, redes sociais, vídeos, imagens e produção de conteúdo."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Popularidade, número de compartilhamentos ou aparência profissional não garantem veracidade."}
     ]
   },
   {
@@ -93,18 +75,9 @@
     "reference": "EF06CO07 e EF06CO08; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "A atividade com cartões é uma boa abordagem desplugada antes de falar em redes.",
     "fixation": [
-      {
-        "q": "O que significa “pacote de dados” nesta aula?",
-        "a": "Parte de uma informação maior preparada para ser transmitida por uma rede e reconstruída no destino."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Internet, nuvem, mensagens, streaming, envio de arquivos e sistemas escolares."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Armazenar localmente e armazenar na nuvem são situações diferentes; ambas exigem organização e cuidados."
-      }
+      {"q": "O que significa “pacote de dados” nesta aula?", "a": "Parte de uma informação maior preparada para ser transmitida por uma rede e reconstruída no destino."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Internet, nuvem, mensagens, streaming, envio de arquivos e sistemas escolares."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Armazenar localmente e armazenar na nuvem são situações diferentes; ambas exigem organização e cuidados."}
     ]
   },
   {
@@ -129,18 +102,9 @@
     "reference": "EF06CO09 e EF06CO10; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Relacionar com logística reversa e realidade local torna a aula mais concreta.",
     "fixation": [
-      {
-        "q": "O que significa “responsabilidade digital” nesta aula?",
-        "a": "Uso ético, respeitoso, seguro e consciente das tecnologias e de seus impactos sociais e ambientais."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Mensagens, fóruns, redes, jogos on-line, compras, descarte de eletrônicos e projetos escolares."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Responsabilidade digital não é só 'não fazer algo errado'; inclui escolhas de consumo e impacto ambiental."
-      }
+      {"q": "O que significa “responsabilidade digital” nesta aula?", "a": "Uso ético, respeitoso, seguro e consciente das tecnologias e de seus impactos sociais e ambientais."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Mensagens, fóruns, redes, jogos on-line, compras, descarte de eletrônicos e projetos escolares."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Responsabilidade digital não é só 'não fazer algo errado'; inclui escolhas de consumo e impacto ambiental."}
     ]
   },
   {
@@ -165,18 +129,9 @@
     "reference": "EF07CO06 e EF07CO07; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Evite transformar a aula em instrução ofensiva; foque em princípios de proteção e comportamento seguro.",
     "fixation": [
-      {
-        "q": "O que significa “protocolo” nesta aula?",
-        "a": "Conjunto de regras compartilhadas que permite que dispositivos ou sistemas se comuniquem de forma consistente."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Internet, Wi‑Fi, aplicativos de mensagens, redes escolares e sistemas conectados."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Segurança não depende de uma única senha; envolve pessoas, procedimentos e tecnologia."
-      }
+      {"q": "O que significa “protocolo” nesta aula?", "a": "Conjunto de regras compartilhadas que permite que dispositivos ou sistemas se comuniquem de forma consistente."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Internet, Wi‑Fi, aplicativos de mensagens, redes escolares e sistemas conectados."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Segurança não depende de uma única senha; envolve pessoas, procedimentos e tecnologia."}
     ]
   },
   {
@@ -198,21 +153,12 @@
     "guided": "Analise um caso fictício de comentário ofensivo e proponha formas seguras de interromper a situação e buscar apoio.",
     "challenge": "Que cuidados devem ser tomados ao publicar um vídeo de projeto escolar com outras pessoas aparecendo?",
     "answer": "Consentimento/autorização adequada, respeito à imagem, contexto, autoria dos materiais usados e proteção de dados pessoais.",
-    "reference": "EF07CO08, EF07CO09, EF07CO10 e EF07CO11; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
+    "reference": "EF07CO08, EF07CO09 e EF07CO11; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Use casos fictícios e protocolos de proteção da escola; não exponha situações pessoais em público.",
     "fixation": [
-      {
-        "q": "O que significa “cyberbullying” nesta aula?",
-        "a": "Prática de intimidação, humilhação, exposição ou agressão repetida por meios digitais."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Redes sociais, grupos, vídeos, podcasts, sites e trabalhos colaborativos."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "'Foi só brincadeira' não elimina impacto, exposição ou responsabilidade."
-      }
+      {"q": "O que significa “cyberbullying” nesta aula?", "a": "Prática de intimidação, humilhação, exposição ou agressão repetida por meios digitais."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Redes sociais, grupos, vídeos, podcasts, sites e trabalhos colaborativos."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "'Foi só brincadeira' não elimina impacto, exposição ou responsabilidade."}
     ]
   },
   {
@@ -237,18 +183,9 @@
     "reference": "EF08CO05 e EF08CO06; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Use analogias de equipes trabalhando em paralelo, mas deixe claro que analogia não substitui o modelo técnico.",
     "fixation": [
-      {
-        "q": "O que significa “sistema distribuído” nesta aula?",
-        "a": "Sistema cujas partes ou recursos estão em mais de um dispositivo e cooperam por meio de uma rede."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Internet, nuvem, streaming, jogos on-line, serviços web e colaboração."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Internet não é um único computador central; é uma rede de redes com múltiplas camadas e sistemas."
-      }
+      {"q": "O que significa “sistema distribuído” nesta aula?", "a": "Sistema cujas partes ou recursos estão em mais de um dispositivo e cooperam por meio de uma rede."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Internet, nuvem, streaming, jogos on-line, serviços web e colaboração."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Internet não é um único computador central; é uma rede de redes com múltiplas camadas e sistemas."}
     ]
   },
   {
@@ -273,18 +210,9 @@
     "reference": "EF08CO07, EF08CO08, EF08CO09, EF08CO10 e EF08CO11; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Trabalhe com exemplos simulados e jamais peça aos alunos que exponham credenciais ou dados pessoais reais.",
     "fixation": [
-      {
-        "q": "O que significa “dado pessoal” nesta aula?",
-        "a": "Informação relacionada a uma pessoa identificada ou identificável, cujo uso pode envolver riscos e responsabilidades."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Redes sociais, jogos, compras, aplicativos, serviços educacionais e pesquisas."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Aceitar termos sem ler não elimina consequências; fonte digital também pode conter vieses mesmo quando os dados são verdadeiros."
-      }
+      {"q": "O que significa “dado pessoal” nesta aula?", "a": "Informação relacionada a uma pessoa identificada ou identificável, cujo uso pode envolver riscos e responsabilidades."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Redes sociais, jogos, compras, aplicativos, serviços educacionais e pesquisas."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Aceitar termos sem ler não elimina consequências; fonte digital também pode conter vieses mesmo quando os dados são verdadeiros."}
     ]
   },
   {
@@ -296,11 +224,11 @@
     "axis": "Mundo Digital",
     "objective": "Compreender em nível conceitual malwares, ataques e o papel da criptografia na proteção de dados.",
     "keyTerm": "criptografia",
-    "keyDefinition": "Técnica de transformar dados para que apenas quem possui o mecanismo apropriado possa interpretá-los.",
+    "keyDefinition": "Conjunto de técnicas que transforma dados com algoritmos e, em muitos sistemas, chaves, para impedir ou dificultar a leitura por pessoas não autorizadas.",
     "concept": "Malwares são softwares maliciosos que podem comprometer dispositivos ou dados. Criptografia protege informações durante armazenamento ou transmissão. A compreensão escolar deve priorizar prevenção, segurança e princípios, não técnicas ofensivas.",
     "example": "Conexões seguras usam criptografia para reduzir o risco de terceiros interpretarem informações transmitidas.",
     "formula": "mensagem legível → cifragem → dado protegido → decifragem autorizada",
-    "representation": "texto → chave/algoritmo → cifra",
+    "representation": "texto → algoritmo/chave → cifra",
     "use": "Mensagens, bancos, compras on-line, backups, redes e autenticação.",
     "observe": "Criptografia não substitui boas práticas de segurança; ela é uma camada dentro de uma estratégia maior.",
     "guided": "Use uma cifra simples de substituição para demonstrar o princípio de transformar e recuperar uma mensagem, sem tratar isso como segurança moderna.",
@@ -309,18 +237,9 @@
     "reference": "EF09CO04 e EF09CO05; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Mantenha a abordagem defensiva e conceitual, adequada ao contexto educacional.",
     "fixation": [
-      {
-        "q": "O que significa “criptografia” nesta aula?",
-        "a": "Técnica de transformar dados para que apenas quem possui o mecanismo apropriado possa interpretá-los."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Mensagens, bancos, compras on-line, backups, redes e autenticação."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Criptografia não substitui boas práticas de segurança; ela é uma camada dentro de uma estratégia maior."
-      }
+      {"q": "O que significa “criptografia” nesta aula?", "a": "Conjunto de técnicas que transforma dados com algoritmos e, em muitos sistemas, chaves, para impedir ou dificultar a leitura por pessoas não autorizadas."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Mensagens, bancos, compras on-line, backups, redes e autenticação."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Criptografia não substitui boas práticas de segurança; ela é uma camada dentro de uma estratégia maior."}
     ]
   },
   {
@@ -345,18 +264,9 @@
     "reference": "EF09CO06, EF09CO07, EF09CO08, EF09CO09 e EF09CO10; BNCC Computação; Referencial Curricular do Paraná, Volume 2.",
     "teacherTip": "Relacionar com problemas da comunidade fortalece protagonismo e aplicação crítica.",
     "fixation": [
-      {
-        "q": "O que significa “cidadania digital” nesta aula?",
-        "a": "Participação crítica, ética, responsável e consciente em ambientes e decisões mediados por tecnologias digitais."
-      },
-      {
-        "q": "Onde esse conceito pode aparecer fora desta tela?",
-        "a": "Políticas públicas, escola, trabalho, redes, inteligência artificial, serviços digitais e produção de conteúdo."
-      },
-      {
-        "q": "Qual ponto merece atenção para não confundir o conceito?",
-        "a": "Tecnologia não é neutra em seus efeitos sociais: decisões de projeto, acesso e uso influenciam quem se beneficia e quem fica de fora."
-      }
+      {"q": "O que significa “cidadania digital” nesta aula?", "a": "Participação crítica, ética, responsável e consciente em ambientes e decisões mediados por tecnologias digitais."},
+      {"q": "Onde esse conceito pode aparecer fora desta tela?", "a": "Políticas públicas, escola, trabalho, redes, inteligência artificial, serviços digitais e produção de conteúdo."},
+      {"q": "Qual ponto merece atenção para não confundir o conceito?", "a": "Tecnologia não é neutra em seus efeitos sociais: decisões de projeto, acesso e uso influenciam quem se beneficia e quem fica de fora."}
     ]
   }
 ]
