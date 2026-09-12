@@ -1,0 +1,2 @@
+/* Cards da Tia Tati v1 */
+.tati-cards-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
