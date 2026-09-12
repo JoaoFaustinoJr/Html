@@ -8,12 +8,14 @@ let enabled=localStorage.getItem(PREF)!=='0';
 let ctx=null, musicBus=null, master=null, timer=null, nextStepTime=0, step=0, started=false, duckUntil=0;
 const BPM=118;
 const STEP=60/BPM/4;
+const MUSIC_LEVEL=.34;
+const DUCK_LEVEL=.10;
 
 function ensureAudio(){
   if(!enabled)return null;
   const AC=window.AudioContext||window.webkitAudioContext;
   if(!AC)return null;
-  if(!ctx){ctx=new AC();master=ctx.createGain();musicBus=ctx.createGain();master.gain.value=.58;musicBus.gain.value=.26;musicBus.connect(master);master.connect(ctx.destination);}
+  if(!ctx){ctx=new AC();master=ctx.createGain();musicBus=ctx.createGain();master.gain.value=.72;musicBus.gain.value=MUSIC_LEVEL;musicBus.connect(master);master.connect(ctx.destination);}
   if(ctx.state==='suspended')ctx.resume().catch(()=>{});
   return ctx;
 }
@@ -26,7 +28,7 @@ function hat(at,accent=false){noise(at,.035,accent ? .022 : .012,6200);}
 const bass=[55,55,65.41,55,73.42,65.41,49,55];
 const arp=[220,261.63,329.63,392,329.63,261.63,246.94,329.63];
 function scheduleStep(s,at){const pos=s%16;if(pos===0||pos===8)kick(at);if(pos===4||pos===12)snare(at);if(pos%2===0)hat(at,pos%4===0);if(pos%2===0){const n=bass[(Math.floor(s/2))%bass.length];osc(n,at,.21,'sawtooth',.027,n*.98);}if(pos%2===1){const n=arp[Math.floor(s/2)%arp.length];osc(n,at,.11,'triangle',.018,n*1.002);}if(pos===14){osc(659.25,at,.09,'sine',.022);osc(783.99,at+.07,.12,'sine',.018);}}
-function scheduler(){if(!ctx||!started)return;while(nextStepTime<ctx.currentTime+.12){scheduleStep(step,nextStepTime);step++;nextStepTime+=STEP;}const ducked=performance.now()<duckUntil;const target=ducked ? .075 : .26;musicBus.gain.cancelScheduledValues(ctx.currentTime);musicBus.gain.setTargetAtTime(enabled ? target : .0001,ctx.currentTime,.08);}
+function scheduler(){if(!ctx||!started)return;while(nextStepTime<ctx.currentTime+.12){scheduleStep(step,nextStepTime);step++;nextStepTime+=STEP;}const ducked=performance.now()<duckUntil;const target=ducked ? DUCK_LEVEL : MUSIC_LEVEL;musicBus.gain.cancelScheduledValues(ctx.currentTime);musicBus.gain.setTargetAtTime(enabled ? target : .0001,ctx.currentTime,.08);}
 function start(){if(!enabled||started)return;if(!ensureAudio())return;started=true;step=0;nextStepTime=ctx.currentTime+.04;timer=setInterval(scheduler,35);updateBtn();}
 function stop(){started=false;if(timer){clearInterval(timer);timer=null;}if(musicBus&&ctx)musicBus.gain.setTargetAtTime(.0001,ctx.currentTime,.06);updateBtn();}
 function setEnabled(v){enabled=!!v;localStorage.setItem(PREF,enabled?'1':'0');if(enabled)start();else stop();updateBtn();}
