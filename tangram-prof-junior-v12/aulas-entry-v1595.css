@@ -1,0 +1,11 @@
+/* v15.9.5 — Aulas sempre visível no cabeçalho; botão flutuante fica reservado ao modo Ampliar */
+#tangram-levels .tl-brand-tools{grid-template-columns:repeat(6,minmax(0,1fr))!important;width:min(390px,50vw)!important}
+#tangram-levels #raiLessonHeaderButton{order:4!important;position:relative!important;border-color:#78d9ca!important;background:linear-gradient(180deg,#0b6d68,#0a514f)!important;color:#effffb!important}
+#tangram-levels #performanceApp{order:5!important}
+#tangram-levels #aboutApp{order:6!important}
+#tangram-levels:not(.tl-focus) #raiLessonDock{display:none!important}
+#tangram-levels.tl-focus #raiLessonHeaderButton{display:none!important}
+#tangram-levels.tl-focus #raiLessonDock{display:inline-flex!important;position:fixed!important;top:max(8px,env(safe-area-inset-top))!important;right:8px!important;bottom:auto!important;z-index:2147483640!important}
+.rai-lesson-header-pr{position:absolute;right:2px;top:2px;display:grid;place-items:center;min-width:14px;height:14px;padding:0 2px;border-radius:999px;background:#ffd54a;color:#29220c;border:1px solid #fff0a0;font:950 6.5px/1 system-ui;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.28)}
+@media(max-width:640px){#tangram-levels .tl-brand-tools{width:100%!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:4px!important}#tangram-levels #raiLessonHeaderButton{min-height:35px!important;padding:3px 1px!important;font-size:12px!important}#tangram-levels #raiLessonHeaderButton span{font-size:7px!important}.rai-lesson-header-pr{right:1px;top:1px;min-width:12px;height:12px;font-size:6px}}
+@media(max-width:360px){#tangram-levels .tl-mini-action{padding-left:1px!important;padding-right:1px!important}#tangram-levels .tl-mini-action span{font-size:6.5px!important}}
