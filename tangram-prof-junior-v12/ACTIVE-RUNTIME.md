@@ -5,7 +5,7 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 ## Produção
 - URL: `/Html/tangram-prof-junior-v12/`
 - Versão lógica: **15.10.0**
-- Cache PWA: **tangram-rai-v12-63**
+- Cache PWA: **tangram-rai-v12-64**
 - Atualização/PWA: `update-manager-v14.js` + `sw.js`
 - O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
@@ -20,10 +20,12 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 ## Conteúdo pedagógico
 Trilhas permanentes: `rai-fundamentos-v17.json`, `rai-pensamento-v17.json`, `rai-programacao-v17.json`, `rai-matematica-v17.json`, `rai-mundo-digital-v17.json`.
 
-A revisão curricular e conceitual está documentada em `CONTENT-AUDIT.md`. A auditoria de 12/09/2026 usou como referências primárias a BNCC Computação (Resolução CNE/CEB nº 1/2022 e Parecer CNE/CEB nº 2/2022), o CREP/Referencial Curricular do Paraná em Matemática e as matrizes/gabaritos oficiais recentes da Prova Paraná.
+A revisão curricular e conceitual está documentada em `CONTENT-AUDIT.md`. A auditoria de 12/09/2026 usou como referências primárias a BNCC Computação (Resolução CNE/CEB nº 1/2022 e Parecer CNE/CEB nº 2/2022), o Referencial Curricular do Paraná — Volume 2 (Educação Digital e Computação), o CREP/Referencial Curricular do Paraná em Matemática e as matrizes/gabaritos oficiais recentes da Prova Paraná.
 
 ### Especial Prova Paraná 2026 — Matemática
 `prova-parana-6-v1.json`, `prova-parana-7-v1.json`, `prova-parana-8a-v1.json`, `prova-parana-8b-v1.json`, `prova-parana-8c-v1.json`, `prova-parana-8d-v1.json`, `prova-parana-9-v1.json` e `prova-parana-professor-v1.json`.
+
+Na auditoria v15.10.0, as aulas do 8º e 9º anos receberam descritores oficiais pertinentes, três questões autorais por aula e refinamento conceitual de proporcionalidade, equações, semelhança, relações métricas, radicais, área e volume.
 
 ### Especial Prova Paraná 2026 — Língua Portuguesa
 `prova-parana-portugues-6-v1.json`, `pp-lp-7-v1.js`, `pp-lp-8-v1.js`, `pp-lp-9-v1.js` e `prova-parana-portugues-professor-v1.json`.
@@ -46,7 +48,7 @@ Os pacotes `pp-lp-7/8/9-v1.js` carregam dados codificados para contornar uma lim
 - Matemática: referências CREP foram confrontadas com o objetivo efetivamente ensinado; associações indevidas foram removidas ou reclassificadas como integração interdisciplinar.
 - Programação: revisados tipos de dados, implementação, listas e recursão; códigos BNCC Computação foram refinados quando não eram o foco direto da aula.
 - Mundo/Cultura Digital: corrigida referência de cyberbullying/produção digital e refinadas definições de sistema operacional e criptografia.
-- Prova Paraná: mantido o princípio de trabalhar habilidades e recorrências sem afirmar antecipação de itens futuros.
+- Prova Paraná: mantido o princípio de trabalhar habilidades e recorrências sem afirmar antecipação de itens futuros; 8º e 9º anos de Matemática foram aprofundados para uniformizar a qualidade dos testes rápidos.
 - Narração matemática: ampliada para raiz quadrada, aproximação, graus, porcentagem e relações de igualdade/desigualdade.
 
 ## Regras
