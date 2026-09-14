@@ -1,15 +1,19 @@
 (()=>{
  if(window.__raiAnswerOrderV1)return;
  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
- function hash(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;return Math.abs(h)}
- function applyGroup(group,questionIndex=0){
+ function questionIndex(group,fallback=0){
+  const q=group.closest('.rai-pp-q,.rai-em-q');
+  if(q&&q.dataset&&q.dataset.q!==undefined){const n=Number(q.dataset.q);if(Number.isFinite(n))return n}
+  if(q&&q.parentElement){const all=[...q.parentElement.querySelectorAll('.rai-pp-q,.rai-em-q')];const idx=all.indexOf(q);if(idx>=0)return idx}
+  return fallback;
+ }
+ function applyGroup(group,fallback=0){
   if(!group||group.dataset.raiOrderReady==='1')return;
   const buttons=[...group.querySelectorAll('button[data-opt]')];
   const n=buttons.length;if(n<2)return;
-  const q=group.closest('.rai-pp-q,.rai-em-q');
-  const seed=(hash((q?.textContent||'').slice(0,180))+questionIndex)%n;
+  const shift=questionIndex(group,fallback)%n;
   buttons.forEach((b,orig)=>{
-   const pos=(orig+seed)%n;
+   const pos=(orig+shift)%n;
    b.style.order=String(pos);
    const raw=(b.textContent||'').replace(/^\s*[A-Z]\)\s*/,'').trim();
    b.textContent=`${letters[pos]}) ${raw}`;
