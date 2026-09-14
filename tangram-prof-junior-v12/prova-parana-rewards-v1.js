@@ -162,6 +162,6 @@
     decorate();
   }
 
-  window.__raiProvaRewardsV1={mounted:true,refresh:refreshAccess,count,showUnlocked,showLocked};
+  window.__raiProvaRewardsV1={mounted:true,refresh:decorate,refreshAccess,count,showUnlocked,showLocked};
   wire();
 })();
