@@ -51,6 +51,7 @@ html:not(.j20-ready) #screen-home>.youth-challenges{visibility:hidden!important}
   await loadScript('jovem-assets-j20.js','artes visuais');
   await loadScript('jovem-finish-v29.js','conclusão das atividades');
   await loadScript('jovem-music-v1.js','trilha musical');
+  await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='../authorship-ui.js?v=1';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);});
   document.documentElement.classList.add('j20-ready');
   window.dispatchEvent(new Event('tia:jovem-modules-ready'));
   setTimeout(()=>document.getElementById('j20Boot')?.remove(),200);
