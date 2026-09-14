@@ -1,7 +1,7 @@
 /* Tia Tati Jovem v57 — correção visual pontual sem alterar os motores. */
 
 /* O card do Ping Pong usa a arte aprovada, mas a imagem original traz uma área oval muito escura.
-   Esta máscara integra essa área ao fundo neon e deixa a figura da Tia Tati respirar melhor. */
+   Esta máscara integra essa área ao fundo neon e mantém a Tia Tati visível à direita. */
 #screen-home [data-jlab="ping-focus"] .youth-card-art{
   isolation:isolate!important;
 }
@@ -10,18 +10,18 @@
   z-index:3!important;
   inset:0 auto 0 0!important;
   display:block!important;
-  width:54%!important;
+  width:61%!important;
   height:100%!important;
   pointer-events:none!important;
   background:
-    radial-gradient(circle at 28% 52%,rgba(35,225,255,.16),transparent 24%),
-    linear-gradient(90deg,rgba(5,18,49,.98) 0%,rgba(7,23,58,.95) 56%,rgba(7,23,58,.58) 80%,rgba(7,23,58,0) 100%)!important;
+    radial-gradient(circle at 28% 54%,rgba(35,225,255,.17),transparent 25%),
+    linear-gradient(90deg,#051231 0%,#07173a 68%,rgba(7,23,58,.78) 82%,rgba(7,23,58,0) 100%)!important;
 }
 #screen-home [data-jlab="ping-focus"] .j57-ping-mask:before{
   content:'🏓'!important;
   position:absolute!important;
-  left:20%!important;
-  top:50%!important;
+  left:21%!important;
+  top:53%!important;
   transform:translate(-50%,-50%) rotate(-8deg)!important;
   font-size:clamp(18px,4vw,31px)!important;
   line-height:1!important;
@@ -32,24 +32,30 @@
   content:''!important;
   position:absolute!important;
   left:8%!important;
-  right:9%!important;
-  bottom:18%!important;
+  right:15%!important;
+  bottom:17%!important;
   height:2px!important;
   background:linear-gradient(90deg,transparent,#47e8ff,transparent)!important;
   box-shadow:0 0 9px rgba(71,232,255,.65)!important;
-  opacity:.7!important;
+  opacity:.72!important;
 }
 
-/* Remove qualquer dimensão herdada do antigo card de laboratório. */
+/* Remove dimensões herdadas do antigo card de laboratório. */
 #screen-home [data-jlab="ping-focus"] .jlab-card-art,
 #screen-home [data-jlab="piano-lab"] .jlab-card-art{
   min-height:0!important;
 }
 
-/* Uma única seta. O texto do botão fica apenas “Abrir”. */
+/* Reconstrói visualmente o rótulo do botão para nunca haver “→ →”. */
 #screen-home [data-jlab="ping-focus"] .youth-card-go,
 #screen-home [data-jlab="piano-lab"] .youth-card-go{
+  font-size:0!important;
+}
+#screen-home [data-jlab="ping-focus"] .youth-card-go:before,
+#screen-home [data-jlab="piano-lab"] .youth-card-go:before{
+  content:'Abrir'!important;
   font-size:.72rem!important;
+  font-weight:950!important;
 }
 #screen-home [data-jlab="ping-focus"] .youth-card-go:after,
 #screen-home [data-jlab="piano-lab"] .youth-card-go:after{
@@ -58,14 +64,14 @@
   font-size:1rem!important;
 }
 
-/* Mantém a grade regular quando os oito cards estão presentes. */
+/* Mantém o Piano visível na grade quando os oito cards estão presentes. */
 #screen-home .youth-card-grid>[data-jlab="piano-lab"]{
   display:flex!important;
 }
 
 @media(max-width:760px){
-  #screen-home [data-jlab="ping-focus"] .j57-ping-mask{width:55%!important}
+  #screen-home [data-jlab="ping-focus"] .j57-ping-mask{width:62%!important}
   #screen-home [data-jlab="ping-focus"] .j57-ping-mask:before{font-size:20px!important}
-  #screen-home [data-jlab="ping-focus"] .youth-card-go,
-  #screen-home [data-jlab="piano-lab"] .youth-card-go{font-size:.57rem!important}
+  #screen-home [data-jlab="ping-focus"] .youth-card-go:before,
+  #screen-home [data-jlab="piano-lab"] .youth-card-go:before{font-size:.57rem!important}
 }
