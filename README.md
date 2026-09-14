@@ -1,37 +1,23 @@
-## Welcome to GitHub Pages
+# Aplicativos educacionais — Prof. João Faustino Júnior
 
-You can use the [editor on GitHub](https://github.com/JoaoFaustinoJr/Html/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+Repositório dos aplicativos e experiências digitais desenvolvidos e mantidos por **Prof. João Faustino Júnior**.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Aplicativos ativos
 
-### Markdown
+- **Tangram Educativo** — desafios de Tangram, R.A.I. Tutora, aulas e recursos pedagógicos.
+- **Maker Quest** — jornada STEAM com programação, robótica, algoritmos e tecnologia.
+- **Tia Tati** — família de experiências interativas, incluindo versões Kids, Jovem e Fisio.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Autoria
 
-```markdown
-Syntax highlighted code block
+© 2022–2026 **João Faustino Júnior**.
 
-# Header 1
-## Header 2
-### Header 3
+Concepção, direção do produto, definição das funcionalidades, curadoria, testes, validação e evolução dos projetos: **Prof. João Faustino Júnior**. O desenvolvimento técnico utiliza apoio de ferramentas de inteligência artificial.
 
-- Bulleted
-- List
+A declaração detalhada de autoria, atribuição e créditos está em [`AUTHORSHIP.md`](AUTHORSHIP.md). Cada aplicativo ativo possui também um arquivo `NOTICE.md` próprio.
 
-1. Numbered
-2. List
+## Licença
 
-**Bold** and _Italic_ and `Code` text
+O código-fonte é disponibilizado sob a licença **MIT**, salvo indicação específica em contrário. A licença permite uso, modificação e redistribuição, mas exige que o aviso de copyright e a permissão da licença sejam mantidos em cópias ou porções substanciais.
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/JoaoFaustinoJr/Html/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Consulte [`LICENSE`](LICENSE) e [`AUTHORSHIP.md`](AUTHORSHIP.md) antes de reutilizar o projeto ou partes substanciais dele.
