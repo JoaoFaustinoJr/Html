@@ -1,27 +1,17 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_J13__)return;
-window.__TIA_TATI_JOVEM_J13__=true;
+if(window.__TIA_TATI_JOVEM_V56__)return;
+window.__TIA_TATI_JOVEM_V56__=true;
 
-const V='j13-v55';
-const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
+const V='56';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
-
-function applyCompletionAvatar(){
-  document.querySelectorAll('#screen-done .done > img').forEach(img=>{
-    if((img.getAttribute('src')||'')!==FINAL_AVATAR) img.setAttribute('src',FINAL_AVATAR);
-    img.setAttribute('alt','Tia Tati comemorando a conquista');
-    img.setAttribute('decoding','async');
-  });
-}
 
 const critical=document.createElement('style');
 critical.id='tia-jovem-critical';
 critical.textContent=`
 html.tia-jovem-boot body{background:#07132f!important}
-html.tia-jovem-boot header.topbar,
-html.tia-jovem-boot #bottomNav{display:none!important}
+html.tia-jovem-boot header.topbar,html.tia-jovem-boot #bottomNav{display:none!important}
 html.tia-jovem-boot #screen-home>.home-v22-hero,
 html.tia-jovem-boot #screen-home>.audience-v44,
 html.tia-jovem-boot #screen-home>.kids-v44,
@@ -33,76 +23,66 @@ html.tia-jovem-boot #screen-home>.home-v22-cards,
 html.tia-jovem-boot #screen-home>.home-v22-tools,
 html.tia-jovem-boot #screen-home>.finish-v44,
 html.tia-jovem-boot #screen-home>.home-v22-footer-phrase{display:none!important}
-html.tia-jovem-boot:not(.tia-jovem-ready) #screen-home>.youth-challenges{visibility:hidden!important}
-#tiaJovemStatus{position:fixed;z-index:99999;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,360px);padding:16px 18px;border-radius:18px;background:rgba(10,20,58,.96);border:1px solid rgba(61,224,255,.35);box-shadow:0 18px 50px rgba(0,0,0,.42);color:#eefcff;text-align:center;font:700 14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+html.tia-jovem-boot:not(.tia-jovem-ready) #screen-home>.youth-challenges,
+html.tia-jovem-boot:not(.tia-jovem-ready) #screen-home>.jovem-home-hero{visibility:hidden!important}
+#tiaJovemStatus{position:fixed;z-index:99999;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,360px);padding:16px 18px;border-radius:18px;background:rgba(10,20,58,.97);border:1px solid rgba(61,224,255,.35);box-shadow:0 18px 50px rgba(0,0,0,.42);color:#eefcff;text-align:center;font:700 14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
 #tiaJovemStatus b{display:block;color:#45e8ff;font-size:16px;margin-bottom:4px}
 html.tia-jovem-ready #tiaJovemStatus{display:none!important}
 `;
 document.head.appendChild(critical);
 
-['sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css','jovem-theme-v27.css'].forEach(href=>{
-  const old=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>(x.getAttribute('href')||'').startsWith(href));
-  if(old)old.remove();
-  const l=document.createElement('link');
-  l.rel='stylesheet';
-  l.href=href+'?v='+V+'&t='+Date.now();
-  document.head.appendChild(l);
-});
-
 const status=document.createElement('div');
 status.id='tiaJovemStatus';
-status.innerHTML='<b>Modo Jovem</b>Preparando os desafios…';
+status.innerHTML='<b>Modo Jovem</b>Preparando atividades…';
 (document.body||document.documentElement).appendChild(status);
 
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
+// Remove caches antigos já nesta abertura. O SW v56 não guarda recursos da interface.
+try{
+  if('caches'in window)caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-jovem-')).map(k=>caches.delete(k)))).catch(()=>{});
+  if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js?v=56',{updateViaCache:'none'}).catch(()=>{});
+}catch(_){}
 
-async function getCode(src,{attempts=3,timeout=9000,showStatus=true}={}){
-  let lastErr=null;
-  for(let attempt=1;attempt<=attempts;attempt++){
-    const ctrl=new AbortController();
-    const timer=setTimeout(()=>ctrl.abort(),timeout);
-    try{
-      if(showStatus)status.innerHTML=`<b>Modo Jovem</b>Carregando ${src.replace('.js','')}…`;
-      const res=await fetch(src+'?v='+V+'&a='+attempt+'&t='+Date.now(),{
-        cache:'no-store',
-        credentials:'same-origin',
-        signal:ctrl.signal
-      });
-      clearTimeout(timer);
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      const code=await res.text();
-      if(!code||code.length<80)throw new Error('arquivo vazio ou incompleto');
-      return code;
-    }catch(err){
-      clearTimeout(timer);
-      lastErr=err;
-      if(attempt<attempts)await wait(250*attempt);
-    }
-  }
-  throw new Error(src+': '+(lastErr?.message||'falha de carregamento'));
+function loadStyle(file){
+  return new Promise(resolve=>{
+    [...document.querySelectorAll('link[rel="stylesheet"]')].filter(l=>(l.getAttribute('href')||'').split('?')[0]===file).forEach(l=>l.remove());
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href=file+'?v='+V;
+    link.onload=()=>resolve(true);
+    link.onerror=()=>resolve(false);
+    document.head.appendChild(link);
+    setTimeout(()=>resolve(false),5000);
+  });
 }
 
-function runCode(src,code){
-  try{
-    const fn=new Function(code+'\n//# sourceURL='+src+'?'+V);
-    fn.call(window);
-  }catch(err){
-    throw new Error(src+': erro ao executar — '+err.message);
-  }
+function loadScript(file,{optional=false}={}){
+  return new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src=file+'?v='+V;
+    s.async=false;
+    s.dataset.tiaJovemModule=file;
+    s.onload=()=>resolve(true);
+    s.onerror=()=>optional?resolve(false):reject(new Error('Falha ao carregar '+file));
+    document.head.appendChild(s);
+  });
 }
 
-async function loadOptional(src){
-  try{
-    const code=await getCode(src,{attempts:1,timeout:5000,showStatus:false});
-    runCode(src,code);
-  }catch(err){
-    console.warn('Módulo opcional ignorado:',err);
-  }
+function applyCompletionAvatar(){
+  document.querySelectorAll('#screen-done .done > img').forEach(img=>{
+    img.src='assets/completion-avatar.webp?v=56';
+    img.alt='Tia Tati comemorando a conquista';
+    img.decoding='async';
+  });
 }
 
 (async()=>{
   try{
-    const coreOrder=[
+    status.innerHTML='<b>Modo Jovem</b>Carregando visual…';
+    await Promise.all([
+      'sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css','jovem-theme-v27.css'
+    ].map(loadStyle));
+
+    const modules=[
       'app-core-v39.js',
       'sensory-v40.js',
       'remaining-v41.js',
@@ -111,26 +91,30 @@ async function loadOptional(src){
       'jovem-nav-v55.js',
       'jovem-cards-static-v54.js'
     ];
-    for(const src of coreOrder){
-      const code=await getCode(src);
-      runCode(src,code);
+    for(const file of modules){
+      status.innerHTML='<b>Modo Jovem</b>Carregando '+file.replace('.js','')+'…';
+      await loadScript(file);
+    }
+
+    if(window.TiaTatiJovemCardsReady){
+      status.innerHTML='<b>Modo Jovem</b>Preparando imagens…';
+      await window.TiaTatiJovemCardsReady;
     }
 
     applyCompletionAvatar();
+    window.TiaTatiJovemNav?.bindDirect?.();
     root.classList.add('tia-jovem-ready');
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
 
-    loadOptional('naming-v42.js');
+    loadScript('naming-v42.js',{optional:true});
   }catch(err){
-    console.error('Tia Tati Jovem j13-v55',err);
-    status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Atualize a página e tente novamente.</small>';
+    console.error('Tia Tati Jovem v56',err);
+    status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Reabra esta página.</small>';
   }
 })();
 
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',applyCompletionAvatar,{once:true});
-}else{
+window.addEventListener('pageshow',()=>{
   applyCompletionAvatar();
-}
-window.addEventListener('pageshow',applyCompletionAvatar);
+  window.TiaTatiJovemNav?.bindDirect?.();
+});
 })();
