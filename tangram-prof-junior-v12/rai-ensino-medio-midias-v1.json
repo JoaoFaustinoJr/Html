@@ -1,0 +1,77 @@
+{
+  "sectionTitle": "Ensino Médio • Mídias Digitais",
+  "sectionSubtitle": "3ª série • comunicação, linguagem, plataformas e leitura crítica",
+  "lesson": {
+    "id": "em-midias-01",
+    "icon": "📡",
+    "levelLabel": "3ª série do Ensino Médio",
+    "course": "Mídias Digitais II",
+    "title": "Mídias tradicionais e digitais: linguagem, circulação e poder de alcance",
+    "objective": "Distinguir mídias tradicionais e digitais sem simplificações, analisar como cada meio altera alcance, linguagem, interatividade, custos, velocidade e segmentação e tomar decisões conscientes sobre qual mídia usar em uma situação real.",
+    "opening": "Uma mesma informação muda quando muda de meio. Uma notícia lida no rádio, publicada em um jornal, enviada por mensagem ou apresentada em um vídeo curto não é apenas distribuída de maneira diferente: ela ganha ritmo, formato, público, possibilidade de resposta e critérios de visibilidade diferentes. Compreender mídia é compreender também como a informação circula e influencia decisões.",
+    "keyConcept": "Ecossistema de mídia",
+    "keyDefinition": "Conjunto de meios, plataformas, linguagens, públicos, tecnologias e regras de circulação que participam da produção e da distribuição de informação. Hoje, mídias tradicionais e digitais frequentemente convivem e se combinam: televisão pode ter transmissão online, rádio pode virar podcast e jornais impressos podem operar redes sociais.",
+    "comparison": [
+      {"dimension":"Alcance e segmentação","traditional":"Tende a atingir públicos amplos ou definidos por região, horário, programa e perfil editorial.","digital":"Pode combinar grande alcance com segmentação detalhada por interesse, comportamento, contexto e perfil — embora isso dependa da plataforma e dos dados disponíveis."},
+      {"dimension":"Interatividade","traditional":"Historicamente oferece retorno mais lento ou mediado: cartas, telefone, pesquisas, audiência e participação programada.","digital":"Favorece resposta rápida: comentários, reações, compartilhamentos, remix, mensagens e produção pelo próprio público."},
+      {"dimension":"Produção e distribuição","traditional":"Pode exigir infraestrutura, impressão, concessão, grade, estúdio ou distribuição física. O custo varia muito conforme o meio.","digital":"A entrada pode ser barata, mas produção profissional, impulsionamento, armazenamento, moderação e infraestrutura também podem gerar custos relevantes."},
+      {"dimension":"Atualização e permanência","traditional":"Alguns formatos são menos flexíveis depois de publicados, como impressos; rádio e TV ao vivo podem ser imediatos.","digital":"Permite atualização quase instantânea, mas também deixa rastros, cópias, republicações e versões difíceis de controlar."},
+      {"dimension":"Curadoria e visibilidade","traditional":"Editores, produtores, redações e grades exercem forte papel de seleção do que ganha espaço.","digital":"A visibilidade mistura decisões editoriais, comportamento do público e sistemas algorítmicos de recomendação."},
+      {"dimension":"Dados e mensuração","traditional":"Audiência costuma ser estimada por amostras, tiragem, circulação, pesquisa e indicadores indiretos.","digital":"Cliques, retenção, conversões, alcance e interações podem ser medidos em detalhe — o que aumenta possibilidades de análise e também questões de privacidade."}
+    ],
+    "criticalInsight": "A oposição 'tradicional versus digital' é útil para começar, mas não deve ser tratada como uma divisão absoluta. O conceito mais atual é convergência: meios antigos incorporam tecnologias digitais e plataformas digitais reutilizam linguagens de rádio, TV, jornal, cinema e publicidade. O importante é analisar a lógica de circulação e a relação com o público.",
+    "caseStudy": {
+      "title": "Caso: divulgação de uma feira de ciências",
+      "scenario": "A escola quer divulgar uma feira aberta à comunidade. Há três objetivos diferentes: informar as famílias da cidade, mobilizar estudantes rapidamente e registrar o projeto para permanecer acessível depois do evento.",
+      "analysis": "Uma estratégia consistente pode combinar rádio local ou jornal comunitário para alcance territorial; mensagens e redes sociais para mobilização rápida; e site, vídeo ou página institucional para registro permanente. A resposta mais inteligente não é escolher uma única mídia, mas desenhar uma combinação coerente com objetivo, público e linguagem."
+    },
+    "guidedActivity": "Escolha uma notícia real da escola. Produza três versões: (1) uma manchete para jornal ou mural; (2) um roteiro de 20 segundos para rádio; (3) uma publicação digital curta. Depois compare: o que precisou ser cortado, destacado, explicado ou transformado em cada formato?",
+    "strategyChallenge": {
+      "title": "Desafio 360° — você é o estrategista de mídia",
+      "prompt": "Uma campanha escolar precisa combater a desinformação sobre um tema científico. Você tem orçamento pequeno, uma semana e públicos de idades diferentes. Defina: público prioritário, mensagem central, duas mídias complementares, formato de conteúdo, indicador de resultado e um cuidado ético.",
+      "answer": "Uma boa solução começa pelo objetivo, não pela plataforma. Exemplo: público prioritário = estudantes e famílias; mensagem central = uma afirmação verificável acompanhada da fonte; mídias = vídeo curto para alcance entre estudantes + rádio/WhatsApp institucional para famílias; indicador = retenção, compartilhamentos qualificados ou respostas em formulário; cuidado ético = não coletar dados desnecessários, não manipular imagem/áudio e citar fontes. Outras soluções podem ser igualmente válidas se forem coerentes e justificadas."
+    },
+    "exercises": [
+      {
+        "q": "Uma emissora de rádio também publica podcasts e vídeos em redes sociais. Qual conceito descreve melhor esse cenário?",
+        "options": ["Substituição total da mídia tradicional", "Convergência de mídias", "Comunicação exclusivamente impressa", "Fim da segmentação de público"],
+        "correct": 1,
+        "explain": "A mesma organização utiliza linguagens e canais diferentes, articulando rádio, áudio sob demanda e plataformas digitais. Isso é convergência de mídias."
+      },
+      {
+        "q": "Qual afirmação é mais precisa sobre custos?",
+        "options": ["Toda mídia digital é gratuita", "Toda mídia tradicional é cara", "Mídias digitais podem ter baixo custo de entrada, mas produção profissional e distribuição também podem custar", "Custos não influenciam escolhas de mídia"],
+        "correct": 2,
+        "explain": "A comparação deve evitar absolutos. O digital reduz certas barreiras de entrada, mas infraestrutura, equipe, edição, anúncios e moderação podem ter custos significativos."
+      },
+      {
+        "q": "Por que algoritmos entram no estudo de mídias digitais?",
+        "options": ["Porque substituem todo trabalho humano", "Porque podem influenciar quais conteúdos recebem visibilidade", "Porque eliminam a publicidade", "Porque tornam toda informação verdadeira"],
+        "correct": 1,
+        "explain": "Sistemas de recomendação e ranqueamento participam da distribuição de conteúdo e ajudam a definir o que cada pessoa vê primeiro."
+      },
+      {
+        "q": "Uma escola precisa avisar rapidamente sobre mudança de horário e garantir que famílias recebam a informação. Qual decisão é mais adequada?",
+        "options": ["Usar apenas um cartaz interno", "Publicar somente um vídeo longo", "Combinar canais digitais de aviso com um canal institucional confiável", "Aguardar a notícia circular espontaneamente"],
+        "correct": 2,
+        "explain": "Comunicação crítica escolhe canais pelo objetivo e pelo público. Redundância planejada aumenta alcance e confiabilidade."
+      },
+      {
+        "q": "Qual pergunta demonstra maior competência midiática?",
+        "options": ["Qual plataforma está na moda?", "Quantas curtidas posso conseguir?", "Quem produziu esta mensagem, para qual público, com qual objetivo e por quais critérios ela chegou até mim?", "Qual aplicativo tem mais efeitos visuais?"],
+        "correct": 2,
+        "explain": "Leitura crítica de mídia considera autoria, finalidade, público, evidências, linguagem e mecanismos de circulação."
+      }
+    ],
+    "teacher": {
+      "axis": "Mídias Digitais • Cultura Digital • Linguagens e comunicação",
+      "reference": "Material de referência fornecido pela professora: Mídias Digitais II, 3ª série, 3º trimestre, Aula 43 (2026). Referência citada no material: PARANÁ. Caderno de Itinerários Formativos — Trilha de Mídias Digitais II. SEED/PR, 2023.",
+      "method": "A aula foi reestruturada para o formato autoral do Tangram Educativo, preservando os objetivos centrais do material de origem e aprofundando conceitos de convergência, segmentação, curadoria algorítmica, métricas, ética e estratégia de mídia.",
+      "tip": "Peça aos estudantes que justifiquem escolhas de mídia. A qualidade da resposta deve ser avaliada pela coerência entre objetivo, público, linguagem, canal e ética — não pela preferência por uma plataforma específica."
+    },
+    "sources": [
+      {"label":"SEED/PR — Caderno de Itinerários Formativos: Trilha de Mídias Digitais II","url":"https://acervodigital.educacao.pr.gov.br/pages/download.php?direct=1&noattach=true&ref=55643&ext=pdf&k=18d3e213d2"},
+      {"label":"Apresentação-base compartilhada pela professora","url":"https://docs.google.com/presentation/d/1sJiyiUGpmyzww-CWBKGbOKQG7pG548skAZdJbvt1fTs/edit"}
+    ]
+  }
+}
