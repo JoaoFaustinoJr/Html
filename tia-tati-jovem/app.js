@@ -1,9 +1,9 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_J10__)return;
-window.__TIA_TATI_JOVEM_J10__=true;
+if(window.__TIA_TATI_JOVEM_J11__)return;
+window.__TIA_TATI_JOVEM_J11__=true;
 
-const V='j10';
+const V='j11';
 const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
@@ -51,18 +51,18 @@ document.head.appendChild(critical);
 
 const status=document.createElement('div');
 status.id='tiaJovemStatus';
-status.innerHTML='<b>Modo Jovem</b>Preparando os oito desafios…';
+status.innerHTML='<b>Modo Jovem</b>Preparando os desafios…';
 (document.body||document.documentElement).appendChild(status);
 
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
-async function getCode(src){
+async function getCode(src,{attempts=3,timeout=9000,showStatus=true}={}){
   let lastErr=null;
-  for(let attempt=1;attempt<=3;attempt++){
+  for(let attempt=1;attempt<=attempts;attempt++){
     const ctrl=new AbortController();
-    const timer=setTimeout(()=>ctrl.abort(),9000);
+    const timer=setTimeout(()=>ctrl.abort(),timeout);
     try{
-      status.innerHTML=`<b>Modo Jovem</b>Carregando ${src.replace('.js','')}…`;
+      if(showStatus)status.innerHTML=`<b>Modo Jovem</b>Carregando ${src.replace('.js','')}…`;
       const res=await fetch(src+'?v='+V+'&a='+attempt+'&t='+Date.now(),{
         cache:'no-store',
         credentials:'same-origin',
@@ -76,7 +76,7 @@ async function getCode(src){
     }catch(err){
       clearTimeout(timer);
       lastErr=err;
-      if(attempt<3)await wait(250*attempt);
+      if(attempt<attempts)await wait(250*attempt);
     }
   }
   throw new Error(src+': '+(lastErr?.message||'falha de carregamento'));
@@ -91,27 +91,38 @@ function runCode(src,code){
   }
 }
 
+async function loadOptional(src){
+  try{
+    const code=await getCode(src,{attempts:1,timeout:5000,showStatus:false});
+    runCode(src,code);
+  }catch(err){
+    console.warn('Módulo opcional ignorado:',err);
+  }
+}
+
 (async()=>{
   try{
-    const order=[
+    const coreOrder=[
       'app-core-v39.js',
       'sensory-v40.js',
       'remaining-v41.js',
-      'naming-v42.js',
       'jovem-v1.js',
-      'jovem-labs-v1.js',
-      'jovem-ping-art-v51.js'
+      'jovem-labs-v1.js'
     ];
-    for(const src of order){
+    for(const src of coreOrder){
       const code=await getCode(src);
       runCode(src,code);
     }
+
     applyCompletionAvatar();
     root.classList.add('tia-jovem-ready');
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
+
+    loadOptional('naming-v42.js');
+    loadOptional('jovem-ping-art-v51.js');
   }catch(err){
-    console.error('Tia Tati Jovem j10',err);
-    status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Volte ao Portal Tia Tati e tente novamente.</small>';
+    console.error('Tia Tati Jovem j11',err);
+    status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Atualize a página e tente novamente.</small>';
   }
 })();
 
