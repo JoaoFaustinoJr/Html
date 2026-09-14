@@ -1,4 +1,4 @@
-const CACHE='tia-tati-portal-pwa-v12';
+const CACHE='tia-tati-portal-pwa-v13';
 const SHELL=['./','./index.html','./manifest.webmanifest','./assets/icon-tia-tati-192.webp','./assets/icon-tia-tati-512.webp','./assets/tatiana-portal-v3.webp','./assets/tatiana-about-v2.webp','./launch-kids.html','./launch-jovem.html','./portal-runtime-v12.js'];
 
 function patchPortalHtml(html){
@@ -13,6 +13,7 @@ function patchPortalHtml(html){
   if(!patched.includes('apple-touch-icon'))patched=patched.replace('</head>','<link rel="apple-touch-icon" href="assets/icon-tia-tati-192.webp?v=3">\n</head>');
   else patched=patched.replace(/<link rel="apple-touch-icon"[^>]*>/g,'<link rel="apple-touch-icon" href="assets/icon-tia-tati-192.webp?v=3">');
   if(!patched.includes('portal-runtime-v12.js'))patched=patched.replace('</body>','<script src="portal-runtime-v12.js?v=12"></script>\n</body>');
+  if(!patched.includes('authorship-ui.js'))patched=patched.replace('</body>','<script src="../authorship-ui.js?v=1"></script>\n</body>');
   return patched;
 }
 function isPortalHome(url){return /\/tia-tati\/(?:index\.html)?$/.test(url.pathname);}
