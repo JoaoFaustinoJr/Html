@@ -1,7 +1,11 @@
 # Aviso de autoria — Tia Tati Jovem
 
-**© 2026 João Faustino Júnior**
+**Dra. Tatiana de Oliveira Machado**  
+Participação profissional e colaboração no projeto.
 
-Concepção do produto digital, direção, arquitetura da experiência, testes, validação e evolução: **Prof. João Faustino Júnior**.
+**Prof. João Faustino Júnior**  
+Concepção e direção do produto digital, testes, validação e evolução.
+
+**© 2026 João Faustino Júnior • Produto digital**
 
 Declaração geral de autoria: `../AUTHORSHIP.md`.
