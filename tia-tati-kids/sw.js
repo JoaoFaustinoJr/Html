@@ -8,8 +8,8 @@ const FINAL_CARD_VERSION='completion-v2';
 const LAYOUT_VERSION='kids-layout-v13';
 const CARDS_UI_VERSION='kids-cards-ui-v8';
 const CARDS_EXPORT_VERSION='kids-cards-export-v5';
-const GAMES_VERSION='kids-games-v2-clock';
-const CLOCK_VERSION='clock-v2';
+const GAMES_VERSION='kids-games-v3-clock-refresh';
+const CLOCK_VERSION='clock-v4-custom-hour-no-tts';
 
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>{
@@ -47,7 +47,7 @@ self.addEventListener('fetch',event=>{
   if(url.pathname.endsWith('/tia-tati-kids/clock-game-v1.js')){
     event.respondWith((async()=>{
       try{
-        const response=await fetch(event.request,{cache:'no-store'});if(!response.ok)return response;
+        const response=await fetch(new Request(event.request.url,{cache:'no-store'}));if(!response.ok)return response;
         const headers=new Headers(response.headers);headers.set('cache-control','no-store, max-age=0');headers.delete('content-length');headers.delete('content-encoding');
         return new Response(await response.text(),{status:response.status,statusText:response.statusText,headers});
       }catch(_){return fetch(event.request,{cache:'reload'});}
