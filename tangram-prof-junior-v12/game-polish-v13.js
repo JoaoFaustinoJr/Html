@@ -28,3 +28,24 @@
   const markNormalTimer=()=>{[...root.querySelectorAll('.tl-stats .tl-chip')].forEach(chip=>{const text=(chip.textContent||'').replace(/\s+/g,' ').trim();chip.classList.toggle('rai-normal-timer',/⏱|cron[oô]metro|(^|\s)\d{1,2}:\d{2}(\s|$)/i.test(text))})};
   markNormalTimer();const stats=root.querySelector('.tl-stats');if(stats)new MutationObserver(markNormalTimer).observe(stats,{childList:true,subtree:true});
 })();
+
+(()=>{
+  // Ponte direta para os desafios bônus. Este arquivo é script clássico e enxerga
+  // o estado léxico do núcleo histórico (levelIndex, levels, reset e renderLevels).
+  if(window.__raiTangramBonusBridge?.open)return;
+  window.__raiTangramBonusBridge={
+    open(i){
+      try{
+        if(typeof levelIndex==='undefined'||typeof reset!=='function'||typeof levels==='undefined'||!levels[i])return false;
+        levelIndex=i;
+        reset();
+        try{if(typeof sound==='function')sound()}catch(e){}
+        return true;
+      }catch(e){console.warn('Abrir desafio bônus',e);return false}
+    },
+    refresh(){
+      try{if(typeof renderLevels==='function'){renderLevels();return true}}catch(e){}
+      return false;
+    }
+  };
+})();
