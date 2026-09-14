@@ -52,7 +52,7 @@
       if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installDoneFix,{once:true});else installDoneFix();
       setTimeout(installDoneFix,300);setTimeout(installDoneFix,1200);
     })();<\/script>`;
-    html=html.replace('</body>',hotfix+'</body>');
+    html=html.replace('</body>',hotfix+'<script src="../authorship-ui.js?v=1"><\/script></body>');
     document.open();
     document.write(html);
     document.close();
