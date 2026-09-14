@@ -1,9 +1,9 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_J11__)return;
-window.__TIA_TATI_JOVEM_J11__=true;
+if(window.__TIA_TATI_JOVEM_J12__)return;
+window.__TIA_TATI_JOVEM_J12__=true;
 
-const V='j11';
+const V='j12-v54';
 const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
@@ -40,7 +40,7 @@ html.tia-jovem-ready #tiaJovemStatus{display:none!important}
 `;
 document.head.appendChild(critical);
 
-['sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css'].forEach(href=>{
+['sensory-v40.css','remaining-v41.css','polish-v43.css','jovem-v1.css','jovem-theme-v27.css'].forEach(href=>{
   const old=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>(x.getAttribute('href')||'').startsWith(href));
   if(old)old.remove();
   const l=document.createElement('link');
@@ -107,7 +107,8 @@ async function loadOptional(src){
       'sensory-v40.js',
       'remaining-v41.js',
       'jovem-v1.js',
-      'jovem-labs-v1.js'
+      'jovem-labs-v1.js',
+      'jovem-cards-static-v54.js'
     ];
     for(const src of coreOrder){
       const code=await getCode(src);
@@ -119,9 +120,8 @@ async function loadOptional(src){
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
 
     loadOptional('naming-v42.js');
-    loadOptional('jovem-ping-art-v51.js');
   }catch(err){
-    console.error('Tia Tati Jovem j11',err);
+    console.error('Tia Tati Jovem j12-v54',err);
     status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Atualize a página e tente novamente.</small>';
   }
 })();
