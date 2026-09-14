@@ -5,7 +5,7 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 ## Produção
 - URL: `/Html/tangram-prof-junior-v12/`
 - Versão lógica: **15.10.1**
-- Cache PWA: **tangram-rai-v12-65**
+- Cache PWA: **tangram-rai-v12-66**
 - Atualização/PWA: `update-manager-v14.js` + `sw.js`
 - O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
