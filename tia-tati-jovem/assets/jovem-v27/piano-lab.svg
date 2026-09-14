@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071a43"/><stop offset=".55" stop-color="#151f5f"/><stop offset="1" stop-color="#44165f"/></linearGradient><filter id="g"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="800" height="420" rx="28" fill="url(#bg)"/>
+<circle cx="630" cy="95" r="120" fill="#ff4fa8" opacity=".12"/><circle cx="160" cy="330" r="140" fill="#20dfff" opacity=".11"/>
+<g transform="translate(80 120)" filter="url(#g)"><rect width="640" height="190" rx="20" fill="#061227" stroke="#56eaff" stroke-width="4"/>
+<g transform="translate(30 26)"><g fill="#f7fbff" stroke="#93a8c8"><rect x="0" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="72" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="144" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="216" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="288" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="360" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="432" y="0" width="72" height="135" rx="0 0 8 8"/><rect x="504" y="0" width="72" height="135" rx="0 0 8 8"/></g><g fill="#10182b"><rect x="52" y="0" width="42" height="82" rx="0 0 6 6"/><rect x="124" y="0" width="42" height="82" rx="0 0 6 6"/><rect x="268" y="0" width="42" height="82" rx="0 0 6 6"/><rect x="340" y="0" width="42" height="82" rx="0 0 6 6"/><rect x="412" y="0" width="42" height="82" rx="0 0 6 6"/></g></g></g>
+<g filter="url(#g)" fill="#ff5ab4"><path d="M640 70v110a38 38 0 1 1-20-33V92l92-24v86a38 38 0 1 1-20-33V45z"/></g>
+<text x="42" y="58" fill="#6ff3ff" font-family="Arial,sans-serif" font-size="28" font-weight="800">PIANO LAB</text><text x="42" y="385" fill="#fff" opacity=".8" font-family="Arial,sans-serif" font-size="22">notas • ritmo • percepção auditiva</text>
+</svg>
