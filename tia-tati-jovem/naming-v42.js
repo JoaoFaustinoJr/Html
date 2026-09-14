@@ -20,6 +20,16 @@ const replaceText=(root)=>{
   });
 };
 
+const loadPingArtFix=()=>{
+  if(window.__TIA_TATI_PING_ART_V51__||document.querySelector('script[data-ping-art-v51]'))return;
+  const script=document.createElement('script');
+  script.dataset.pingArtV51='1';
+  script.src=new URL('jovem-ping-art-v51.js?v=51',document.baseURI).href;
+  script.async=true;
+  script.onerror=()=>console.warn('Ping Pong: não foi possível carregar o hotfix visual v51.');
+  document.head.appendChild(script);
+};
+
 const apply=()=>{
   document.querySelectorAll('[data-breathe-mode="reset"]').forEach(btn=>{
     btn.classList.add('recomeco-v43-setup');
@@ -71,6 +81,7 @@ const apply=()=>{
 };
 
 const start=()=>{
+  loadPingArtFix();
   apply();
   requestAnimationFrame(apply);
   setTimeout(apply,120);
