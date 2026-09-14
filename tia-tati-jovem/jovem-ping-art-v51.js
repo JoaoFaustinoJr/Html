@@ -3,7 +3,16 @@
 if(window.__TIA_TATI_COMPAT_STATIC_V54__)return;
 window.__TIA_TATI_COMPAT_STATIC_V54__=true;
 
+function ensureTheme(){
+  if([...document.querySelectorAll('link[rel="stylesheet"]')].some(l=>(l.getAttribute('href')||'').includes('jovem-theme-v27.css')))return;
+  const link=document.createElement('link');
+  link.rel='stylesheet';
+  link.href='jovem-theme-v27.css?v=54&t='+Date.now();
+  document.head.appendChild(link);
+}
+
 async function loadStaticCards(){
+  ensureTheme();
   if(window.__TIA_TATI_JOVEM_STATIC_CARDS_V54__)return;
   try{
     const url=new URL('jovem-cards-static-v54.js?v=54&t='+Date.now(),document.baseURI);
