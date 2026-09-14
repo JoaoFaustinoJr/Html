@@ -1,4 +1,4 @@
-const CACHE='tia-tati-jovem-pwa-v30';
+const CACHE='tia-tati-jovem-pwa-v31';
 const SHELL=['./entry-j20.html','./index.html','./manifest.webmanifest','./manual-jovem.html','./styles.css','./sensory-v40.css','./remaining-v41.css','./polish-v43.css','./jovem-v1.css','./jovem-refine-j12.css','./jovem-assets-j13.css','./jovem-layout-j15.css','./jovem-theme-v28.css','./app-core-v39.js','./sensory-v40.js','./remaining-v41.js','./jovem-v20.js','./jovem-ptbr-j16.js','./jovem-assets-j20.js','./jovem-finish-v29.js','./jovem-music-v1.js','./jovem-labs-v1.js','./assets/jovem-v27/reflexo-neon.webp','./assets/jovem-v27/memorize.webp','./assets/jovem-v27/ritmo-movimento.webp','./assets/jovem-v27/recomeco.webp','./assets/jovem-v27/missao-movimento.webp','./assets/jovem-v27/laboratorio-pulso.webp'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-jovem-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
