@@ -4,8 +4,8 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 
 ## Produção
 - URL: `/Html/tangram-prof-junior-v12/`
-- Versão lógica: **15.10.2**
-- Cache PWA: **tangram-rai-v12-67**
+- Versão lógica: **15.10.3**
+- Cache PWA: **tangram-rai-v12-69**
 - Atualização/PWA: `update-manager-v14.js` + `sw.js`
 - O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
@@ -41,13 +41,20 @@ Os pacotes `pp-lp-7/8/9-v1.js` carregam dados pedagógicos estáticos codificado
 - O app mostra antes do teste a mensagem **“Aprenda. Acerte. Desbloqueie.”**, progresso de domínio, tentativa novamente sem penalidade e celebração ao conquistar a recompensa.
 - Os 10 desafios originais permanecem independentes do Especial Prova Paraná; a mecânica nova atua somente sobre os quatro bônus.
 
+## Hotfix de acesso aos bônus — v15.10.3
+- Causa identificada: o núcleo histórico usa `canAccess(i){ return i===0 || completed.has(i-1) }` e só registra o `click` de uma missão quando ela está liberada por essa sequência. Assim, apenas remover `disabled` dos níveis 11–14 não era suficiente: o botão parecia liberado, mas não tinha o listener interno para abrir o desafio.
+- `prova-parana-rewards-v1.js` agora instala uma ponte sobre a função global `canAccess`, preservando a regra original para os níveis 1–10 e usando o domínio das aulas do Especial Prova Paraná para os níveis 11–14.
+- Após instalar a ponte, o módulo chama o `renderLevels()` original para que os botões bônus sejam recriados já com os listeners internos corretos.
+- Cada novo domínio dispara uma nova renderização segura da lista e libera imediatamente a missão correspondente.
+- Botões bloqueados continuam realmente desabilitados; botões liberados usam o próprio fluxo nativo do Tangram para selecionar nível, `reset()` e iniciar a missão.
+
 ## Carimbo de abertura — v15.10.2
 - `prova-parana-welcome-v1.js` + `prova-parana-welcome-v1.css` criam um aviso central em formato de carimbo sobre o Especial Prova Paraná e o desbloqueio de Missões Bônus.
-- O aviso aparece uma vez por sessão da versão 15.10.2, fecha sozinho após cerca de 5 segundos e também pode ser fechado manualmente.
+- O aviso aparece uma vez por sessão da versão e permanece até o aluno escolher **Ir para o Especial**, **Agora não** ou fechar pelo X.
 - O botão principal abre diretamente o Especial Prova Paraná.
 - O texto é dinâmico conforme o progresso de 0/4 a 4/4 missões bônus.
 - Quando uma aula atinge o domínio mínimo e dispara `rai-prova-mastered`, o carimbo reaparece como **“Nova Missão Bônus!”**.
-- O aviso não bloqueia permanentemente o app e respeita `prefers-reduced-motion`.
+- O aviso respeita `prefers-reduced-motion`.
 
 ## Instalação iPhone/iPad
 `ios-install-v1.js` e `ios-install-v1.css` são carregados somente em iOS/iPadOS. O assistente intercepta o clique de instalação durante a fase de captura e tem prioridade sobre o instalador universal legado de `app-v10.js`. No Safari, orienta Compartilhar → Adicionar à Tela de Início → Adicionar; em navegadores internos, orienta abrir no Safari e oferece cópia do endereço.
