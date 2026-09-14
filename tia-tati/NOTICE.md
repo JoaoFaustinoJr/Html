@@ -1,11 +1,13 @@
 # Aviso de autoria — Tia Tati
 
-**© 2026 João Faustino Júnior**
+**Dra. Tatiana de Oliveira Machado**  
+Conteúdos profissionais, imagem, voz e contribuições ao projeto.
 
-**Tia Tati — aplicativo educacional/interativo**
+**Prof. João Faustino Júnior**  
+Concepção do produto digital, direção, arquitetura da experiência, funcionalidades, integração, testes, validação e evolução.
 
-Concepção do produto digital, direção, definição das funcionalidades, arquitetura da experiência, integração, testes, validação e evolução: **Prof. João Faustino Júnior**.
+**© 2026 João Faustino Júnior • Produto digital**
 
-Créditos de conteúdos profissionais, educacionais, imagens e contribuições de terceiros permanecem conforme indicados no próprio aplicativo e em suas fontes.
+Créditos de materiais de terceiros permanecem conforme indicados no aplicativo e em suas fontes.
 
 Declaração geral de autoria: `../AUTHORSHIP.md`.
