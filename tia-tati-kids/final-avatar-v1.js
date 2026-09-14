@@ -47,4 +47,5 @@
     armObserver();
   }
   window.addEventListener('pageshow',applyCompletionAvatar);
+  if(!window.__joaoAuthorshipUILoader){window.__joaoAuthorshipUILoader=1;const s=document.createElement('script');s.src='../authorship-ui.js?v=1';document.head.appendChild(s);}
 })();
