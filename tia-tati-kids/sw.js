@@ -10,7 +10,7 @@ const CARDS_EXPORT_VERSION='kids-cards-export-v5';
 const GAMES_VERSION='kids-games-v3-clock-refresh';
 const CLOCK_VERSION='clock-v6-routine-check-celebration';
 const XYLO_VERSION='xylophone-v6-fatima-song';
-const XYLO_FATIMA_VERSION='extra-songs-v3-strong-highlight';
+const XYLO_FATIMA_VERSION='extra-songs-v4-compact-landscape';
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k===LEGACY_CACHE||k.startsWith('tia-tati-kids-')).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);
