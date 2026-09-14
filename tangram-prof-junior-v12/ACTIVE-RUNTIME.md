@@ -4,16 +4,16 @@ Mapa de produção para evitar duplicidades e exclusões acidentais.
 
 ## Produção
 - URL: `/Html/tangram-prof-junior-v12/`
-- Versão lógica: **15.10.1**
-- Cache PWA: **tangram-rai-v12-66**
+- Versão lógica: **15.10.2**
+- Cache PWA: **tangram-rai-v12-67**
 - Atualização/PWA: `update-manager-v14.js` + `sw.js`
 - O `index.html` ainda depende dos cinco `chunk*.txt` de `../tangram-prof-junior/`; não remover enquanto o núcleo não for consolidado.
 
 ## JS ativo
-`app-v10.js`, `comfort-v11.js`, `performance-v12.js`, `rai-tutor-v13.js`, `rai-aula-v17.js`, `aulas-entry-v1595.js`, `prova-parana-v1.js`, `prova-parana-rewards-v1.js`, `prova-parana-mastery-v1.js`, `pp-lp-7-v1.js`, `pp-lp-8-v1.js`, `pp-lp-9-v1.js`, `ios-install-v1.js`, `game-polish-v13.js`, `gamer-official-v1.js`, `update-manager-v14.js`.
+`app-v10.js`, `comfort-v11.js`, `performance-v12.js`, `rai-tutor-v13.js`, `rai-aula-v17.js`, `aulas-entry-v1595.js`, `prova-parana-v1.js`, `prova-parana-rewards-v1.js`, `prova-parana-mastery-v1.js`, `prova-parana-welcome-v1.js`, `pp-lp-7-v1.js`, `pp-lp-8-v1.js`, `pp-lp-9-v1.js`, `ios-install-v1.js`, `game-polish-v13.js`, `gamer-official-v1.js`, `update-manager-v14.js`.
 
 ## CSS ativo
-`v10.css`, `comfort-v11.css`, `focus-v11.css`, `performance-v12.css`, `rai-tutor-v13.css`, `rai-aula-v14.css`, `rai-aula-v16.css`, `rai-aula-v17.css`, `aulas-entry-v1595.css`, `prova-parana-v1.css`, `prova-parana-subjects.css`, `prova-parana-rewards-v1.css`, `ios-install-v1.css`, `gamer-official-v1.css`, `shared-ui-v14.css`, `identity-v15.css`, `game-polish-v13.css`.
+`v10.css`, `comfort-v11.css`, `focus-v11.css`, `performance-v12.css`, `rai-tutor-v13.css`, `rai-aula-v14.css`, `rai-aula-v16.css`, `rai-aula-v17.css`, `aulas-entry-v1595.css`, `prova-parana-v1.css`, `prova-parana-subjects.css`, `prova-parana-rewards-v1.css`, `prova-parana-welcome-v1.css`, `ios-install-v1.css`, `gamer-official-v1.css`, `shared-ui-v14.css`, `identity-v15.css`, `game-polish-v13.css`.
 
 `rai-aula-v17.css` ainda herda estilos das versões 14 e 16; esses dois arquivos não são redundantes no runtime atual.
 
@@ -33,14 +33,21 @@ Na auditoria v15.10.0, as aulas do 8º e 9º anos receberam descritores oficiais
 Os pacotes `pp-lp-7/8/9-v1.js` carregam dados pedagógicos estáticos codificados. Em futura consolidação, preferir convertê-los para JSON comum.
 
 ## Piloto de recompensas — v15.10.1
-- `content-v12.json` passa a acrescentar quatro desafios bônus ao conjunto de 10 desafios já existente, totalizando **14 desafios** no runtime: **11. Gato Espelhado**, **12. Corredor Invertido**, **13. Cisne Reflexo** e **14. Foguete Reverso**.
+- `content-v12.json` acrescenta quatro desafios bônus ao conjunto de 10 desafios já existente, totalizando **14 desafios** no runtime: **11. Gato Espelhado**, **12. Corredor Invertido**, **13. Cisne Reflexo** e **14. Foguete Reverso**.
 - Os quatro bônus são variações refletidas de desafios avançados existentes e trabalham explicitamente reflexão, rotação e invariantes geométricos.
 - `prova-parana-mastery-v1.js` registra domínio da aula separadamente da simples conclusão. O critério é **mínimo de 2/3 das questões corretas**; em aulas de 3 itens, são necessários 2 acertos.
 - O armazenamento de domínio usa `raiProvaParanaMasteryV1` e é espelhado em `raiProvaParana2026V2` para compatibilidade com o módulo de recompensas.
 - `prova-parana-rewards-v1.js` controla a apresentação dos quatro desafios bônus: 1 aula dominada libera o primeiro, 2 liberam o segundo, 3 o terceiro e 4 o quarto.
 - O app mostra antes do teste a mensagem **“Aprenda. Acerte. Desbloqueie.”**, progresso de domínio, tentativa novamente sem penalidade e celebração ao conquistar a recompensa.
 - Os 10 desafios originais permanecem independentes do Especial Prova Paraná; a mecânica nova atua somente sobre os quatro bônus.
-- Esta implementação é um piloto conservador sobre a arquitetura existente. Antes de ampliar a quantidade de recompensas, validar em Android, iPhone/iPad e Windows o desbloqueio e a abertura direta dos níveis 11–14.
+
+## Carimbo de abertura — v15.10.2
+- `prova-parana-welcome-v1.js` + `prova-parana-welcome-v1.css` criam um aviso central em formato de carimbo sobre o Especial Prova Paraná e o desbloqueio de Missões Bônus.
+- O aviso aparece uma vez por sessão da versão 15.10.2, fecha sozinho após cerca de 5 segundos e também pode ser fechado manualmente.
+- O botão principal abre diretamente o Especial Prova Paraná.
+- O texto é dinâmico conforme o progresso de 0/4 a 4/4 missões bônus.
+- Quando uma aula atinge o domínio mínimo e dispara `rai-prova-mastered`, o carimbo reaparece como **“Nova Missão Bônus!”**.
+- O aviso não bloqueia permanentemente o app e respeita `prefers-reduced-motion`.
 
 ## Instalação iPhone/iPad
 `ios-install-v1.js` e `ios-install-v1.css` são carregados somente em iOS/iPadOS. O assistente intercepta o clique de instalação durante a fase de captura e tem prioridade sobre o instalador universal legado de `app-v10.js`. No Safari, orienta Compartilhar → Adicionar à Tela de Início → Adicionar; em navegadores internos, orienta abrir no Safari e oferece cópia do endereço.
