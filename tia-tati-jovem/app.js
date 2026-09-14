@@ -1,9 +1,9 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_J8__)return;
-window.__TIA_TATI_JOVEM_J8__=true;
+if(window.__TIA_TATI_JOVEM_J9__)return;
+window.__TIA_TATI_JOVEM_J9__=true;
 
-const V='j8';
+const V='j9';
 const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
@@ -51,7 +51,7 @@ document.head.appendChild(critical);
 
 const status=document.createElement('div');
 status.id='tiaJovemStatus';
-status.innerHTML='<b>Modo Jovem</b>Preparando os seis desafios…';
+status.innerHTML='<b>Modo Jovem</b>Preparando os oito desafios…';
 (document.body||document.documentElement).appendChild(status);
 
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
@@ -98,7 +98,8 @@ function runCode(src,code){
       'sensory-v40.js',
       'remaining-v41.js',
       'naming-v42.js',
-      'jovem-v1.js'
+      'jovem-v1.js',
+      'jovem-labs-v1.js'
     ];
     for(const src of order){
       const code=await getCode(src);
@@ -108,7 +109,7 @@ function runCode(src,code){
     root.classList.add('tia-jovem-ready');
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
   }catch(err){
-    console.error('Tia Tati Jovem j8',err);
+    console.error('Tia Tati Jovem j9',err);
     status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Volte ao Portal Tia Tati e tente novamente.</small>';
   }
 })();
