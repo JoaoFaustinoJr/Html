@@ -1,4 +1,4 @@
-const CACHE='tia-tati-jovem-pwa-v44';
+const CACHE='tia-tati-jovem-pwa-v45';
 self.addEventListener('install',e=>{e.waitUntil(self.skipWaiting())});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-jovem-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
