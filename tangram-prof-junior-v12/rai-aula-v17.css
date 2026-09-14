@@ -58,6 +58,13 @@
 .rai-lesson-v17 .rai-lesson-actions button{min-height:40px}
 .rai-lesson-v17 .rai-lesson-actions button:last-child{grid-column:1/-1}
 .rai-lesson-v17 .rai-teacher-box small{display:block;margin-top:6px;color:#8fb5bf}
+.rai-lesson-v17 .rai-lesson-expand{width:38px;height:38px;flex:0 0 38px;border:1px solid #427184;border-radius:11px;background:#0b2b3a;color:#dff9ff;font:900 18px/1 system-ui;cursor:pointer;display:grid;place-items:center;margin-left:auto}
+.rai-lesson-v17 .rai-lesson-expand:hover{background:#113d50;border-color:#64a7bd}
+.rai-lesson-v17.rai-lesson-expanded{padding:8px;place-items:stretch}
+.rai-lesson-v17.rai-lesson-expanded .rai-lesson-card{width:100%;height:calc(100dvh - 16px);max-height:none;border-radius:16px;display:flex;flex-direction:column}
+.rai-lesson-v17.rai-lesson-expanded .rai-lesson-body{flex:1;min-height:0;max-height:none;overflow:auto;padding-left:clamp(14px,3vw,42px);padding-right:clamp(14px,3vw,42px)}
+.rai-lesson-v17.rai-lesson-expanded .rai-lesson-detail,.rai-lesson-v17.rai-lesson-expanded #raiLessonHome,.rai-lesson-v17.rai-lesson-expanded #raiSectionView{width:min(1100px,100%);margin:0 auto}
+.rai-lesson-v17.rai-lesson-expanded .rai-lesson-head{padding-left:clamp(14px,3vw,42px);padding-right:clamp(14px,3vw,42px)}
 @media(max-width:640px){
  .rai-lesson-v17 .rai-lesson-card{max-height:96dvh;border-radius:16px}
  .rai-lesson-v17 .rai-lesson-head h3{font-size:18px}
@@ -68,5 +75,8 @@
  .rai-lesson-v17 .rai-lesson-actions{grid-template-columns:1fr}
  .rai-lesson-v17 .rai-lesson-actions button:last-child{grid-column:auto}
  .rai-v17-fix-head{align-items:flex-start;flex-direction:column}
+ .rai-lesson-v17 .rai-lesson-expand{width:34px;height:34px;flex-basis:34px;font-size:16px}
+ .rai-lesson-v17.rai-lesson-expanded{padding:0}
+ .rai-lesson-v17.rai-lesson-expanded .rai-lesson-card{height:100dvh;border-radius:0}
 }
 @media(prefers-reduced-motion:reduce){.rai-lesson-v17 *{scroll-behavior:auto!important}}
