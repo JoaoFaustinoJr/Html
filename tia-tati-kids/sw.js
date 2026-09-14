@@ -8,6 +8,8 @@ const FINAL_CARD_VERSION='completion-v2';
 const LAYOUT_VERSION='kids-layout-v13';
 const CARDS_UI_VERSION='kids-cards-ui-v8';
 const CARDS_EXPORT_VERSION='kids-cards-export-v5';
+const GAMES_VERSION='kids-games-v2-clock';
+const CLOCK_VERSION='clock-v2';
 
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>{
@@ -21,6 +23,28 @@ self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
   const url=new URL(event.request.url);
   if(url.pathname.endsWith('/tia-tati-kids/styles.css') || url.pathname.endsWith('/tia-tati-kids/kids-shell-v1.css') || url.pathname.endsWith('/tia-tati-kids/kids-theme-v2.css') || url.pathname.endsWith('/tia-tati-kids/kids-cards-v8.css')){
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(event.request,{cache:'no-store'});if(!response.ok)return response;
+        const headers=new Headers(response.headers);headers.set('cache-control','no-store, max-age=0');headers.delete('content-length');headers.delete('content-encoding');
+        return new Response(await response.text(),{status:response.status,statusText:response.statusText,headers});
+      }catch(_){return fetch(event.request,{cache:'reload'});}
+    })());
+    return;
+  }
+  if(url.pathname.endsWith('/tia-tati-kids/kids-games-v1.js')){
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(new Request(event.request.url,{cache:'no-store'}));if(!response.ok)return response;
+        const source=await response.text();
+        const loader='\n;(()=>{if(window.__TIA_TATI_CLOCK_LOADER_SW__)return;window.__TIA_TATI_CLOCK_LOADER_SW__=true;const s=document.createElement("script");s.src="clock-game-v1.js?'+CLOCK_VERSION+'";s.async=true;document.head.appendChild(s);})();\n';
+        const headers=new Headers(response.headers);headers.set('content-type','application/javascript; charset=utf-8');headers.set('cache-control','no-store, max-age=0');headers.delete('content-length');headers.delete('content-encoding');
+        return new Response(source+loader,{status:response.status,statusText:response.statusText,headers});
+      }catch(_){return fetch(event.request,{cache:'reload'});}
+    })());
+    return;
+  }
+  if(url.pathname.endsWith('/tia-tati-kids/clock-game-v1.js')){
     event.respondWith((async()=>{
       try{
         const response=await fetch(event.request,{cache:'no-store'});if(!response.ok)return response;
