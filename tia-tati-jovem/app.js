@@ -1,5 +1,18 @@
 (()=>{
 'use strict';
+
+// A entrada instalada usa entry-j20.html. Qualquer abertura direta do index deve
+// seguir exatamente a mesma rota estável, evitando duas arquiteturas concorrentes.
+try{
+  const qs=new URLSearchParams(location.search);
+  if(!qs.has('template') && !location.pathname.endsWith('/entry-j20.html')){
+    const target=new URL('entry-j20.html',location.href);
+    target.search='?source=pwa';
+    location.replace(target.href);
+    return;
+  }
+}catch(_){}
+
 if(window.__TIA_TATI_JOVEM_V58_SAFE__)return;
 window.__TIA_TATI_JOVEM_V58_SAFE__=true;
 
@@ -36,7 +49,6 @@ status.id='tiaJovemStatus';
 status.innerHTML='<b>Modo Jovem</b>Preparando atividades…';
 (document.body||document.documentElement).appendChild(status);
 
-// Mantém a estratégia que estabilizou a v56: sem cache concorrente da interface.
 try{
   if('caches'in window)caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tia-tati-jovem-')).map(k=>caches.delete(k)))).catch(()=>{});
   if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js?v='+V,{updateViaCache:'none'}).catch(()=>{});
@@ -87,7 +99,6 @@ function applyCompletionAvatar(){
       'jovem-hotfix-v57.css'
     ].map(loadStyle));
 
-    // Mesma ordem funcional da v56 que está abrindo no PWA instalado.
     const modules=[
       'app-core-v39.js',
       'sensory-v40.js',
@@ -111,7 +122,6 @@ function applyCompletionAvatar(){
     window.TiaTatiJovemNav?.bindDirect?.();
     root.classList.add('tia-jovem-ready');
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
-
     loadScript('naming-v42.js',{optional:true});
   }catch(err){
     console.error('Tia Tati Jovem v58-safe',err);
