@@ -12,12 +12,10 @@ Repositório dos aplicativos e experiências digitais desenvolvidos e mantidos p
 
 © 2022–2026 **João Faustino Júnior**.
 
-Concepção, direção do produto, definição das funcionalidades, curadoria, testes, validação e evolução dos projetos: **Prof. João Faustino Júnior**. O desenvolvimento técnico utiliza apoio de ferramentas de inteligência artificial.
+Concepção, direção do produto, arquitetura da experiência, definição das funcionalidades, curadoria, testes, validação e evolução dos projetos: **Prof. João Faustino Júnior**.
 
-A declaração detalhada de autoria, atribuição e créditos está em [`AUTHORSHIP.md`](AUTHORSHIP.md). Cada aplicativo ativo possui também um arquivo `NOTICE.md` próprio.
+A declaração detalhada está em [`AUTHORSHIP.md`](AUTHORSHIP.md). Cada aplicativo ativo possui também um arquivo `NOTICE.md` próprio.
 
 ## Licença
 
-O código-fonte é disponibilizado sob a licença **MIT**, salvo indicação específica em contrário. A licença permite uso, modificação e redistribuição, mas exige que o aviso de copyright e a permissão da licença sejam mantidos em cópias ou porções substanciais.
-
-Consulte [`LICENSE`](LICENSE) e [`AUTHORSHIP.md`](AUTHORSHIP.md) antes de reutilizar o projeto ou partes substanciais dele.
+O código-fonte é disponibilizado sob a licença **MIT**, salvo indicação específica em contrário.
