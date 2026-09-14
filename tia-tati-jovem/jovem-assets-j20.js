@@ -1,37 +1,14 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_ASSETS_V28__)return;
-window.__TIA_TATI_JOVEM_ASSETS_V28__=true;
+if(window.__TIA_TATI_JOVEM_ASSETS_V35__)return;
+window.__TIA_TATI_JOVEM_ASSETS_V35__=true;
 const q=(s,r=document)=>r.querySelector(s);
-function addTheme(){
- if(document.querySelector('link[data-j28-theme]'))return;
- const l=document.createElement('link');l.rel='stylesheet';l.href='jovem-theme-v28.css?v=28&t='+Date.now();l.dataset.j28Theme='1';document.head.appendChild(l);
-}
-function safeImg(src,alt=''){
- const img=document.createElement('img');img.src=src;img.alt=alt;img.decoding='async';img.loading='eager';
- img.onerror=()=>{img.onerror=null;img.remove();};return img;
-}
-function setArt(card,src,badge){
- if(!card)return;let box=q('.youth-card-art',card);
- if(!box){box=document.createElement('span');box.className='youth-card-art';card.prepend(box);}
- box.textContent='';box.appendChild(safeImg(src,''));
- const em=document.createElement('em');em.className='j28-badge';em.textContent=badge;box.appendChild(em);
-}
-function setHero(){
- const hero=q('.jovem-home-art');if(!hero)return;
- hero.textContent='';
- const stage=document.createElement('div');stage.className='j28-stage';stage.innerHTML='<span class="brain">🧠</span><span class="rings"></span><span class="spark s1">✦</span><span class="spark s2">♥</span><span class="spark s3">⚡</span><span class="tag">VOCÊ CONSEGUE! ♥</span>';
- hero.appendChild(stage);
-}
-function apply(){
- addTheme();setHero();
- setArt(q('[data-youth-light="react"]'),'assets/jovem-v27/reflexo-neon.webp?v=28','REFLEXO');
- setArt(q('[data-youth-light="memory"]'),'assets/jovem-v27/memorize.webp?v=28','MEMORIZE');
- setArt(q('[data-youth-light="beat"]'),'assets/jovem-v27/ritmo-movimento.webp?v=28','RITMO');
- setArt(q('[data-youth-breathe]'),'assets/jovem-v27/recomeco.webp?v=28','RECOMEÇO');
- setArt(q('[data-youth-physical]'),'assets/jovem-v27/missao-movimento.webp?v=28','MOVIMENTO');
- setArt(q('[data-youth-sensory]'),'assets/jovem-v27/laboratorio-pulso.webp?v=28','PULSO');
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
-window.addEventListener('tia:jovem-modules-ready',apply,{once:true});
+function addTheme(){if(document.querySelector('link[data-j28-theme]'))return;const l=document.createElement('link');l.rel='stylesheet';l.href='jovem-theme-v28.css?v=35';l.dataset.j28Theme='1';document.head.appendChild(l)}
+function safeImg(src,alt=''){const img=document.createElement('img');img.src=src;img.alt=alt;img.decoding='async';img.loading='eager';img.onerror=()=>{img.onerror=null;img.remove()};return img}
+function setArt(card,src,badge){if(!card)return;let box=q('.youth-card-art',card);if(!box){box=document.createElement('span');box.className='youth-card-art';card.prepend(box)}box.textContent='';box.appendChild(safeImg(src,''));const em=document.createElement('em');em.className='j28-badge';em.textContent=badge;box.appendChild(em)}
+function setCustomArt(card,type){if(!card)return;let box=q('.youth-card-art',card);if(!box){box=document.createElement('span');box.className='youth-card-art';card.prepend(box)}box.className='youth-card-art j35-art '+type;box.innerHTML=type==='j35-ping'?'<span class="j35-table"><i></i><i></i><b></b></span><span class="j35-glow"></span><em class="j28-badge">PING PONG</em>':'<span class="j35-keys"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="k1"></b><b class="k2"></b><b class="k3"></b><b class="k4"></b><b class="k5"></b></span><span class="j35-note">♪</span><em class="j28-badge">PIANO LAB</em>'}
+function addCustomCSS(){if(q('#j35Cards'))return;const s=document.createElement('style');s.id='j35Cards';s.textContent=`.j35-art{position:relative;min-height:132px;overflow:hidden;background:radial-gradient(circle at 30% 20%,#15dfff55,transparent 35%),linear-gradient(135deg,#09143d,#182067 55%,#471365)!important}.j35-art:after{content:"";position:absolute;inset:auto -15% -45% 20%;height:100px;background:#ff3aa855;filter:blur(28px)}.j35-table{position:absolute;width:76%;height:68%;left:12%;top:18%;border:2px solid #39e7ff;border-radius:12px;transform:perspective(180px) rotateX(13deg);box-shadow:0 0 22px #20dfff55,inset 0 0 20px #183d8555}.j35-table:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed #fff8}.j35-table i{position:absolute;left:7px;top:25%;width:8px;height:50%;border-radius:8px;background:#43eaff;box-shadow:0 0 14px #43eaff}.j35-table i+i{left:auto;right:7px;background:#ff48b1;box-shadow:0 0 14px #ff48b1}.j35-table b{position:absolute;left:56%;top:36%;width:13px;height:13px;border-radius:50%;background:#fff;box-shadow:0 0 18px #fff}.j35-keys{position:absolute;display:flex;left:9%;right:9%;bottom:12%;height:75%;padding:7px;background:#080d25;border:2px solid #35ddff55;border-radius:12px;box-shadow:0 0 25px #27dfff35}.j35-keys i{position:relative;flex:1;background:linear-gradient(#fff,#d8e7f4);border:1px solid #8299b5;border-radius:0 0 5px 5px}.j35-keys b{position:absolute;top:7px;width:10%;height:50%;background:linear-gradient(#070a13,#253151);z-index:3;border-radius:0 0 4px 4px}.j35-keys .k1{left:18%}.j35-keys .k2{left:31%}.j35-keys .k3{left:56%}.j35-keys .k4{left:69%}.j35-keys .k5{left:81%}.j35-note{position:absolute;right:7%;top:7%;font-size:2.2rem;color:#ff4ab1;text-shadow:0 0 15px #ff4ab1;transform:rotate(8deg)}.j35-art .j28-badge{z-index:5}`;document.head.appendChild(s)}
+function setHero(){const hero=q('.jovem-home-art');if(!hero)return;hero.textContent='';const stage=document.createElement('div');stage.className='j28-stage';stage.innerHTML='<span class="brain">🧠</span><span class="rings"></span><span class="spark s1">✦</span><span class="spark s2">♥</span><span class="spark s3">⚡</span><span class="tag">VOCÊ CONSEGUE! ♥</span>';hero.appendChild(stage)}
+function apply(){addTheme();addCustomCSS();setHero();setArt(q('[data-youth-light="react"]'),'assets/jovem-v27/reflexo-neon.webp?v=28','REFLEXO');setArt(q('[data-youth-light="memory"]'),'assets/jovem-v27/memorize.webp?v=28','MEMORIZE');setArt(q('[data-youth-light="beat"]'),'assets/jovem-v27/ritmo-movimento.webp?v=28','RITMO');setArt(q('[data-youth-breathe]'),'assets/jovem-v27/recomeco.webp?v=28','RECOMEÇO');setArt(q('[data-youth-physical]'),'assets/jovem-v27/missao-movimento.webp?v=28','MOVIMENTO');setArt(q('[data-youth-sensory]'),'assets/jovem-v27/laboratorio-pulso.webp?v=28','PULSO');setCustomArt(q('[data-jlab="ping-focus"]'),'j35-ping');setCustomArt(q('[data-jlab="piano-lab"]'),'j35-piano')}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();window.addEventListener('tia:jovem-modules-ready',()=>{apply();setTimeout(apply,700)});window.addEventListener('tia:jovem-labs-ready',()=>{apply();setTimeout(apply,200)});
 })();
