@@ -18,6 +18,28 @@
   }
   const count=()=>Math.min(4,readState().mastered.length);
 
+  function installAccessBridge(refresh=true){
+    try{
+      const current=window.canAccess;
+      if(typeof current!=='function')return false;
+      if(!current.__raiBonusAccess){
+        const base=current;
+        const wrapped=function(i){
+          if(i>=BONUS_START&&i<BONUS_START+BONUS.length){
+            const meta=BONUS[i-BONUS_START];
+            return !!meta&&count()>=meta.need;
+          }
+          return base(i);
+        };
+        wrapped.__raiBonusAccess=true;
+        wrapped.__raiBase=base;
+        window.canAccess=wrapped;
+      }
+      if(refresh&&typeof window.renderLevels==='function')window.renderLevels();
+      return true;
+    }catch(e){console.warn('Acesso bônus Prova Paraná',e);return false}
+  }
+
   function ensureCelebration(){
     if(celebration?.isConnected)return celebration;
     celebration=document.createElement('div');
@@ -74,17 +96,17 @@
     play.hidden=false;o.querySelector('[data-study]').hidden=true;o.querySelector('[data-close]').textContent='Continuar estudando';
     play.onclick=()=>{
       o.classList.remove('show');
+      installAccessBridge(true);decorate();
       const b=bonusButton(i);if(!b)return;
       const before=String(root?.querySelector('#title')?.textContent||'');
       b.click();
       setTimeout(()=>{
         const after=String(root?.querySelector('#title')?.textContent||'');
         if(after===before){
-          o.querySelector('.rai-bonus-trophy').textContent='🎯';
-          o.querySelector('#raiBonusText').textContent='A missão está liberada. Se a tela não mudou, toque diretamente no desafio na lista de missões.';
-          o.classList.add('show');
+          installAccessBridge(true);decorate();
+          const retry=bonusButton(i);retry?.click();
         }
-      },220);
+      },160);
     };
     o.classList.add('show');
     try{navigator.vibrate?.([22,45,30,45,45])}catch(e){}
@@ -107,8 +129,8 @@
       const b=buttons[BONUS_START+i];if(!b)return;
       const unlocked=mastered>=meta.need;
       b.dataset.raiBonus=String(i);b.dataset.raiBonusNeed=String(meta.need);
-      b.disabled=false;b.setAttribute('aria-disabled',unlocked?'false':'true');
-      b.classList.add('rai-bonus-level');b.classList.toggle('rai-bonus-locked',!unlocked);b.classList.toggle('rai-bonus-unlocked',unlocked);
+      b.disabled=!unlocked;b.setAttribute('aria-disabled',unlocked?'false':'true');
+      b.classList.add('rai-bonus-level');b.classList.toggle('locked',!unlocked);b.classList.toggle('rai-bonus-locked',!unlocked);b.classList.toggle('rai-bonus-unlocked',unlocked);
       let badge=b.querySelector('.rai-bonus-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge';b.appendChild(badge)}
       badge.textContent=unlocked?'🎯 BÔNUS':`🔒 ${meta.need} aula${meta.need>1?'s':''}`;
       b.title=unlocked?'Desafio Bônus liberado pelas aulas do Especial Prova Paraná':`Complete ${meta.need} aula${meta.need>1?'s':''} do Especial Prova Paraná com aproveitamento mínimo`;
@@ -116,26 +138,30 @@
     ensureSection();
   }
 
+  function refreshAccess(){installAccessBridge(true);decorate()}
+
   function wire(){
     root=document.getElementById('tangram-levels');if(!root){setTimeout(wire,120);return}
     levelsHost=root.querySelector('#levels');if(!levelsHost){setTimeout(wire,120);return}
+    installAccessBridge(true);
+    levelsHost=root.querySelector('#levels');
     root.addEventListener('click',e=>{
       const b=e.target?.closest?.('#levels button.tl-level[data-rai-bonus]');if(!b)return;
       const i=Number(b.dataset.raiBonus),meta=BONUS[i];if(!meta)return;
-      if(count()<meta.need){e.preventDefault();e.stopPropagation();showLocked(i)}
+      if(count()<meta.need){e.preventDefault();e.stopImmediatePropagation();showLocked(i)}
     },true);
     let queued=false;
     observer=new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;decorate()})});
     observer.observe(levelsHost,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','class']});
     window.addEventListener('rai-prova-mastered',e=>{
-      decorate();
+      refreshAccess();
       const before=Number(e.detail?.previousMastered||0),after=Number(e.detail?.mastered||count());
       if(after>before&&after>=1&&after<=4)showUnlocked(after-1);
     });
-    window.addEventListener('storage',e=>{if(e.key===STORE)decorate()});
+    window.addEventListener('storage',e=>{if(e.key===STORE)refreshAccess()});
     decorate();
   }
 
-  window.__raiProvaRewardsV1={mounted:true,refresh:decorate,count,showUnlocked,showLocked};
+  window.__raiProvaRewardsV1={mounted:true,refresh:refreshAccess,count,showUnlocked,showLocked};
   wire();
 })();
