@@ -1,9 +1,9 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_J12__)return;
-window.__TIA_TATI_JOVEM_J12__=true;
+if(window.__TIA_TATI_JOVEM_J13__)return;
+window.__TIA_TATI_JOVEM_J13__=true;
 
-const V='j12-v54';
+const V='j13-v55';
 const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
@@ -108,6 +108,7 @@ async function loadOptional(src){
       'remaining-v41.js',
       'jovem-v1.js',
       'jovem-labs-v1.js',
+      'jovem-nav-v55.js',
       'jovem-cards-static-v54.js'
     ];
     for(const src of coreOrder){
@@ -121,7 +122,7 @@ async function loadOptional(src){
 
     loadOptional('naming-v42.js');
   }catch(err){
-    console.error('Tia Tati Jovem j12-v54',err);
+    console.error('Tia Tati Jovem j13-v55',err);
     status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Atualize a página e tente novamente.</small>';
   }
 })();
