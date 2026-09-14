@@ -16,6 +16,15 @@ const cards=[
   {sel:'[data-youth-physical]',art:'assets/jovem-v27/missao-movimento.webp?v=55',title:'Missão Movimento',desc:'Movimento real • sequência • etapas',badge:'MISSÃO MOVIMENTO'}
 ];
 
+function ensureNav(){
+  if(window.__TIA_TATI_JOVEM_NAV_V55__||document.querySelector('script[data-j55-nav]'))return;
+  const s=document.createElement('script');
+  s.dataset.j55Nav='1';
+  s.src='jovem-nav-v55.js?v=55&t='+Date.now();
+  s.async=true;
+  document.head.appendChild(s);
+}
+
 function pasteFrame(card,cfg){
   if(!card)return false;
   card.classList.add('j55-static-card');
@@ -45,6 +54,7 @@ function applyHero(){
 }
 
 function apply(){
+  ensureNav();
   const grid=q('.youth-card-grid');
   if(!grid)return false;
   let found=0;
@@ -60,6 +70,7 @@ function apply(){
 }
 
 function boot(){
+  ensureNav();
   apply();
   [80,220,500,900,1600].forEach(ms=>setTimeout(apply,ms));
 }
