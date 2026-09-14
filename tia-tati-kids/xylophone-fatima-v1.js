@@ -15,6 +15,26 @@ function installHighlight(){if(document.getElementById('ttXyloStrongHighlight'))
 .tt-xylo-bars:has(.tt-xylo-key.lit) .tt-xylo-key:not(.lit){filter:brightness(.72) saturate(.72)!important;opacity:.66}
 @keyframes ttXyloPulse{from{transform:translateY(4px) scale(1.055)}to{transform:translateY(4px) scale(1.105)}}
 @media(max-width:520px){.tt-xylo-key.lit{box-shadow:0 2px 0 #173d7130,0 0 0 5px #fff,0 0 0 9px #ffd54f,0 0 27px 12px #ffb300cc!important}}
+@media(orientation:landscape) and (max-height:620px){
+  .tt-xylo-shell{padding:3px max(58px,env(safe-area-inset-right)) 3px 3px!important;gap:2px!important}
+  .tt-xylo-top{min-height:0!important;padding:2px 7px!important}
+  .tt-xylo-brand img{width:28px!important;height:28px!important;border-radius:9px!important}
+  .tt-xylo-close{width:30px!important;height:30px!important;font-size:1rem!important}
+  .tt-xylo-hero{padding:2px!important;border-radius:12px!important}
+  .tt-xylo-hero h1{font-size:.9rem!important;line-height:1.05!important}
+  .tt-xylo-panel{grid-template-columns:minmax(170px,23vw) minmax(0,1fr)!important;gap:3px!important;padding:4px!important}
+  .tt-xylo-msg{padding:4px 5px!important;font-size:.62rem!important;line-height:1.05!important;border-radius:10px!important}
+  .tt-xylo-modes{gap:3px!important}
+  .tt-xylo-mode{padding:4px 2px!important;font-size:.56rem!important;line-height:1.08!important;border-width:1.5px!important;border-radius:11px!important}
+  .tt-xylo-songs{padding:3px!important;border-radius:11px!important}
+  .tt-xylo-songgrid{gap:3px!important}
+  .tt-xylo-song{padding:4px 2px!important;font-size:.55rem!important;line-height:1.08!important;border-width:1.5px!important;border-radius:10px!important}
+  .tt-xylo-actions{gap:3px!important;justify-content:flex-start!important}
+  .tt-xylo-btn{padding:5px 8px!important;font-size:.6rem!important;line-height:1!important}
+  .tt-xylo-bars{min-width:0!important;gap:2px!important;padding:3px 2px 5px!important;max-height:calc(100dvh - 76px)!important}
+  .tt-xylo-key{min-width:0!important;border-radius:10px 10px 15px 15px!important}
+  .tt-xylo-key span{font-size:.54rem!important;bottom:5px!important;padding:2px 1px!important}
+}
 `;document.head.appendChild(s)}
 installHighlight();
 const current=()=>extraSongs[selectedKey]||null;
