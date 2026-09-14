@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071a43"/><stop offset=".55" stop-color="#13256c"/><stop offset="1" stop-color="#421763"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="800" height="420" rx="28" fill="url(#bg)"/>
+<circle cx="155" cy="95" r="110" fill="#16d9ff" opacity=".12"/><circle cx="650" cy="320" r="150" fill="#ff4fa8" opacity=".12"/>
+<g transform="translate(120 80)" filter="url(#glow)"><rect x="0" y="0" width="560" height="240" rx="22" fill="#061229" stroke="#45eaff" stroke-width="5"/><line x1="280" y1="0" x2="280" y2="240" stroke="#ffffff" stroke-opacity=".5" stroke-dasharray="12 12" stroke-width="4"/><line x1="0" y1="120" x2="560" y2="120" stroke="#ffffff" stroke-opacity=".18" stroke-width="3"/><rect x="28" y="55" width="20" height="130" rx="10" fill="#45eaff"/><rect x="512" y="55" width="20" height="130" rx="10" fill="#ff4fa8"/><circle cx="335" cy="88" r="18" fill="white"/></g>
+<text x="42" y="58" fill="#6ff3ff" font-family="Arial,sans-serif" font-size="28" font-weight="800">PING PONG FOCUS</text><text x="42" y="385" fill="#fff" opacity=".8" font-family="Arial,sans-serif" font-size="22">reflexo • precisão • controle</text>
+</svg>
