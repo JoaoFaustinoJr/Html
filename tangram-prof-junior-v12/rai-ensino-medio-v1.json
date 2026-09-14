@@ -1,0 +1,29 @@
+[
+  {
+    "id":"em-midias-01",
+    "section":"em",
+    "icon":"📡",
+    "levelLabel":"3ª série do Ensino Médio",
+    "topic":"Mídias tradicionais e digitais: linguagem, circulação e alcance",
+    "objective":"Analisar diferenças e convergências entre mídias tradicionais e digitais e justificar escolhas de mídia conforme objetivo, público, linguagem e contexto.",
+    "concept":"Uma mesma informação muda quando muda de meio. Rádio, jornal, televisão, mensagens, redes sociais, podcasts e plataformas de vídeo organizam tempo, linguagem, público, resposta e visibilidade de maneiras diferentes. A distinção entre tradicional e digital é útil como ponto de partida, mas hoje predomina a convergência: rádio vira podcast, televisão transmite online, jornais operam redes sociais e conteúdos digitais reutilizam linguagens de meios anteriores.",
+    "keyTerm":"Ecossistema de mídia",
+    "keyDefinition":"Conjunto de meios, plataformas, linguagens, públicos, tecnologias e regras de circulação envolvidos na produção e distribuição de informação. O efeito de uma mensagem depende do conteúdo, do canal, do público e dos mecanismos que determinam sua visibilidade.",
+    "example":"Para divulgar uma feira de ciências, a escola pode combinar rádio local para alcance territorial, mensagens e redes sociais para mobilização rápida e uma página institucional ou vídeo para registro permanente. A melhor estratégia não escolhe a plataforma pela moda: escolhe o meio pelo objetivo.",
+    "formula":"MATRIZ DE DECISÃO\nObjetivo → Público → Linguagem → Canal → Interação → Métrica → Ética\n\nTradicionais: alcance amplo ou territorial; retorno mais mediado; forte curadoria editorial.\nDigitais: segmentação detalhada; interação rápida; mensuração em tempo real; visibilidade também influenciada por algoritmos.",
+    "representation":"Perguntas-guia: Quem produziu a mensagem? Para qual público? Com qual objetivo? Que linguagem foi escolhida? Por que este conteúdo chegou até mim? Que indicador mostraria se a comunicação funcionou?",
+    "use":"Na divulgação de projetos, jornalismo, publicidade, comunicação pública, redes sociais, podcasts, streaming e educação online. Competência midiática significa escolher meios de forma intencional e interpretar criticamente como as mensagens circulam.",
+    "observe":"Evite generalizações. Mídia digital não é sempre gratuita, e mídia tradicional não é necessariamente sem interação. Custos, velocidade, alcance e participação dependem do formato e da situação concreta.",
+    "guided":"Escolha uma notícia da escola e produza três versões: uma manchete para mural ou jornal, um roteiro de 20 segundos para rádio e uma publicação digital curta. Depois compare o que precisou ser cortado, destacado ou explicado em cada formato.",
+    "challenge":"Desafio 360°: a escola precisa divulgar uma informação científica importante em uma semana para públicos de idades diferentes. Defina público prioritário, mensagem central, duas mídias complementares, formato do conteúdo, um indicador de resultado e um cuidado ético.",
+    "answer":"Uma resposta consistente começa pelo objetivo e pelo público. Exemplo: vídeo curto para estudantes e canal institucional ou rádio local para famílias; mensagem clara com fonte; indicador ligado ao objetivo, como acesso ao conteúdo completo ou respostas qualificadas; cuidado ético com autoria, privacidade e fidelidade da informação. Outras soluções são válidas se forem coerentes e justificadas.",
+    "fixation":[
+      {"q":"Uma emissora de rádio também publica podcasts e vídeos em redes sociais. Que conceito explica melhor esse cenário?","a":"Convergência de mídias: linguagens, canais e tecnologias diferentes passam a funcionar de forma articulada."},
+      {"q":"Por que algoritmos entram no estudo das mídias digitais?","a":"Porque sistemas de busca, recomendação e ranqueamento podem influenciar quais conteúdos ganham visibilidade e para quais públicos aparecem."},
+      {"q":"Muitas curtidas significam automaticamente que uma campanha foi bem-sucedida?","a":"Não. A métrica precisa corresponder ao objetivo. Alcance, retenção, acesso à fonte, respostas ou outra ação podem ser indicadores mais relevantes."}
+    ],
+    "axis":"Ensino Médio • Mídias Digitais • Cultura Digital e Linguagens",
+    "reference":"Trilha de Mídias Digitais II • Ensino Médio • Referencial curricular do Paraná e materiais pedagógicos da rede estadual.",
+    "teacherTip":"Avalie a justificativa das escolhas. Uma resposta forte conecta objetivo, público, linguagem, canal, interação, métrica e ética. Como extensão, os grupos podem adaptar a mesma notícia para dois meios e defender suas decisões."
+  }
+]
