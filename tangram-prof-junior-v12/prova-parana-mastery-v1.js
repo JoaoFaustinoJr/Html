@@ -7,6 +7,8 @@
  const count=()=>read().mastered.length;
  const need=n=>n?Math.max(1,Math.ceil(n*2/3)):0;
  function syncCore(){try{const c=JSON.parse(localStorage.getItem(CORE)||'{}'),m=read().mastered;c.mastered=m;localStorage.setItem(CORE,JSON.stringify(c))}catch(e){}}
+ function retry(o,d){const id=current;answers={};d.querySelector('[data-back]')?.click();setTimeout(()=>o.querySelector(`.rai-pp-item[data-id="${CSS.escape(id)}"]`)?.click(),40)}
+ function renderRetry(box,o,d,total,score){const req=need(total);box.className='rai-pp-reward retry';box.innerHTML=`<span>🎯</span><div><b>Quase lá!</b><p>Você acertou ${score} de ${total}. São necessários ${req} acertos para conquistar a recompensa.</p><button type="button" class="rai-pp-retry">↻ Revisar e tentar novamente</button></div>`;box.querySelector('.rai-pp-retry')?.addEventListener('click',()=>retry(o,d))}
  function decorate(){
   const o=document.querySelector('.rai-pp-overlay');if(!o)return;
   const home=o.querySelector('#raiPPHome');
@@ -15,13 +17,15 @@
   const total=d.querySelectorAll('.rai-pp-q').length;if(!total)return;
   let b=d.querySelector('.rai-pp-reward');if(!b){b=document.createElement('div');b.className='rai-pp-reward';d.querySelector('.rai-pp-summary')?.after(b)}
   const s=read();if(s.mastered.includes(current)){b.className='rai-pp-reward success';b.innerHTML='<span>🏆</span><div><b>Recompensa conquistada</b><p>Esta aula já contou para desbloquear os Desafios Bônus do Tangram.</p><small>⭐ Domínio registrado neste aparelho.</small></div>';return}
-  const done=Object.keys(answers).length,score=Object.values(answers).filter(Boolean).length;b.className='rai-pp-reward';b.innerHTML=`<span>🎁</span><div><b>Missão da Raí</b><p>Conclua o teste e acerte pelo menos <strong>${need(total)} de ${total}</strong> questões para avançar no desbloqueio de um novo Desafio Bônus.</p><small>⭐ ${done}/${total} respondidas • ${score} acerto${score===1?'':'s'}</small></div>`;
+  const done=Object.keys(answers).length,score=Object.values(answers).filter(Boolean).length;
+  if(done>=total&&score<need(total)){renderRetry(b,o,d,total,score);return}
+  b.className='rai-pp-reward';b.innerHTML=`<span>🎁</span><div><b>Missão da Raí</b><p>Conclua o teste e acerte pelo menos <strong>${need(total)} de ${total}</strong> questões para avançar no desbloqueio de um novo Desafio Bônus.</p><small>⭐ ${done}/${total} respondidas • ${score} acerto${score===1?'':'s'}</small></div>`;
  }
  function finish(){
   const o=document.querySelector('.rai-pp-overlay'),d=o?.querySelector('#raiPPDetail');if(!d||d.hidden||!current)return;const total=d.querySelectorAll('.rai-pp-q').length;if(!total||Object.keys(answers).length<total)return;
   const score=Object.values(answers).filter(Boolean).length,req=need(total),box=d.querySelector('.rai-pp-reward');if(!box)return;
   if(score>=req){const s=read(),before=s.mastered.length,first=!s.mastered.includes(current);if(first)s.mastered.push(current);save(s);syncCore();box.className='rai-pp-reward success';box.innerHTML=`<span>🔓</span><div><b>Desafio desbloqueado!</b><p>Você acertou ${score} de ${total}. Seu estudo avançou o desbloqueio dos Desafios Bônus.</p><small>🎯 Aprender também faz o jogo avançar.</small></div>`;if(first)window.dispatchEvent(new CustomEvent('rai-prova-mastered',{detail:{lessonId:current,previousMastered:before,mastered:s.mastered.length}}))}
-  else{box.className='rai-pp-reward retry';box.innerHTML=`<span>🎯</span><div><b>Quase lá!</b><p>Você acertou ${score} de ${total}. São necessários ${req} acertos para conquistar a recompensa.</p><button type="button" class="rai-pp-retry">↻ Revisar e tentar novamente</button></div>`;box.querySelector('.rai-pp-retry')?.addEventListener('click',()=>{const id=current;answers={};d.querySelector('[data-back]')?.click();setTimeout(()=>o.querySelector(`.rai-pp-item[data-id="${CSS.escape(id)}"]`)?.click(),40)})}
+  else renderRetry(box,o,d,total,score)
  }
  document.addEventListener('click',e=>{
   const item=e.target?.closest?.('.rai-pp-item[data-id]');if(item){current=item.dataset.id;answers={};setTimeout(decorate,20);return}
