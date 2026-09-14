@@ -1,9 +1,9 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_JOVEM_J9__)return;
-window.__TIA_TATI_JOVEM_J9__=true;
+if(window.__TIA_TATI_JOVEM_J10__)return;
+window.__TIA_TATI_JOVEM_J10__=true;
 
-const V='j9';
+const V='j10';
 const FINAL_AVATAR='assets/completion-avatar.webp?v=completion-v1';
 const root=document.documentElement;
 root.classList.add('tia-jovem-boot');
@@ -99,7 +99,8 @@ function runCode(src,code){
       'remaining-v41.js',
       'naming-v42.js',
       'jovem-v1.js',
-      'jovem-labs-v1.js'
+      'jovem-labs-v1.js',
+      'jovem-ping-art-v51.js'
     ];
     for(const src of order){
       const code=await getCode(src);
@@ -109,7 +110,7 @@ function runCode(src,code){
     root.classList.add('tia-jovem-ready');
     window.dispatchEvent(new Event('tia:jovem-modules-ready'));
   }catch(err){
-    console.error('Tia Tati Jovem j9',err);
+    console.error('Tia Tati Jovem j10',err);
     status.innerHTML='<b>Não foi possível iniciar</b>'+String(err.message||err)+'<br><small>Volte ao Portal Tia Tati e tente novamente.</small>';
   }
 })();
