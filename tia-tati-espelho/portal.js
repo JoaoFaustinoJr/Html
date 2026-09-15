@@ -2,7 +2,7 @@
 'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const feedback={smile:'Que sorriso lindo! 💗',blink:'Piscadinha encantada! 😉',surprise:'Uau! Que espanto! ✨',serious:'Muito bem! Agora bem sério. 🌟'};
-const V='16';
+const V='17';
 const AVATARS={
  girl:{
   smile:`assets/avatars/girl-smile.webp?v=${V}`,
@@ -24,10 +24,17 @@ function toast(text){const t=$('#feedbackToast');if(!t)return;t.textContent=text
 function halo(){const h=$('#liveHalo');if(!h)return;h.classList.remove('show');void h.offsetWidth;h.classList.add('show');clearTimeout(haloTimer);haloTimer=setTimeout(()=>h.classList.remove('show'),950)}
 function imgStyle(img){img.style.cssText='display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 9px #754a6640);';}
 function winkOverlay(av,kind){
- const overlay=document.createElement('span');overlay.setAttribute('aria-hidden','true');overlay.className='wink-overlay';overlay.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:3;';
- const patch=document.createElement('span');patch.style.cssText=`position:absolute;left:${kind==='girl'?'23%':'24%'};top:${kind==='girl'?'31%':'30%'};width:30%;height:20%;border-radius:50%;background:radial-gradient(ellipse at 50% 52%,#f6c9ad 0 64%,#f3bd9f 68%,transparent 72%);transform:rotate(-4deg);`;
- const lid=document.createElement('span');lid.style.cssText=`position:absolute;left:${kind==='girl'?'28%':'29%'};top:${kind==='girl'?'39%':'38%'};width:20%;height:8%;border-top:4px solid #4f3028;border-radius:50%;transform:rotate(-5deg);filter:drop-shadow(0 1px 0 #fff8);`;
- overlay.append(patch,lid);av.appendChild(overlay);
+ const overlay=document.createElement('span');
+ overlay.setAttribute('aria-hidden','true');
+ overlay.className='wink-overlay';
+ overlay.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:3;';
+ const patch=document.createElement('span');
+ const girl=kind==='girl';
+ patch.style.cssText=`position:absolute;left:${girl?'27.5%':'28.2%'};top:${girl?'46.2%':'45.6%'};width:${girl?'18.5%':'18%'};height:${girl?'10.2%':'10%'};border-radius:50%;background:radial-gradient(ellipse at 50% 52%,#f6c9ad 0 68%,#efb795 72%,transparent 76%);transform:rotate(-4deg);`;
+ const lid=document.createElement('span');
+ lid.style.cssText=`position:absolute;left:${girl?'29.4%':'30%'};top:${girl?'50.2%':'49.6%'};width:${girl?'15.5%':'15%'};height:4.5%;border-top:3px solid #4f3028;border-radius:50%;transform:rotate(-5deg);filter:drop-shadow(0 1px 0 #fff8);`;
+ overlay.append(patch,lid);
+ av.appendChild(overlay);
 }
 function refreshAvatar(){
  const av=$('#liveAvatar');if(!av)return;const token=++renderToken;av.classList.remove('animate-pop');av.innerHTML='';av.style.backgroundImage='none';
