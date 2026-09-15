@@ -1,48 +1,42 @@
 (()=>{
 'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const feedback={smile:'Que sorriso lindo! 💗',blink:'Piscadinha encantada! 😉',surprise:'Uau! Que espanto! ✨',serious:'Muito bem! Agora bem sério. 🌟'};
 let avatar=localStorage.getItem('tiaTatiMirrorAvatar')||'girl';
-let paused=false;
-const feedback={
-  smile:{tia:'Que sorriso lindo! ♥',mirror:'Seu sorriso ilumina o espelho! ✨'},
-  blink:{tia:'Piscadinha encantada! 😉',mirror:'Um pequeno gesto também é magia!'},
-  surprise:{tia:'Uau! Que espanto! ✨',mirror:'Seu rosto conta histórias incríveis!'},
-  serious:{tia:'Muito bem! Agora bem sério.',mirror:'Toda expressão tem seu lugar aqui. ♥'}
-};
-function applyAvatar(kind){
- avatar=kind;
- ['#avatar','#homeAvatar'].forEach(sel=>{const av=$(sel);if(!av)return;av.classList.toggle('girl',kind==='girl');av.classList.toggle('boy',kind==='boy')});
- $$('[data-avatar]').forEach(b=>b.classList.toggle('active',b.dataset.avatar===kind));
- localStorage.setItem('tiaTatiMirrorAvatar',kind);
+let toastTimer=null,haloTimer=null,favorite=false;
+async function loadMask(){
+ try{
+  const r=await fetch('assets/espelho-encantado-home.b64?v=3',{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
+  const b64=(await r.text()).trim();
+  $('#maskImage').src='data:image/webp;base64,'+b64;
+  $('#maskImage').addEventListener('load',()=>$('#maskStage').classList.add('ready'),{once:true});
+ }catch(e){
+  console.error(e);$('#maskLoading').textContent='Não foi possível carregar o cenário. Recarregue a página.';
+ }
 }
-function applyExpression(exp){
- if(paused)return;
- ['#avatar','#homeAvatar'].forEach(sel=>{const av=$(sel);if(!av)return;['smile','blink','surprise','serious'].forEach(c=>av.classList.remove(c));if(exp)av.classList.add(exp)});
- $$('[data-expression]').forEach(b=>b.classList.toggle('active',b.dataset.expression===exp));
- if(feedback[exp]){const t=$('#tiaFeedback'),m=$('#mirrorText');if(t)t.textContent=feedback[exp].tia;if(m)m.textContent=feedback[exp].mirror}
-}
-function showScreen(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));window.scrollTo({top:0,behavior:'auto'})}
-function openMode(mode){
- showScreen('freeScreen');
- if(mode==='free'){applyExpression('smile');return}
- const seq=mode==='challenge'?['surprise','smile','serious','blink']:['smile','blink','surprise','serious'];
- let i=0;const run=()=>{if(i>=seq.length)return;applyExpression(seq[i]);const t=$('#tiaFeedback');if(t)t.textContent=mode==='challenge'?'Desafio '+(i+1)+' de '+seq.length+' ✨':'Imite a princesa: '+feedback[seq[i]].tia;i++;setTimeout(run,1100)};run();
-}
-function toggleAvatarSheet(){const s=$('#avatarSheet');s?.classList.toggle('show')}
-function toggleAdmin(show){const m=$('#adminSheet');if(!m)return;m.classList.toggle('show',show??!m.classList.contains('show'));m.setAttribute('aria-hidden',m.classList.contains('show')?'false':'true')}
+function toast(text){const t=$('#feedbackToast');if(!t)return;t.textContent=text;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1900)}
+function halo(){const h=$('#liveHalo');if(!h)return;h.classList.remove('show');void h.offsetWidth;h.classList.add('show');clearTimeout(haloTimer);haloTimer=setTimeout(()=>h.classList.remove('show'),950)}
+function setAvatar(kind){avatar=kind;localStorage.setItem('tiaTatiMirrorAvatar',kind);$$('[data-avatar]').forEach(b=>b.classList.toggle('selected',b.dataset.avatar===kind));toast(kind==='girl'?'Avatar menina escolhido 💗':'Avatar menino escolhido 💙');halo()}
+function setExpression(exp){$$('[data-expression]').forEach(b=>b.classList.toggle('selected',b.dataset.expression===exp));toast(feedback[exp]||'Que expressão especial!');halo();setTimeout(()=>$$('[data-expression]').forEach(b=>b.classList.remove('selected')),900)}
+function playSequence(items,label){let i=0;toast(label);const run=()=>{if(i>=items.length){toast('Muito bem! ✨');return}setExpression(items[i++]);setTimeout(run,1150)};setTimeout(run,650)}
+function openModal(id){const m=$(id);if(!m)return;m.classList.add('show');m.setAttribute('aria-hidden','false')}
+function closeModals(){$$('.modal').forEach(m=>{m.classList.remove('show');m.setAttribute('aria-hidden','true')})}
 function init(){
- applyAvatar(avatar);applyExpression('smile');
- $$('[data-avatar]').forEach(b=>b.addEventListener('click',()=>applyAvatar(b.dataset.avatar)));
- $$('[data-expression]').forEach(b=>b.addEventListener('click',()=>applyExpression(b.dataset.expression)));
- $$('[data-open-mode]').forEach(b=>b.addEventListener('click',()=>openMode(b.dataset.openMode)));
+ loadMask();setAvatar(avatar);
+ $$('[data-avatar]').forEach(b=>b.addEventListener('click',()=>setAvatar(b.dataset.avatar)));
+ $$('[data-expression]').forEach(b=>b.addEventListener('click',()=>setExpression(b.dataset.expression)));
+ $$('[data-mode]').forEach(b=>b.addEventListener('click',()=>{
+  const mode=b.dataset.mode;
+  if(mode==='free'){toast('Espelho Livre: escolha uma expressão ✨');halo()}
+  if(mode==='challenge')playSequence(['smile','blink','surprise','serious'],'Desafio Encantado começou! ⭐');
+  if(mode==='princess')playSequence(['smile','surprise','blink','serious'],'Imite a Princesa 👑');
+ }));
+ $('[data-action="room"]')?.addEventListener('click',()=>openModal('#roomModal'));
+ $('[data-action="settings"]')?.addEventListener('click',()=>openModal('#settingsModal'));
+ $('[data-action="favorite"]')?.addEventListener('click',()=>{favorite=!favorite;toast(favorite?'Guardado com carinho 💗':'Retirado dos favoritos')});
+ $$('.modal-close').forEach(b=>b.addEventListener('click',closeModals));
+ $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals()}));
  $('#backKids')?.addEventListener('click',()=>location.href='../tia-tati-kids/');
- $('#backHome')?.addEventListener('click',()=>showScreen('homeScreen'));
- $('#chooseAvatar')?.addEventListener('click',toggleAvatarSheet);
- $('#adminBtn')?.addEventListener('click',()=>toggleAdmin(true));
- $('.modal-close')?.addEventListener('click',()=>toggleAdmin(false));
- $('#adminSheet')?.addEventListener('click',e=>{if(e.target.id==='adminSheet')toggleAdmin(false)});
- $('#pauseBtn')?.addEventListener('click',()=>{paused=!paused;const b=$('#pauseBtn');if(b)b.innerHTML=paused?'▶ <span>Continuar</span> ›':'⏸ <span>Pausar</span> ›';const t=$('#tiaFeedback');if(t)t.textContent=paused?'O espelho está descansando um pouquinho. ✨':'Voltamos à brincadeira! ♥'});
- $('#settingsBtn')?.addEventListener('click',()=>toggleAdmin(true));
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
