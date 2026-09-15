@@ -22,7 +22,6 @@ function init(){
  $$('.modal-close').forEach(b=>b.addEventListener('click',closeModals));
  $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals()}));
  $('#backKids')?.addEventListener('click',()=>location.href='../tia-tati-kids/');
- const img=$('#maskImage');if(img){img.addEventListener('error',()=>{toast('Não foi possível carregar o cenário.');console.error('Falha ao carregar máscara',img.src)})}
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
