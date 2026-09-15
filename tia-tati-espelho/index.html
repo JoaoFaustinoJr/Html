@@ -5,57 +5,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7cddd">
 <title>Espelho Encantado da Tia Tati</title>
-<link rel="stylesheet" href="portal.css?v=4">
+<link rel="stylesheet" href="portal.css?v=5">
 </head>
 <body>
 <main class="mask-app" id="maskApp">
-  <section class="mask-stage" id="maskStage" aria-label="Espelho Encantado da Tia Tati">
-    <div class="mask-loading" id="maskLoading">✨ Preparando o Espelho Encantado…</div>
-    <img id="maskImage" class="mask-image" alt="Espelho Encantado da Tia Tati">
-
+  <section class="mask-stage ready" id="maskStage" aria-label="Espelho Encantado da Tia Tati">
+    <img id="maskImage" class="mask-image" src="assets/espelho-encantado-home-v5.webp?v=5" alt="Espelho Encantado da Tia Tati">
     <div class="live-halo" id="liveHalo" aria-hidden="true"></div>
     <div class="feedback-toast" id="feedbackToast" role="status" aria-live="polite"></div>
-
     <button class="hotspot round hs-settings" data-action="settings" aria-label="Configurações"></button>
     <button class="hotspot round hs-heart" data-action="favorite" aria-label="Favorito"></button>
-
     <button class="hotspot hs-avatar-girl selected" data-avatar="girl" aria-label="Avatar menina"></button>
     <button class="hotspot hs-avatar-boy" data-avatar="boy" aria-label="Avatar menino"></button>
-
     <button class="hotspot hs-smile" data-expression="smile" aria-label="Sorriso"></button>
     <button class="hotspot hs-blink" data-expression="blink" aria-label="Piscada"></button>
     <button class="hotspot hs-surprise" data-expression="surprise" aria-label="Espanto"></button>
     <button class="hotspot hs-serious" data-expression="serious" aria-label="Sério"></button>
-
     <button class="hotspot hs-free" data-mode="free" aria-label="Espelho Livre"></button>
     <button class="hotspot hs-challenge" data-mode="challenge" aria-label="Desafio Encantado"></button>
     <button class="hotspot hs-princess" data-mode="princess" aria-label="Imite a Princesa"></button>
     <button class="hotspot hs-room" data-action="room" aria-label="Sala da Tia Tati"></button>
   </section>
-
-  <div class="modal" id="roomModal" aria-hidden="true">
-    <section class="modal-card">
-      <button class="modal-close" type="button" aria-label="Fechar">×</button>
-      <h2>👑 Sala da Tia Tati</h2>
-      <p>Este será o cantinho para conversas, dicas, histórias e, futuramente, perfis autorizados.</p>
-      <div class="room-grid">
-        <button type="button">💗 Mensagens da Tia Tati</button>
-        <button type="button">⭐ Conquistas</button>
-        <button type="button">👧👦 Perfis autorizados</button>
-        <button type="button">🔒 Privacidade</button>
-      </div>
-    </section>
-  </div>
-
-  <div class="modal" id="settingsModal" aria-hidden="true">
-    <section class="modal-card small">
-      <button class="modal-close" type="button" aria-label="Fechar">×</button>
-      <h2>⚙️ Configurações</h2>
-      <p>O sensor facial continuará separado desta tela visual. Nenhuma imagem da criança é exibida.</p>
-      <button class="back-kids" id="backKids" type="button">← Voltar ao Tia Tati Kids</button>
-    </section>
-  </div>
+  <div class="modal" id="roomModal" aria-hidden="true"><section class="modal-card"><button class="modal-close" type="button" aria-label="Fechar">×</button><h2>👑 Sala da Tia Tati</h2><p>Este será o cantinho para conversas, dicas, histórias e, futuramente, perfis autorizados.</p><div class="room-grid"><button type="button">💗 Mensagens da Tia Tati</button><button type="button">⭐ Conquistas</button><button type="button">👧👦 Perfis autorizados</button><button type="button">🔒 Privacidade</button></div></section></div>
+  <div class="modal" id="settingsModal" aria-hidden="true"><section class="modal-card small"><button class="modal-close" type="button" aria-label="Fechar">×</button><h2>⚙️ Configurações</h2><p>O sensor facial continuará separado desta tela visual. Nenhuma imagem da criança é exibida.</p><button class="back-kids" id="backKids" type="button">← Voltar ao Tia Tati Kids</button></section></div>
 </main>
-<script src="portal.js?v=4"></script>
+<script src="portal.js?v=5"></script>
 </body>
 </html>
