@@ -1,0 +1,14 @@
+(()=>{
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+let avatar='girl',mode='free',challengeIndex=0;
+const challengeOrder=['smile','blink','surprise','serious'];
+const labels={smile:'Mostre um sorriso!',blink:'Pisca para mim!',surprise:'Faça cara de espanto!',serious:'Agora fique bem sério!'};
+function setAvatar(kind){avatar=kind;const av=$('#avatar');if(!av)return;av.classList.toggle('girl',kind==='girl');av.classList.toggle('boy',kind==='boy');$$('[data-avatar]').forEach(b=>b.classList.toggle('active',b.dataset.avatar===kind));localStorage.setItem('tiaTatiMirrorAvatar',kind)}
+function setExpression(exp){const av=$('#avatar');if(!av)return;['smile','blink','surprise','serious'].forEach(c=>av.classList.remove(c));if(exp)av.classList.add(exp);$$('[data-expression]').forEach(b=>b.classList.toggle('active',b.dataset.expression===exp));if(mode==='challenge'&&exp===challengeOrder[challengeIndex]){challengeIndex=(challengeIndex+1)%challengeOrder.length;setTimeout(()=>{$('#prompt').textContent='Muito bem! ✨ '+labels[challengeOrder[challengeIndex]];setExpression('')},650)}}
+function setMode(next){mode=next;$$('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===next));const p=$('#prompt');if(next==='free'){p.textContent='Faça uma careta — por enquanto, toque nas expressões abaixo para testar o avatar.';setExpression('')}if(next==='challenge'){challengeIndex=0;p.textContent=labels[challengeOrder[challengeIndex]];setExpression('')}if(next==='mirror'){p.textContent='Imite a princesa: sorriso, piscadinha, espanto e sério.';demoSequence()}}
+function demoSequence(){const seq=['smile','blink','surprise','serious',''];seq.forEach((e,i)=>setTimeout(()=>setExpression(e),i*850))}
+function toggleSheet(id){$$('.sheet').forEach(s=>s.classList.toggle('show',s.id===id&&!s.classList.contains('show')))}
+function init(){setAvatar(localStorage.getItem('tiaTatiMirrorAvatar')||'girl');$$('[data-avatar]').forEach(b=>b.addEventListener('click',()=>setAvatar(b.dataset.avatar)));$$('[data-expression]').forEach(b=>b.addEventListener('click',()=>setExpression(b.dataset.expression)));$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));$('#chooseAvatar')?.addEventListener('click',()=>toggleSheet('avatarSheet'));$('#adminBtn')?.addEventListener('click',()=>toggleSheet('adminSheet'));$('#demoBtn')?.addEventListener('click',demoSequence);$('#backKids')?.addEventListener('click',()=>location.href='../tia-tati-kids/');setMode('free')}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
