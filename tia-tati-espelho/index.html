@@ -3,115 +3,59 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8d7e8">
+<meta name="theme-color" content="#f7cddd">
 <title>Espelho Encantado da Tia Tati</title>
-<link rel="stylesheet" href="portal.css?v=2">
+<link rel="stylesheet" href="portal.css?v=3">
 </head>
 <body>
-<main class="app">
-  <section class="screen home-screen active" id="homeScreen">
-    <button class="corner back" id="backKids" type="button" aria-label="Voltar">‹</button>
-    <button class="corner settings" id="settingsBtn" type="button" aria-label="Configurações">⚙</button>
+<main class="mask-app" id="maskApp">
+  <section class="mask-stage" id="maskStage" aria-label="Espelho Encantado da Tia Tati">
+    <div class="mask-loading" id="maskLoading">✨ Preparando o Espelho Encantado…</div>
+    <img id="maskImage" class="mask-image" alt="Espelho Encantado da Tia Tati">
 
-    <div class="home-title crown-title">
-      <span class="gem">💗</span>
-      <h1>Espelho Encantado</h1>
-      <h2>da Tia Tati</h2>
-      <p>Faça uma expressão e veja o espelho responder com magia!</p>
-    </div>
+    <div class="live-halo" id="liveHalo" aria-hidden="true"></div>
+    <div class="feedback-toast" id="feedbackToast" role="status" aria-live="polite"></div>
 
-    <section class="storybook">
-      <aside class="princess-guide">
-        <div class="princess-frame">
-          <span class="princess-crown">♛</span>
-          <img src="../tia-tati-kids/assets/welcome.webp" alt="Tia Tati">
-        </div>
-        <div class="guide-bubble">Você é incrível do seu jeito! ♥</div>
-      </aside>
+    <button class="hotspot round hs-settings" data-action="settings" aria-label="Configurações"></button>
+    <button class="hotspot round hs-heart" data-action="favorite" aria-label="Favorito"></button>
 
-      <div class="magic-mirror home-mirror">
-        <span class="mirror-gem top">♥</span>
-        <div class="mirror-glass">
-          <div class="avatar girl" id="homeAvatar">
-            <div class="hair"></div><div class="head"><i class="brow l"></i><i class="brow r"></i><i class="eye l"></i><i class="eye r"></i><i class="cheek l"></i><i class="cheek r"></i><i class="mouth"></i></div><div class="neck"></div><div class="body"></div>
-          </div>
-          <div class="mirror-message">Que linda expressão! ✨</div>
-        </div>
-        <span class="mirror-gem bottom">♥</span>
-      </div>
-    </section>
+    <button class="hotspot hs-avatar-girl selected" data-avatar="girl" aria-label="Avatar menina"></button>
+    <button class="hotspot hs-avatar-boy" data-avatar="boy" aria-label="Avatar menino"></button>
 
-    <section class="mode-grid">
-      <button class="mode-card pink" data-open-mode="free" type="button"><span>💗</span><strong>Espelho Livre</strong><small>Explore suas emoções com magia</small></button>
-      <button class="mode-card purple" data-open-mode="challenge" type="button"><span>🎮</span><strong>Desafio Encantado</strong><small>Brinque, aprenda e evolua</small></button>
-      <button class="mode-card blue" data-open-mode="mirror" type="button"><span>👑</span><strong>Imite a Princesa</strong><small>Repita as expressões com a Tia Tati</small></button>
-    </section>
+    <button class="hotspot hs-smile" data-expression="smile" aria-label="Sorriso"></button>
+    <button class="hotspot hs-blink" data-expression="blink" aria-label="Piscada"></button>
+    <button class="hotspot hs-surprise" data-expression="surprise" aria-label="Espanto"></button>
+    <button class="hotspot hs-serious" data-expression="serious" aria-label="Sério"></button>
 
-    <button class="room-card" id="adminBtn" type="button"><span>📖</span><span><strong>Sala da Tia Tati</strong><small>Dicas, histórias e muito carinho</small></span><b>›</b></button>
-
-    <section class="avatar-home">
-      <h3>Escolha seu avatar:</h3>
-      <div class="avatar-select">
-        <button class="avatar-choice active" type="button" data-avatar="girl"><span>👧</span>Avatar menina</button>
-        <button class="avatar-choice" type="button" data-avatar="boy"><span>👦</span>Avatar menino</button>
-      </div>
-    </section>
-
-    <div class="privacy">🛡️ A câmera é usada apenas como um sensor. A imagem da criança não é exibida nem armazenada.</div>
+    <button class="hotspot hs-free" data-mode="free" aria-label="Espelho Livre"></button>
+    <button class="hotspot hs-challenge" data-mode="challenge" aria-label="Desafio Encantado"></button>
+    <button class="hotspot hs-princess" data-mode="princess" aria-label="Imite a Princesa"></button>
+    <button class="hotspot hs-room" data-action="room" aria-label="Sala da Tia Tati"></button>
   </section>
 
-  <section class="screen free-screen" id="freeScreen">
-    <button class="corner back" id="backHome" type="button" aria-label="Voltar">‹</button>
-    <button class="corner settings" type="button" aria-label="Configurações">⚙</button>
-
-    <div class="free-title crown-title compact">
-      <span class="gem">💗</span>
-      <h1>Espelho Livre</h1>
-      <p>Explore suas emoções com magia</p>
-    </div>
-
-    <section class="free-storybook">
-      <aside class="princess-guide free-guide">
-        <div class="princess-frame small"><span class="princess-crown">♛</span><img src="../tia-tati-kids/assets/welcome.webp" alt="Tia Tati"></div>
-        <div class="guide-bubble" id="tiaFeedback">Que sorriso lindo! ♥</div>
-      </aside>
-
-      <div class="magic-mirror free-mirror">
-        <span class="mirror-gem top">♥</span>
-        <div class="mirror-glass">
-          <div class="mirror-text" id="mirrorText">Você é incrível do seu jeito!</div>
-          <div class="avatar girl" id="avatar">
-            <div class="hair"></div><div class="head"><i class="brow l"></i><i class="brow r"></i><i class="eye l"></i><i class="eye r"></i><i class="cheek l"></i><i class="cheek r"></i><i class="mouth"></i></div><div class="neck"></div><div class="body"></div>
-          </div>
-        </div>
-        <span class="mirror-gem bottom">♥</span>
+  <div class="modal" id="roomModal" aria-hidden="true">
+    <section class="modal-card">
+      <button class="modal-close" type="button" aria-label="Fechar">×</button>
+      <h2>👑 Sala da Tia Tati</h2>
+      <p>Este será o cantinho para conversas, dicas, histórias e, futuramente, perfis autorizados.</p>
+      <div class="room-grid">
+        <button type="button">💗 Mensagens da Tia Tati</button>
+        <button type="button">⭐ Conquistas</button>
+        <button type="button">👧👦 Perfis autorizados</button>
+        <button type="button">🔒 Privacidade</button>
       </div>
     </section>
+  </div>
 
-    <section class="expression-panel">
-      <h3>Escolha uma expressão para se ver no espelho:</h3>
-      <div class="expressions">
-        <button class="expr active" type="button" data-expression="smile"><span class="face-demo">😊</span><strong>Sorriso</strong></button>
-        <button class="expr" type="button" data-expression="blink"><span class="face-demo">😉</span><strong>Piscada</strong></button>
-        <button class="expr" type="button" data-expression="surprise"><span class="face-demo">😮</span><strong>Espanto</strong></button>
-        <button class="expr" type="button" data-expression="serious"><span class="face-demo">😐</span><strong>Sério</strong></button>
-      </div>
+  <div class="modal" id="settingsModal" aria-hidden="true">
+    <section class="modal-card small">
+      <button class="modal-close" type="button" aria-label="Fechar">×</button>
+      <h2>⚙️ Configurações</h2>
+      <p>O sensor facial continuará separado desta tela visual. Nenhuma imagem da criança é exibida.</p>
+      <button class="back-kids" id="backKids" type="button">← Voltar ao Tia Tati Kids</button>
     </section>
-
-    <div class="encourage"><span>⭐</span><div><strong>Cada expressão é uma forma especial de se conhecer!</strong><small>Brinque, explore e descubra como seu rosto pode contar histórias.</small></div><div class="hearts">♥ ♥ ♡</div></div>
-
-    <div class="free-actions">
-      <button class="action-btn avatar-btn" id="chooseAvatar" type="button">👧👦 <span>Trocar avatar</span> ›</button>
-      <button class="action-btn pause-btn" id="pauseBtn" type="button">⏸ <span>Pausar</span> ›</button>
-    </div>
-
-    <div class="privacy">🛡️ A câmera é usada apenas como um sensor. A imagem da criança não é exibida nem armazenada.</div>
-
-    <div class="sheet" id="avatarSheet"><h3>Escolha seu espelho</h3><div class="avatar-select"><button class="avatar-choice active" type="button" data-avatar="girl"><span>👧</span>Avatar menina</button><button class="avatar-choice" type="button" data-avatar="boy"><span>👦</span>Avatar menino</button></div></div>
-  </section>
-
-  <div class="modal" id="adminSheet" aria-hidden="true"><div class="modal-card"><button class="modal-close" type="button">×</button><h2>👑 Sala da Tia Tati</h2><div class="admin-grid"><div class="admin-card"><strong>Perfil da Tia Tati</strong><small>Personagem-guia, saudação e preferências do portal.</small><span>Em preparação</span></div><div class="admin-card"><strong>Perfis autorizados</strong><small>Futuramente: perfis locais com consentimento.</small><span>Sem imagens armazenadas nesta versão</span></div><div class="admin-card"><strong>Privacidade</strong><small>Dados locais, exclusão simples e câmera sem preview.</small></div></div></div></div>
+  </div>
 </main>
-<script src="portal.js?v=2"></script>
+<script src="portal.js?v=3"></script>
 </body>
 </html>
