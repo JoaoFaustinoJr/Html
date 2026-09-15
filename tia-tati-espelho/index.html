@@ -3,40 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#eefaff">
-<title>Espelho Mágico da Tia Tati</title>
-<style>
-html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#eefaff,#fff6fb 56%,#f4efff);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#26496c}
-.portal-boot{position:fixed;inset:0;display:grid;place-items:center;padding:24px;text-align:center;background:linear-gradient(180deg,#eefaff,#fff6fb 56%,#f4efff);z-index:999999}
-.portal-box{width:min(88vw,420px);padding:26px 20px;border-radius:28px;background:#fff;box-shadow:0 18px 45px rgba(38,73,108,.14);border:1px solid #e5eef4}
-.portal-icon{font-size:64px}.portal-box h1{margin:8px 0 5px;color:#244ea1}.portal-box p{margin:0;color:#6d7f92;line-height:1.45}.portal-safe{margin-top:14px;padding:10px;border-radius:16px;background:#ecfff2;color:#3a6a49;font-size:.78rem;font-weight:800}
-.home-v22-missions{display:none!important}
-</style>
+<meta name="theme-color" content="#f8f0ff">
+<title>Espelho Encantado da Tia Tati</title>
+<link rel="stylesheet" href="portal.css?v=1">
 </head>
 <body>
-<div class="portal-boot" id="portalBoot"><div class="portal-box"><div class="portal-icon">🪞✨</div><h1>Espelho Mágico</h1><p>Preparando seu avatar e o reconhecimento facial…</p><div class="portal-safe">A câmera será usada apenas como sensor. A imagem da criança nunca será exibida.</div></div></div>
-<div class="home-v22-missions" aria-hidden="true"></div>
-<script src="../tia-tati-kids/magic-mirror-network-v1.js?v=5"></script>
-<script src="../tia-tati-kids/magic-mirror-core-v2.js?v=5"></script>
-<script src="../tia-tati-kids/magic-mirror-visual-v2.js?v=5"></script>
-<script>
-(()=>{
- let attempts=0;
- const launch=()=>{
-  const card=document.querySelector('[data-magic-mirror]');
-  if(card){
-   document.getElementById('portalBoot')?.remove();
-   card.click();
-   return;
-  }
-  if(++attempts<40)setTimeout(launch,120);
-  else{
-   const b=document.querySelector('#portalBoot .portal-box');
-   if(b)b.innerHTML='<div class="portal-icon">⚠️</div><h1>Não foi possível iniciar</h1><p>Recarregue a página e tente novamente.</p>';
-  }
- };
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',launch,{once:true});else launch();
-})();
-</script>
+<main class="app">
+<header class="top"><div class="brand"><div class="crest">👑</div><div><strong>Espelho Encantado</strong><small>Tia Tati Kids</small></div></div><button class="back" id="backKids" type="button">← Voltar ao Kids</button></header>
+<section class="hero"><h1>Espelho Encantado <span>da Tia Tati</span></h1><p>Um espelho mágico para brincar com expressões, imitação e imaginação.</p></section>
+<div class="safe">🔒 Nesta versão, nenhuma câmera é ativada. Primeiro estamos validando o layout. Quando o sensor facial voltar, a imagem da criança continuará sem aparecer, sem ser salva e sem ser enviada.</div>
+<section class="layout">
+<aside class="guide"><div class="guide-cameo"><span class="guide-crown">👑</span><img src="../tia-tati-kids/assets/welcome.webp" alt="Tia Tati"></div><h2>Tia Tati Princesa</h2><p>A guardiã do Espelho Encantado recebe a criança, demonstra as expressões e comemora cada conquista.</p><div class="speech">“Faça uma careta e veja a magia acontecer!” ✨</div><div class="guide-tools"><button type="button" id="demoBtn">✨ Ver demonstração</button><button type="button" id="chooseAvatar">👧👦 Escolher avatar</button><button type="button" id="adminBtn">👑 Sala da Tia Tati</button></div></aside>
+<div class="portal"><nav class="tabs"><button class="tab active" data-mode="free" type="button">🪞 Livre</button><button class="tab" data-mode="challenge" type="button">✨ Desafio</button><button class="tab" data-mode="mirror" type="button">👑 Imite a Princesa</button></nav>
+<section class="mirror-card"><div class="mirror-shell"><div class="mirror-inner"><div class="avatar girl" id="avatar"><div class="hair"></div><div class="head"><i class="brow l"></i><i class="brow r"></i><i class="eye l"></i><i class="eye r"></i><i class="cheek l"></i><i class="cheek r"></i><i class="mouth"></i></div><div class="neck"></div><div class="body"></div></div></div></div><div class="prompt" id="prompt">Faça uma careta — por enquanto, toque nas expressões abaixo para testar o avatar.</div><div class="status"><i></i> Modo demonstração • sensor facial será conectado depois</div><div class="expressions"><button class="expr" type="button" data-expression="smile"><b>😊</b>Sorriso</button><button class="expr" type="button" data-expression="blink"><b>😉</b>Pisca</button><button class="expr" type="button" data-expression="surprise"><b>😮</b>Espanto</button><button class="expr" type="button" data-expression="serious"><b>😐</b>Sério</button></div>
+<div class="sheet" id="avatarSheet"><h3>Escolha seu espelho</h3><div class="avatar-select"><button class="avatar-choice active" type="button" data-avatar="girl">👧 Avatar menina</button><button class="avatar-choice" type="button" data-avatar="boy">👦 Avatar menino</button></div></div>
+<div class="sheet" id="adminSheet"><h3>👑 Sala da Tia Tati</h3><div class="admin-grid"><div class="admin-card"><strong>Perfil da Tia Tati</strong><small>Personagem-guia, saudação personalizada e preferências do portal.</small><span class="coming">Reconhecimento pessoal em preparação</span></div><div class="admin-card"><strong>Perfis autorizados</strong><small>Futuramente: nome, avatar e referência facial local com consentimento.</small><span class="coming">Sem armazenar imagens nesta versão</span></div><div class="admin-card"><strong>Privacidade</strong><small>O plano é manter os dados apenas no aparelho e permitir exclusão fácil.</small></div></div></div>
+</section></div></section>
+</main>
+<script src="portal.js?v=1"></script>
 </body>
 </html>
