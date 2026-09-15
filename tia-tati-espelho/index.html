@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eefaff">
+<title>Espelho Mágico da Tia Tati</title>
+<style>
+html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#eefaff,#fff6fb 56%,#f4efff);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#26496c}
+.portal-boot{position:fixed;inset:0;display:grid;place-items:center;padding:24px;text-align:center;background:linear-gradient(180deg,#eefaff,#fff6fb 56%,#f4efff);z-index:999999}
+.portal-box{width:min(88vw,420px);padding:26px 20px;border-radius:28px;background:#fff;box-shadow:0 18px 45px rgba(38,73,108,.14);border:1px solid #e5eef4}
+.portal-icon{font-size:64px}.portal-box h1{margin:8px 0 5px;color:#244ea1}.portal-box p{margin:0;color:#6d7f92;line-height:1.45}.portal-safe{margin-top:14px;padding:10px;border-radius:16px;background:#ecfff2;color:#3a6a49;font-size:.78rem;font-weight:800}
+.home-v22-missions{display:none!important}
+</style>
+</head>
+<body>
+<div class="portal-boot" id="portalBoot"><div class="portal-box"><div class="portal-icon">🪞✨</div><h1>Espelho Mágico</h1><p>Preparando seu avatar e o reconhecimento facial…</p><div class="portal-safe">A câmera será usada apenas como sensor. A imagem da criança nunca será exibida.</div></div></div>
+<div class="home-v22-missions" aria-hidden="true"></div>
+<script src="../tia-tati-kids/magic-mirror-network-v4.js?v=5"></script>
+<script src="../tia-tati-kids/magic-mirror-core-v2.js?v=5"></script>
+<script src="../tia-tati-kids/magic-mirror-visual-v2.js?v=5"></script>
+<script>
+(()=>{
+ let attempts=0;
+ const launch=()=>{
+  const card=document.querySelector('[data-magic-mirror]');
+  if(card){
+   document.getElementById('portalBoot')?.remove();
+   card.click();
+   return;
+  }
+  if(++attempts<40)setTimeout(launch,120);
+  else{
+   const b=document.querySelector('#portalBoot .portal-box');
+   if(b)b.innerHTML='<div class="portal-icon">⚠️</div><h1>Não foi possível iniciar</h1><p>Recarregue a página e tente novamente.</p>';
+  }
+ };
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',launch,{once:true});else launch();
+})();
+</script>
+</body>
+</html>
