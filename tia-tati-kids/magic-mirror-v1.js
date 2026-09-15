@@ -1,11 +1,11 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V20__)return;
-window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V20__=true;
+if(window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V21__)return;
+window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V21__=true;
 const $=(s,r=document)=>r.querySelector(s);
 function installStyle(){
- if($('#mmCardV20Style'))return;
- const s=document.createElement('style');s.id='mmCardV20Style';s.textContent=`
+ if($('#mmCardV21Style'))return;
+ const s=document.createElement('style');s.id='mmCardV21Style';s.textContent=`
  .mm-card .mm-card-art{min-height:150px!important;position:relative!important;overflow:hidden!important;background:linear-gradient(145deg,#ffe9f4,#eef7ff)!important}
  .mm-card .mm-card-art>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 48%!important;transform:scale(1.05);display:block!important}
  .mm-card .mm-card-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(77,34,91,.16));pointer-events:none}
@@ -23,8 +23,8 @@ function install(){
  installStyle();
  const b=document.createElement('button');
  b.type='button';b.className='home-v22-mission mm-card';b.dataset.magicMirrorPortal='1';
- b.innerHTML=`<span class="home-v22-visual mm-card-art"><img src="../tia-tati-espelho/assets/mask-v6-2.webp?v=20" alt="Espelho Encantado da Tia Tati" decoding="async"><span class="mm-card-sparkles" aria-hidden="true">✦ ✨ ✦</span></span><span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🪞</span><span><strong>Espelho Encantado</strong><small>Expressões • imitação • consciência facial</small></span></span><span class="mm-card-meta" aria-hidden="true"><i>👧 Menina</i><i>👦 Menino</i><i>⭐ 4 emoções</i></span><em>Portal</em>`;
- b.addEventListener('click',()=>{location.href='../tia-tati-espelho/?from=kids&v=20&fresh='+Date.now()});
+ b.innerHTML=`<span class="home-v22-visual mm-card-art"><img src="../tia-tati-espelho/assets/mask-v6-2.webp?v=21" alt="Espelho Encantado da Tia Tati" decoding="async"><span class="mm-card-sparkles" aria-hidden="true">✦ ✨ ✦</span></span><span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🪞</span><span><strong>Espelho Encantado</strong><small>Expressões • imitação • consciência facial</small></span></span><span class="mm-card-meta" aria-hidden="true"><i>👧 Menina</i><i>👦 Menino</i><i>⭐ 4 emoções</i></span><em>Portal</em>`;
+ b.addEventListener('click',()=>{location.href='../tia-tati-espelho/?from=kids&v=21&fresh='+Date.now()});
  g.appendChild(b);return true;
 }
 function boot(){if(!install())setTimeout(boot,220)}
