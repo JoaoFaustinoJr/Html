@@ -2,17 +2,17 @@
 'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const feedback={smile:'Que sorriso lindo! 💗',blink:'Piscadinha encantada! 😉',surprise:'Uau! Que espanto! ✨',serious:'Muito bem! Agora bem sério. 🌟'};
-const V='15';
+const V='16';
 const AVATARS={
  girl:{
   smile:`assets/avatars/girl-smile.webp?v=${V}`,
-  blink:`assets/avatars/girl-blink.webp?v=${V}`,
+  blink:`assets/avatars/girl-smile.webp?v=${V}`,
   surprise:`assets/avatars/girl-surprise.webp?v=${V}`,
   serious:`assets/avatars/girl-serious.webp?v=${V}`
  },
  boy:{
   smile:`assets/avatars/boy-smile.webp?v=${V}`,
-  blink:`assets/avatars/boy-blink.webp?v=${V}`,
+  blink:`assets/avatars/boy-smile.webp?v=${V}`,
   surprise:`assets/avatars/boy-surprise.webp?v=${V}`,
   serious:`assets/avatars/boy-serious.webp?v=${V}`
  }
@@ -20,52 +20,22 @@ const AVATARS={
 let avatar=localStorage.getItem('tiaTatiMirrorAvatar')||'girl';
 let expression='smile';
 let toastTimer=null,haloTimer=null,favorite=false,sequenceToken=0,renderToken=0;
-
 function toast(text){const t=$('#feedbackToast');if(!t)return;t.textContent=text;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1900)}
 function halo(){const h=$('#liveHalo');if(!h)return;h.classList.remove('show');void h.offsetWidth;h.classList.add('show');clearTimeout(haloTimer);haloTimer=setTimeout(()=>h.classList.remove('show'),950)}
-
-function imgStyle(img){
- img.style.cssText='display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 9px #754a6640);';
-}
+function imgStyle(img){img.style.cssText='display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 5px 9px #754a6640);';}
 function winkOverlay(av,kind){
- const overlay=document.createElement('span');
- overlay.setAttribute('aria-hidden','true');
- overlay.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:3;';
- const lid=document.createElement('span');
- // Mesmo lado visual da piscada nos avatares ilustrados aprovados.
- lid.style.cssText=`position:absolute;left:${kind==='girl'?'28%':'29%'};top:${kind==='girl'?'37%':'36%'};width:19%;height:8%;border-bottom:4px solid #4f3028;border-radius:0 0 50% 50%;transform:rotate(-5deg);filter:drop-shadow(0 1px 1px #fff7);`;
- overlay.appendChild(lid);av.appendChild(overlay);
-}
-function renderFallbackBlink(av,kind,token){
- if(token!==renderToken)return;
- av.innerHTML='';
- const img=new Image();img.alt='';imgStyle(img);
- img.src=AVATARS[kind].smile;
- av.appendChild(img);
- winkOverlay(av,kind);
+ const overlay=document.createElement('span');overlay.setAttribute('aria-hidden','true');overlay.className='wink-overlay';overlay.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:3;';
+ const patch=document.createElement('span');patch.style.cssText=`position:absolute;left:${kind==='girl'?'23%':'24%'};top:${kind==='girl'?'31%':'30%'};width:30%;height:20%;border-radius:50%;background:radial-gradient(ellipse at 50% 52%,#f6c9ad 0 64%,#f3bd9f 68%,transparent 72%);transform:rotate(-4deg);`;
+ const lid=document.createElement('span');lid.style.cssText=`position:absolute;left:${kind==='girl'?'28%':'29%'};top:${kind==='girl'?'39%':'38%'};width:20%;height:8%;border-top:4px solid #4f3028;border-radius:50%;transform:rotate(-5deg);filter:drop-shadow(0 1px 0 #fff8);`;
+ overlay.append(patch,lid);av.appendChild(overlay);
 }
 function refreshAvatar(){
- const av=$('#liveAvatar');if(!av)return;
- const token=++renderToken;
- av.classList.remove('animate-pop');
- av.innerHTML='';
- av.style.backgroundImage='none';
- const kind=avatar,exp=expression;
- const img=new Image();
- img.alt='';
- img.decoding='async';
- imgStyle(img);
- img.onload=()=>{if(token!==renderToken)return;};
- img.onerror=()=>{
-  if(token!==renderToken)return;
-  if(exp==='blink')renderFallbackBlink(av,kind,token);
-  else {
-   img.onerror=null;
-   img.src=AVATARS[kind].smile;
-  }
- };
- img.src=AVATARS[kind][exp]||AVATARS[kind].smile;
- av.appendChild(img);
+ const av=$('#liveAvatar');if(!av)return;const token=++renderToken;av.classList.remove('animate-pop');av.innerHTML='';av.style.backgroundImage='none';
+ const kind=avatar,exp=expression;av.dataset.kind=kind;av.dataset.expression=exp;
+ const img=new Image();img.alt='';img.decoding='async';imgStyle(img);
+ img.onerror=()=>{if(token!==renderToken)return;img.onerror=null;img.src=AVATARS[kind].smile;};
+ img.onload=()=>{if(token!==renderToken)return;if(exp==='blink')winkOverlay(av,kind);};
+ img.src=AVATARS[kind][exp]||AVATARS[kind].smile;av.appendChild(img);
  av.setAttribute('aria-label',(kind==='girl'?'Avatar menina ':'Avatar menino ')+({smile:'sorrindo',blink:'piscando',surprise:'espantado',serious:'sério'}[exp]||''));
  void av.offsetWidth;av.classList.add('animate-pop');setTimeout(()=>av.classList.remove('animate-pop'),340);
 }
@@ -83,8 +53,7 @@ function init(){
  $('[data-action="room"]')?.addEventListener('click',()=>openModal('#roomModal'));
  $('[data-action="settings"]')?.addEventListener('click',()=>openModal('#settingsModal'));
  $('[data-action="favorite"]')?.addEventListener('click',()=>{favorite=!favorite;toast(favorite?'Guardado com carinho 💗':'Retirado dos favoritos')});
- $$('.modal-close').forEach(b=>b.addEventListener('click',closeModals));
- $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals()}));
+ $$('.modal-close').forEach(b=>b.addEventListener('click',closeModals));$$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals()}));
  $('#backKids')?.addEventListener('click',()=>location.href='../tia-tati-kids/');
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
