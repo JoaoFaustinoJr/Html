@@ -3,17 +3,65 @@
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const feedback={smile:'Que sorriso lindo! 💗',blink:'Piscadinha encantada! 😉',surprise:'Uau! Que espanto! ✨',serious:'Muito bem! Agora bem sério. 🌟'};
 let avatar=localStorage.getItem('tiaTatiMirrorAvatar')||'girl';
-let toastTimer=null,haloTimer=null,favorite=false;
-async function loadMask(){
- try{
-  const r=await fetch('assets/espelho-encantado-home.b64?v=3',{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
-  const b64=(await r.text()).trim();
-  $('#maskImage').src='data:image/webp;base64,'+b64;
-  $('#maskImage').addEventListener('load',()=>$('#maskStage').classList.add('ready'),{once:true});
- }catch(e){
-  console.error(e);$('#maskLoading').textContent='Não foi possível carregar o cenário. Recarregue a página.';
- }
+let toastTimer=null,haloTimer=null,favorite=false,maskObjectUrl=null;
+
+function revealMask(){
+  const stage=$('#maskStage');
+  if(stage)stage.classList.add('ready');
 }
+
+function maskError(message){
+  console.error(message);
+  const loading=$('#maskLoading');
+  if(loading)loading.textContent='O cenário demorou para carregar. Toque para tentar novamente.';
+  revealMask();
+}
+
+async function loadMask(){
+  const img=$('#maskImage');
+  const loading=$('#maskLoading');
+  if(!img)return;
+
+  let finished=false;
+  const done=()=>{
+    if(finished)return;
+    finished=true;
+    revealMask();
+    if(maskObjectUrl){setTimeout(()=>URL.revokeObjectURL(maskObjectUrl),1500);}
+  };
+
+  // Registra os eventos ANTES de definir src para evitar perder o load em navegadores móveis.
+  img.addEventListener('load',done,{once:true});
+  img.addEventListener('error',()=>maskError('Falha ao decodificar a máscara do Espelho Encantado.'),{once:true});
+
+  // Nunca deixa a tela presa no loading.
+  const failsafe=setTimeout(()=>{
+    if(img.complete&&img.naturalWidth>0)done();
+    else{
+      if(loading)loading.textContent='✨ Abrindo o Espelho Encantado…';
+      revealMask();
+    }
+  },2200);
+
+  try{
+    const r=await fetch('assets/espelho-encantado-home.b64?v=4',{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const b64=(await r.text()).trim();
+    const raw=atob(b64);
+    const bytes=new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+    const blob=new Blob([bytes],{type:'image/webp'});
+    maskObjectUrl=URL.createObjectURL(blob);
+    img.src=maskObjectUrl;
+
+    // Alguns WebViews marcam complete sem disparar load de forma confiável.
+    if(img.complete&&img.naturalWidth>0){clearTimeout(failsafe);done();}
+  }catch(e){
+    clearTimeout(failsafe);
+    maskError(e);
+  }
+}
+
 function toast(text){const t=$('#feedbackToast');if(!t)return;t.textContent=text;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1900)}
 function halo(){const h=$('#liveHalo');if(!h)return;h.classList.remove('show');void h.offsetWidth;h.classList.add('show');clearTimeout(haloTimer);haloTimer=setTimeout(()=>h.classList.remove('show'),950)}
 function setAvatar(kind){avatar=kind;localStorage.setItem('tiaTatiMirrorAvatar',kind);$$('[data-avatar]').forEach(b=>b.classList.toggle('selected',b.dataset.avatar===kind));toast(kind==='girl'?'Avatar menina escolhido 💗':'Avatar menino escolhido 💙');halo()}
@@ -37,6 +85,7 @@ function init(){
  $$('.modal-close').forEach(b=>b.addEventListener('click',closeModals));
  $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModals()}));
  $('#backKids')?.addEventListener('click',()=>location.href='../tia-tati-kids/');
+ $('#maskLoading')?.addEventListener('click',()=>location.reload());
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
