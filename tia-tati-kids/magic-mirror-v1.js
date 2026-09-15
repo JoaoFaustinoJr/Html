@@ -1,11 +1,11 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V25__)return;
-window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V25__=true;
+if(window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V26__)return;
+window.__TIA_TATI_MAGIC_MIRROR_PORTAL_LINK_V26__=true;
 const $=(s,r=document)=>r.querySelector(s);
 function installStyle(){
- if($('#mmCardV25Style'))return;
- const s=document.createElement('style');s.id='mmCardV25Style';s.textContent=`
+ if($('#mmCardV26Style'))return;
+ const s=document.createElement('style');s.id='mmCardV26Style';s.textContent=`
  .mm-card .mm-card-art{min-height:150px!important;position:relative!important;overflow:hidden!important;background:linear-gradient(145deg,#ffe9f4,#eef7ff)!important}
  .mm-card .mm-card-art>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 48%!important;transform:scale(1.05);display:block!important}
  .mm-card .mm-card-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(77,34,91,.16));pointer-events:none}
@@ -21,7 +21,7 @@ function install(){
  const old=g.querySelector('[data-magic-mirror-portal]');if(old)old.remove();installStyle();
  const b=document.createElement('button');b.type='button';b.className='home-v22-mission mm-card';b.dataset.magicMirrorPortal='1';
  b.innerHTML=`<span class="home-v22-visual mm-card-art"><img src="../tia-tati-espelho/assets/mask-v6-2.webp?v=25" alt="Espelho Encantado da Tia Tati" decoding="async"><span class="mm-card-sparkles" aria-hidden="true">✦ ✨ ✦</span></span><span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🪞</span><span><strong>Espelho Encantado</strong><small>Expressões • imitação • consciência facial</small></span></span><span class="mm-card-meta" aria-hidden="true"><i>👧 Menina</i><i>👦 Menino</i><i>⭐ 5 expressões</i></span><em>Portal</em>`;
- b.addEventListener('click',()=>{location.href='../tia-tati-espelho/?from=kids&v=25&fresh='+Date.now()});g.appendChild(b);return true;
+ b.addEventListener('click',()=>{location.href='../tia-tati-espelho/?from=kids&v=26&fresh='+Date.now()});g.appendChild(b);return true;
 }
 function boot(){if(!install())setTimeout(boot,220)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
