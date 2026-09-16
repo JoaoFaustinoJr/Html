@@ -1,0 +1,1 @@
+v33: restauracao da estrutura HTML estavel do Tia Tati Kids e preservacao dos modulos adicionados pelo service worker.
