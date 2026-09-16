@@ -1,0 +1,1 @@
+Capa v25 HD aprovada para a Home da Novena da Divina Misericórdia. O arquivo visual mestre deve substituir a miniatura anterior sem reconstrução da interface.
