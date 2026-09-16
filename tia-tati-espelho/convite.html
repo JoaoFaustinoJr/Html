@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4c8de">
+<title>Espelho Encantado da Tia Tati</title>
+<meta name="description" content="Entre no Espelho Encantado da Tia Tati: expressões, voz, brincadeiras, saberes e magia.">
+<meta property="og:title" content="Espelho Encantado da Tia Tati">
+<meta property="og:description" content="Um espelho mágico para brincar, conversar, aprender e se encantar.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://joaofaustinojr.github.io/Html/tia-tati-espelho/convite.html">
+<meta property="og:image" content="https://joaofaustinojr.github.io/Html/tia-tati-espelho/assets/mask-v6-2.webp">
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Georgia,'Times New Roman',serif;background:radial-gradient(circle at 50% 20%,#fffafc 0,#f7ddea 38%,#dfc6ee 100%);color:#6d315f}body{display:grid;place-items:center;padding:20px}.wrap{width:min(94vw,440px);text-align:center}.crest{font-size:1.1rem;letter-spacing:.18em;color:#a24c84;margin-bottom:8px}.card{position:relative;overflow:hidden;border-radius:32px;background:linear-gradient(180deg,#fffafd,#f9e8f2);border:2px solid #f2cade;box-shadow:0 24px 60px #673d5e3a, inset 0 0 0 1px #fff}.hero{position:relative;height:290px;background:linear-gradient(160deg,#eddcf7,#ffdfe9);overflow:hidden}.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,#f9e8f2 100%)}.hero img{width:100%;height:100%;object-fit:cover;object-position:center 44%;display:block;filter:saturate(.96) contrast(.98)}.sparkles{position:absolute;z-index:2;inset:15px 18px auto;color:#fff7bf;font-size:1.2rem;letter-spacing:.45rem;text-shadow:0 0 8px #fff,0 2px 9px #8f4c86}.content{padding:20px 22px 24px}.title{margin:0;font-size:1.82rem;line-height:1.05;color:#8d3b76;text-shadow:0 1px #fff}.sub{margin:8px auto 16px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.95rem;line-height:1.45;color:#805d77;max-width:330px}.tags{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:18px}.tags span{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.73rem;font-weight:800;padding:7px 9px;border-radius:999px;background:#fff;color:#8a4b79;box-shadow:inset 0 0 0 1px #efd9e6}.open{display:block;width:100%;border:0;border-radius:20px;padding:15px 18px;background:linear-gradient(180deg,#cc65a5,#a84488);color:#fff;text-decoration:none;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:900;font-size:1.03rem;box-shadow:0 9px 20px #9a4d7d45}.open:active{transform:translateY(1px)}.install{margin:15px 6px 0;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.82rem;line-height:1.45;color:#74596e}.install strong{color:#8d3b76}.sig{margin-top:14px;font-size:.82rem;color:#a2638f}.share{margin-top:10px;border:0;background:transparent;color:#8d3b76;text-decoration:underline;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:800;cursor:pointer}.hint{display:none;margin-top:8px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.78rem;color:#7d6275}.hint.show{display:block}@media(max-height:720px){.hero{height:235px}.content{padding:16px 18px 20px}.title{font-size:1.55rem}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="crest">✦ TIA TATI ✦</div>
+  <section class="card">
+    <div class="hero">
+      <img src="assets/mask-v6-2.webp?v=31" alt="Espelho Encantado da Tia Tati">
+      <div class="sparkles" aria-hidden="true">✦ ✨ ✧ ✨ ✦</div>
+    </div>
+    <div class="content">
+      <h1 class="title">Espelho Encantado<br>da Tia Tati</h1>
+      <p class="sub">Um espelho mágico que observa expressões, conversa, responde, ensina e brinca com você.</p>
+      <div class="tags" aria-hidden="true"><span>🪞 Expressões</span><span>🎙️ Voz</span><span>✨ Magia</span><span>📚 Saberes</span></div>
+      <a class="open" href="./?v=31&from=convite">✨ Abrir o Espelho Encantado</a>
+      <p class="install"><strong>Para instalar no tablet:</strong><br>abra o Espelho e escolha no menu do navegador <b>“Adicionar à tela inicial”</b> ou <b>“Instalar app”</b>.</p>
+      <button class="share" id="shareBtn" type="button">💗 Compartilhar este convite</button>
+      <div class="hint" id="shareHint">Link copiado. Agora é só enviar.</div>
+    </div>
+  </section>
+  <div class="sig">Feito com carinho para aprender, brincar e se encantar.</div>
+</main>
+<script>
+const SHARE_URL='https://joaofaustinojr.github.io/Html/tia-tati-espelho/convite.html';
+document.getElementById('shareBtn').addEventListener('click',async()=>{
+  const data={title:'Espelho Encantado da Tia Tati',text:'Venha conhecer o Espelho Encantado da Tia Tati ✨',url:SHARE_URL};
+  try{if(navigator.share){await navigator.share(data);return}await navigator.clipboard.writeText(SHARE_URL);document.getElementById('shareHint').classList.add('show')}catch(_){try{await navigator.clipboard.writeText(SHARE_URL);document.getElementById('shareHint').classList.add('show')}catch(__){}}
+});
+</script>
+</body>
+</html>
