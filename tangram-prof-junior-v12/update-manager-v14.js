@@ -1,6 +1,6 @@
 (()=>{
- const VERSION='15.11.2',PATH='/Html/tangram-prof-junior-v12/';
- let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false;
+ const VERSION='15.11.3',PATH='/Html/tangram-prof-junior-v12/';
+ let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
  function repairViewport(){if(!handheld())return;try{const sw=Number(screen.width)||0,sh=Number(screen.height)||0,short=Math.min(sw,sh),long=Math.max(sw,sh);const portrait=matchMedia('(orientation:portrait)').matches;const width=short&&short<=640?Math.round(portrait?short:long):0;let v=document.querySelector('meta[name="viewport"]');if(!v){v=document.createElement('meta');v.name='viewport';document.head.prepend(v)}v.content=width?'width='+width+',initial-scale=1,viewport-fit=cover':'width=device-width,initial-scale=1,viewport-fit=cover'}catch(e){}}
@@ -27,6 +27,28 @@
   return Array.isArray(value)?value.map(clean):clean(value)
  }
  function patchNarration(){try{const old=window.__raiSpeak;if(typeof old!=='function'||old.__raiNarrationNormalized)return;const wrap=(text,opts={})=>old(narrationText(text),{...opts,pause:Number.isFinite(opts.pause)?opts.pause:190});wrap.__raiNarrationNormalized=true;wrap.__raiOriginal=old;window.__raiSpeak=wrap;window.__raiNarrationText=narrationText}catch(e){}}
+ function lessonSpeakButton(){return document.getElementById('raiLessonSpeak')}
+ function resetLessonSpeakButton(){const b=lessonSpeakButton();if(b){b.textContent='🔊 Ouvir com a R.A.I.';b.setAttribute('aria-pressed','false');b.title='Ouvir explicação com a R.A.I.'}}
+ function stopLessonNarration(){lessonNarrationActive=false;clearInterval(lessonNarrationWatch);lessonNarrationWatch=null;try{window.__raiStopSpeak?.()}catch(e){}resetLessonSpeakButton()}
+ function watchLessonNarration(){clearInterval(lessonNarrationWatch);let idle=0;lessonNarrationWatch=setInterval(()=>{if(!lessonNarrationActive){clearInterval(lessonNarrationWatch);lessonNarrationWatch=null;return}let busy=false;try{busy=!!(speechSynthesis.speaking||speechSynthesis.pending)}catch(e){}if(busy){idle=0;return}if(++idle>=3)stopLessonNarration()},260)}
+ function wireLessonNarration(){
+  if(lessonNarrationWired)return;lessonNarrationWired=true;
+  document.addEventListener('click',e=>{
+   const speak=e.target?.closest?.('#raiLessonSpeak');
+   if(speak){
+    let busy=false;try{busy=!!(speechSynthesis.speaking||speechSynthesis.pending)}catch(err){}
+    if(lessonNarrationActive||busy){e.preventDefault();e.stopImmediatePropagation();stopLessonNarration();return}
+    setTimeout(()=>{lessonNarrationActive=true;speak.textContent='⏹ Parar narração';speak.setAttribute('aria-pressed','true');speak.title='Interromper a narração da R.A.I.';watchLessonNarration()},0);
+    return;
+   }
+   const leave=e.target?.closest?.('.rai-lesson-close,#raiLessonClose,#raiHomeFromDetail,#raiSectionFromDetail,#raiListLessons,#raiSwitchSection,#raiPrevLesson,#raiNextLesson');
+   const overlay=e.target?.closest?.('.rai-lesson-overlay');
+   if(leave||(overlay&&e.target===overlay))stopLessonNarration();
+  },true);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.querySelector('.rai-lesson-overlay.show'))stopLessonNarration()},true);
+  const observe=()=>{const o=document.querySelector('.rai-lesson-overlay');if(!o||o.dataset.raiNarrationObserved)return false;o.dataset.raiNarrationObserved='1';new MutationObserver(()=>{if(!o.classList.contains('show'))stopLessonNarration()}).observe(o,{attributes:true,attributeFilter:['class']});return true};
+  if(!observe()){let n=0;const t=setInterval(()=>{if(observe()||++n>30)clearInterval(t)},250)}
+ }
  function loadAnswerOrder(){if(answerOrderStarted)return;answerOrderStarted=true;import('./answer-order-v1.js?v=15111').catch(e=>{answerOrderStarted=false;console.warn('Ordem das alternativas',e)})}
  function loadAulasEntry(){if(aulasEntryStarted)return;aulasEntryStarted=true;try{if(!document.querySelector('link[data-rai-aulas-entry]')){const l=document.createElement('link');l.rel='stylesheet';l.href='aulas-entry-v1595.css?v=15111';l.dataset.raiAulasEntry='1';document.head.appendChild(l)}import('./aulas-entry-v1595.js?v=15111').catch(e=>{aulasEntryStarted=false;console.warn('Entrada Aulas',e)})}catch(e){aulasEntryStarted=false}}
  function loadSpecial(){if(specialStarted||(window.__raiProvaParanaV1&&window.__raiProvaParanaV1.active))return;specialStarted=true;try{if(!document.querySelector('link[data-rai-prova-parana]')){const l=document.createElement('link');l.rel='stylesheet';l.href='prova-parana-v1.css?v=15111';l.dataset.raiProvaParana='1';document.head.appendChild(l)}if(!document.querySelector('link[data-rai-prova-subjects]')){const l=document.createElement('link');l.rel='stylesheet';l.href='prova-parana-subjects.css?v=15111';l.dataset.raiProvaSubjects='1';document.head.appendChild(l)}import('./prova-parana-v1.js?v=15111').catch(e=>{specialStarted=false;console.warn('Especial Prova Paraná',e)})}catch(e){specialStarted=false}}
@@ -42,10 +64,10 @@
  async function registration(){if(!('serviceWorker'in navigator))return null;if(reg)return reg;try{return reg=await navigator.serviceWorker.getRegistration('./')}catch(e){return null}}
  async function check(){if(checking)return checking;checking=(async()=>{try{const r=await registration();if(!r)return null;await r.update();if(r.waiting&&navigator.serviceWorker.controller)ready();return r}catch(e){console.warn('Atualização Tangram',e);return null}})();try{return await checking}finally{checking=null}}
  async function apply(){const r=await registration();if(r?.waiting){const b=button();if(b){b.classList.add('show');b.innerHTML='⏳ <span>Atualizando</span>'}r.waiting.postMessage({type:'SKIP_WAITING'});return}await check()}
- function sync(){syncHead();syncVersion();patchNarration();loadAnswerOrder();loadAulasEntry();loadSpecial();loadRewards();loadWelcome();loadIOSInstall();try{window.__raiAnswerOrderV1?.scan?.();window.__raiEnsureAulasEntry?.();window.__raiProvaParanaV1?.ensureEntryPoints?.();window.__raiProvaRewardsV2?.refresh?.();window.__raiIOSInstall?.wire?.()}catch(e){}repairViewport()}
+ function sync(){syncHead();syncVersion();patchNarration();wireLessonNarration();loadAnswerOrder();loadAulasEntry();loadSpecial();loadRewards();loadWelcome();loadIOSInstall();try{window.__raiAnswerOrderV1?.scan?.();window.__raiEnsureAulasEntry?.();window.__raiProvaParanaV1?.ensureEntryPoints?.();window.__raiProvaRewardsV2?.refresh?.();window.__raiIOSInstall?.wire?.()}catch(e){}repairViewport()}
  sync();setTimeout(sync,160);setTimeout(sync,420);
  const b=button();b?.addEventListener('click',()=>apply().catch(()=>{}));document.getElementById('aboutApp')?.addEventListener('click',()=>setTimeout(aboutVersion,0));setTimeout(aboutVersion,500);
  addEventListener('pageshow',sync);addEventListener('orientationchange',()=>setTimeout(repairViewport,140));addEventListener('focus',()=>{sync();check()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){sync();check()}});
  if('serviceWorker'in navigator){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!reloading){reloading=true;location.reload()}});registration().then(()=>check()).catch(()=>{});setInterval(check,30*60*1000)}
- window.__raiUpdate={version:VERSION,path:PATH,check,repairViewport,narrationText};
+ window.__raiUpdate={version:VERSION,path:PATH,check,repairViewport,narrationText,stopLessonNarration};
 })();
