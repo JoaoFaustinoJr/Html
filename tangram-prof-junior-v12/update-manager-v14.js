@@ -1,5 +1,5 @@
 (()=>{
- const VERSION='15.11.1',PATH='/Html/tangram-prof-junior-v12/';
+ const VERSION='15.11.2',PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
@@ -10,11 +10,23 @@
    text=text.replace(/(\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)/g,(m,a,b,off,str)=>{const before=str.charAt(off-1),after=str.charAt(off+m.length);return before==='/'||after==='/'?m:`${a} sobre ${b}`});
    text=text.replace(/√\s*(\d+(?:[.,]\d+)?)/g,' raiz quadrada de $1 ');
    text=text.replace(/(\d+(?:[.,]\d+)?)\s*°/g,'$1 graus ');
-   return text.replace(/->|[→➡➜➝➞⟶⇒↦]/g,' leva a ').replace(/\+\+/g,' mais mais ').replace(/\+/g,' somado a ').replace(/×/g,' vezes ').replace(/÷/g,' dividido por ').replace(/≈/g,' aproximadamente ').replace(/≠/g,' diferente de ').replace(/≤/g,' menor ou igual a ').replace(/≥/g,' maior ou igual a ').replace(/=/g,' igual a ').replace(/²/g,' ao quadrado ').replace(/³/g,' ao cubo ').replace(/%/g,' por cento ').replace(/\s+/g,' ').trim();
+   text=text.replace(/\bObjetivo\s*:/gi,'Primeiro, vamos ao objetivo:');
+   text=text.replace(/\bConceito\s*:/gi,'Agora, veja a ideia principal:');
+   text=text.replace(/\bExemplo\s*:/gi,'Por exemplo:');
+   text=text.replace(/\bAtividade guiada\s*:/gi,'Vamos praticar juntos:');
+   text=text.replace(/\bDesafio\s*:/gi,'Agora vem o desafio:');
+   text=text.replace(/\bObserve\s*:/gi,'Repare nisto:');
+   text=text.replace(/\bResposta\s*:/gi,'Veja como fica a resposta:');
+   text=text.replace(/\s*;\s*/g,', ');
+   text=text.replace(/\s*•\s*/g,'. ');
+   text=text.replace(/->|[→➡➜➝➞⟶⇒↦]/g,' leva a ').replace(/\+\+/g,' mais mais ').replace(/\+/g,' somado a ').replace(/×/g,' vezes ').replace(/÷/g,' dividido por ').replace(/≈/g,' aproximadamente ').replace(/≠/g,' diferente de ').replace(/≤/g,' menor ou igual a ').replace(/≥/g,' maior ou igual a ').replace(/=/g,' igual a ').replace(/²/g,' ao quadrado ').replace(/³/g,' ao cubo ').replace(/%/g,' por cento ').replace(/\s+/g,' ').trim();
+   const alreadyWarm=/^(oi|olá|vamos|agora|repare|veja|imagine|pense|por exemplo|muito bem|boa|isso|parabéns|primeiro|sem pressa)/i.test(text);
+   if(text.length>175&&!alreadyWarm)text='Vamos por partes. '+text;
+   return text;
   };
   return Array.isArray(value)?value.map(clean):clean(value)
  }
- function patchNarration(){try{const old=window.__raiSpeak;if(typeof old!=='function'||old.__raiNarrationNormalized)return;const wrap=(text,opts)=>old(narrationText(text),opts);wrap.__raiNarrationNormalized=true;wrap.__raiOriginal=old;window.__raiSpeak=wrap;window.__raiNarrationText=narrationText}catch(e){}}
+ function patchNarration(){try{const old=window.__raiSpeak;if(typeof old!=='function'||old.__raiNarrationNormalized)return;const wrap=(text,opts={})=>old(narrationText(text),{...opts,pause:Number.isFinite(opts.pause)?opts.pause:190});wrap.__raiNarrationNormalized=true;wrap.__raiOriginal=old;window.__raiSpeak=wrap;window.__raiNarrationText=narrationText}catch(e){}}
  function loadAnswerOrder(){if(answerOrderStarted)return;answerOrderStarted=true;import('./answer-order-v1.js?v=15111').catch(e=>{answerOrderStarted=false;console.warn('Ordem das alternativas',e)})}
  function loadAulasEntry(){if(aulasEntryStarted)return;aulasEntryStarted=true;try{if(!document.querySelector('link[data-rai-aulas-entry]')){const l=document.createElement('link');l.rel='stylesheet';l.href='aulas-entry-v1595.css?v=15111';l.dataset.raiAulasEntry='1';document.head.appendChild(l)}import('./aulas-entry-v1595.js?v=15111').catch(e=>{aulasEntryStarted=false;console.warn('Entrada Aulas',e)})}catch(e){aulasEntryStarted=false}}
  function loadSpecial(){if(specialStarted||(window.__raiProvaParanaV1&&window.__raiProvaParanaV1.active))return;specialStarted=true;try{if(!document.querySelector('link[data-rai-prova-parana]')){const l=document.createElement('link');l.rel='stylesheet';l.href='prova-parana-v1.css?v=15111';l.dataset.raiProvaParana='1';document.head.appendChild(l)}if(!document.querySelector('link[data-rai-prova-subjects]')){const l=document.createElement('link');l.rel='stylesheet';l.href='prova-parana-subjects.css?v=15111';l.dataset.raiProvaSubjects='1';document.head.appendChild(l)}import('./prova-parana-v1.js?v=15111').catch(e=>{specialStarted=false;console.warn('Especial Prova Paraná',e)})}catch(e){specialStarted=false}}
