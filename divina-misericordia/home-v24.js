@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',function(){var p=document.getElementById('portal'),n=document.getElementById('novena');window.home=function(){if(n)n.classList.add('hidden');if(p)p.classList.remove('hidden');window.scrollTo(0,0)};document.querySelectorAll('.homebtn').forEach(function(b){b.onclick=window.home})});
