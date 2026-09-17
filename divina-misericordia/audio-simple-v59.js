@@ -1,0 +1,16 @@
+/* v59 — áudio simples universal: 1 clique inicia, 1 clique para; referências nunca são narradas */
+(function(){'use strict';
+let activeBtn=null;
+const REF=/\b(?:Gn|Êx|Ex|Lv|Nm|Dt|Js|Jz|Rt|1\s?Sm|2\s?Sm|1\s?Rs|2\s?Rs|1\s?Cr|2\s?Cr|Esd|Ne|Tb|Jt|Est|1\s?Mc|2\s?Mc|Jó|Jo|Sl|Pr|Ecl|Ct|Sb|Eclo|Is|Jr|Lm|Br|Ez|Dn|Os|Jl|Am|Ab|Jn|Mq|Na|Hab|Sf|Ag|Zc|Ml|Mt|Mc|Lc|At|Rm|1\s?Cor|2\s?Cor|Gl|Ef|Fl|Cl|1\s?Ts|2\s?Ts|1\s?Tm|2\s?Tm|Tt|Fm|Hb|Tg|1\s?Pd|2\s?Pd|1\s?Jo|2\s?Jo|3\s?Jo|Jd|Ap)\s*\d+\s*[,.:]\s*\d+(?:\s*[-–]\s*\d+)?\b/giu;
+function stop(){try{speechSynthesis.cancel()}catch(e){}if(activeBtn){activeBtn.textContent='🔊 Ouvir';activeBtn.dataset.playing='0'}activeBtn=null}
+function sanitize(t){return String(t||'').replace(REF,' ').replace(/\b(?:capítulo|capitulo|versículo|versiculo)\s+\d+(?:\s*(?:a|até|ate|[-–])\s*\d+)?\b/giu,' ').replace(/\s+/g,' ').trim()}
+function textOf(el){if(!el)return'';let c=el.cloneNode(true);c.querySelectorAll('button,[data-no-speech],.citation,.reference,.ref,cite,.bible-ref,.scripture-ref,small').forEach(n=>n.remove());return sanitize(c.textContent)}
+function play(btn,text){if(activeBtn===btn){stop();return}stop();text=sanitize(text);if(!text)return;activeBtn=btn;btn.dataset.playing='1';btn.textContent='■ Parar';let u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';let vs=speechSynthesis.getVoices();u.voice=vs.find(v=>v.lang==='pt-BR')||vs.find(v=>/^pt/i.test(v.lang))||null;u.rate=.9;u.onend=u.onerror=()=>{if(activeBtn===btn){btn.textContent='🔊 Ouvir';btn.dataset.playing='0';activeBtn=null}};speechSynthesis.speak(u)}
+function bind(btn,getText){if(!btn||btn.dataset.simple59)return;btn.dataset.simple59='1';btn.onclick=e=>{e.preventDefault();e.stopPropagation();play(btn,getText())}}
+function upgrade(root=document){root.querySelectorAll('.audio-row').forEach(row=>{let buttons=[...row.querySelectorAll('button')];if(!buttons.length)return;let first=buttons[0];buttons.slice(1).forEach(b=>b.remove());first.textContent='🔊 Ouvir';first.classList.remove('secondary');let section=row.closest('section');bind(first,()=>textOf(section?.querySelector('p,.chaplet-prayer')||section||row.previousElementSibling))});
+root.querySelectorAll('.dm57-pause,.dm57-stop').forEach(b=>b.remove());root.querySelectorAll('.dm57-listen').forEach(b=>{b.textContent='🔊 Ouvir';bind(b,()=>textOf(b.closest('.sheet')?.querySelector('.dm57-body')))});
+let float=document.querySelector('#audioFloat');if(float)float.classList.add('hidden')}
+function interceptLegacy(){window.stopSpeech=stop;window.dmStopSpeech=stop;window.speak=function(t){let btn=event?.currentTarget;if(btn&&btn.tagName==='BUTTON')play(btn,t);else{stop();let u=new SpeechSynthesisUtterance(sanitize(t));u.lang='pt-BR';speechSynthesis.speak(u)}};window.toggleSpeech=stop}
+function init(){stop();interceptLegacy();upgrade();new MutationObserver(m=>{for(let x of m)for(let n of x.addedNodes)if(n.nodeType===1)upgrade(n.matches?.('.audio-row,.modal,.sheet')?n.parentElement||n:n)}).observe(document.body,{childList:true,subtree:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,700));else setTimeout(init,700);
+})();
