@@ -180,3 +180,54 @@ body #app>header.topbar .brand small{display:block!important;margin-top:4px!impo
     font-size:.58rem!important;
   }
 }
+
+
+/* Mission cards v42 — retrato externo ao quadro antigo. */
+/* Em vez de sobrepor a nova imagem à arte antiga, o retrato passa a ocupar
+   uma faixa própria entre a ilustração e o texto. */
+#screen-home .home-v22-mission .home-v22-visual.mission-art{
+  overflow:visible!important;
+  margin-bottom:28px!important;
+}
+#screen-home .home-v22-mission .mission-tati-cameo{
+  left:12px!important;
+  top:auto!important;
+  bottom:-24px!important;
+  width:48px!important;
+  height:48px!important;
+  z-index:8!important;
+  border:4px solid #fff!important;
+  box-shadow:0 5px 14px rgba(30,70,96,.20)!important;
+}
+#screen-home .home-v22-mission .home-v22-mission-copy{
+  padding-top:4px!important;
+  min-height:68px!important;
+}
+/* reserva espaço horizontal para o retrato, sem cobrir título/subtítulo */
+#screen-home .home-v22-mission .home-v22-mission-copy > span:last-child{
+  display:block!important;
+  padding-left:54px!important;
+}
+/* o quadro antigo fica apenas como moldura da ilustração, sem receber o retrato */
+#screen-home .home-v22-mission .home-v22-visual.mission-art > .mission-art-bg{
+  border-radius:14px!important;
+}
+@media(max-width:760px){
+  #screen-home .home-v22-mission .home-v22-visual.mission-art{
+    overflow:visible!important;
+    margin-bottom:24px!important;
+  }
+  #screen-home .home-v22-mission .mission-tati-cameo{
+    width:42px!important;
+    height:42px!important;
+    left:9px!important;
+    bottom:-21px!important;
+  }
+  #screen-home .home-v22-mission .home-v22-mission-copy{
+    padding-top:3px!important;
+    min-height:64px!important;
+  }
+  #screen-home .home-v22-mission .home-v22-mission-copy > span:last-child{
+    padding-left:48px!important;
+  }
+}
