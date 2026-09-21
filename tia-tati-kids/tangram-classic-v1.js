@@ -34,7 +34,7 @@ const css=`
 `;
 let overlay=null,current='casa',state=[],drag=null,showModel=false;
 function style(){if($('#tteStyle'))return;const s=document.createElement('style');s.id='tteStyle';s.textContent=css;document.head.appendChild(s)}
-function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.rate=.9;speechSynthesis.speak(u)}catch(_){}}
+function speak(t){}catch(_){}}
 function mk(tag,a={}){const n=document.createElementNS(NS,tag);Object.entries(a).forEach(([k,v])=>n.setAttribute(k,v));return n}
 function pts(a){return a.map(p=>p.join(',')).join(' ')}
 function packStart(items){
@@ -77,6 +77,6 @@ function end(){
 window.addEventListener('pointermove',move,{passive:false});window.addEventListener('pointerup',end);
 function next(){const ks=Object.keys(MODELS),i=(ks.indexOf(current)+1)%ks.length;current=ks[i];$$('.tte-tab',overlay).forEach((b,j)=>b.classList.toggle('active',j===i));reset();speak(LABELS[current][0])}
 function open(){buildUI();overlay.classList.add('open');document.body.style.overflow='hidden';speak('Escolha uma figura e monte com as peças correspondentes.')}
-function close(){overlay?.classList.remove('open');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(_){}}
+function close(){overlay?.classList.remove('open');document.body.style.overflow='';}
 style();addCard();let n=0,t=setInterval(()=>{addCard();if(document.querySelector('[data-new-game="tangram"]')||++n>30)clearInterval(t)},250);
 })();
