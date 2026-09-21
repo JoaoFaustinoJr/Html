@@ -121,7 +121,7 @@ function finishDrag(e){
 }
 function rotatePiece(p){pushHistory();const nr=((p.rot||0)+90)%360,q=clampFree(p,p.x,p.y,nr);p.x=q.x;p.y=q.y;p.rot=nr;renderPieces();status('Peça girada 90°.')}
 function afterMove(){
- if(mode==='build'&&placed.length===SLOTS.length){status('🌟 Mosaico completo! Agora experimente o modo Explorar.');try{const u=new SpeechSynthesisUtterance('Muito bem! Agora experimente novas formas no modo explorar.');u.lang='pt-BR';speechSynthesis.speak(u)}catch(_){}}
+ if(mode==='build'&&placed.length===SLOTS.length){status('🌟 Mosaico completo! Agora experimente o modo Explorar.');}
  else if(mode==='explore'){}
  else status('Peça encaixada. Faltam '+(SLOTS.length-placed.length)+' peças.');
 }
