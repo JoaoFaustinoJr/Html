@@ -90,7 +90,7 @@ function addCard(){const g=$('.home-v22-missions');if(!g)return false;let b=g.qu
 function makeUI(){
  if(overlay)return;
  overlay=document.createElement('div');overlay.className='ttmw';
- overlay.innerHTML='<div class="ttmw-shell"><div class="ttmw-top"><div class="ttmw-title"><img class="ttmw-avatar" src="assets/guide.webp" alt="Tia Tati"><div><strong>Mosaico da Tia Tati</strong><small>As mesmas peças podem formar novos desenhos</small></div></div><button class="ttmw-close">×</button></div><div class="ttmw-modes"><button class="ttmw-mode build active">🧩 Montar</button><button class="ttmw-mode explore">✨ Explorar</button><button class="ttmw-mode model">👁️ Modelo</button><button class="ttmw-mode sym">◐ Simetria</button></div><section class="ttmw-panel"><p class="ttmw-instruction">No modo Montar as peças procuram seus encaixes. Em Explorar a peça fica exatamente onde você soltar, desde que não sobreponha outra peça, e pode ser girada.</p><div class="ttmw-frame"><div class="ttmw-board"><div class="ttmw-axis"></div></div></div><div class="ttmw-palette-title">Peças disponíveis</div><div class="ttmw-palette"></div><div class="ttmw-actions"><button class="ttmw-view">👁️ Modelo</button><button class="ttmw-clear">↶ Desfazer</button><button class="ttmw-next">↻ Recomeçar</button></div><div class="ttmw-status">Monte o mosaico ou escolha Explorar.</div></section></div><div class="ttmw-modal"><div class="ttmw-modal-card"><h3>Modelo completo</h3><div class="ttmw-model-board"></div><button>Fechar modelo</button></div></div>';
+ overlay.innerHTML='<div class="ttmw-shell"><div class="ttmw-top"><div class="ttmw-title"><img class="ttmw-avatar" src="assets/guide.webp" alt="Tia Tati"><div><strong>Mosaico da Tia Tati</strong><small>As mesmas peças podem formar novos desenhos</small></div></div><button class="ttmw-close">×</button></div><div class="ttmw-modes"><button class="ttmw-mode build active">🧩 Montar</button><button class="ttmw-mode explore">✨ Explorar</button><button class="ttmw-mode model">👁️ Modelo</button><button class="ttmw-mode sym">◐ Simetria</button></div><section class="ttmw-panel"><p class="ttmw-instruction">No modo Montar as peças procuram seus encaixes. Em Explorar a peça não volta mais à origem: ela fica onde você soltar ou, se houver outra peça, no espaço livre mais próximo.</p><div class="ttmw-frame"><div class="ttmw-board"><div class="ttmw-axis"></div></div></div><div class="ttmw-palette-title">Peças disponíveis</div><div class="ttmw-palette"></div><div class="ttmw-actions"><button class="ttmw-view">👁️ Modelo</button><button class="ttmw-clear">↶ Desfazer</button><button class="ttmw-next">↻ Recomeçar</button></div><div class="ttmw-status">Monte o mosaico ou escolha Explorar.</div></section></div><div class="ttmw-modal"><div class="ttmw-modal-card"><h3>Modelo completo</h3><div class="ttmw-model-board"></div><button>Fechar modelo</button></div></div>';
  document.body.appendChild(overlay);
  $('.ttmw-close',overlay).onclick=close;$('.ttmw-mode.build',overlay).onclick=()=>setMode('build');$('.ttmw-mode.explore',overlay).onclick=()=>setMode('explore');$('.ttmw-mode.model',overlay).onclick=showModel;$('.ttmw-mode.sym',overlay).onclick=()=>setMode('symmetry');$('.ttmw-view',overlay).onclick=showModel;$('.ttmw-clear',overlay).onclick=undo;$('.ttmw-next',overlay).onclick=restart;$('.ttmw-modal button',overlay).onclick=()=>$('.ttmw-modal',overlay).classList.remove('show');
  $('.ttmw-board',overlay).onclick=e=>{if(e.target===e.currentTarget||e.target.classList.contains('ttmw-axis'))placeAt(e)};
@@ -132,12 +132,35 @@ function moveDrag(e){
  if(mode==='explore'){const q=clampFree(drag.p,pt.x-drag.dx,pt.y-drag.dy,drag.p.rot||0);drag.p.x=q.x;drag.p.y=q.y;drag.el.style.left=q.x+'%';drag.el.style.top=q.y+'%'}
  else{const x=Math.max(0,Math.min(100-g.w,pt.x-g.w/2)),y=Math.max(0,Math.min(100-g.h,pt.y-g.h/2));drag.el.style.left=x+'%';drag.el.style.top=y+'%'}
 }
+function findClosestFree(p,x,y,rot){
+ const first=clampFree(p,x,y,rot);
+ if(!collides(p,first.x,first.y,rot))return first;
+ const steps=[1.25,2.5,3.75,5,7.5,10,12.5,15,17.5,20,22.5,25,30,35,40];
+ for(const r of steps){
+   for(let deg=0;deg<360;deg+=15){
+     const rad=deg*Math.PI/180,q=clampFree(p,first.x+Math.cos(rad)*r,first.y+Math.sin(rad)*r,rot);
+     if(!collides(p,q.x,q.y,rot))return q;
+   }
+ }
+ return null;
+}
 function finishDrag(e){
  if(!drag)return;
  const p=drag.p,pt=boardPoint(e);
  if(mode==='explore'){
-   const q=clampFree(p,p.x,p.y,p.rot||0);
-   if(collides(p,q.x,q.y,p.rot||0)){placed=dragBefore;status('Esse espaço está ocupado. A peça voltou.')}else{p.x=q.x;p.y=q.y;history.push(dragBefore);if(history.length>80)history.shift();status('Peça solta exatamente onde você deixou.')}
+   const wanted=clampFree(p,p.x,p.y,p.rot||0);
+   const q=findClosestFree(p,wanted.x,wanted.y,p.rot||0);
+   if(q){
+     p.x=q.x;p.y=q.y;
+     history.push(dragBefore);if(history.length>80)history.shift();
+     status(Math.hypot(q.x-wanted.x,q.y-wanted.y)<.6?'Peça ficou onde você soltou.':'Peça ficou no espaço livre mais próximo, sem sobrepor outra.');
+   }else{
+     // If the board is completely occupied, keep the piece lifted at the release point.
+     // This is intentional: it must never jump back to the origin in Explore.
+     p.x=wanted.x;p.y=wanted.y;
+     history.push(dragBefore);if(history.length>80)history.shift();
+     status('Não havia espaço livre suficiente; a peça permaneceu onde você soltou.');
+   }
  }else{
    const s=nearestSlot(p.type,pt.x,pt.y,p.id);
    if(s&&s.id!==p.slotId){history.push(dragBefore);if(history.length>80)history.shift();p.slotId=s.id;status('Peça reposicionada.')}else status('A peça permaneceu no encaixe anterior.');
@@ -152,7 +175,7 @@ function rotatePiece(p){
 }
 function afterMove(){
  if(mode==='build'&&placed.length===SLOTS.length&&placed.every(p=>p.slotId)){status('🌟 Mosaico completo! Agora experimente o modo Explorar.');try{const u=new SpeechSynthesisUtterance('Muito bem! Agora experimente novas formas no modo explorar.');u.lang='pt-BR';speechSynthesis.speak(u)}catch(_){}}
- else if(mode==='explore')status('Explore novas combinações. Arraste e dê dois toques para girar.');
+ else if(mode==='explore'){}
  else status('Peça encaixada. Faltam '+(SLOTS.length-placed.length)+' peças.');
 }
 function undo(){if(!history.length){status('Não há movimento para desfazer.');return}placed=history.pop();renderPieces();refreshCounts();status('Último movimento desfeito.')}
