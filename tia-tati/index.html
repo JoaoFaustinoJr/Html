@@ -41,7 +41,7 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
 </head>
 <body>
 <main class="portal-cover" aria-label="Portal Tia Tati – Fisio Sensório-Motora">
-  <img src="assets/file_00000000352c820ea39ef106ea497525.png?v=1" alt="Portal Tia Tati com borboletas, Área Kids e Modo Jovem">
+  <img src="assets/file_00000000352c820ea39ef106ea497525.png?v=2" alt="Portal Tia Tati com borboletas, Área Kids e Modo Jovem">
   <a class="hotspot kids-hotspot" href="launch-kids.html" aria-label="Entrar na Área Kids"></a>
   <a class="hotspot young-hotspot" href="../tia-tati-jovem/entry-j12.html?v=j14" aria-label="Entrar no Modo Jovem"></a>
   <button class="hotspot about-hotspot" id="aboutHotspot" type="button" aria-label="Sobre a Dra. Tatiana" style="border:0;background:transparent;cursor:pointer"></button>
@@ -92,7 +92,7 @@ btn.addEventListener('click',openHelp);aboutHotspot.addEventListener('click',()=
 closeBtn.addEventListener('click',()=>modal.classList.remove('open'));
 modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
 nativeBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;const p=deferredPrompt;deferredPrompt=null;modal.classList.remove('open');try{await p.prompt();await p.userChoice}catch(_){}});
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=2',{scope:'./'}).catch(()=>{}));
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=14',{scope:'./'}).catch(()=>{}));
 })();
 </script>
 </body>
