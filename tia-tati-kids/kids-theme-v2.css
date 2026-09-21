@@ -85,3 +85,98 @@ body #app>header.topbar .brand small{display:block!important;margin-top:4px!impo
   #screen-home .home-v22-mission .home-v22-visual.mission-art{height:150px!important}
   #screen-home .home-v22-mission .mission-tati-cameo{width:42px!important;height:42px!important;left:7px!important;bottom:7px!important}
 }
+
+
+/* Mission cards v41 — corrige sobreposições no mobile. */
+#screen-home .home-v22-mission{
+  position:relative!important;
+  overflow:hidden!important;
+}
+#screen-home .home-v22-mission .home-v22-visual.mission-art{
+  position:relative!important;
+  display:block!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+#screen-home .home-v22-mission .home-v22-visual.mission-art > .mission-art-bg{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  object-fit:cover!important;
+  object-position:center 8%!important;
+  transform:scale(1.01)!important;
+  z-index:1!important;
+}
+#screen-home .home-v22-mission .mission-tati-cameo{
+  position:absolute!important;
+  left:8px!important;
+  top:8px!important;
+  bottom:auto!important;
+  width:42px!important;
+  height:42px!important;
+  z-index:3!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+  border:3px solid #fff!important;
+  border-radius:50%!important;
+  box-shadow:0 4px 12px rgba(30,70,96,.22)!important;
+}
+#screen-home .home-v22-mission .home-v22-mission-copy{
+  position:relative!important;
+  z-index:5!important;
+  background:#fff!important;
+  margin:0!important;
+}
+#screen-home .home-v22-mission > em{
+  z-index:6!important;
+  top:9px!important;
+  right:9px!important;
+  white-space:nowrap!important;
+  line-height:1!important;
+}
+/* A própria arte do Caminho Seguro já contém o selo; evita duplicação. */
+#screen-home .home-v22-mission.road > em{display:none!important}
+
+@media(max-width:760px){
+  #screen-home .home-v22-mission{
+    padding:6px!important;
+    min-height:0!important;
+  }
+  #screen-home .home-v22-mission .home-v22-visual.mission-art{
+    height:126px!important;
+    border-radius:14px!important;
+    margin:0!important;
+  }
+  #screen-home .home-v22-mission .home-v22-visual.mission-art > .mission-art-bg{
+    object-position:center 6%!important;
+  }
+  #screen-home .home-v22-mission .mission-tati-cameo{
+    width:38px!important;
+    height:38px!important;
+    left:7px!important;
+    top:7px!important;
+  }
+  #screen-home .home-v22-mission .home-v22-mission-copy{
+    padding:9px 7px 7px!important;
+    min-height:62px!important;
+  }
+  #screen-home .home-v22-mission .home-v22-mission-copy strong{
+    font-size:.78rem!important;
+    line-height:1.12!important;
+  }
+  #screen-home .home-v22-mission .home-v22-mission-copy small{
+    margin-top:4px!important;
+    font-size:.56rem!important;
+    line-height:1.3!important;
+  }
+  #screen-home .home-v22-mission > em{
+    top:8px!important;
+    right:8px!important;
+    padding:6px 9px!important;
+    font-size:.58rem!important;
+  }
+}
