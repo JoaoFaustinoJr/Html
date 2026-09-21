@@ -5,6 +5,33 @@ const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelecto
 
 function make(tag,cls,html){const el=document.createElement(tag);if(cls)el.className=cls;if(html!=null)el.innerHTML=html;return el;}
 
+
+function addHeroButterflies(){
+ const home=q('#screen-home');const hero=q('.home-v22-hero',home);if(!hero||q('.v45-butterflies',hero))return;
+ const layer=make('div','v45-butterflies');
+ layer.setAttribute('aria-hidden','true');
+ const specs=[
+  ['b1',7,18,.72,'#ff8bc2','#c79cff'],
+  ['b2',18,34,.48,'#83d4ff','#9c95ff'],
+  ['b3',33,17,.60,'#f49bc8','#be9fff'],
+  ['b4',48,30,.42,'#88d6ff','#b3a3ff'],
+  ['b5',61,14,.54,'#ff9fd0','#d19dff'],
+  ['b6',73,31,.67,'#7dcfff','#9b92ff'],
+  ['b7',86,19,.46,'#ff91c3','#b991ff'],
+  ['b8',92,42,.70,'#7dcfff','#ab99ff'],
+  ['b9',14,57,.44,'#ff9bcb','#cba4ff'],
+  ['b10',42,55,.56,'#81d3ff','#a69aff'],
+  ['b11',67,58,.45,'#ff8fc1','#c394ff'],
+  ['b12',82,64,.58,'#8ad8ff','#ae9eff']
+ ];
+ specs.forEach(([cls,x,y,scale,c1,c2],i)=>{
+   const b=make('span','v45-butterfly '+cls,'<i></i>');
+   b.style.left=x+'%';b.style.top=y+'%';b.style.setProperty('--bs',scale);b.style.setProperty('--bc1',c1);b.style.setProperty('--bc2',c2);b.style.setProperty('--bd',(10+(i%5)*1.7)+'s');b.style.setProperty('--bdelay',(-i*1.15)+'s');layer.appendChild(b);
+ });
+ const p1=make('span','v45-flight-path p1');const p2=make('span','v45-flight-path p2');
+ layer.append(p1,p2);hero.appendChild(layer);
+}
+
 function updateHero(){
  const home=q('#screen-home');if(!home)return;
  home.classList.add('home-final-v44');
@@ -134,4 +161,5 @@ function fixCompletionCard(){
 function enhance(){updateHero();buildAudienceSwitch();buildKidsArea();polishYouth();buildSupportHub();addFinishStamp();fixCompletionCard();document.documentElement.classList.add('tia-v44-ready');}
 function start(){setTimeout(enhance,0);setTimeout(enhance,220);setTimeout(enhance,700);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+try{addHeroButterflies();}catch(_){}
 })();
