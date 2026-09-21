@@ -82,8 +82,7 @@ function project(poly,a){let min=Infinity,max=-Infinity;poly.forEach(p=>{const v
 function overlapsPoly(a,b){const eps=.35;for(const ax of axes(a).concat(axes(b))){const pa=project(a,ax),pb=project(b,ax);if(pa.max<=pb.min+eps||pb.max<=pa.min+eps)return false}return true}
 function inside(poly){return poly.every(p=>p.x>=-.15&&p.y>=-.15&&p.x<=100.15&&p.y<=100.15)}
 function collides(p,x,y,rot){const poly=polygonFor(p,x,y,rot);if(!inside(poly))return true;return placed.some(o=>o.id!==p.id&&overlapsPoly(poly,polygonFor(o)))}
-function snap(v){return Math.round(v/2.5)*2.5}
-function clampFree(p,x,y,rot){let nx=snap(x),ny=snap(y),poly=polygonFor(p,nx,ny,rot),minX=Math.min(...poly.map(q=>q.x)),maxX=Math.max(...poly.map(q=>q.x)),minY=Math.min(...poly.map(q=>q.y)),maxY=Math.max(...poly.map(q=>q.y));if(minX<0)nx-=minX;if(maxX>100)nx-=maxX-100;if(minY<0)ny-=minY;if(maxY>100)ny-=maxY-100;return{x:snap(nx),y:snap(ny)}}
+function clampFree(p,x,y,rot){let nx=x,ny=y,poly=polygonFor(p,nx,ny,rot),minX=Math.min(...poly.map(q=>q.x)),maxX=Math.max(...poly.map(q=>q.x)),minY=Math.min(...poly.map(q=>q.y)),maxY=Math.max(...poly.map(q=>q.y));if(minX<0)nx-=minX;if(maxX>100)nx-=maxX-100;if(minY<0)ny-=minY;if(maxY>100)ny-=maxY-100;return{x:nx,y:ny}}
 
 function renderMini(){const host=document.createElement('span');host.className='tt-mosaic-mini-board';SLOTS.forEach(s=>{const i=document.createElement('i');i.style.left=s.x+'%';i.style.top=s.y+'%';i.style.width=s.w+'%';i.style.height=s.h+'%';i.style.clipPath=s.clip;i.style.background=colorOf(s.type);host.appendChild(i)});return host.outerHTML}
 function addCard(){const g=$('.home-v22-missions');if(!g)return false;let b=g.querySelector('[data-new-game="mosaic-wood"]');if(!b){b=document.createElement('button');g.appendChild(b)}b.type='button';b.className='home-v22-mission tt-new-game-card tt-mosaic-wood-card';b.dataset.newGame='mosaic-wood';b.innerHTML='<span class="home-v22-visual"><span class="tt-mosaic-mini">'+renderMini()+'</span></span><span class="home-v22-mission-copy"><span class="home-v22-mission-icon">🧩</span><span><strong>Mosaico da Tia Tati</strong><small>Monte e depois explore novas formas</small></span></span><em>Nova missão</em>';b.onclick=open;return true}
@@ -91,7 +90,7 @@ function addCard(){const g=$('.home-v22-missions');if(!g)return false;let b=g.qu
 function makeUI(){
  if(overlay)return;
  overlay=document.createElement('div');overlay.className='ttmw';
- overlay.innerHTML='<div class="ttmw-shell"><div class="ttmw-top"><div class="ttmw-title"><img class="ttmw-avatar" src="assets/guide.webp" alt="Tia Tati"><div><strong>Mosaico da Tia Tati</strong><small>As mesmas peças podem formar novos desenhos</small></div></div><button class="ttmw-close">×</button></div><div class="ttmw-modes"><button class="ttmw-mode build active">🧩 Montar</button><button class="ttmw-mode explore">✨ Explorar</button><button class="ttmw-mode model">👁️ Modelo</button><button class="ttmw-mode sym">◐ Simetria</button></div><section class="ttmw-panel"><p class="ttmw-instruction">No modo Montar as peças procuram seus encaixes. Em Explorar você pode levá-las para qualquer lugar livre do quadro e girá-las.</p><div class="ttmw-frame"><div class="ttmw-board"><div class="ttmw-axis"></div></div></div><div class="ttmw-palette-title">Peças disponíveis</div><div class="ttmw-palette"></div><div class="ttmw-actions"><button class="ttmw-view">👁️ Modelo</button><button class="ttmw-clear">↶ Desfazer</button><button class="ttmw-next">↻ Recomeçar</button></div><div class="ttmw-status">Monte o mosaico ou escolha Explorar.</div></section></div><div class="ttmw-modal"><div class="ttmw-modal-card"><h3>Modelo completo</h3><div class="ttmw-model-board"></div><button>Fechar modelo</button></div></div>';
+ overlay.innerHTML='<div class="ttmw-shell"><div class="ttmw-top"><div class="ttmw-title"><img class="ttmw-avatar" src="assets/guide.webp" alt="Tia Tati"><div><strong>Mosaico da Tia Tati</strong><small>As mesmas peças podem formar novos desenhos</small></div></div><button class="ttmw-close">×</button></div><div class="ttmw-modes"><button class="ttmw-mode build active">🧩 Montar</button><button class="ttmw-mode explore">✨ Explorar</button><button class="ttmw-mode model">👁️ Modelo</button><button class="ttmw-mode sym">◐ Simetria</button></div><section class="ttmw-panel"><p class="ttmw-instruction">No modo Montar as peças procuram seus encaixes. Em Explorar a peça fica exatamente onde você soltar, desde que não sobreponha outra peça, e pode ser girada.</p><div class="ttmw-frame"><div class="ttmw-board"><div class="ttmw-axis"></div></div></div><div class="ttmw-palette-title">Peças disponíveis</div><div class="ttmw-palette"></div><div class="ttmw-actions"><button class="ttmw-view">👁️ Modelo</button><button class="ttmw-clear">↶ Desfazer</button><button class="ttmw-next">↻ Recomeçar</button></div><div class="ttmw-status">Monte o mosaico ou escolha Explorar.</div></section></div><div class="ttmw-modal"><div class="ttmw-modal-card"><h3>Modelo completo</h3><div class="ttmw-model-board"></div><button>Fechar modelo</button></div></div>';
  document.body.appendChild(overlay);
  $('.ttmw-close',overlay).onclick=close;$('.ttmw-mode.build',overlay).onclick=()=>setMode('build');$('.ttmw-mode.explore',overlay).onclick=()=>setMode('explore');$('.ttmw-mode.model',overlay).onclick=showModel;$('.ttmw-mode.sym',overlay).onclick=()=>setMode('symmetry');$('.ttmw-view',overlay).onclick=showModel;$('.ttmw-clear',overlay).onclick=undo;$('.ttmw-next',overlay).onclick=restart;$('.ttmw-modal button',overlay).onclick=()=>$('.ttmw-modal',overlay).classList.remove('show');
  $('.ttmw-board',overlay).onclick=e=>{if(e.target===e.currentTarget||e.target.classList.contains('ttmw-axis'))placeAt(e)};
@@ -125,8 +124,8 @@ function renderPieces(){
 function startDrag(e,p,el){
  e.preventDefault();dragBefore=cloneState();
  if(mode==='explore'&&p.slotId){const s=slotById(p.slotId);p.x=s.x;p.y=s.y;p.w=s.w;p.h=s.h;p.clip=s.clip;p.rot=0;p.slotId=null}
- const g=pieceGeom(p),r=el.getBoundingClientRect(),b=$('.ttmw-board',overlay).getBoundingClientRect();
- drag={p,el,dx:(e.clientX-r.left)/b.width*100,dy:(e.clientY-r.top)/b.height*100,start:cloneState()};try{el.setPointerCapture(e.pointerId)}catch(_){}
+ const b=$('.ttmw-board',overlay).getBoundingClientRect(),pt=boardPoint(e);
+ drag={p,el,dx:pt.x-p.x,dy:pt.y-p.y,startX:p.x,startY:p.y,startRot:p.rot||0};try{el.setPointerCapture(e.pointerId)}catch(_){}
 }
 function moveDrag(e){
  if(!drag)return;e.preventDefault();const b=$('.ttmw-board',overlay),r=b.getBoundingClientRect(),pt=boardPoint(e),g=pieceGeom(drag.p);
@@ -138,7 +137,7 @@ function finishDrag(e){
  const p=drag.p,pt=boardPoint(e);
  if(mode==='explore'){
    const q=clampFree(p,p.x,p.y,p.rot||0);
-   if(collides(p,q.x,q.y,p.rot||0)){placed=dragBefore;status('Esse espaço está ocupado. A peça voltou.')}else{p.x=q.x;p.y=q.y;history.push(dragBefore);if(history.length>80)history.shift();status('Nova posição aceita.')}
+   if(collides(p,q.x,q.y,p.rot||0)){placed=dragBefore;status('Esse espaço está ocupado. A peça voltou.')}else{p.x=q.x;p.y=q.y;history.push(dragBefore);if(history.length>80)history.shift();status('Peça solta exatamente onde você deixou.')}
  }else{
    const s=nearestSlot(p.type,pt.x,pt.y,p.id);
    if(s&&s.id!==p.slotId){history.push(dragBefore);if(history.length>80)history.shift();p.slotId=s.id;status('Peça reposicionada.')}else status('A peça permaneceu no encaixe anterior.');
@@ -160,7 +159,7 @@ function undo(){if(!history.length){status('Não há movimento para desfazer.');
 function restart(){if(placed.length)pushHistory();placed=[];renderPieces();refreshCounts();status('As peças foram retiradas. Comece novamente.')}
 function setMode(m){
  mode=m==='symmetry'?'explore':m;overlay.classList.toggle('symmetry',m==='symmetry');$$('.ttmw-mode',overlay).forEach(x=>x.classList.remove('active'));const q=$('.ttmw-mode.'+(m==='symmetry'?'sym':m),overlay);if(q)q.classList.add('active');
- if(mode==='explore'){placed.forEach(p=>{if(p.slotId){const s=slotById(p.slotId);p.x=s.x;p.y=s.y;p.w=s.w;p.h=s.h;p.clip=s.clip;p.rot=0;p.slotId=null}});renderPieces();status(m==='symmetry'?'Explore mantendo a linha central como referência.':'Explore livremente: mova as peças para qualquer região livre e gire com dois toques.')}
+ if(mode==='explore'){placed.forEach(p=>{if(p.slotId){const s=slotById(p.slotId);p.x=s.x;p.y=s.y;p.w=s.w;p.h=s.h;p.clip=s.clip;p.rot=0;p.slotId=null}});renderPieces();status(m==='symmetry'?'Explore mantendo a linha central como referência.':'Explore livremente: a peça permanece exatamente onde for solta. Gire com dois toques.')}
  else status('Modo Montar: as peças procuram os encaixes do mosaico original.');
 }
 function showModel(){const b=$('.ttmw-model-board',overlay);b.innerHTML='';SLOTS.forEach(s=>{const e=document.createElement('div');e.className='ttmw-model-piece';e.style.left=s.x+'%';e.style.top=s.y+'%';e.style.width=s.w+'%';e.style.height=s.h+'%';e.style.clipPath=s.clip;e.style.backgroundColor=colorOf(s.type);b.appendChild(e)});$('.ttmw-modal',overlay).classList.add('show')}
