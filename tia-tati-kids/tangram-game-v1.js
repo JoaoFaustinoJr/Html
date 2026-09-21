@@ -8,18 +8,18 @@ const CARD='assets/file_0000000025f4820e94bf82c96720553a.png';
 const NS='http://www.w3.org/2000/svg';
 
 const defs={
- L1:{name:'Triângulo grande',color:'#ff5f6d',pts:[[0,0],[0,240],[120,120]]},
- L2:{name:'Triângulo grande',color:'#ff9f43',pts:[[0,120],[240,120],[120,0]]},
- M:{name:'Triângulo médio',color:'#ffd93d',pts:[[0,0],[120,0],[120,120]]},
- S1:{name:'Triângulo pequeno',color:'#6bff95',pts:[[0,0],[120,0],[60,60]]},
- S2:{name:'Triângulo pequeno',color:'#3dd6ff',pts:[[60,0],[60,120],[0,60]]},
- Q:{name:'Quadrado',color:'#7c83ff',pts:[[0,60],[60,0],[120,60],[60,120]]},
- P:{name:'Paralelogramo',color:'#d66bff',pts:[[0,0],[120,0],[180,60],[60,60]]}
+ L1:{type:'large',name:'Triângulo grande',color:'#ff5f6d',pts:[[0,0],[110,0],[0,110]]},
+ L2:{type:'large',name:'Triângulo grande',color:'#ff9f43',pts:[[0,0],[110,0],[0,110]]},
+ M:{type:'medium',name:'Triângulo médio',color:'#ffd93d',pts:[[0,0],[78,0],[0,78]]},
+ S1:{type:'small',name:'Triângulo pequeno',color:'#6bff95',pts:[[0,0],[55,0],[0,55]]},
+ S2:{type:'small',name:'Triângulo pequeno',color:'#3dd6ff',pts:[[0,0],[55,0],[0,55]]},
+ Q:{type:'square',name:'Quadrado',color:'#7c83ff',pts:[[0,0],[54,0],[54,54],[0,54]]},
+ P:{type:'para',name:'Paralelogramo',color:'#d66bff',pts:[[18,0],[82,0],[64,50],[0,50]]}
 };
 
 const starts={
- L1:{x:40,y:515,r:0,flip:1},L2:{x:185,y:515,r:0,flip:1},M:{x:445,y:545,r:0,flip:1},
- S1:{x:585,y:555,r:0,flip:1},S2:{x:705,y:555,r:0,flip:1},Q:{x:580,y:650,r:0,flip:1},P:{x:755,y:650,r:0,flip:1}
+ L1:{x:35,y:405,r:0,flip:1},L2:{x:160,y:405,r:0,flip:1},M:{x:300,y:415,r:0,flip:1},
+ S1:{x:400,y:425,r:0,flip:1},S2:{x:475,y:425,r:0,flip:1},Q:{x:555,y:420,r:0,flip:1},P:{x:635,y:423,r:0,flip:1}
 };
 
 /* Casa e Foguete reaproveitam os modelos clássicos do Tangram Educativo.
@@ -43,10 +43,10 @@ const challenges={
  },
  castle:{
   label:'Castelo',emoji:'🏰',
-  hint:'Monte primeiro as duas torres com os triângulos grandes e feche o centro com as peças menores.',
+  hint:'Monte primeiro as torres e depois complete a parte central.',
   solution:{
-   L1:{x:325,y:255,r:315,flip:1},L2:{x:505,y:255,r:225,flip:1},M:{x:415,y:175,r:45,flip:1},
-   S1:{x:345,y:125,r:225,flip:1},S2:{x:535,y:125,r:315,flip:1},Q:{x:430,y:265,r:45,flip:1},P:{x:430,y:350,r:0,flip:1}
+   L1:{x:300,y:235,r:315,flip:1},L2:{x:500,y:235,r:225,flip:1},M:{x:405,y:255,r:0,flip:1},
+   S1:{x:325,y:170,r:315,flip:1},S2:{x:510,y:170,r:225,flip:1},Q:{x:415,y:320,r:0,flip:1},P:{x:445,y:350,r:0,flip:1}
   }
  },
  free:{label:'Livre',emoji:'✨',hint:'Monte o que imaginar.',solution:null}
@@ -120,7 +120,7 @@ let overlay=null,current='house',pieces={},selected='L1',drag=null,sampleActive=
 function makeUI(){
  if(overlay)return;
  overlay=document.createElement('div');overlay.className='tt-tangram-overlay';
- overlay.innerHTML='<div class="tt-tangram-shell"><div class="tt-tangram-top"><div class="tt-tangram-brand"><strong>Tangram da Tia Tati</strong><small>Formas • percepção espacial • coordenação</small></div><button class="tt-tangram-close">×</button></div><section class="tt-tangram-hero"><img src="'+CARD+'" alt="Tangram da Tia Tati"><h1>Tangram da Tia Tati</h1><p>Conheça as sete peças e depois monte figuras de verdade.</p></section><div class="tt-tangram-modes"><button class="tt-tangram-mode learn">🔷 Conhecer</button><button class="tt-tangram-mode build">🧩 Montar</button></div><section class="tt-tangram-panel"><div class="tt-learn-area"><div class="tt-tangram-head"><strong>Peças do Tangram</strong><button class="tt-tangram-all">🔊 Ouvir todas</button></div><div class="tt-shape-grid"></div><div class="tt-tangram-spoken">Toque em uma peça para ouvir o nome.</div></div><div class="tt-build-area"><div class="tt-tangram-head"><strong>Escolha um desafio</strong></div><div class="tt-challenges"></div><div class="tt-build-hint"></div><div class="tt-board-wrap"><div class="tt-sample-banner">👁️ Amostra de solução</div><svg class="tt-build-board" viewBox="240 40 520 470" preserveAspectRatio="xMidYMid meet"></svg></div><div class="tt-build-actions"><button class="tt-left">↺<br>45°</button><button class="tt-right">↻<br>45°</button><button class="tt-flip">⇋<br>Espelhar</button><button class="tt-sample">👁️<br>Amostra</button><button class="tt-build-reset">↺<br>Recomeçar</button></div><div class="tt-complete"></div></div></section></div>';
+ overlay.innerHTML='<div class="tt-tangram-shell"><div class="tt-tangram-top"><div class="tt-tangram-brand"><strong>Tangram da Tia Tati</strong><small>Formas • percepção espacial • coordenação</small></div><button class="tt-tangram-close">×</button></div><section class="tt-tangram-hero"><img src="'+CARD+'" alt="Tangram da Tia Tati"><h1>Tangram da Tia Tati</h1><p>Conheça as sete peças e depois monte figuras de verdade.</p></section><div class="tt-tangram-modes"><button class="tt-tangram-mode learn">🔷 Conhecer</button><button class="tt-tangram-mode build">🧩 Montar</button></div><section class="tt-tangram-panel"><div class="tt-learn-area"><div class="tt-tangram-head"><strong>Peças do Tangram</strong><button class="tt-tangram-all">🔊 Ouvir todas</button></div><div class="tt-shape-grid"></div><div class="tt-tangram-spoken">Toque em uma peça para ouvir o nome.</div></div><div class="tt-build-area"><div class="tt-tangram-head"><strong>Escolha um desafio</strong></div><div class="tt-challenges"></div><div class="tt-build-hint"></div><div class="tt-board-wrap"><div class="tt-sample-banner">👁️ Amostra de solução</div><svg class="tt-build-board" viewBox="0 0 800 520" preserveAspectRatio="xMidYMid meet"></svg></div><div class="tt-build-actions"><button class="tt-left">↺<br>45°</button><button class="tt-right">↻<br>45°</button><button class="tt-flip">⇋<br>Espelhar</button><button class="tt-sample">👁️<br>Amostra</button><button class="tt-build-reset">↺<br>Recomeçar</button></div><div class="tt-complete"></div></div></section></div>';
  document.body.appendChild(overlay);
  $('.tt-tangram-close',overlay).onclick=close;
  $('.tt-tangram-mode.learn',overlay).onclick=()=>mode('learn');
@@ -150,20 +150,53 @@ function resetBoard(){
 
 function renderTarget(svg){
  const c=challenges[current];if(!c.solution)return;
- /* A silhueta é a união visual das sete peças da solução; sem desenho inventado. */
- Object.entries(c.solution).forEach(([id,state])=>{const poly=make('polygon',{points:fmtPts(transformed(id,state)),class:'tt-target'});svg.appendChild(poly)});
+ Object.entries(c.solution).forEach(([id,state])=>{
+  const poly=make('polygon',{
+   points:fmtPts(defs[id].pts),
+   class:'tt-target',
+   transform:`translate(${state.x} ${state.y}) rotate(${state.r})`
+  });
+  svg.appendChild(poly);
+ });
 }
 function renderBoard(){
  const svg=$('.tt-build-board',overlay);svg.innerHTML='';renderTarget(svg);
  Object.keys(defs).forEach(id=>{const st=pieces[id],g=make('g',{class:'tt-piece '+(selected===id?'selected':''),transform:`translate(${st.x} ${st.y}) rotate(${st.r}) scale(${st.flip} 1)`});const vis=make('polygon',{points:fmtPts(defs[id].pts),fill:defs[id].color,stroke:'#fff','stroke-width':3,'stroke-linejoin':'round'});const hit=make('polygon',{points:fmtPts(defs[id].pts),fill:'transparent',stroke:'transparent','stroke-width':20,'pointer-events':'all'});g.appendChild(vis);g.appendChild(hit);svg.appendChild(g);g.addEventListener('pointerdown',e=>begin(e,id));g.addEventListener('dblclick',()=>speak(defs[id].name));g.addEventListener('click',()=>{selected=id;renderBoard()})});
 }
 function svgPt(e){const svg=$('.tt-build-board',overlay),p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
-function begin(e,id){if(sampleActive)return;e.preventDefault();selected=id;const q=svgPt(e),p=pieces[id];drag={id,dx:q.x-p.x,dy:q.y-p.y,pointerId:e.pointerId};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){};renderBoard()}
-function move(e){if(!drag)return;e.preventDefault();const q=svgPt(e),p=pieces[drag.id];p.x=q.x-drag.dx;p.y=q.y-drag.dy;renderBoard()}
+function begin(e,id){
+ if(sampleActive)return;
+ e.preventDefault();
+ selected=id;
+ const q=svgPt(e),p=pieces[id];
+ drag={id,dx:q.x-p.x,dy:q.y-p.y,el:e.currentTarget,pointerId:e.pointerId};
+ try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}
+ $('.tt-piece',overlay).forEach(x=>x.classList.remove('selected'));
+ e.currentTarget.classList.add('selected');
+}
+function move(e){
+ if(!drag)return;
+ e.preventDefault();
+ const q=svgPt(e),p=pieces[drag.id];
+ p.x=q.x-drag.dx;p.y=q.y-drag.dy;
+ if(drag.el&&drag.el.isConnected){
+  drag.el.setAttribute('transform',`translate(${p.x} ${p.y}) rotate(${p.r}) scale(${p.flip} 1)`);
+ }
+}
 function end(){drag=null}
 window.addEventListener('pointermove',move,{passive:false});window.addEventListener('pointerup',end);
-function rotate(d){if(!pieces[selected]||sampleActive)return;pieces[selected].r=(pieces[selected].r+d+360)%360;renderBoard()}
-function flip(){if(!pieces[selected]||sampleActive)return;pieces[selected].flip*=-1;renderBoard()}
+function rotate(d){
+ if(!pieces[selected]||sampleActive)return;
+ pieces[selected].r=(pieces[selected].r+d+360)%360;
+ const el=$('.tt-piece.selected',overlay);
+ if(el)el.setAttribute('transform',`translate(${pieces[selected].x} ${pieces[selected].y}) rotate(${pieces[selected].r}) scale(${pieces[selected].flip} 1)`);
+}
+function flip(){
+ if(!pieces[selected]||sampleActive)return;
+ pieces[selected].flip*=-1;
+ const el=$('.tt-piece.selected',overlay);
+ if(el)el.setAttribute('transform',`translate(${pieces[selected].x} ${pieces[selected].y}) rotate(${pieces[selected].r}) scale(${pieces[selected].flip} 1)`);
+}
 function showSample(){
  const c=challenges[current];if(!c.solution||sampleActive)return;
  sampleActive=true;savedSample={};Object.keys(pieces).forEach(id=>savedSample[id]={...pieces[id]});
