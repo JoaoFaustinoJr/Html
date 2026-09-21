@@ -32,5 +32,6 @@ function resetBoard(){buildBoard();$('.tt-build-hint',overlay).textContent='Arra
 function mode(m){const learn=$('.tt-learn-area',overlay),build=$('.tt-build-area',overlay);if(m==='learn'){learn.classList.remove('hidden');build.classList.remove('active');speak('Vamos conhecer as formas do tangram.')}else{learn.classList.add('hidden');build.classList.add('active');speak('Agora vamos montar com as sete peças do tangram.')}}
 function open(){make();overlay.classList.add('open');document.body.style.overflow='hidden';mode('learn')}
 function close(){overlay?.classList.remove('open');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(_){}}
-addStyle();let tries=0,t=setInterval(()=>{if(addCard()||++tries>40)clearInterval(t)},250);
+function bindCard(){const b=document.querySelector('[data-new-game="tangram"]');if(!b)return false;b.onclick=open;return true}
+addStyle();let tries=0,t=setInterval(()=>{addCard();if(bindCard()||++tries>40)clearInterval(t)},250);
 })();
