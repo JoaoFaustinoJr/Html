@@ -34,10 +34,30 @@ a{-webkit-tap-highlight-color:transparent}
 @media(max-width:520px){.copy{right:1.2%;width:54.5%;top:10.7%}.copy h1{font-size:clamp(1.45rem,5.2vw,1.9rem);line-height:.96}.copy h1 em{font-size:.91em}.copy p{font-size:clamp(.64rem,2.25vw,.82rem);max-width:320px}.hero-art{width:69.5%;height:47.5%;left:-6%;top:8.2%}.quote{left:2.7%;top:10.7%;max-width:17%;font-size:clamp(.54rem,2.2vw,.82rem)}.choices{top:47.7%;height:34.6%}.values{top:83.8%}.install-zone{top:89.45%}.install-btn{padding:8px 14px}}
 @media(max-height:660px){.topbar{height:6.8%}.hero-art{top:7.5%;height:46.8%}.copy{top:9.2%}.choices{top:46.7%;height:35.2%}.values{top:82.9%}.install-zone{top:88.7%}.footer{bottom:.4%}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.portal-butterflies{position:absolute;z-index:3;inset:8% 0 46% 0;overflow:hidden;pointer-events:none}
+.portal-butterfly{position:absolute;width:32px;height:24px;opacity:.78;filter:drop-shadow(0 3px 7px rgba(65,103,151,.18));animation:portalButterflyFloat var(--dur) linear infinite;animation-delay:var(--delay);will-change:transform,opacity}
+.portal-butterfly:before,.portal-butterfly:after{content:"";position:absolute;top:3px;width:15px;height:18px;border-radius:72% 40% 72% 45%;background:linear-gradient(135deg,var(--c1),var(--c2));transform-origin:100% 50%;animation:portalWing .85s ease-in-out infinite alternate}
+.portal-butterfly:before{left:0;transform:rotate(17deg)}
+.portal-butterfly:after{right:0;transform-origin:0 50%;transform:scaleX(-1) rotate(17deg)}
+.portal-butterfly i{position:absolute;left:14px;top:5px;width:3px;height:14px;border-radius:3px;background:#54718d}
+@keyframes portalWing{from{scale:.96 1;filter:brightness(1)}to{scale:.66 1;filter:brightness(1.08)}}
+@keyframes portalButterflyFloat{0%{transform:translate3d(0,28px,0) rotate(-7deg) scale(.82);opacity:0}10%{opacity:.72}30%{transform:translate3d(18px,0,0) rotate(5deg) scale(1)}55%{transform:translate3d(-10px,-42px,0) rotate(-3deg) scale(.94)}78%{transform:translate3d(20px,-86px,0) rotate(7deg) scale(1.03);opacity:.8}100%{transform:translate3d(-6px,-126px,0) rotate(-4deg) scale(.9);opacity:0}}
+@media(prefers-reduced-motion:reduce){.portal-butterfly{animation:none!important;opacity:.38!important}}
+
 </style>
 </head>
 <body>
 <main class="portal" aria-label="Portal Tia Tati – Fisio Sensório-Motora">
+  <div class="portal-butterflies" aria-hidden="true">
+    <span class="portal-butterfly" style="left:10%;top:70%;--c1:#ff86bd;--c2:#bd91ff;--dur:12s;--delay:-2s"><i></i></span>
+    <span class="portal-butterfly" style="left:28%;top:58%;--c1:#7fd2ff;--c2:#918cff;--dur:14s;--delay:-6s"><i></i></span>
+    <span class="portal-butterfly" style="left:46%;top:72%;--c1:#ff9cc8;--c2:#f3b1ff;--dur:11s;--delay:-4s"><i></i></span>
+    <span class="portal-butterfly" style="left:63%;top:52%;--c1:#72caff;--c2:#9f8fff;--dur:15s;--delay:-8s"><i></i></span>
+    <span class="portal-butterfly" style="left:78%;top:68%;--c1:#ff8bc0;--c2:#b890ff;--dur:13s;--delay:-5s"><i></i></span>
+    <span class="portal-butterfly" style="left:90%;top:46%;--c1:#87d6ff;--c2:#b09aff;--dur:16s;--delay:-9s"><i></i></span>
+  </div>
+
   <header class="topbar">
     <div class="brand"><span class="brand-script">Tia Tati</span><span class="brand-pill">FISIO SENSÓRIO-MOTORA</span></div>
     <div class="pro"><strong>Dra. Tatiana de Oliveira Machado</strong><small>FISIOTERAPEUTA</small></div>
