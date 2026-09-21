@@ -1039,8 +1039,27 @@ $('#repeatVoice').onclick=()=>playVoice(state.currentPhrase,true);$('#hintGame')
 $('#pauseGame').onclick=e=>{state.paused=!state.paused;e.currentTarget.textContent=state.paused?'▶️ Continuar':'⏸️ Pausar';feedback(state.paused?'Atividade pausada.':'Vamos continuar no seu tempo.');};
 $('#exitGame').onclick=()=>show('home');$('#repeatSession').onclick=()=>startCircuit(state.lastCircuit);$('#refreshVoice').onclick=()=>renderVoice();$('#saveObservation').onclick=saveObservation;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();clearIdle();}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=62').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js?v=63').catch(()=>{});
 })();
 ;(()=>{if(window.__TIA_TATI_CLASSIC_FORCE_LOADER__)return;window.__TIA_TATI_CLASSIC_FORCE_LOADER__=true;const s=document.createElement('script');s.src='tangram-classic-v1.js?v=20260921-exato-v12';s.async=true;document.head.appendChild(s)})();
 
 ;(()=>{if(window.__TIA_TATI_MOSAIC_V10_LOADER__)return;window.__TIA_TATI_MOSAIC_V10_LOADER__=true;document.querySelectorAll('.ttmw').forEach(x=>x.remove());const old=document.getElementById('ttmwStyle');if(old)old.remove();const s=document.createElement('script');s.src='mosaic-game-v2.js?v=10';s.async=true;document.head.appendChild(s)})();
+
+;(()=>{if(window.__TIA_TATI_FLOATING_BUTTERFLIES__)return;window.__TIA_TATI_FLOATING_BUTTERFLIES__=true;
+const css=`
+.home-v22-hero{position:relative!important;overflow:hidden!important}
+.tt-float-butterflies{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+.tt-float-butterfly{position:absolute;width:30px;height:24px;opacity:.78;filter:drop-shadow(0 3px 6px rgba(73,109,158,.18));animation:ttButterflyDrift var(--dur) linear infinite;animation-delay:var(--delay);will-change:transform,opacity}
+.tt-float-butterfly:before,.tt-float-butterfly:after{content:'';position:absolute;top:3px;width:15px;height:18px;border-radius:70% 40% 70% 45%;background:linear-gradient(135deg,var(--c1),var(--c2));transform-origin:100% 50%;animation:ttWing .9s ease-in-out infinite alternate}
+.tt-float-butterfly:before{left:0;transform:rotate(18deg)}
+.tt-float-butterfly:after{right:0;transform-origin:0 50%;transform:scaleX(-1) rotate(18deg)}
+.tt-float-butterfly i{position:absolute;left:14px;top:5px;width:3px;height:14px;border-radius:3px;background:#54718d;display:block}
+@keyframes ttWing{from{filter:brightness(1);scale:.95 1}to{filter:brightness(1.08);scale:.68 1}}
+@keyframes ttButterflyDrift{0%{transform:translate3d(0,35px,0) rotate(-8deg) scale(.8);opacity:0}10%{opacity:.75}28%{transform:translate3d(20px,0,0) rotate(5deg) scale(1)}50%{transform:translate3d(-10px,-40px,0) rotate(-3deg) scale(.92)}75%{transform:translate3d(18px,-82px,0) rotate(7deg) scale(1.05);opacity:.8}100%{transform:translate3d(-8px,-130px,0) rotate(-4deg) scale(.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.tt-float-butterfly{animation:none!important;opacity:.42!important}}
+`;
+function boot(){const hero=document.querySelector('#screen-home .home-v22-hero');if(!hero)return false;if(document.getElementById('ttButterflyStyle'))return true;const st=document.createElement('style');st.id='ttButterflyStyle';st.textContent=css;document.head.appendChild(st);const layer=document.createElement('div');layer.className='tt-float-butterflies';layer.setAttribute('aria-hidden','true');const specs=[
+[9,77,'#ff7bb7','#b78cff',11,-1.4,.85],[24,62,'#8ad7ff','#8f86ff',13,-4.5,.72],[43,72,'#ff97c8','#f7b6ff',12,-7.2,.9],[61,58,'#73c8ff','#8c98ff',14,-2.7,.76],[79,70,'#ff86bf','#a88cff',12,-5.6,.82],[89,52,'#7fd1ff','#a991ff',15,-8.1,.68],[70,84,'#ff9dce','#c9a5ff',10,-3.2,.64]];
+specs.forEach(s=>{const b=document.createElement('span');b.className='tt-float-butterfly';b.style.left=s[0]+'%';b.style.top=s[1]+'%';b.style.setProperty('--c1',s[2]);b.style.setProperty('--c2',s[3]);b.style.setProperty('--dur',s[4]+'s');b.style.setProperty('--delay',s[5]+'s');b.style.transform='scale('+s[6]+')';b.innerHTML='<i></i>';layer.appendChild(b)});hero.appendChild(layer);return true}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else if(!boot()){let n=0,t=setInterval(()=>{if(boot()||++n>40)clearInterval(t)},250)}
+})();
