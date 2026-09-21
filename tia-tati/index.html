@@ -21,7 +21,7 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
 .hotspot:focus-visible{outline:4px solid rgba(255,47,155,.75);outline-offset:3px}
 .kids-hotspot{left:2.5%;top:48.3%;width:46.5%;height:34.5%}
 .young-hotspot{left:51%;top:48.3%;width:46.5%;height:34.5%}
-.about-hotspot{right:5.5%;top:7.0%;width:30%;height:5.5%}
+.about-hotspot{right:5.5%;top:7.0%;width:30%;height:5.5%}.about-modal{position:fixed;z-index:99998;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(7,26,57,.48);backdrop-filter:blur(7px)}.about-modal.open{display:flex}.about-card{width:min(92vw,460px);border-radius:28px;padding:24px;background:#fff;box-shadow:0 24px 70px rgba(8,38,72,.30);color:#173d71;text-align:left}.about-card h2{margin:0 0 6px;color:#0b4382}.about-card .role{display:block;margin-bottom:14px;color:#f2479a;font-weight:900;letter-spacing:.08em;font-size:.78rem}.about-card p{margin:0 0 12px;line-height:1.5;color:#506a80}.about-close{width:100%;border:0;border-radius:999px;padding:12px 15px;background:linear-gradient(90deg,#f2479a,#ff65ae);color:#fff;font-weight:850;cursor:pointer}
 .install-fab{position:absolute;z-index:7;right:3.2%;bottom:2.2%;border:1px solid rgba(15,86,199,.18);border-radius:999px;padding:9px 13px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);box-shadow:0 7px 20px rgba(23,61,113,.12);color:#0f56c7;font:800 12px/1 system-ui;cursor:pointer}
 .install-fab b{color:#ff2f9b}
 .install-modal{position:fixed;z-index:99999;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(7,26,57,.48);backdrop-filter:blur(7px)}
@@ -44,9 +44,19 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
   <img src="assets/file_00000000352c820ea39ef106ea497525.png?v=1" alt="Portal Tia Tati com borboletas, Área Kids e Modo Jovem">
   <a class="hotspot kids-hotspot" href="launch-kids.html" aria-label="Entrar na Área Kids"></a>
   <a class="hotspot young-hotspot" href="../tia-tati-jovem/entry-j12.html?v=j14" aria-label="Entrar no Modo Jovem"></a>
-  <a class="hotspot about-hotspot" href="#" aria-label="Sobre a Dra. Tatiana"></a>
+  <button class="hotspot about-hotspot" id="aboutHotspot" type="button" aria-label="Sobre a Dra. Tatiana" style="border:0;background:transparent;cursor:pointer"></button>
   <button class="install-fab" id="installAppBtn" type="button">⬇ <b>Instalar</b> app</button>
 </main>
+
+<div class="about-modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="about-card">
+    <h2 id="aboutTitle">Dra. Tatiana de Oliveira Machado</h2>
+    <span class="role">FISIOTERAPEUTA</span>
+    <p>Responsável pela proposta Tia Tati – Fisio Sensório-Motora, com atividades lúdicas voltadas a movimento, atenção, autonomia e desenvolvimento funcional.</p>
+    <p>O portal reúne experiências para a Área Kids e para o Modo Jovem, com adaptação ao ritmo de cada participante.</p>
+    <button class="about-close" id="aboutClose" type="button">Voltar ao portal</button>
+  </div>
+</div>
 
 <div class="install-modal" id="installModal" role="dialog" aria-modal="true" aria-labelledby="installTitle">
   <div class="install-card">
@@ -63,7 +73,7 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
 <script>
 (()=>{
 'use strict';
-const btn=document.getElementById('installAppBtn'),modal=document.getElementById('installModal'),closeBtn=document.getElementById('installClose'),nativeBtn=document.getElementById('installNative'),steps=document.getElementById('installSteps');
+const btn=document.getElementById('installAppBtn'),modal=document.getElementById('installModal'),closeBtn=document.getElementById('installClose'),nativeBtn=document.getElementById('installNative'),steps=document.getElementById('installSteps'),aboutHotspot=document.getElementById('aboutHotspot'),aboutModal=document.getElementById('aboutModal'),aboutClose=document.getElementById('aboutClose');
 let deferredPrompt=null;
 const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 if(standalone)btn.style.display='none';
@@ -78,7 +88,7 @@ function openHelp(){
  modal.classList.add('open');
 }
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
-btn.addEventListener('click',openHelp);
+btn.addEventListener('click',openHelp);aboutHotspot.addEventListener('click',()=>aboutModal.classList.add('open'));aboutClose.addEventListener('click',()=>aboutModal.classList.remove('open'));aboutModal.addEventListener('click',e=>{if(e.target===aboutModal)aboutModal.classList.remove('open')});
 closeBtn.addEventListener('click',()=>modal.classList.remove('open'));
 modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
 nativeBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;const p=deferredPrompt;deferredPrompt=null;modal.classList.remove('open');try{await p.prompt();await p.userChoice}catch(_){}});
