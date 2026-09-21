@@ -34,7 +34,7 @@ const css=`
 `;
 let overlay=null,current='casa',state=[],drag=null,showModel=false;
 function style(){if($('#tteStyle'))return;const s=document.createElement('style');s.id='tteStyle';s.textContent=css;document.head.appendChild(s)}
-function speak(t){}catch(_){}}
+function speak(t){}
 function mk(tag,a={}){const n=document.createElementNS(NS,tag);Object.entries(a).forEach(([k,v])=>n.setAttribute(k,v));return n}
 function pts(a){return a.map(p=>p.join(',')).join(' ')}
 function packStart(items){
