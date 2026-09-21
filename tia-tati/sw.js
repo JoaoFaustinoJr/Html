@@ -1,5 +1,5 @@
-const CACHE='tia-tati-portal-pwa-v13';
-const SHELL=['./','./index.html','./manifest.webmanifest','./assets/icon-tia-tati-192.webp','./assets/icon-tia-tati-512.webp','./assets/tatiana-portal-v3.webp','./assets/tatiana-about-v2.webp','./launch-kids.html','./launch-jovem.html','./portal-runtime-v12.js'];
+const CACHE='tia-tati-portal-pwa-v14';
+const SHELL=['./','./index.html','./manifest.webmanifest','./assets/icon-tia-tati-192.webp','./assets/icon-tia-tati-512.webp','./assets/tatiana-portal-v3.webp','./assets/tatiana-about-v2.webp','./assets/file_00000000352c820ea39ef106ea497525.png','./launch-kids.html','./launch-jovem.html','./portal-runtime-v12.js'];
 
 function patchPortalHtml(html){
   if(!html)return html;
