@@ -47,3 +47,41 @@ body #app>header.topbar .brand small{display:block!important;margin-top:4px!impo
   body #app>header.topbar{min-height:66px!important;padding:9px 10px!important;border-radius:0 0 18px 18px!important}.brand-avatar{width:48px!important;height:48px!important}.round-btn{width:46px!important;height:46px!important;border-radius:15px!important}body #app>header.topbar .brand strong{font-size:1.32rem!important}body #app>header.topbar .brand small{font-size:.55rem!important}
 }
 @media(max-width:420px){.home-v22-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}.home-v22-cards button:nth-child(n+5){display:none!important}.home-v22-tutor{min-height:225px!important}.home-v22-portrait-wrap{min-height:220px!important}.home-v22-bubble{font-size:.65rem!important}.bottom-nav{width:calc(100% - 14px)!important}.bottom-nav button{font-size:.56rem!important}}
+
+
+/* Mission cards v40 — artes refinadas + retrato oficial da Tia Tati. */
+#screen-home .home-v22-mission .home-v22-visual.mission-art{
+  display:block!important;
+  position:relative!important;
+  height:180px!important;
+  overflow:hidden!important;
+  background:#f7fbff!important;
+}
+#screen-home .home-v22-mission .home-v22-visual.mission-art .mission-art-bg{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center 28%!important;
+  transform:scale(1.025);
+  transition:transform .22s ease;
+}
+#screen-home .home-v22-mission:hover .home-v22-visual.mission-art .mission-art-bg{
+  transform:scale(1.055);
+}
+#screen-home .home-v22-mission .mission-tati-cameo{
+  position:absolute!important;
+  left:8px!important;
+  bottom:8px!important;
+  width:48px!important;
+  height:48px!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+  border-radius:50%!important;
+  border:3px solid rgba(255,255,255,.96)!important;
+  box-shadow:0 5px 14px rgba(32,72,98,.24)!important;
+  background:#fff!important;
+}
+@media(max-width:650px){
+  #screen-home .home-v22-mission .home-v22-visual.mission-art{height:150px!important}
+  #screen-home .home-v22-mission .mission-tati-cameo{width:42px!important;height:42px!important;left:7px!important;bottom:7px!important}
+}
