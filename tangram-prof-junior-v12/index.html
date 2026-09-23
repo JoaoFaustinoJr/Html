@@ -47,6 +47,39 @@ window.addEventListener('beforeinstallprompt',function(e){
 });
 window.addEventListener('appinstalled',function(){window.__raiDeferredInstall=null});
 </script>
+<script>
+/* GA4 — telemetria pedagógica anônima do Tangram */
+(function(){
+  const APP='tangram_educativo';
+  function send(name,params){
+    if(typeof window.gtag!=='function') return;
+    window.gtag('event',name,Object.assign({app_name:APP},params||{}));
+  }
+  window.tangramAnalytics=send;
+  send('app_open');
+  window.addEventListener('appinstalled',()=>send('app_installed'));
+  document.addEventListener('click',function(e){
+    const el=e.target&&e.target.closest?e.target.closest('button,a,[role="button"]'):null;
+    if(!el)return;
+    const id=(el.id||'').toLowerCase(), txt=(el.textContent||'').trim().replace(/\s+/g,' ').slice(0,80).toLowerCase();
+    if(id==='mcheck'||id.includes('check')||txt.includes('verificar')) send('check_answer');
+    if(id==='gamerapp'||id.includes('gamer')||txt.includes('gamer')) send('gamer_start');
+    if(id==='installapp'||id.includes('install')||txt.includes('instalar')) send('install_prompt');
+    if(id.includes('share')||txt.includes('compartilhar')) send('share');
+    if(id.includes('sample')||txt.includes('amostra')) send('solution_sample');
+    if(id.includes('next')||txt.includes('próxim')) send('activity_navigation',{direction:'next'});
+    if(id.includes('prev')||txt.includes('anterior')) send('activity_navigation',{direction:'previous'});
+  },true);
+  const obs=new MutationObserver(function(){
+    const body=(document.body&&document.body.innerText)||'';
+    if(/missão completa/i.test(body)&&!window.__gaMissionComplete){
+      window.__gaMissionComplete=true;send('activity_complete');
+      setTimeout(()=>window.__gaMissionComplete=false,1500);
+    }
+  });
+  window.addEventListener('DOMContentLoaded',()=>obs.observe(document.body,{subtree:true,childList:true,characterData:true}));
+})();
+</script>
 
 <div id="loading"><div><h1>🧩 Tangram Educativo</h1><p>Preparando 10 desafios...</p></div></div>
 <script>
