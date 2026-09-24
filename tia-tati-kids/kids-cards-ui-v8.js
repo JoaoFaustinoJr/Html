@@ -16,8 +16,8 @@ const CARDS=[
  {id:'muito-bem',title:'Muito bem!',subtitle:'Seu esforço merece ser reconhecido.',sprite:'assets/cards/cards-pair-6.webp',side:0},
  {id:'amizade',title:'Amizade também move o mundo!',subtitle:'Inclusão, respeito e amizade.',sprite:'assets/cards/cards-pair-6.webp',side:1},
  {id:'carro-tia-tati',title:'Carro da Tia Tati',subtitle:'Vamos juntos!',image:'assets/cards/carro-tia-tati-v1.webp'},
- {id:'abelhinha',title:'Abelhinha',subtitle:'Você consegue!',image:'assets/file_0000000030dc820ea4d4cdfb72364846.png'},
- {id:'espelho-magico',title:'Espelho Mágico',subtitle:'Veja como você é especial!',image:'../tia-tati-espelho/assets/espelho-encantado-home-v5.webp'}
+ {id:'abelhinha',title:'Abelhinha',subtitle:'Você consegue!',image:'assets/bee-garden.svg'},
+ {id:'espelho-magico',title:'Espelho Mágico',subtitle:'Veja como você é especial!',image:'../tia-tati-espelho/assets/mask-v6-2.webp'}
 ];
 const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
 window.TiaTatiKidsCardsData=CARDS;
