@@ -1,8 +1,25 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_KIDS_CARDS_UI_V23__)return;
-window.__TIA_TATI_KIDS_CARDS_UI_V23__=true;
+if(window.__TIA_TATI_KIDS_CARDS_UI_V24__)return;
+window.__TIA_TATI_KIDS_CARDS_UI_V24__=true;
 const CARDS=[
+ {id:'reward-espelho-v24',title:'Você é especial!',subtitle:'Espelho Mágico',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[0,0,390,350]},
+ {id:'reward-abelha-v24',title:'Você consegue!',subtitle:'Abelhinha',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[390,0,350,350]},
+ {id:'reward-carro-v24',title:'Vamos juntos!',subtitle:'Caminho Seguro',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[740,0,390,350]},
+ {id:'reward-gratidao-v24',title:'Gratidão!',subtitle:'Esforço reconhecido',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[1130,0,300,350]},
+ {id:'reward-bomdia-v24',title:'Bom dia!',subtitle:'Começar com alegria',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[1430,0,340,350]},
+ {id:'reward-fe-v24',title:'Deus cuida de você!',subtitle:'Carinho e confiança',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[0,350,300,340]},
+ {id:'reward-estudo-v24',title:'Hora de estudar!',subtitle:'Missão de aprendizagem',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[300,350,330,340]},
+ {id:'reward-especial-v24',title:'Você é especial!',subtitle:'Abelhinha e borboleta',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[630,350,340,340]},
+ {id:'reward-amizade-v24',title:'Amizade faz bem!',subtitle:'Conquista em conjunto',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[970,350,330,340]},
+ {id:'reward-conseguiu-v24',title:'Você conseguiu!',subtitle:'Desafio superado',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[1300,350,300,340]},
+ {id:'reward-sonhe-v24',title:'Sonhe sempre!',subtitle:'Borboleta da conquista',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[1600,350,300,340]},
+ {id:'reward-musica-v24',title:'Música alegra o dia!',subtitle:'Ritmo e xilofone',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[0,690,330,340]},
+ {id:'reward-sol-v24',title:'Dia incrível!',subtitle:'Uma conquista luminosa',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[330,690,300,340]},
+ {id:'reward-juntos-v24',title:'Juntos vamos mais longe!',subtitle:'Abelhinha',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[630,690,340,340]},
+ {id:'reward-conhecimento-v24',title:'Conhecimento abre portas!',subtitle:'Aprendizagem',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[970,690,330,340]},
+ {id:'reward-borboleta-v24',title:'Pequenas ações!',subtitle:'Borboleta da evolução',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[1300,690,300,340]},
+ {id:'reward-estrela-v24',title:'Brilhe sempre!',subtitle:'Estrela da conquista',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[1600,690,300,340]},
  {id:'colecao-atividades-v23',title:'Conquistas das Atividades',subtitle:'Figurinhas especiais para celebrar o esforço!',image:'assets/cards/tia-tati-rewards-v23.webp',sheet:true},
  {id:'espelho-magico',title:'Espelho Mágico',subtitle:'Veja como você é especial!',image:'assets/file_00000000106481fdbe4c95bf18c9eff7.png'},
  {id:'abelhinha',title:'Abelhinha',subtitle:'Você consegue!',image:'assets/file_0000000059a88211bd424dfb72428755.png'},
@@ -39,7 +56,7 @@ window.TiaTatiKidsCardsData=CARDS;
 function normalizeBrand(){const a=q('.brand small');if(a)a.textContent='Fisio Sensório-Motora';const b=q('.home-v22-pill');if(b)b.textContent='FISIO SENSÓRIO-MOTORA';const c=q('.home-v22-footer-phrase small');if(c)c.textContent='Tia Tati • Fisio Sensório-Motora';document.title='Tia Tati – Fisio Sensório-Motora';}
 function fixHeaderImages(){qa('img[src*="assets/welcome.webp"]').forEach(img=>img.src='assets/cards/boas-vindas-v2.webp?v=8');}
 function preload(){[...new Set(CARDS.map(c=>c.image||c.sprite))].forEach(src=>{const i=new Image();i.src=src+'?v=8';});}
-function artMarkup(c){if(c.image)return `<span class="tati-card-art${c.sheet?' tati-sheet-art':''}"><img class="tati-sprite-img" src="${c.image}?v=23" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:${c.sheet?'contain':'cover'};object-position:center"></span>`;const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=8" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;}
+function artMarkup(c){if(c.crop){const [x,y,w,h]=c.crop,iw=1900,ih=1267;return `<span class="tati-card-art"><span style="display:block;width:100%;height:100%;overflow:hidden;position:relative"><img class="tati-sprite-img" src="${c.image}?v=24" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="position:absolute;max-width:none;width:${iw/w*100}%;height:auto;left:-${x/w*100}%;top:-${y/h*100}%"></span></span>`;}if(c.image)return `<span class="tati-card-art${c.sheet?' tati-sheet-art':''}"><img class="tati-sprite-img" src="${c.image}?v=23" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:${c.sheet?'contain':'cover'};object-position:center"></span>`;const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=8" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;}
 function cardMarkup(c){return `<article class="tati-card tati-sticker-card" data-tati-card="${c.id}"><button class="tati-sticker-preview-btn" type="button" data-preview="${c.id}" aria-label="Ver figurinha ${c.title}">${artMarkup(c)}</button><strong class="tati-sticker-title">${c.title}</strong><small class="tati-sticker-subtitle">${c.subtitle}</small><button class="tati-sticker-download" type="button" data-sticker="${c.id}">⬇️ Baixar figurinha</button></article>`;}
 function buildSection(){
  const home=q('#screen-home'),head=q('.home-v22-section-head.compact',home),grid=q('.home-v22-cards',home);if(!home||!head||!grid)return false;
