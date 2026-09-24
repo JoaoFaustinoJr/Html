@@ -372,7 +372,71 @@ $('#rematch').addEventListener('click',async()=>{
  finally{b.disabled=false;b.textContent='Revanche • nova rodada'}
 });
 
-$('#demoStart').addEventListener('click',()=>{alert('No Gamer, qualquer aluno pode criar uma sala. O modo Pedagógico continua protegido pela senha do professor.')});
+const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
+function buildPilotScales(){
+ $('.pilot-rating').forEach(block=>{
+  const field=block.dataset.field,scale=block.querySelector('.scale');if(!field||!scale)return;
+  scale.innerHTML='';
+  for(let i=1;i<=5;i++){
+   const b=document.createElement('button');b.type='button';b.textContent=i;b.dataset.value=String(i);
+   if(i===pilotRatings[field])b.classList.add('active');
+   b.addEventListener('click',()=>{pilotRatings[field]=i;scale.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b))});
+   scale.appendChild(b);
+  }
+  const labels=document.createElement('div');labels.className='scale-labels';labels.innerHTML='<span>1 • pouco</span><span>5 • muito</span>';scale.after(labels);
+ });
+}
+function openPilotForm(){
+ buildPilotScales();
+ const score=$('#pilotScore');if(score){score.value='8';$('#pilotScoreValue').textContent='8/10'}
+ $('#pilotStatus').textContent='';
+ show('pilotForm');
+}
+$('#openPilotForm')?.addEventListener('click',openPilotForm);
+$('#pilotBack')?.addEventListener('click',()=>show('results'));
+$('#pilotScore')?.addEventListener('input',e=>{$('#pilotScoreValue').textContent=e.target.value+'/10'});
+
+$('#submitPilotForm')?.addEventListener('click',async()=>{
+ const grade=$('#pilotGrade').value;
+ if(!grade){$('#pilotStatus').textContent='Selecione sua turma ou ano.';$('#pilotStatus').style.color='#ff9cab';return}
+ const b=$('#submitPilotForm');b.disabled=true;b.textContent='Enviando…';
+ $('#pilotStatus').textContent='';$('#pilotStatus').style.color='';
+ try{
+  const future=$('.pilot-future input:checked').map(x=>x.value);
+  const args={
+   p_room_id:room.id||null,
+   p_room_code:room.code||null,
+   p_player_id:room.playerId||null,
+   p_nickname:room.nickname||null,
+   p_mode:room.mode||null,
+   p_grade_level:grade,
+   p_device_type:$('#pilotDevice').value,
+   p_access_ease:pilotRatings.access,
+   p_visual_appeal:pilotRatings.visual,
+   p_competition_engagement:pilotRatings.competition,
+   p_learning_value:pilotRatings.learning,
+   p_concentration:pilotRatings.concentration,
+   p_would_play_again:pilotRatings.again,
+   p_overall_score:Number($('#pilotScore').value)||0,
+   p_favorite_part:$('#pilotFavorite').value.trim()||null,
+   p_improvement:$('#pilotImprove').value.trim()||null,
+   p_future_challenges:future
+  };
+  const {data,error}=await sb.rpc('x1_submit_pilot_feedback',args);
+  if(error)throw error;
+  localStorage.setItem('x1PilotFeedbackLast',JSON.stringify({id:data,at:Date.now()}));
+  $('#pilotStatus').textContent='✓ Obrigado! Sua avaliação foi registrada no piloto X1 — Arena Tangram.';
+  $('#pilotStatus').style.color='#79e6ab';
+  b.textContent='Avaliação enviada ✓';
+  setTimeout(()=>show('results'),1600);
+ }catch(e){
+  $('#pilotStatus').textContent='Não foi possível enviar agora: '+(e.message||e);
+  $('#pilotStatus').style.color='#ff9cab';
+  b.disabled=false;b.textContent='Enviar avaliação';
+ }
+});
+
+$('#demoStart')?.addEventListener('click',()=>{alert('No Gamer, qualquer aluno pode criar uma sala. O modo Pedagógico continua protegido pela senha do professor.')});
 
 (async()=>{
  if(!sb){document.body.classList.add('offline');return}
