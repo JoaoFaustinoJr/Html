@@ -15,9 +15,9 @@ const CARDS=[
  {id:'preciso-ajuda',title:'Preciso de ajuda',subtitle:'Tudo bem pedir ajuda quando precisar.',sprite:'assets/cards/cards-pair-5.webp',side:1},
  {id:'muito-bem',title:'Muito bem!',subtitle:'Seu esforço merece ser reconhecido.',sprite:'assets/cards/cards-pair-6.webp',side:0},
  {id:'amizade',title:'Amizade também move o mundo!',subtitle:'Inclusão, respeito e amizade.',sprite:'assets/cards/cards-pair-6.webp',side:1},
- {id:'carro-tia-tati',title:'Carro da Tia Tati',subtitle:'Vamos juntos!',image:'assets/cards/carro-tia-tati-v14.png'},
- {id:'abelhinha',title:'Abelhinha',subtitle:'Você consegue!',image:'assets/cards/abelhinha-tia-tati-v14.png'},
- {id:'espelho-magico',title:'Espelho Mágico',subtitle:'Veja como você é especial!',image:'assets/cards/espelho-magico-tia-tati-v14.png'}
+ {id:'carro-tia-tati',title:'Carro da Tia Tati',subtitle:'Vamos juntos!',image:'assets/file_00000000ee508211b76cde0b825efc6d.png'},
+ {id:'abelhinha',title:'Abelhinha',subtitle:'Você consegue!',image:'assets/file_0000000059a88211bd424dfb72428755.png'},
+ {id:'espelho-magico',title:'Espelho Mágico',subtitle:'Veja como você é especial!',image:'assets/file_00000000106481fdbe4c95bf18c9eff7.png'}
 ];
 const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
 window.TiaTatiKidsCardsData=CARDS;
