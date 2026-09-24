@@ -1,6 +1,6 @@
 (()=>{
- const VERSION='15.12.0',PATH='/Html/tangram-prof-junior-v12/';
- let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,verifyAssistStarted=false,x1PortalWired=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
+ const VERSION='15.13.0',PATH='/Html/tangram-prof-junior-v12/';
+ let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,verifyAssistStarted=false,x1PortalWired=false,x1PromoWired=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
  function repairViewport(){if(!handheld())return;try{const sw=Number(screen.width)||0,sh=Number(screen.height)||0,short=Math.min(sw,sh),long=Math.max(sw,sh);const portrait=matchMedia('(orientation:portrait)').matches;const width=short&&short<=640?Math.round(portrait?short:long):0;let v=document.querySelector('meta[name="viewport"]');if(!v){v=document.createElement('meta');v.name='viewport';document.head.prepend(v)}v.content=width?'width='+width+',initial-scale=1,viewport-fit=cover':'width=device-width,initial-scale=1,viewport-fit=cover'}catch(e){}}
@@ -49,11 +49,46 @@
   const observe=()=>{const o=document.querySelector('.rai-lesson-overlay');if(!o||o.dataset.raiNarrationObserved)return false;o.dataset.raiNarrationObserved='1';new MutationObserver(()=>{if(!o.classList.contains('show'))stopLessonNarration()}).observe(o,{attributes:true,attributeFilter:['class']});return true};
   if(!observe()){let n=0;const t=setInterval(()=>{if(observe()||++n>30)clearInterval(t)},250)}
  }
+ function x1Open(){window.open('../tangram-x1/','_blank','noopener')}
+ function ensureX1PromoStyle(){
+  if(document.getElementById('raiX1PromoStyle'))return;
+  const s=document.createElement('style');s.id='raiX1PromoStyle';s.textContent=`
+  #tangramX1Portal{border-color:#e5c342!important;background:linear-gradient(180deg,#b88a08,#795906)!important;color:#fff5bd!important;box-shadow:0 0 0 1px rgba(255,226,102,.14),0 0 18px rgba(255,199,31,.16)!important}
+  .rai-x1-portal-card{position:relative;overflow:hidden;margin:10px 0 14px;padding:14px 16px;border-radius:18px;border:1px solid rgba(255,215,94,.45);background:radial-gradient(circle at 88% 16%,rgba(255,211,71,.17),transparent 28%),radial-gradient(circle at 12% 95%,rgba(44,211,239,.16),transparent 34%),linear-gradient(135deg,#071a28,#0c2837 58%,#251d0d);box-shadow:0 12px 36px rgba(0,0,0,.28),inset 0 0 0 1px rgba(72,218,245,.07);color:#effcff;display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px}
+  .rai-x1-portal-card:before,.rai-x1-portal-card:after{content:"";position:absolute;width:64px;height:64px;transform:rotate(45deg);opacity:.10;border:1px solid #48dcf4}.rai-x1-portal-card:before{left:-34px;bottom:-32px}.rai-x1-portal-card:after{right:82px;top:-40px;border-color:#ffd75e}
+  .rai-x1-copy{position:relative;z-index:1}.rai-x1-kicker{display:inline-flex;gap:6px;align-items:center;font:900 10px/1 system-ui;letter-spacing:.13em;color:#ffd75e;text-transform:uppercase}.rai-x1-kicker i{width:7px;height:7px;border-radius:50%;background:#58ef9d;box-shadow:0 0 10px #58ef9d}
+  .rai-x1-copy h3{margin:5px 0 3px;font:950 clamp(18px,3.4vw,25px)/1.05 system-ui;color:#fff;letter-spacing:.01em}.rai-x1-copy h3 b{color:#ffd75e}.rai-x1-copy p{margin:0;color:#bfe5ef;font:700 11px/1.4 system-ui}
+  .rai-x1-cta{position:relative;z-index:1;display:flex;align-items:center;gap:10px}.rai-x1-cta img{width:54px;height:54px;filter:drop-shadow(0 0 10px rgba(72,220,244,.18))}.rai-x1-cta button{border:0;border-radius:13px;padding:11px 15px;background:linear-gradient(135deg,#ffd75e,#ffb72d);color:#201600;font:950 12px system-ui;box-shadow:0 5px 18px rgba(255,183,45,.18);cursor:pointer;white-space:nowrap}
+  .rai-x1-launch{position:fixed;inset:0;z-index:2147483643;display:grid;place-items:center;padding:18px;background:rgba(1,8,14,.82);backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:.22s}.rai-x1-launch.show{opacity:1;pointer-events:auto}
+  .rai-x1-launch-card{position:relative;width:min(92vw,520px);overflow:hidden;border-radius:25px;border:1px solid rgba(62,220,246,.6);background:radial-gradient(circle at 75% 20%,rgba(255,201,48,.18),transparent 30%),linear-gradient(145deg,#071827,#0d2a3a);box-shadow:0 30px 100px rgba(0,0,0,.62),0 0 38px rgba(54,214,238,.12);padding:22px;color:#effcff;text-align:center}
+  .rai-x1-launch-card:before{content:"NOVO";position:absolute;left:18px;top:16px;transform:rotate(-5deg);padding:6px 10px;border-radius:9px;background:#ffd642;color:#211700;font:1000 11px system-ui;box-shadow:0 0 18px rgba(255,214,66,.28)}
+  .rai-x1-launch-close{position:absolute;right:13px;top:12px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(102,225,248,.45);background:#092637;color:#eaffff;font:900 19px system-ui;cursor:pointer}
+  .rai-x1-launch-rai{width:105px;height:105px;margin:8px auto 3px;display:block;filter:drop-shadow(0 0 18px rgba(62,220,246,.22))}
+  .rai-x1-launch-card h2{margin:5px 0 5px;font:1000 clamp(24px,7vw,38px)/.98 system-ui}.rai-x1-launch-card h2 b{color:#ffd75e}.rai-x1-launch-card>p{margin:8px auto 15px;max-width:390px;color:#c4e5ed;font:700 13px/1.45 system-ui}
+  .rai-x1-launch-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px}.rai-x1-launch-modes div{padding:10px;border:1px solid rgba(255,255,255,.1);border-radius:13px;background:rgba(255,255,255,.035);font:850 11px/1.35 system-ui}.rai-x1-launch-modes b{display:block;color:#fff;margin-bottom:2px}.rai-x1-launch-modes .g b{color:#ffd75e}.rai-x1-launch-modes .p b{color:#61ddf6}
+  .rai-x1-launch-actions{display:grid;grid-template-columns:1.2fr .8fr;gap:8px}.rai-x1-launch-actions button{border-radius:13px;padding:12px;border:1px solid rgba(103,224,246,.28);font:950 12px system-ui;cursor:pointer}.rai-x1-launch-actions .go{background:linear-gradient(135deg,#ffd75e,#ffb52c);border:0;color:#1d1500}.rai-x1-launch-actions .later{background:#0a2332;color:#d9f2f7}
+  @media(max-width:560px){.rai-x1-portal-card{grid-template-columns:1fr;padding:12px 13px}.rai-x1-cta{justify-content:space-between}.rai-x1-cta img{width:46px;height:46px}.rai-x1-copy p{font-size:10px}.rai-x1-launch-card{padding:18px 15px 16px}.rai-x1-launch-rai{width:88px;height:88px}.rai-x1-launch-actions{grid-template-columns:1fr}.rai-x1-launch-modes{grid-template-columns:1fr 1fr}}
+  `;document.head.appendChild(s)
+ }
+ function wireX1Promo(){
+  if(x1PromoWired)return;const root=document.getElementById('tangram-levels');if(!root)return;x1PromoWired=true;ensureX1PromoStyle();
+  if(!document.getElementById('raiX1PortalCard')){
+   const card=document.createElement('section');card.id='raiX1PortalCard';card.className='rai-x1-portal-card';card.innerHTML='<div class="rai-x1-copy"><span class="rai-x1-kicker"><i></i> NOVO • TEMPO REAL</span><h3>Tangram <b>X1 — Arena</b></h3><p>Jogue ao vivo com seus colegas • sala por código • ranking em tempo real</p></div><div class="rai-x1-cta"><img src="rai-icon.svg?v=rai3" alt="R.A.I."><button type="button">⚡ Entrar no X1</button></div>';
+   card.querySelector('button').addEventListener('click',x1Open);
+   const brand=root.querySelector('.tl-brand');brand?.insertAdjacentElement('afterend',card);
+  }
+  if(!localStorage.getItem('raiX1LaunchSeenV1')&&!document.getElementById('raiX1Launch')){
+   const m=document.createElement('div');m.id='raiX1Launch';m.className='rai-x1-launch';m.innerHTML='<div class="rai-x1-launch-card" role="dialog" aria-modal="true" aria-label="Tangram X1 Arena"><button class="rai-x1-launch-close" type="button" aria-label="Fechar">×</button><img class="rai-x1-launch-rai" src="rai-icon.svg?v=rai3" alt="R.A.I."><h2>Chegou o Tangram <b>X1</b>!</h2><p>Crie salas, jogue em tempo real e dispute com seus colegas. A R.A.I. continua com você na Arena.</p><div class="rai-x1-launch-modes"><div class="g"><b>⚡ Gamer livre</b>Alunos criam e entram em salas.</div><div class="p"><b>🎓 Pedagógico</b>Aula + questões + desafio, com senha.</div></div><div class="rai-x1-launch-actions"><button class="go" type="button">Conhecer o X1</button><button class="later" type="button">Agora não</button></div></div>';
+   const close=()=>{localStorage.setItem('raiX1LaunchSeenV1','1');m.classList.remove('show');setTimeout(()=>m.remove(),240)};
+   m.querySelector('.go').addEventListener('click',()=>{localStorage.setItem('raiX1LaunchSeenV1','1');x1Open();close()});m.querySelector('.later').addEventListener('click',close);m.querySelector('.rai-x1-launch-close').addEventListener('click',close);m.addEventListener('click',e=>{if(e.target===m)close()});
+   document.body.appendChild(m);setTimeout(()=>m.classList.add('show'),850);
+  }
+ }
  function wireX1Portal(){
-  if(x1PortalWired)return;const host=tools();if(!host)return;x1PortalWired=true;
+  if(x1PortalWired)return;const host=tools();if(!host)return;x1PortalWired=true;ensureX1PromoStyle();
   if(document.getElementById('tangramX1Portal'))return;
-  const b=document.createElement('button');b.type='button';b.id='tangramX1Portal';b.className='tl-mini-action';b.innerHTML='⚔ <span>X1 Arena</span>';b.title='Abrir Tangram X1 — Arena';
-  b.addEventListener('click',()=>{window.open('../tangram-x1/','_blank','noopener')});
+  const b=document.createElement('button');b.type='button';b.id='tangramX1Portal';b.className='tl-mini-action';b.innerHTML='⚡ <span>X1 Arena</span>';b.title='Abrir Tangram X1 — Arena';
+  b.addEventListener('click',x1Open);
   const about=document.getElementById('aboutApp');about?host.insertBefore(b,about):host.appendChild(b);
  }
  function loadVerifyAssist(){if(verifyAssistStarted)return;verifyAssistStarted=true;import('./verify-assist-v1.js?v=15114').catch(e=>{verifyAssistStarted=false;console.warn('Assistente de verificação',e)})}
@@ -72,7 +107,7 @@
  async function registration(){if(!('serviceWorker'in navigator))return null;if(reg)return reg;try{return reg=await navigator.serviceWorker.getRegistration('./')}catch(e){return null}}
  async function check(){if(checking)return checking;checking=(async()=>{try{const r=await registration();if(!r)return null;await r.update();if(r.waiting&&navigator.serviceWorker.controller)ready();return r}catch(e){console.warn('Atualização Tangram',e);return null}})();try{return await checking}finally{checking=null}}
  async function apply(){const r=await registration();if(r?.waiting){const b=button();if(b){b.classList.add('show');b.innerHTML='⏳ <span>Atualizando</span>'}r.waiting.postMessage({type:'SKIP_WAITING'});return}await check()}
- function sync(){syncHead();syncVersion();patchNarration();wireLessonNarration();wireX1Portal();loadVerifyAssist();loadAnswerOrder();loadAulasEntry();loadSpecial();loadRewards();loadWelcome();loadIOSInstall();try{window.__raiAnswerOrderV1?.scan?.();window.__raiEnsureAulasEntry?.();window.__raiProvaParanaV1?.ensureEntryPoints?.();window.__raiProvaRewardsV2?.refresh?.();window.__raiIOSInstall?.wire?.()}catch(e){}repairViewport()}
+ function sync(){syncHead();syncVersion();patchNarration();wireLessonNarration();wireX1Portal();wireX1Promo();loadVerifyAssist();loadAnswerOrder();loadAulasEntry();loadSpecial();loadRewards();loadWelcome();loadIOSInstall();try{window.__raiAnswerOrderV1?.scan?.();window.__raiEnsureAulasEntry?.();window.__raiProvaParanaV1?.ensureEntryPoints?.();window.__raiProvaRewardsV2?.refresh?.();window.__raiIOSInstall?.wire?.()}catch(e){}repairViewport()}
  sync();setTimeout(sync,160);setTimeout(sync,420);
  const b=button();b?.addEventListener('click',()=>apply().catch(()=>{}));document.getElementById('aboutApp')?.addEventListener('click',()=>setTimeout(aboutVersion,0));setTimeout(aboutVersion,500);
  addEventListener('pageshow',sync);addEventListener('orientationchange',()=>setTimeout(repairViewport,140));addEventListener('focus',()=>{sync();check()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){sync();check()}});
