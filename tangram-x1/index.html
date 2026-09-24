@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <span class="badge">REALTIME • v0.3</span>
+    <span class="badge">REALTIME • v0.4</span>
   </header>
 
   <section id="home" class="view show">
@@ -41,6 +41,18 @@
     </div>
 
     <button class="demo-link" id="demoStart">▶ Ver demonstração do fluxo neste aparelho</button>
+  </section>
+
+  <section id="teacherGate" class="view">
+    <div class="section-head"><button data-home>←</button><div><span>ÁREA RESTRITA</span><h2>Modo professor</h2></div></div>
+    <div class="card form-card compact teacher-gate">
+      <img class="gate-rai" src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
+      <h3>Acesso do professor</h3>
+      <p>Digite a senha para criar e controlar salas do Tangram X1.</p>
+      <label>Senha do professor<input id="teacherPassword" type="password" autocomplete="current-password" placeholder="••••••••••"></label>
+      <button class="primary big" id="unlockTeacher">Entrar no modo professor</button>
+      <p id="teacherGateStatus" class="server-note"></p>
+    </div>
   </section>
 
   <section id="teacherSetup" class="view">
@@ -152,13 +164,15 @@
       <div class="place third"><b>3º</b><span>Lucas</span><small>01:12.7</small></div>
     </div>
     <div class="card scoreboard">
-      <div><b>Precisão</b><span>3/3 questões</span></div><div><b>Verificações</b><span>1</span></div><div><b>Tempo total</b><span id="totalTime">02:14.8</span></div>
+      <div><b id="metricPrecisionLabel">Precisão</b><span id="metricPrecision">—</span></div>
+      <div><b id="metricErrorsLabel">Erros pedagógicos</b><span id="metricErrors">—</span></div>
+      <div><b>Tempo Arena</b><span id="totalTime">—</span></div>
     </div>
     <button class="primary big" id="rematch">Revanche</button>
     <button class="secondary big" data-home>Voltar ao portal</button>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
