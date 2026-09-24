@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <span class="badge">REALTIME • v0.2</span>
+    <span class="badge">REALTIME • v0.3</span>
   </header>
 
   <section id="home" class="view show">
@@ -128,11 +128,18 @@
   <section id="arena" class="view">
     <div class="progress"><b>3 de 3</b><span><i style="width:100%"></i></span><small>Arena</small></div>
     <div class="arena-head"><div><span>⚔️ RODADA 1</span><h2>Figura: Casa</h2></div><div class="timer" id="timer">00:00.0</div></div>
-    <div class="card arena-placeholder">
-      <div class="mini-figure" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <h3>Arena de Tangram</h3>
-      <p>No MVP online, aqui entra o mesmo motor de montagem do Tangram Educativo para todos os jogadores.</p>
-      <button class="primary big" id="simulateFinish">✓ Simular encaixe concluído</button>
+    <div class="arena-stage card">
+      <div class="arena-frame-head">
+        <div><span class="arena-live-dot"></span><b>Motor oficial do Tangram Educativo</b><small id="arenaRole">Jogador</small></div>
+        <div class="arena-rai"><img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I."><span>R.A.I. acompanha a rodada</span></div>
+      </div>
+      <div class="arena-loader" id="arenaLoader"><div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>O motor oficial do Tangram está sendo carregado.</small></div>
+      <iframe id="tangramArenaFrame" title="Tangram X1 — desafio da rodada" src="about:blank" loading="eager"></iframe>
+      <div class="spectator-card" id="spectatorCard" hidden>
+        <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
+        <h3>Modo professor</h3>
+        <p>Você acompanha a corrida em tempo real enquanto os alunos montam o mesmo desafio.</p>
+      </div>
     </div>
     <div class="race-feed" id="raceFeed"><span>🏁 Todos começaram juntos.</span></div>
   </section>
@@ -152,6 +159,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
