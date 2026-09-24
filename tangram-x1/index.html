@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <span class="badge">MVP • v0.1</span>
+    <span class="badge">REALTIME • v0.2</span>
   </header>
 
   <section id="home" class="view show">
@@ -47,7 +47,11 @@
     <div class="section-head"><button data-home>←</button><div><span>PROFESSOR</span><h2>Criar Arena</h2></div></div>
     <div class="card form-card">
       <label>Nome da turma<input id="className" value="Turma X1" maxlength="30"></label>
-      <label>Conteúdo<select id="contentPack">
+      <div class="mode-picker" role="group" aria-label="Modo da sala">
+        <button type="button" class="mode-option active" data-mode="pedagogico"><span>🎓</span><b>Pedagógico</b><small>Aula → questões → Tangram → ranking</small></button>
+        <button type="button" class="mode-option" data-mode="gamer"><span>⚡</span><b>Gamer</b><small>Contagem → Tangram → ranking</small></button>
+      </div>
+      <label id="contentPackLabel">Conteúdo<select id="contentPack">
         <option value="pp9">Prova Paraná • Matemática • 9º ano</option>
         <option value="prog8">Programação • 8º ano</option>
         <option value="logic7">Pensamento Computacional • 7º ano</option>
@@ -59,7 +63,7 @@
       </div>
       <label class="toggle"><input id="penalty" type="checkbox" checked><span>Aplicar penalidade leve por resposta incorreta</span></label>
       <button class="primary big" id="createDemoRoom">Criar sala</button>
-      <p class="server-note">Nesta primeira versão, o fluxo visual e pedagógico já está disponível. A conexão entre aparelhos será ativada ao vincular o serviço em tempo real.</p>
+      <p class="server-note online-note">● Realtime conectado. A sala criada aqui pode ser acessada por outros computadores usando o código.</p>
     </div>
   </section>
 
@@ -69,7 +73,7 @@
       <label>Código da sala<input id="roomCodeInput" class="code-input" placeholder="RAI-4821" maxlength="8" autocomplete="off"></label>
       <label>Seu apelido<input id="nickname" placeholder="Ex.: João" maxlength="18" autocomplete="off"></label>
       <button class="primary big" id="joinOnline">Entrar</button>
-      <p id="joinStatus" class="server-note"></p>
+      <p id="joinStatus" class="server-note">Digite o código criado pelo professor. A entrada é em tempo real.</p>
     </div>
   </section>
 
@@ -83,9 +87,9 @@
       <div class="players" id="players"></div>
     </div>
     <div class="card compact-panel">
-      <span>DESAFIO PEDAGÓGICO</span>
+      <span id="lobbyModeLabel">MODO PEDAGÓGICO</span>
       <b id="lobbyPack">Prova Paraná • Matemática • 9º ano</b>
-      <p>Todos recebem a mesma aula e as mesmas questões. O Tangram só é liberado depois da etapa pedagógica.</p>
+      <p id="lobbyModeText">Todos recebem a mesma aula e as mesmas questões. O Tangram só é liberado depois da etapa pedagógica.</p>
     </div>
     <button class="primary big" id="startMatch">Começar partida</button>
   </section>
@@ -147,6 +151,7 @@
     <button class="secondary big" data-home>Voltar ao portal</button>
   </section>
 </main>
-<script src="app.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
