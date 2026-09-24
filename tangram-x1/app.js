@@ -8,6 +8,7 @@ const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{pa
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const views=$$('.view');
 const PACKS={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
+const CHALLENGES={0:'Desafio 1',1:'Desafio 2',2:'Desafio 3',3:'Desafio 4',4:'Desafio 5',5:'6. Gato Angular',6:'7. Corredor',7:'8. Cisne',8:'9. Foguete',9:'10. Dragão R.A.I.',10:'11. Gato Espelhado 🎯',11:'12. Corredor Invertido 🎯',12:'13. Cisne Reflexo 🎯',13:'14. Foguete Reverso 🎯'};
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
@@ -49,7 +50,8 @@ async function createRoom(){
    p_content_pack:$('#contentPack').value,
    p_question_count:Number($('#questionCount').value)||3,
    p_round_count:Number($('#roundCount').value)||1,
-   p_penalty_enabled:!!$('#penalty').checked
+   p_penalty_enabled:!!$('#penalty').checked,
+   p_challenge:$('#teacherChallenge').value
   };
   const {data,error}=await sb.rpc('x1_create_room_secure',args);
   if(error)throw error;
@@ -66,11 +68,12 @@ async function createGamerRoom(){
  if(!sb)return;
  const nickname=$('#gamerNickname').value.trim();
  const rounds=Number($('#gamerRounds').value)||1;
+ const challenge=$('#gamerChallenge').value||'random';
  const status=$('#gamerCreateStatus'),btn=$('#createGamerOnline');
  if(!nickname){status.textContent='Informe um apelido.';status.style.color='#ff9cab';return}
  btn.disabled=true;btn.textContent='Criando sala…';status.textContent='Conectando à Arena…';status.style.color='';
  try{
-  const {data,error}=await sb.rpc('x1_create_gamer_room',{p_nickname:nickname,p_round_count:rounds});
+  const {data,error}=await sb.rpc('x1_create_gamer_room',{p_nickname:nickname,p_round_count:rounds,p_challenge:challenge});
   if(error)throw error;
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não criada.');
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
@@ -130,7 +133,8 @@ async function openLobby(){
  $('#roomCode').textContent=room.code;
  const pedagogico=room.mode==='pedagogico';
  $('#lobbyModeLabel').textContent=pedagogico?'MODO PEDAGÓGICO':'MODO GAMER';
- $('#lobbyPack').textContent=pedagogico?(PACKS[room.pack]||room.pack):'Arena direta • mesmo desafio para todos';
+ const challengeLabel=room.challenge==='random'?'🎲 Desafio surpresa • igual para todos':(CHALLENGES[Number(room.challenge)]||'Desafio selecionado');
+ $('#lobbyPack').textContent=pedagogico?(PACKS[room.pack]||room.pack)+' • '+challengeLabel:challengeLabel;
  $('#lobbyModeText').textContent=pedagogico?'Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.':'Sem etapa didática: contagem regressiva, Tangram e ranking.';
  $('#startMatch').style.display=room.isHost?'block':'none';
  const lobbyNote=document.querySelector('.lobby-title small');if(lobbyNote)lobbyNote.textContent=room.isHost?'Você controla o início da partida':'Aguardando o anfitrião iniciar';
@@ -217,9 +221,20 @@ async function updateRaceFeed(){
  }catch(e){}
 }
 
+function roomHash(){
+ const src=(room.code||room.id||'RAI-X1')+'|'+(room.currentRound||1);
+ let h=2166136261;
+ for(let i=0;i<src.length;i++){h^=src.charCodeAt(i);h=Math.imul(h,16777619)}
+ return Math.abs(h>>>0);
+}
 function arenaChallengeIndex(){
- const round=Math.max(1,Number(room.currentRound)||1);
- return (round-1)%5;
+ const fixed=Number(room.challenge);
+ if(room.challenge!=='random'&&Number.isInteger(fixed)&&fixed>=0&&fixed<=13)return fixed;
+ return roomHash()%14;
+}
+function arenaChallengeLabel(){
+ const i=arenaChallengeIndex();
+ return CHALLENGES[i]||('Desafio '+(i+1));
 }
 
 function styleArenaDocument(doc){
@@ -251,12 +266,8 @@ function wireArenaFrame(frame,token){
    const bridge=win.__raiTangramBonusBridge;
    if(bridge?.open){
     bridge.open(arenaChallengeIndex());
-    if(room.mode==='gamer'){
-      const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}}catch(e){}return false};
-      if(!enterGamer())setTimeout(enterGamer,220);
-    }else{
-      try{win.__raiGamerOfficial?.exit?.()}catch(e){}
-    }
+    const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}}catch(e){}return false};
+    if(!enterGamer())setTimeout(enterGamer,220);
     setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},220);
    }else if(tries<50){setTimeout(attempt,180);return}
    $('#arenaLoader').hidden=true;
@@ -309,7 +320,8 @@ async function startArena(){
   const s=(performance.now()-startedAt)/1000,m=Math.floor(s/60),sec=s-m*60;
   $('#timer').textContent=String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0');
  },100);
- $('#raceFeed').innerHTML='<span>🏁 Todos receberam o mesmo desafio.</span>';
+ const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent='Figura: '+arenaChallengeLabel();
+ $('#raceFeed').innerHTML='<span>🏁 Todos receberam o mesmo desafio no Modo Gamer.</span>';
  await prepareTangramArena();
 }
 
