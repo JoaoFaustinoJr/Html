@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <span class="badge">REALTIME • v0.4</span>
+    <span class="badge">REALTIME • v0.5</span>
   </header>
 
   <section id="home" class="view show">
@@ -31,16 +31,32 @@
       </div>
     </div>
 
-    <div class="choice-grid">
-      <button class="choice teacher" id="createRoom">
-        <span class="ico">🎓</span><b>Sala do professor</b><small>Criar uma arena e escolher o desafio pedagógico</small>
+    <div class="choice-grid x1-home-grid">
+      <button class="choice gamer-create" id="createGamerRoom">
+        <span class="ico">⚡</span><b>Criar sala Gamer</b><small>Qualquer jogador pode criar uma sala, convidar amigos e competir.</small>
       </button>
       <button class="choice student" id="joinRoom">
-        <span class="ico">⚔️</span><b>Entrar na arena</b><small>Usar código da sala e um apelido</small>
+        <span class="ico">⚔️</span><b>Entrar com código</b><small>Entre em uma sala Gamer ou Pedagógica usando o código.</small>
+      </button>
+      <button class="choice teacher pedagogical-access" id="createRoom">
+        <span class="ico">🔒</span><b>Modo Pedagógico</b><small>Área do professor • aula, questões, Tangram e acompanhamento.</small>
       </button>
     </div>
 
-    <button class="demo-link" id="demoStart">▶ Ver demonstração do fluxo neste aparelho</button>
+    <p class="portal-note">⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.</p>
+  </section>
+
+  <section id="gamerSetup" class="view">
+    <div class="section-head"><button data-home>←</button><div><span>MODO GAMER</span><h2>Criar sala</h2></div></div>
+    <div class="card form-card compact gamer-setup">
+      <div class="setup-emblem">⚡</div>
+      <h3>Sua Arena</h3>
+      <p>Crie a sala, compartilhe o código e jogue junto com seus colegas. Quem cria também participa.</p>
+      <label>Seu apelido<input id="gamerNickname" maxlength="18" placeholder="Ex.: Jr" autocomplete="off"></label>
+      <label>Rodadas<select id="gamerRounds"><option>1</option><option>3</option><option>5</option></select></label>
+      <button class="primary big gold-action" id="createGamerOnline">Criar sala Gamer</button>
+      <p id="gamerCreateStatus" class="server-note">Não é necessária senha.</p>
+    </div>
   </section>
 
   <section id="teacherGate" class="view">
@@ -48,7 +64,7 @@
     <div class="card form-card compact teacher-gate">
       <img class="gate-rai" src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <h3>Acesso do professor</h3>
-      <p>Digite a senha para criar e controlar salas do Tangram X1.</p>
+      <p>Digite a senha para acessar as atividades pedagógicas e o controle do professor.</p>
       <label>Senha do professor<input id="teacherPassword" type="password" autocomplete="current-password" placeholder="••••••••••"></label>
       <button class="primary big" id="unlockTeacher">Entrar no modo professor</button>
       <p id="teacherGateStatus" class="server-note"></p>
@@ -59,10 +75,7 @@
     <div class="section-head"><button data-home>←</button><div><span>PROFESSOR</span><h2>Criar Arena</h2></div></div>
     <div class="card form-card">
       <label>Nome da turma<input id="className" value="Turma X1" maxlength="30"></label>
-      <div class="mode-picker" role="group" aria-label="Modo da sala">
-        <button type="button" class="mode-option active" data-mode="pedagogico"><span>🎓</span><b>Pedagógico</b><small>Aula → questões → Tangram → ranking</small></button>
-        <button type="button" class="mode-option" data-mode="gamer"><span>⚡</span><b>Gamer</b><small>Contagem → Tangram → ranking</small></button>
-      </div>
+      <div class="pedagogical-badge"><span>🎓</span><div><b>Modo Pedagógico</b><small>Aula → questões → Tangram → ranking</small></div></div>
       <label id="contentPackLabel">Conteúdo<select id="contentPack">
         <option value="pp9">Prova Paraná • Matemática • 9º ano</option>
         <option value="prog8">Programação • 8º ano</option>
@@ -85,7 +98,7 @@
       <label>Código da sala<input id="roomCodeInput" class="code-input" placeholder="RAI-4821" maxlength="8" autocomplete="off"></label>
       <label>Seu apelido<input id="nickname" placeholder="Ex.: João" maxlength="18" autocomplete="off"></label>
       <button class="primary big" id="joinOnline">Entrar</button>
-      <p id="joinStatus" class="server-note">Digite o código criado pelo professor. A entrada é em tempo real.</p>
+      <p id="joinStatus" class="server-note">Digite o código da sala. Pode ser uma sala criada por um colega ou pelo professor.</p>
     </div>
   </section>
 
@@ -95,7 +108,7 @@
       <button id="copyCode">Copiar código</button>
     </div>
     <div class="card">
-      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">4 jogadores prontos</b></div><small>Aguardando o professor iniciar</small></div>
+      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">4 jogadores prontos</b></div><small>Aguardando o anfitrião iniciar</small></div>
       <div class="players" id="players"></div>
     </div>
     <div class="card compact-panel">
@@ -173,6 +186,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
