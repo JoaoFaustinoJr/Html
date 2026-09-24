@@ -90,3 +90,6 @@ box-shadow:0 22px 70px rgba(0,0,0,.34),inset 0 0 0 1px rgba(70,221,244,.06)}
 .pilot-score-label{padding:15px;border-radius:16px;border:1px solid rgba(255,215,94,.22);background:rgba(255,215,94,.045)}.pilot-score-label input{width:calc(100% - 66px);vertical-align:middle;accent-color:#ffd75e}.pilot-score-label strong{display:inline-block;min-width:56px;text-align:right;color:var(--gold);font-size:15px}
 .pilot-future{margin:4px 0 18px;padding:14px;border:1px solid var(--line);border-radius:16px}.pilot-future legend{padding:0 7px;color:#dff6fb;font-size:12px;font-weight:900}.pilot-future label{display:inline-flex;align-items:center;gap:6px;margin:5px 10px 5px 0;color:var(--muted);font-size:11px}.pilot-future input{accent-color:#ffd75e}
 @media(max-width:600px){.pilot-grid{grid-template-columns:1fr}.pilot-intro{align-items:flex-start}.pilot-intro img{width:52px;height:52px}.pilot-future label{display:flex}}
+
+.pilot-home-link{display:block;margin:10px auto 0;border:1px solid rgba(130,215,240,.14);background:transparent;color:#89b8c7;border-radius:999px;padding:8px 12px;font-size:10px;font-weight:850;cursor:pointer}
+.pilot-home-link:hover{border-color:rgba(255,215,94,.35);color:#ffe47b}
