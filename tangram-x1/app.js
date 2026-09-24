@@ -10,7 +10,7 @@ const views=$$('.view');
 const PACKS={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
 let mode='pedagogico';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
-let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0;
+let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
 
 const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -48,6 +48,7 @@ async function createRoom(){
   room={id:x.room_id,code:x.code,teacher:true,pack:args.p_content_pack,mode:args.p_mode,nickname:'Professor',hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
   sessionStorage.setItem('tangramX1Host',JSON.stringify(room));
   await subscribeRoom();
+  await fetchRoom();
   await openLobby();
  }catch(e){alert('Não foi possível criar a sala: '+(e.message||e))}
  finally{btn.disabled=false;btn.textContent='Criar sala'}
@@ -66,6 +67,7 @@ async function joinRoom(){
   room={id:x.room_id,code,teacher:false,pack:x.content_pack,mode:x.room_mode,nickname,hostToken:'',playerId:x.player_id,playerToken:x.player_token,status:x.room_status};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   await subscribeRoom();
+  await fetchRoom();
   await openLobby();
   applyRoomState(room.status);
  }catch(e){setJoinStatus('Não foi possível entrar: '+(e.message||e),true)}
@@ -77,7 +79,7 @@ async function fetchRoom(){
  if(!sb||!room.id)return null;
  const {data,error}=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at').eq('id',room.id).maybeSingle();
  if(error)throw error;
- if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status}
+ if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status;room.currentRound=data.current_round||1;room.challenge=data.challenge||'casa';room.startedAt=data.started_at||null}
  return data;
 }
 async function fetchPlayers(){
@@ -113,14 +115,16 @@ async function subscribeRoom(){
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
-  .on('postgres_changes',{event:'*',schema:'public',table:'x1_players',filter:playerFilter},()=>{renderPlayers();if($('#results').classList.contains('show'))renderResults()})
+  .on('postgres_changes',{event:'*',schema:'public',table:'x1_players',filter:playerFilter},()=>{renderPlayers();updateRaceFeed();if($('#results').classList.contains('show'))renderResults()})
   .subscribe();
 }
 function disconnectSubscriptions(){
  try{if(roomChannel)sb?.removeChannel(roomChannel)}catch(e){}try{if(playerChannel)sb?.removeChannel(playerChannel)}catch(e){}
  roomChannel=playerChannel=null;
 }
-function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);countdownBusy=false}
+function stopArenaObserver(){try{arenaObserver?.disconnect()}catch(e){}arenaObserver=null}
+function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank'}catch(e){}}}
+function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);countdownBusy=false;resetArenaFrame()}
 
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent='Copiado ✓';setTimeout(()=>$('#copyCode').textContent='Copiar código',1300)}catch(e){}});
 
@@ -171,29 +175,106 @@ $$('[data-answer]').forEach(b=>b.addEventListener('click',async()=>{
  setTimeout(startArena,700);
 }));
 
-function startArena(){
+async function updateRaceFeed(){
+ const feed=$('#raceFeed');if(!feed||!room.id)return;
+ try{
+  const players=await fetchPlayers(),done=players.filter(p=>p.tangram_finished_at);
+  if(!players.length){feed.innerHTML='<span>🏁 Aguardando jogadores.</span>';return}
+  if(!done.length){feed.innerHTML='<span>🏁 Todos receberam o mesmo desafio.</span><strong>0/'+players.length+' concluíram</strong>';return}
+  const last=done.sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at)).at(-1);
+  feed.innerHTML='<span>🏁 '+esc(last.nickname)+' concluiu.</span><strong>'+done.length+'/'+players.length+' concluíram</strong>';
+ }catch(e){}
+}
+
+function arenaChallengeIndex(){
+ const round=Math.max(1,Number(room.currentRound)||1);
+ return (round-1)%5;
+}
+
+function styleArenaDocument(doc){
+ if(doc.getElementById('x1ArenaStyle'))return;
+ const s=doc.createElement('style');s.id='x1ArenaStyle';
+ s.textContent=`
+ html,body{background:#06111c!important}
+ body{margin:0!important;padding:0!important}
+ #tangram-levels{max-width:none!important;margin:0 auto!important}
+ #tangram-levels .tl-brand{display:none!important}
+ #tangram-levels #levels{display:none!important}
+ #tangram-levels .tl-about-overlay{display:none!important}
+ #tangram-levels .tl-game{margin-top:0!important}
+ `;
+ doc.head.appendChild(s);
+}
+
+function wireArenaFrame(frame,token){
+ let tries=0;
+ const attempt=()=>{
+  if(token!==arenaLoadToken)return;
+  tries++;
+  try{
+   const win=frame.contentWindow,doc=frame.contentDocument;
+   if(!win||!doc)throw new Error('frame');
+   const root=doc.getElementById('tangram-levels'),msg=doc.getElementById('msg');
+   if(!root||!msg){if(tries<50)setTimeout(attempt,180);return}
+   styleArenaDocument(doc);
+   const bridge=win.__raiTangramBonusBridge;
+   if(bridge?.open){
+    bridge.open(arenaChallengeIndex());
+    setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},220);
+   }else if(tries<50){setTimeout(attempt,180);return}
+   $('#arenaLoader').hidden=true;
+   frame.style.display='block';
+   stopArenaObserver();
+   arenaObserver=new MutationObserver(()=>{
+    const text=(msg.textContent||'').replace(/\s+/g,' ').trim();
+    if(/miss[aã]o conclu[ií]da/i.test(text))onTangramComplete(text);
+   });
+   arenaObserver.observe(msg,{subtree:true,childList:true,characterData:true});
+  }catch(e){if(tries<50)setTimeout(attempt,180);else{$('#arenaLoader').innerHTML='<b>Não foi possível abrir o motor do Tangram.</b><small>Recarregue a página e tente novamente.</small>'}}
+ };
+ attempt();
+}
+
+async function prepareTangramArena(){
+ const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole');
+ stopArenaObserver();arenaFinished=false;
+ if(room.teacher){
+  frame.style.display='none';loader.hidden=true;spectator.hidden=false;role.textContent='Professor • acompanhamento';
+  await updateRaceFeed();return;
+ }
+ spectator.hidden=true;loader.hidden=false;frame.style.display='none';role.textContent=(room.nickname||'Jogador')+' • competidor';
+ loader.innerHTML='<div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>Motor oficial do Tangram Educativo.</small>';
+ const token=++arenaLoadToken;
+ frame.onload=()=>wireArenaFrame(frame,token);
+ frame.src='../tangram-prof-junior-v12/?x1=1&round='+(room.currentRound||1)+'&t='+(Date.now());
+}
+
+async function onTangramComplete(message){
+ if(arenaFinished||room.teacher)return;arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
+ $('#raceFeed').innerHTML='<span>🏁 Encaixe correto! Registrando sua chegada…</span>';
+ try{
+  if(room.playerId&&room.playerToken){
+   const {data,error}=await sb.rpc('x1_finish_tangram',{p_player_id:room.playerId,p_player_token:room.playerToken});
+   if(error)throw error;if(!data)throw new Error('Resultado não registrado.');
+  }
+  await updateRaceFeed();
+  setTimeout(()=>renderResults(),700);
+ }catch(e){arenaFinished=false;$('#raceFeed').textContent='Não foi possível registrar o resultado: '+(e.message||e)}
+}
+
+async function startArena(){
  if($('#arena').classList.contains('show')&&tick)return;
- show('arena');startedAt=performance.now();clearInterval(tick);
+ show('arena');
+ const base=room.startedAt?new Date(room.startedAt).getTime():Date.now();
+ startedAt=performance.now()-Math.max(0,Date.now()-base);
+ clearInterval(tick);
  tick=setInterval(()=>{
   const s=(performance.now()-startedAt)/1000,m=Math.floor(s/60),sec=s-m*60;
   $('#timer').textContent=String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0');
  },100);
  $('#raceFeed').innerHTML='<span>🏁 Todos receberam o mesmo desafio.</span>';
+ await prepareTangramArena();
 }
-
-$('#simulateFinish').addEventListener('click',async()=>{
- clearInterval(tick);tick=null;
- const elapsed=(performance.now()-startedAt)/1000;
- $('#simulateFinish').disabled=true;$('#simulateFinish').textContent='Registrando resultado…';
- try{
-  if(room.playerId&&room.playerToken){
-   const {error}=await sb.rpc('x1_finish_tangram',{p_player_id:room.playerId,p_player_token:room.playerToken});if(error)throw error;
-  }
-  $('#raceFeed').innerHTML='<span>🏁 Resultado registrado em tempo real.</span>';
-  await renderResults();
- }catch(e){$('#raceFeed').textContent='Não foi possível registrar: '+(e.message||e)}
- finally{$('#simulateFinish').disabled=false;$('#simulateFinish').textContent='✓ Simular encaixe concluído'}
-});
 
 async function renderResults(){
  clearInterval(tick);tick=null;
