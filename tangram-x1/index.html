@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07131f">
+<title>Tangram X1 — Arena</title>
+<meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<main class="shell">
+  <header class="hero">
+    <a class="back" href="../tangram-prof-junior-v12/" aria-label="Voltar ao Tangram Educativo">← Tangram</a>
+    <div class="brand">
+      <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
+      <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
+    </div>
+    <span class="badge">MVP • v0.1</span>
+  </header>
+
+  <section id="home" class="view show">
+    <div class="intro card">
+      <div>
+        <span class="kicker">Mesmo conteúdo. Mesmo desafio. Mesmo instante.</span>
+        <h2>Quem aprende e resolve primeiro?</h2>
+        <p>Uma sala conecta os jogadores por código. Primeiro vem a etapa pedagógica; depois, o desafio de Tangram e o ranking.</p>
+      </div>
+      <div class="flow">
+        <span><b>1</b> Aula</span><i>→</i><span><b>2</b> Questões</span><i>→</i><span><b>3</b> Tangram</span><i>→</i><span><b>4</b> Ranking</span>
+      </div>
+    </div>
+
+    <div class="choice-grid">
+      <button class="choice teacher" id="createRoom">
+        <span class="ico">🎓</span><b>Sala do professor</b><small>Criar uma arena e escolher o desafio pedagógico</small>
+      </button>
+      <button class="choice student" id="joinRoom">
+        <span class="ico">⚔️</span><b>Entrar na arena</b><small>Usar código da sala e um apelido</small>
+      </button>
+    </div>
+
+    <button class="demo-link" id="demoStart">▶ Ver demonstração do fluxo neste aparelho</button>
+  </section>
+
+  <section id="teacherSetup" class="view">
+    <div class="section-head"><button data-home>←</button><div><span>PROFESSOR</span><h2>Criar Arena</h2></div></div>
+    <div class="card form-card">
+      <label>Nome da turma<input id="className" value="Turma X1" maxlength="30"></label>
+      <label>Conteúdo<select id="contentPack">
+        <option value="pp9">Prova Paraná • Matemática • 9º ano</option>
+        <option value="prog8">Programação • 8º ano</option>
+        <option value="logic7">Pensamento Computacional • 7º ano</option>
+        <option value="geo6">Matemática & Geometria • 6º ano</option>
+      </select></label>
+      <div class="two">
+        <label>Questões<select id="questionCount"><option>3</option><option>5</option><option>8</option></select></label>
+        <label>Rodadas<select id="roundCount"><option>1</option><option>3</option><option>5</option></select></label>
+      </div>
+      <label class="toggle"><input id="penalty" type="checkbox" checked><span>Aplicar penalidade leve por resposta incorreta</span></label>
+      <button class="primary big" id="createDemoRoom">Criar sala</button>
+      <p class="server-note">Nesta primeira versão, o fluxo visual e pedagógico já está disponível. A conexão entre aparelhos será ativada ao vincular o serviço em tempo real.</p>
+    </div>
+  </section>
+
+  <section id="join" class="view">
+    <div class="section-head"><button data-home>←</button><div><span>ALUNO</span><h2>Entrar na Arena</h2></div></div>
+    <div class="card form-card compact">
+      <label>Código da sala<input id="roomCodeInput" class="code-input" placeholder="RAI-4821" maxlength="8" autocomplete="off"></label>
+      <label>Seu apelido<input id="nickname" placeholder="Ex.: João" maxlength="18" autocomplete="off"></label>
+      <button class="primary big" id="joinOnline">Entrar</button>
+      <p id="joinStatus" class="server-note"></p>
+    </div>
+  </section>
+
+  <section id="lobby" class="view">
+    <div class="room-top">
+      <div><span>SALA</span><strong id="roomCode">RAI-4821</strong></div>
+      <button id="copyCode">Copiar código</button>
+    </div>
+    <div class="card">
+      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">4 jogadores prontos</b></div><small>Aguardando o professor iniciar</small></div>
+      <div class="players" id="players"></div>
+    </div>
+    <div class="card compact-panel">
+      <span>DESAFIO PEDAGÓGICO</span>
+      <b id="lobbyPack">Prova Paraná • Matemática • 9º ano</b>
+      <p>Todos recebem a mesma aula e as mesmas questões. O Tangram só é liberado depois da etapa pedagógica.</p>
+    </div>
+    <button class="primary big" id="startMatch">Começar partida</button>
+  </section>
+
+  <section id="countdown" class="view center-view">
+    <img class="rai-large" src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
+    <span class="eyebrow">R.A.I. • ÁRBITRA</span>
+    <h2>Todo mundo pronto?</h2>
+    <p>O mesmo desafio começa para todos.</p>
+    <div id="countNum" class="count-num">3</div>
+  </section>
+
+  <section id="lesson" class="view">
+    <div class="progress"><b>1 de 3</b><span><i style="width:33%"></i></span><small>Aula</small></div>
+    <article class="card lesson-card">
+      <span class="kicker">MATEMÁTICA • 9º ANO</span>
+      <h2>Semelhança e proporcionalidade</h2>
+      <div class="rai-says"><img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt=""><p><b>Vamos por partes.</b> Figuras semelhantes mantêm a mesma forma, mesmo quando mudam de tamanho. O segredo é comparar ângulos correspondentes e a proporção entre os lados.</p></div>
+      <div class="example"><b>Exemplo</b><p>Se um lado de 3 cm passa a medir 6 cm, o fator de ampliação é 2. Os demais lados correspondentes também devem dobrar.</p></div>
+      <button class="primary big" id="lessonDone">Entendi • ir para as questões</button>
+    </article>
+  </section>
+
+  <section id="quiz" class="view">
+    <div class="progress"><b>2 de 3</b><span><i style="width:66%"></i></span><small>Questões</small></div>
+    <article class="card lesson-card">
+      <span class="kicker">QUESTÃO 1 DE 3</span>
+      <h2>Uma figura foi ampliada com fator 2. Um lado que media 4 cm passará a medir:</h2>
+      <div class="answers">
+        <button data-answer="0">A) 2 cm</button><button data-answer="1">B) 6 cm</button><button data-answer="2">C) 8 cm</button><button data-answer="3">D) 12 cm</button>
+      </div>
+      <p id="quizFeedback" class="feedback"></p>
+    </article>
+  </section>
+
+  <section id="arena" class="view">
+    <div class="progress"><b>3 de 3</b><span><i style="width:100%"></i></span><small>Arena</small></div>
+    <div class="arena-head"><div><span>⚔️ RODADA 1</span><h2>Figura: Casa</h2></div><div class="timer" id="timer">00:00.0</div></div>
+    <div class="card arena-placeholder">
+      <div class="mini-figure" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h3>Arena de Tangram</h3>
+      <p>No MVP online, aqui entra o mesmo motor de montagem do Tangram Educativo para todos os jogadores.</p>
+      <button class="primary big" id="simulateFinish">✓ Simular encaixe concluído</button>
+    </div>
+    <div class="race-feed" id="raceFeed"><span>🏁 Todos começaram juntos.</span></div>
+  </section>
+
+  <section id="results" class="view">
+    <div class="section-head no-back"><div><span>RESULTADO</span><h2>Pódio da rodada</h2></div></div>
+    <div class="podium">
+      <div class="place second"><b>2º</b><span>Marina</span><small>01:06.4</small></div>
+      <div class="place first"><b>1º</b><span id="winnerName">Você</span><small id="winnerTime">00:52.8</small></div>
+      <div class="place third"><b>3º</b><span>Lucas</span><small>01:12.7</small></div>
+    </div>
+    <div class="card scoreboard">
+      <div><b>Precisão</b><span>3/3 questões</span></div><div><b>Verificações</b><span>1</span></div><div><b>Tempo total</b><span id="totalTime">02:14.8</span></div>
+    </div>
+    <button class="primary big" id="rematch">Revanche</button>
+    <button class="secondary big" data-home>Voltar ao portal</button>
+  </section>
+</main>
+<script src="app.js?v=1"></script>
+</body>
+</html>
