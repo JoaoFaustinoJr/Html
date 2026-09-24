@@ -392,7 +392,8 @@ function openPilotForm(){
  $('#pilotStatus').textContent='';
  show('pilotForm');
 }
-$('#openPilotForm')?.addEventListener('click',openPilotForm);\n$('#pilotHomeLink')?.addEventListener('click',openPilotForm);
+$('#openPilotForm')?.addEventListener('click',openPilotForm);
+$('#pilotHomeLink')?.addEventListener('click',openPilotForm);
 $('#pilotBack')?.addEventListener('click',()=>show('results'));
 $('#pilotScore')?.addEventListener('input',e=>{$('#pilotScoreValue').textContent=e.target.value+'/10'});
 
