@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <span class="badge">REALTIME • v0.6</span>
+    <span class="badge">REALTIME • v0.7</span>
   </header>
 
   <section id="home" class="view show">
@@ -53,6 +53,18 @@
       <h3>Sua Arena</h3>
       <p>Crie a sala, compartilhe o código e jogue junto com seus colegas. Quem cria também participa.</p>
       <label>Seu apelido<input id="gamerNickname" maxlength="18" placeholder="Ex.: Jr" autocomplete="off"></label>
+      <label>Desafio<select id="gamerChallenge">
+        <option value="random">🎲 Aleatório • surpresa a cada rodada</option>
+        <option value="5">6. Gato Angular</option>
+        <option value="6">7. Corredor</option>
+        <option value="7">8. Cisne</option>
+        <option value="8">9. Foguete</option>
+        <option value="9">10. Dragão R.A.I.</option>
+        <option value="10">11. Gato Espelhado 🎯</option>
+        <option value="11">12. Corredor Invertido 🎯</option>
+        <option value="12">13. Cisne Reflexo 🎯</option>
+        <option value="13">14. Foguete Reverso 🎯</option>
+      </select></label>
       <label>Rodadas<select id="gamerRounds"><option>1</option><option>3</option><option>5</option></select></label>
       <button class="primary big gold-action" id="createGamerOnline">Criar sala Gamer</button>
       <p id="gamerCreateStatus" class="server-note">Não é necessária senha.</p>
@@ -81,6 +93,18 @@
         <option value="prog8">Programação • 8º ano</option>
         <option value="logic7">Pensamento Computacional • 7º ano</option>
         <option value="geo6">Matemática & Geometria • 6º ano</option>
+      </select></label>
+      <label>Desafio Tangram<select id="teacherChallenge">
+        <option value="random">🤖 Recomendado pela R.A.I. • surpresa</option>
+        <option value="5">6. Gato Angular</option>
+        <option value="6">7. Corredor</option>
+        <option value="7">8. Cisne</option>
+        <option value="8">9. Foguete</option>
+        <option value="9">10. Dragão R.A.I.</option>
+        <option value="10">11. Gato Espelhado 🎯</option>
+        <option value="11">12. Corredor Invertido 🎯</option>
+        <option value="12">13. Cisne Reflexo 🎯</option>
+        <option value="13">14. Foguete Reverso 🎯</option>
       </select></label>
       <div class="two">
         <label>Questões<select id="questionCount"><option>3</option><option>5</option><option>8</option></select></label>
@@ -186,6 +210,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
