@@ -8,17 +8,32 @@ const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{pa
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const views=$$('.view');
 const PACKS={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
-let mode='pedagogico';
+let mode='pedagogico',teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
 
 const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setJoinStatus=(t,bad=false)=>{const el=$('#joinStatus');if(el){el.textContent=t;el.style.color=bad?'#ff9cab':''}};
-const fmt=t=>{if(!t)return'—';const d=new Date(t);return d.toLocaleTimeString('pt-BR',{minute:'2-digit',second:'2-digit'})};
+const fmtDurationMs=ms=>{if(!Number.isFinite(ms)||ms<0)return'—';const s=ms/1000,m=Math.floor(s/60),sec=s-m*60;return String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0')};
+const elapsedFromArenaStart=t=>{if(!t||!room.startedAt)return'—';return fmtDurationMs(new Date(t).getTime()-new Date(room.startedAt).getTime())};
 
 $$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
-$('#createRoom').addEventListener('click',()=>show('teacherSetup'));
+$('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
+$('#unlockTeacher').addEventListener('click',async()=>{
+ const pw=$('#teacherPassword').value;
+ const btn=$('#unlockTeacher');const status=$('#teacherGateStatus');
+ if(!pw){status.textContent='Digite a senha do professor.';status.style.color='#ff9cab';return}
+ btn.disabled=true;btn.textContent='Verificando…';status.textContent='';
+ try{
+  const {data,error}=await sb.rpc('x1_verify_teacher_password',{p_password:pw});
+  if(error)throw error;
+  if(!data){status.textContent='Senha incorreta.';status.style.color='#ff9cab';return}
+  teacherPassword=pw;$('#teacherPassword').value='';status.textContent='';show('teacherSetup');
+ }catch(e){status.textContent='Não foi possível validar a senha.';status.style.color='#ff9cab'}
+ finally{btn.disabled=false;btn.textContent='Entrar no modo professor'}
+});
+$('#teacherPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#unlockTeacher').click()});
 $('#joinRoom').addEventListener('click',()=>show('join'));
 
 $$('.mode-option').forEach(b=>b.addEventListener('click',()=>{
@@ -34,7 +49,9 @@ async function createRoom(){
  if(!sb)return alert('Realtime indisponível neste navegador.');
  const btn=$('#createDemoRoom');btn.disabled=true;btn.textContent='Criando sala…';
  try{
+  if(!teacherPassword){alert('Acesso do professor expirou. Digite a senha novamente.');show('teacherGate');return}
   const args={
+   p_teacher_password:teacherPassword,
    p_class_name:$('#className').value.trim()||'Turma X1',
    p_mode:mode,
    p_content_pack:$('#contentPack').value,
@@ -42,7 +59,7 @@ async function createRoom(){
    p_round_count:Number($('#roundCount').value)||1,
    p_penalty_enabled:!!$('#penalty').checked
   };
-  const {data,error}=await sb.rpc('x1_create_room',args);
+  const {data,error}=await sb.rpc('x1_create_room_secure',args);
   if(error)throw error;
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não criada.');
   room={id:x.room_id,code:x.code,teacher:true,pack:args.p_content_pack,mode:args.p_mode,nickname:'Professor',hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
@@ -111,7 +128,7 @@ async function subscribeRoom(){
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
-    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;applyRoomState(payload.new.status)}
+    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||room.currentRound||1;applyRoomState(payload.new.status)}
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
@@ -278,6 +295,7 @@ async function startArena(){
 
 async function renderResults(){
  clearInterval(tick);tick=null;
+ try{await fetchRoom()}catch(e){}
  let players=[];try{players=await fetchPlayers()}catch(e){}
  const ranked=players.filter(p=>p.tangram_finished_at).sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at));
  const top=ranked.slice(0,3);
@@ -288,14 +306,38 @@ async function renderResults(){
  ];
  for(const s of slots){
   const el=$(s.sel),p=top[s.rank];if(!el)continue;
-  el.querySelector('b').textContent=s.label;el.querySelector('span').textContent=p?p.nickname:'—';el.querySelector('small').textContent=p?fmt(p.tangram_finished_at):'aguardando';
+  el.querySelector('b').textContent=s.label;
+  el.querySelector('span').textContent=p?p.nickname:'—';
+  el.querySelector('small').textContent=p?elapsedFromArenaStart(p.tangram_finished_at):'aguardando';
  }
+ const me=room.teacher?null:players.find(p=>p.id===room.playerId);
+ const pedagogico=room.mode==='pedagogico';
+ $('#metricPrecisionLabel').textContent=pedagogico?'Precisão':'Modo';
+ $('#metricErrorsLabel').textContent=pedagogico?'Erros pedagógicos':'Posição';
+ if(pedagogico){
+  const correct=me?.quiz_correct??0,wrong=me?.quiz_wrong??0,total=correct+wrong;
+  $('#metricPrecision').textContent=me?(correct+'/'+Math.max(1,total)+' respostas'):'Visão do professor';
+  $('#metricErrors').textContent=me?String(wrong):'—';
+ }else{
+  $('#metricPrecision').textContent='Gamer';
+  const pos=me?ranked.findIndex(p=>p.id===me.id)+1:0;
+  $('#metricErrors').textContent=pos>0?(pos+'º lugar'):'—';
+ }
+ $('#totalTime').textContent=me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—');
+ const rematch=$('#rematch');
+ if(room.teacher){rematch.disabled=false;rematch.textContent='Revanche • nova rodada'}
+ else{rematch.disabled=true;rematch.textContent='Aguardando revanche do professor'}
  show('results');
 }
 $('#rematch').addEventListener('click',async()=>{
- if(room.teacher&&room.hostToken){
-  try{await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:'lobby'});await openLobby()}catch(e){}
- }else show('lobby');
+ if(!room.teacher||!room.hostToken)return;
+ const b=$('#rematch');b.disabled=true;b.textContent='Preparando nova rodada…';
+ try{
+  const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
+  if(error)throw error;if(!data)throw new Error('Não foi possível reiniciar a sala.');
+  quizWrong=0;resetArenaFrame();await fetchRoom();await openLobby();
+ }catch(e){alert(e.message||e)}
+ finally{b.disabled=false;b.textContent='Revanche • nova rodada'}
 });
 
 $('#demoStart').addEventListener('click',()=>{alert('O Realtime já está ativo. Crie uma sala como professor e use o código em outro aparelho para testar a conexão real.')});
