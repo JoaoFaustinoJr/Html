@@ -56,3 +56,29 @@ z-index:-1}
 .pedagogical-badge{display:flex;align-items:center;gap:12px;padding:14px 16px;margin:2px 0 18px;border-radius:16px;border:1px solid rgba(54,214,238,.28);background:rgba(54,214,238,.07)}
 .pedagogical-badge>span{font-size:28px}.pedagogical-badge b,.pedagogical-badge small{display:block}.pedagogical-badge small{color:var(--muted);margin-top:3px}
 @media(max-width:680px){.x1-home-grid{grid-template-columns:1fr}.x1-home-grid .pedagogical-access{grid-column:auto}}
+
+/* Tangram X1 v0.8 — hero oficial inspirado no guia visual */
+.x1-hero-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(230px,.75fr);align-items:center;gap:20px;min-height:300px;border-color:rgba(255,215,94,.36);background:
+radial-gradient(circle at 82% 25%,rgba(255,196,46,.19),transparent 28%),
+radial-gradient(circle at 18% 78%,rgba(54,214,238,.16),transparent 35%),
+linear-gradient(135deg,#071723 0%,#0a2232 54%,#20190d 100%);
+box-shadow:0 22px 70px rgba(0,0,0,.34),inset 0 0 0 1px rgba(70,221,244,.06)}
+.x1-hero-card:before,.x1-hero-card:after{content:"";position:absolute;pointer-events:none;border:1px solid rgba(69,219,245,.12);transform:rotate(45deg)}
+.x1-hero-card:before{width:160px;height:160px;left:-95px;bottom:-105px}.x1-hero-card:after{width:120px;height:120px;right:22%;top:-85px;border-color:rgba(255,215,94,.13)}
+.x1-hero-copy{position:relative;z-index:2}.x1-new{display:inline-flex;align-items:center;gap:8px;padding:6px 9px;border-radius:999px;background:rgba(255,215,94,.10);border:1px solid rgba(255,215,94,.28);color:var(--gold);font-size:10px;font-weight:1000;letter-spacing:.14em}
+.x1-hero-copy h2{font-size:clamp(36px,6vw,64px);line-height:.95;margin:12px 0 4px;letter-spacing:-.035em;color:#eefaff;text-shadow:0 0 20px rgba(54,214,238,.10)}
+.x1-hero-copy h2 b{color:var(--gold);text-shadow:0 0 22px rgba(255,215,94,.18)}.x1-hero-copy h2 em{display:block;margin-top:5px;font-style:normal;font-size:.38em;letter-spacing:.36em;color:#ffd75e}
+.x1-hero-tag{font-size:clamp(16px,2.4vw,21px)!important;color:#fff!important;font-weight:900!important;margin:10px 0 2px!important}.x1-hero-copy>p:not(.x1-hero-tag){max-width:620px;margin:6px 0 0;color:var(--muted);line-height:1.5}
+.x1-hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.x1-hero-chips span{border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.045);border-radius:999px;padding:8px 10px;font-size:11px;font-weight:850;color:#dff7fb}
+.x1-hero-rai{position:relative;display:grid;place-items:center;min-height:240px;isolation:isolate}.x1-hero-rai:before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,rgba(54,214,238,.19),rgba(54,214,238,.03) 52%,transparent 70%);filter:blur(2px);z-index:-2}
+.x1-hero-rai img{width:min(78%,220px);max-height:220px;filter:drop-shadow(0 0 18px rgba(54,214,238,.25)) drop-shadow(0 0 28px rgba(255,199,48,.10));animation:x1RaiFloat 3.6s ease-in-out infinite}
+.x1-rai-bubble{position:absolute;right:0;top:16px;padding:9px 12px;border-radius:14px 14px 14px 4px;border:1px solid rgba(61,220,245,.42);background:rgba(4,26,39,.92);color:#effcff;font-size:11px;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.24)}
+.x1-orbit{position:absolute;display:block;width:20px;height:20px;transform:rotate(45deg);border:1px solid currentColor;background:currentColor;opacity:.55;filter:drop-shadow(0 0 10px currentColor)}.x1-orbit.o1{color:#36d6ee;left:8%;top:27%}.x1-orbit.o2{color:#ffd75e;right:10%;bottom:24%;width:16px;height:16px}.x1-orbit.o3{color:#ab72ff;left:18%;bottom:12%;width:13px;height:13px}
+@keyframes x1RaiFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-7px) rotate(1deg)}}
+.x1-home-grid{margin-top:16px}.x1-home-grid .choice{position:relative;overflow:hidden}.x1-home-grid .choice:after{content:"";position:absolute;right:-28px;bottom:-35px;width:110px;height:110px;transform:rotate(45deg);border:1px solid rgba(255,255,255,.06)}
+.gamer-create b{color:#ffe16f}.student b{color:#65e8ff}.pedagogical-access b{color:#d9b3ff}
+.gamer-create{box-shadow:0 14px 40px rgba(255,190,38,.05),inset 0 0 0 1px rgba(255,215,94,.04)!important}
+.student{border-color:rgba(54,214,238,.32)!important;background:linear-gradient(145deg,#0c2636,#081a27)!important}
+.pedagogical-access{border-color:rgba(169,103,255,.32)!important;background:linear-gradient(145deg,#20133a,#11172a)!important}
+@media(max-width:760px){.x1-hero-card{grid-template-columns:1fr;min-height:0;padding:20px 18px}.x1-hero-rai{min-height:165px}.x1-hero-rai img{width:145px;max-height:145px}.x1-rai-bubble{right:8%;top:8px}.x1-hero-copy h2{font-size:42px}.x1-hero-chips{gap:6px}.x1-hero-chips span{font-size:10px;padding:7px 9px}}
+@media(prefers-reduced-motion:reduce){.x1-hero-rai img{animation:none}}
