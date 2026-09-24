@@ -8,7 +8,7 @@ const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{pa
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const views=$$('.view');
 const PACKS={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
-let mode='pedagogico',teacherPassword='';
+let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
 
@@ -19,6 +19,7 @@ const fmtDurationMs=ms=>{if(!Number.isFinite(ms)||ms<0)return'—';const s=ms/10
 const elapsedFromArenaStart=t=>{if(!t||!room.startedAt)return'—';return fmtDurationMs(new Date(t).getTime()-new Date(room.startedAt).getTime())};
 
 $$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
+$('#createGamerRoom').addEventListener('click',()=>show('gamerSetup'));
 $('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
 $('#unlockTeacher').addEventListener('click',async()=>{
  const pw=$('#teacherPassword').value;
@@ -36,15 +37,6 @@ $('#unlockTeacher').addEventListener('click',async()=>{
 $('#teacherPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#unlockTeacher').click()});
 $('#joinRoom').addEventListener('click',()=>show('join'));
 
-$$('.mode-option').forEach(b=>b.addEventListener('click',()=>{
- mode=b.dataset.mode||'pedagogico';
- $$('.mode-option').forEach(x=>x.classList.toggle('active',x===b));
- const pedagogico=mode==='pedagogico';
- $('#contentPackLabel').style.display=pedagogico?'block':'none';
- $('#questionCount').closest('label').style.display=pedagogico?'block':'none';
- $('#penalty').closest('label').style.display=pedagogico?'flex':'none';
-}));
-
 async function createRoom(){
  if(!sb)return alert('Realtime indisponível neste navegador.');
  const btn=$('#createDemoRoom');btn.disabled=true;btn.textContent='Criando sala…';
@@ -53,7 +45,7 @@ async function createRoom(){
   const args={
    p_teacher_password:teacherPassword,
    p_class_name:$('#className').value.trim()||'Turma X1',
-   p_mode:mode,
+   p_mode:'pedagogico',
    p_content_pack:$('#contentPack').value,
    p_question_count:Number($('#questionCount').value)||3,
    p_round_count:Number($('#roundCount').value)||1,
@@ -62,7 +54,7 @@ async function createRoom(){
   const {data,error}=await sb.rpc('x1_create_room_secure',args);
   if(error)throw error;
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não criada.');
-  room={id:x.room_id,code:x.code,teacher:true,pack:args.p_content_pack,mode:args.p_mode,nickname:'Professor',hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
+  room={id:x.room_id,code:x.code,teacher:true,isHost:true,pack:args.p_content_pack,mode:'pedagogico',nickname:'Professor',hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
   sessionStorage.setItem('tangramX1Host',JSON.stringify(room));
   await subscribeRoom();
   await fetchRoom();
@@ -70,6 +62,27 @@ async function createRoom(){
  }catch(e){alert('Não foi possível criar a sala: '+(e.message||e))}
  finally{btn.disabled=false;btn.textContent='Criar sala'}
 }
+async function createGamerRoom(){
+ if(!sb)return;
+ const nickname=$('#gamerNickname').value.trim();
+ const rounds=Number($('#gamerRounds').value)||1;
+ const status=$('#gamerCreateStatus'),btn=$('#createGamerOnline');
+ if(!nickname){status.textContent='Informe um apelido.';status.style.color='#ff9cab';return}
+ btn.disabled=true;btn.textContent='Criando sala…';status.textContent='Conectando à Arena…';status.style.color='';
+ try{
+  const {data,error}=await sb.rpc('x1_create_gamer_room',{p_nickname:nickname,p_round_count:rounds});
+  if(error)throw error;
+  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não criada.');
+  room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
+  sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
+  sessionStorage.removeItem('tangramX1Host');
+  await subscribeRoom();await fetchRoom();await openLobby();
+ }catch(e){status.textContent='Não foi possível criar a sala: '+(e.message||e);status.style.color='#ff9cab'}
+ finally{btn.disabled=false;btn.textContent='Criar sala Gamer'}
+}
+$('#createGamerOnline').addEventListener('click',createGamerRoom);
+$('#gamerNickname').addEventListener('keydown',e=>{if(e.key==='Enter')createGamerRoom()});
+
 $('#createDemoRoom').addEventListener('click',createRoom);
 
 async function joinRoom(){
@@ -81,7 +94,7 @@ async function joinRoom(){
   const {data,error}=await sb.rpc('x1_join_room',{p_code:code,p_nickname:nickname});
   if(error)throw error;
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não encontrada ou encerrada.');
-  room={id:x.room_id,code,teacher:false,pack:x.content_pack,mode:x.room_mode,nickname,hostToken:'',playerId:x.player_id,playerToken:x.player_token,status:x.room_status};
+  room={id:x.room_id,code,teacher:false,isHost:false,pack:x.content_pack,mode:x.room_mode,nickname,hostToken:'',playerId:x.player_id,playerToken:x.player_token,status:x.room_status};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   await subscribeRoom();
   await fetchRoom();
@@ -110,7 +123,7 @@ async function renderPlayers(){
  const items=[];
  if(room.teacher)items.push({nickname:'Professor',role:'teacher',id:'host'});
  for(const p of players)items.push(p);
- $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><b>'+esc(p.nickname)+(p.id===room.playerId?' • você':'')+'</b><small>'+(p.role==='teacher'?'Anfitrião':p.tangram_finished_at?'Concluiu 🏁':p.quiz_finished_at?'Etapa pedagógica ✓':'Pronto ✓')+'</small></div>').join('');
+ $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><b>'+esc(p.nickname)+(p.id===room.playerId?' • você':'')+'</b><small>'+(p.role==='teacher'?'Professor • anfitrião':(p.id===room.playerId&&room.isHost)?'Anfitrião • pronto ✓':p.tangram_finished_at?'Concluiu 🏁':p.quiz_finished_at?'Etapa pedagógica ✓':'Pronto ✓')+'</small></div>').join('');
  $('#lobbyCount').textContent=items.length+' '+(items.length===1?'participante':'participantes')+' na sala';
 }
 async function openLobby(){
@@ -119,7 +132,8 @@ async function openLobby(){
  $('#lobbyModeLabel').textContent=pedagogico?'MODO PEDAGÓGICO':'MODO GAMER';
  $('#lobbyPack').textContent=pedagogico?(PACKS[room.pack]||room.pack):'Arena direta • mesmo desafio para todos';
  $('#lobbyModeText').textContent=pedagogico?'Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.':'Sem etapa didática: contagem regressiva, Tangram e ranking.';
- $('#startMatch').style.display=room.teacher?'block':'none';
+ $('#startMatch').style.display=room.isHost?'block':'none';
+ const lobbyNote=document.querySelector('.lobby-title small');if(lobbyNote)lobbyNote.textContent=room.isHost?'Você controla o início da partida':'Aguardando o anfitrião iniciar';
  await renderPlayers();
  show('lobby');
 }
@@ -146,7 +160,7 @@ function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);countdow
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent='Copiado ✓';setTimeout(()=>$('#copyCode').textContent='Copiar código',1300)}catch(e){}});
 
 $('#startMatch').addEventListener('click',async()=>{
- if(!room.teacher||!room.hostToken)return;
+ if(!room.isHost||!room.hostToken)return;
  const b=$('#startMatch');b.disabled=true;b.textContent='Iniciando…';
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
@@ -162,7 +176,7 @@ function runCountdown(hostAdvances=false){
   n--;
   if(n>0){$('#countNum').textContent=n;return}
   clearInterval(t);$('#countNum').textContent='VALENDO!';
-  if(hostAdvances&&room.teacher){
+  if(hostAdvances&&room.isHost){
    setTimeout(async()=>{
     const next=room.mode==='pedagogico'?'lesson':'playing';
     try{await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next})}catch(e){}
@@ -325,12 +339,12 @@ async function renderResults(){
  }
  $('#totalTime').textContent=me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—');
  const rematch=$('#rematch');
- if(room.teacher){rematch.disabled=false;rematch.textContent='Revanche • nova rodada'}
- else{rematch.disabled=true;rematch.textContent='Aguardando revanche do professor'}
+ if(room.isHost){rematch.disabled=false;rematch.textContent='Revanche • nova rodada'}
+ else{rematch.disabled=true;rematch.textContent='Aguardando revanche do anfitrião'}
  show('results');
 }
 $('#rematch').addEventListener('click',async()=>{
- if(!room.teacher||!room.hostToken)return;
+ if(!room.isHost||!room.hostToken)return;
  const b=$('#rematch');b.disabled=true;b.textContent='Preparando nova rodada…';
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
@@ -340,14 +354,14 @@ $('#rematch').addEventListener('click',async()=>{
  finally{b.disabled=false;b.textContent='Revanche • nova rodada'}
 });
 
-$('#demoStart').addEventListener('click',()=>{alert('O Realtime já está ativo. Crie uma sala como professor e use o código em outro aparelho para testar a conexão real.')});
+$('#demoStart').addEventListener('click',()=>{alert('No Gamer, qualquer aluno pode criar uma sala. O modo Pedagógico continua protegido pela senha do professor.')});
 
 (async()=>{
  if(!sb){document.body.classList.add('offline');return}
  try{
   const host=JSON.parse(sessionStorage.getItem('tangramX1Host')||'null');
   const player=JSON.parse(sessionStorage.getItem('tangramX1Player')||'null');
-  const saved=host?.id?host:player?.id?player:null;
+  if(host?.id&&host.isHost===undefined){host.isHost=true;host.teacher=true} if(player?.id&&player.isHost===undefined)player.isHost=false; const saved=host?.id?host:player?.id?player:null;
   if(saved){room=saved;await subscribeRoom();const r=await fetchRoom();if(r){await openLobby();applyRoomState(r.status);return}}
  }catch(e){}
  show('home');
