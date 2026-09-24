@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <span class="badge">REALTIME • v0.8</span>
+    <span class="badge">REALTIME • v0.9</span>
   </header>
 
   <section id="home" class="view show">
@@ -210,10 +210,66 @@
       <div><b>Tempo Arena</b><span id="totalTime">—</span></div>
     </div>
     <button class="primary big" id="rematch">Revanche</button>
+    <button class="pilot-cta big" id="openPilotForm">📝 Avaliar o piloto X1</button>
     <button class="secondary big" data-home>Voltar ao portal</button>
+  </section>
+
+  <section id="pilotForm" class="view">
+    <div class="section-head"><button id="pilotBack">←</button><div><span>PILOTO X1 — ARENA TANGRAM</span><h2>Conte como foi a experiência</h2></div></div>
+    <div class="card pilot-form-card">
+      <div class="pilot-intro">
+        <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
+        <div><b>Sua opinião ajuda a evoluir o projeto.</b><p>O formulário é curto e registra dados do piloto para aperfeiçoar o X1 e documentar seu impacto pedagógico.</p></div>
+      </div>
+
+      <div class="pilot-grid">
+        <label>Turma / ano
+          <select id="pilotGrade">
+            <option value="">Selecione</option><option>5º ano</option><option>6º ano</option><option>7º ano</option><option>8º ano</option><option>9º ano</option><option>Ensino Médio</option><option>Outro</option>
+          </select>
+        </label>
+        <label>Dispositivo usado
+          <select id="pilotDevice"><option>Computador / notebook</option><option>Celular</option><option>Tablet</option><option>Outro</option></select>
+        </label>
+      </div>
+
+      <div class="pilot-ratings">
+        <div class="pilot-rating" data-field="access"><b>Foi fácil entrar e entender a dinâmica?</b><div class="scale"></div></div>
+        <div class="pilot-rating" data-field="visual"><b>O visual do X1 chamou sua atenção?</b><div class="scale"></div></div>
+        <div class="pilot-rating" data-field="competition"><b>A competição deixou a atividade mais interessante?</b><div class="scale"></div></div>
+        <div class="pilot-rating" data-field="learning"><b>Você percebeu valor para aprender ou revisar conteúdos?</b><div class="scale"></div></div>
+        <div class="pilot-rating" data-field="concentration"><b>O X1 ajudou a manter atenção e concentração?</b><div class="scale"></div></div>
+        <div class="pilot-rating" data-field="again"><b>Você gostaria de jogar novamente?</b><div class="scale"></div></div>
+      </div>
+
+      <label class="pilot-score-label">Nota geral para o X1 — Arena Tangram
+        <input id="pilotScore" type="range" min="0" max="10" value="8">
+        <strong id="pilotScoreValue">8/10</strong>
+      </label>
+
+      <label>O que você mais gostou?
+        <textarea id="pilotFavorite" maxlength="1000" rows="3" placeholder="Conte em poucas palavras..."></textarea>
+      </label>
+      <label>O que poderia melhorar?
+        <textarea id="pilotImprove" maxlength="1000" rows="3" placeholder="Sua sugestão..."></textarea>
+      </label>
+
+      <fieldset class="pilot-future">
+        <legend>Que desafios você gostaria de ver no futuro?</legend>
+        <label><input type="checkbox" value="Mais figuras de Tangram"> Mais figuras de Tangram</label>
+        <label><input type="checkbox" value="Mosaicos"> Mosaicos</label>
+        <label><input type="checkbox" value="Equipes"> Duplas ou equipes</label>
+        <label><input type="checkbox" value="Disciplinas"> Desafios por disciplinas</label>
+        <label><input type="checkbox" value="Campeonatos"> Campeonatos</label>
+        <label><input type="checkbox" value="Níveis"> Desafios por níveis</label>
+      </fieldset>
+
+      <button class="primary big" id="submitPilotForm">Enviar avaliação</button>
+      <p id="pilotStatus" class="server-note"></p>
+    </div>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>
