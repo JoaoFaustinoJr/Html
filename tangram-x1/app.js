@@ -251,6 +251,12 @@ function wireArenaFrame(frame,token){
    const bridge=win.__raiTangramBonusBridge;
    if(bridge?.open){
     bridge.open(arenaChallengeIndex());
+    if(room.mode==='gamer'){
+      const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}}catch(e){}return false};
+      if(!enterGamer())setTimeout(enterGamer,220);
+    }else{
+      try{win.__raiGamerOfficial?.exit?.()}catch(e){}
+    }
     setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},220);
    }else if(tries<50){setTimeout(attempt,180);return}
    $('#arenaLoader').hidden=true;
