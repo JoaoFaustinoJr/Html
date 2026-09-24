@@ -373,6 +373,7 @@ $('#rematch').addEventListener('click',async()=>{
 });
 
 const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
+let pilotReturn='home';
 function buildPilotScales(){
  $('.pilot-rating').forEach(block=>{
   const field=block.dataset.field,scale=block.querySelector('.scale');if(!field||!scale)return;
@@ -387,6 +388,7 @@ function buildPilotScales(){
  });
 }
 function openPilotForm(){
+ pilotReturn=document.querySelector('.view.show')?.id||'home';
  buildPilotScales();
  const score=$('#pilotScore');if(score){score.value='8';$('#pilotScoreValue').textContent='8/10'}
  $('#pilotStatus').textContent='';
@@ -394,7 +396,7 @@ function openPilotForm(){
 }
 $('#openPilotForm')?.addEventListener('click',openPilotForm);
 $('#pilotHomeLink')?.addEventListener('click',openPilotForm);
-$('#pilotBack')?.addEventListener('click',()=>show('results'));
+$('#pilotBack')?.addEventListener('click',()=>show(pilotReturn));
 $('#pilotScore')?.addEventListener('input',e=>{$('#pilotScoreValue').textContent=e.target.value+'/10'});
 
 $('#submitPilotForm')?.addEventListener('click',async()=>{
@@ -429,7 +431,7 @@ $('#submitPilotForm')?.addEventListener('click',async()=>{
   $('#pilotStatus').textContent='✓ Obrigado! Sua avaliação foi registrada no piloto X1 — Arena Tangram.';
   $('#pilotStatus').style.color='#79e6ab';
   b.textContent='Avaliação enviada ✓';
-  setTimeout(()=>show('results'),1600);
+  setTimeout(()=>show(pilotReturn),1600);
  }catch(e){
   $('#pilotStatus').textContent='Não foi possível enviar agora: '+(e.message||e);
   $('#pilotStatus').style.color='#ff9cab';
