@@ -40,3 +40,6 @@ z-index:-1}
  .arena-frame-head{align-items:flex-start}.arena-rai span{display:none}
  .brand:after{display:none}
 }
+
+.teacher-gate{text-align:center;max-width:460px}.teacher-gate .gate-rai{width:92px;height:92px;margin:0 auto 8px;display:block}.teacher-gate h3{font-size:26px;margin:8px 0 6px}.teacher-gate p{color:var(--muted);line-height:1.5}.teacher-gate label{text-align:left;margin-top:18px}.teacher-gate input{font-size:18px;letter-spacing:.08em}.teacher-gate:before{content:"🔒";display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:rgba(255,215,94,.08);border:1px solid rgba(255,215,94,.26);color:var(--gold);position:absolute;transform:translate(62px,4px)}
+#teacherGateStatus{min-height:18px}
