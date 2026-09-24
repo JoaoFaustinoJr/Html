@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720">
+<defs><filter id="ds" x="-25%" y="-25%" width="150%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#17334d" flood-opacity=".22"/></filter></defs>
+<g filter="url(#ds)"><path d="M360 42C431 42 472 77 520 105c54 31 119 36 143 92 24 55-9 111-7 163 2 57 42 111 14 163-29 53-94 55-145 84-49 28-91 71-165 71-70 0-113-40-162-68-53-30-119-34-145-90-25-54 11-108 10-160-1-55-40-110-13-162 29-55 94-59 146-88 49-28 93-68 164-68z" fill="#fff"/>
+<path d="M360 67c65 0 103 32 147 58 49 28 109 34 130 83 21 49-9 100-7 151 2 52 37 101 12 147-26 48-85 50-132 77-45 26-84 64-150 64-64 0-104-36-149-62-49-28-109-32-132-82-22-49 10-98 9-145-1-51-36-101-11-148 26-49 86-54 133-80 45-26 86-63 150-63z" fill="#ff4e9a" opacity=".16"/>
+<text x="360" y="390" text-anchor="middle" font-size="230" font-family="Arial, sans-serif" fill="#ff4e9a">✿</text>
+<text x="360" y="555" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="800" fill="#17528a">Flor</text></g></svg>
