@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_KIDS_CARDS_UI_V8__)return;
-window.__TIA_TATI_KIDS_CARDS_UI_V8__=true;
+if(window.__TIA_TATI_KIDS_CARDS_UI_V15__)return;
+window.__TIA_TATI_KIDS_CARDS_UI_V15__=true;
 const CARDS=[
  {id:'boas-vindas',title:'Boas-vindas',subtitle:'Vamos começar?',sprite:'assets/cards/cards-pair-1.webp',side:0},
  {id:'cada-conquista',title:'Cada conquista importa!',subtitle:'Todo avanço merece ser celebrado.',sprite:'assets/cards/cards-pair-1.webp',side:1},
@@ -24,7 +24,7 @@ window.TiaTatiKidsCardsData=CARDS;
 function normalizeBrand(){const a=q('.brand small');if(a)a.textContent='Fisio Sensório-Motora';const b=q('.home-v22-pill');if(b)b.textContent='FISIO SENSÓRIO-MOTORA';const c=q('.home-v22-footer-phrase small');if(c)c.textContent='Tia Tati • Fisio Sensório-Motora';document.title='Tia Tati – Fisio Sensório-Motora';}
 function fixHeaderImages(){qa('img[src*="assets/welcome.webp"]').forEach(img=>img.src='assets/cards/boas-vindas-v2.webp?v=8');}
 function preload(){[...new Set(CARDS.map(c=>c.image||c.sprite))].forEach(src=>{const i=new Image();i.src=src+'?v=8';});}
-function artMarkup(c){if(c.image)return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.image}?v=10" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:cover;object-position:center"></span>`;const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=8" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;}
+function artMarkup(c){if(c.image)return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.image}?v=15" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:cover;object-position:center"></span>`;const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=8" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;}
 function cardMarkup(c){return `<article class="tati-card tati-sticker-card" data-tati-card="${c.id}"><button class="tati-sticker-preview-btn" type="button" data-preview="${c.id}" aria-label="Ver figurinha ${c.title}">${artMarkup(c)}</button><strong class="tati-sticker-title">${c.title}</strong><small class="tati-sticker-subtitle">${c.subtitle}</small><button class="tati-sticker-download" type="button" data-sticker="${c.id}">⬇️ Baixar figurinha</button></article>`;}
 function buildSection(){
  const home=q('#screen-home'),head=q('.home-v22-section-head.compact',home),grid=q('.home-v22-cards',home);if(!home||!head||!grid)return false;
