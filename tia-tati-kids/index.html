@@ -486,13 +486,13 @@ body:not(.tt-activity-open)>.tt-global-kids-home{display:none}
 <script src="app.js?v=44"></script>
 <script src="mirror-card-stable-v1.js?v=32"></script>
 <script src="kids-cards-export-v1.js?v=29"></script>
-<script src="kids-cards-ui-v8.js?v=29"></script>
+<script src="kids-cards-ui-v8.js?v=30"></script>
 <script src="kids-games-v1.js?v=4"></script>
 <script src="tangram-classic-v1.js?v=20260921-silent-v14"></script>
 <script src="mosaic-game-v2.js?v=13"></script>
 <a class="tt-global-kids-home" href="./" aria-label="Voltar ao Tia Tati Kids">← Tia Tati Kids</a>
 <script>
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=30',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=31',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});}
 </script>
 <script>
 (()=>{const mark=()=>{const open=!!document.querySelector('.tt-game-overlay.open,.tt-clock-overlay.open,.tt-xylo-overlay.open,.tt-tangram-overlay.open,.tt-mosaic-overlay.open,[class*="overlay"].open');document.body.classList.toggle('tt-activity-open',open)};new MutationObserver(mark).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});mark()})();
