@@ -29,7 +29,17 @@ function applyLanguage(){
  document.documentElement.lang=lang==='en'?'en':'pt-BR';
  const t=$('#langToggle');if(t){t.textContent=lang==='en'?'PT':'EN';t.title=lang==='en'?'Mudar para Português':'Switch to English'}
  document.title=tx('X1 – Arena Tangram','X1 – Tangram Arena');
- setText('.back',tx('← Tangram','← Tangram'));
+ const mainProject=$('.main-project-link');if(mainProject){
+  const b=mainProject.querySelector('b'),s=mainProject.querySelector('small');
+  if(b)b.textContent='Tangram Educativo';
+  if(s)s.textContent=tx('Projeto principal','Main project');
+  mainProject.setAttribute('aria-label',tx('Voltar ao Tangram Educativo','Back to Tangram Educativo'));
+ }
+ const parentStrip=$('.x1-parent-strip');if(parentStrip){
+  const txt=parentStrip.querySelector('span:nth-child(2)');
+  if(txt)txt.innerHTML=tx('O X1 – Arena é uma modalidade do <b>Tangram Educativo</b>.','X1 – Arena is a mode within <b>Tangram Educativo</b>.');
+  parentStrip.setAttribute('aria-label',tx('Conhecer o Tangram Educativo','Explore Tangram Educativo'));
+ }
  setText('.brand p',tx('Aprenda. Responda. Monte. Vença.','Learn. Answer. Build. Win.'));
  setText('.x1-new',tx('NOVO • TEMPO REAL','NEW • REAL TIME'));
  setText('.x1-hero-tag',tx('Aprenda. Responda. Monte. Vença.','Learn. Answer. Build. Win.'));
