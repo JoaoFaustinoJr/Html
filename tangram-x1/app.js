@@ -7,8 +7,11 @@ const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{pa
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const views=$$('.view');
-const PACKS={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
-const CHALLENGES={0:'Desafio 1',1:'Desafio 2',2:'Desafio 3',3:'Desafio 4',4:'Desafio 5',5:'6. Gato Angular',6:'7. Corredor',7:'8. Cisne',8:'9. Foguete',9:'10. Dragão R.A.I.',10:'11. Gato Espelhado 🎯',11:'12. Corredor Invertido 🎯',12:'13. Cisne Reflexo 🎯',13:'14. Foguete Reverso 🎯'};
+const PACKS_PT={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
+const PACKS_EN={pp9:'Prova Paraná • Mathematics • Grade 9',prog8:'Programming • Grade 8',logic7:'Computational Thinking • Grade 7',geo6:'Mathematics & Geometry • Grade 6'};
+const CHALLENGES_PT={0:'Desafio 1',1:'Desafio 2',2:'Desafio 3',3:'Desafio 4',4:'Desafio 5',5:'6. Gato Angular',6:'7. Corredor',7:'8. Cisne',8:'9. Foguete',9:'10. Dragão R.A.I.',10:'11. Gato Espelhado 🎯',11:'12. Corredor Invertido 🎯',12:'13. Cisne Reflexo 🎯',13:'14. Foguete Reverso 🎯'};
+const CHALLENGES_EN={0:'Challenge 1',1:'Challenge 2',2:'Challenge 3',3:'Challenge 4',4:'Challenge 5',5:'6. Angular Cat',6:'7. Runner',7:'8. Swan',8:'9. Rocket',9:'10. R.A.I. Dragon',10:'11. Mirrored Cat 🎯',11:'12. Reversed Runner 🎯',12:'13. Reflected Swan 🎯',13:'14. Reverse Rocket 🎯'};
+let lang=localStorage.getItem('tangramX1Lang')==='en'?'en':'pt';
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
@@ -18,34 +21,80 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const setJoinStatus=(t,bad=false)=>{const el=$('#joinStatus');if(el){el.textContent=t;el.style.color=bad?'#ff9cab':''}};
 const fmtDurationMs=ms=>{if(!Number.isFinite(ms)||ms<0)return'—';const s=ms/1000,m=Math.floor(s/60),sec=s-m*60;return String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0')};
 const elapsedFromArenaStart=t=>{if(!t||!room.startedAt)return'—';return fmtDurationMs(new Date(t).getTime()-new Date(room.startedAt).getTime())};
+const tx=(pt,en)=>lang==='en'?en:pt;
+const packLabel=k=>(lang==='en'?PACKS_EN:PACKS_PT)[k]||k;
+const challengeLabelByIndex=i=>(lang==='en'?CHALLENGES_EN:CHALLENGES_PT)[i]||tx('Desafio '+(i+1),'Challenge '+(i+1));
+const setText=(sel,value)=>{const el=$(sel);if(el)el.textContent=value};
+function applyLanguage(){
+ document.documentElement.lang=lang==='en'?'en':'pt-BR';
+ const t=$('#langToggle');if(t){t.textContent=lang==='en'?'PT':'EN';t.title=lang==='en'?'Mudar para Português':'Switch to English'}
+ document.title=tx('Tangram X1 — Arena','Tangram X1 — Arena');
+ setText('.back',tx('← Tangram','← Tangram'));
+ setText('.brand p',tx('Aprenda. Responda. Monte. Vença.','Learn. Answer. Build. Win.'));
+ setText('.x1-new',tx('NOVO • TEMPO REAL','NEW • REAL TIME'));
+ setText('.x1-hero-tag',tx('Aprenda. Responda. Monte. Vença.','Learn. Answer. Build. Win.'));
+ const heroP=$('.x1-hero-copy>p:not(.x1-hero-tag)');if(heroP)heroP.textContent=tx('Crie salas, jogue em tempo real e dispute com seus colegas usando o mesmo desafio.','Create rooms, play in real time and compete with classmates on the same challenge.');
+ const chips=$('.x1-hero-chips span');if(chips[0])chips[0].textContent=tx('⚡ Gamer livre','⚡ Open Gamer');if(chips[1])chips[1].textContent=tx('🎓 Pedagógico com senha','🎓 Password-protected Learning');if(chips[2])chips[2].textContent=tx('🏆 Ranking ao vivo','🏆 Live ranking');
+ setText('.x1-rai-bubble',tx('Vamos para o X1?','Ready for X1?'));
+ const g=$('#createGamerRoom');if(g){g.querySelector('b').textContent=tx('Criar sala Gamer','Create Gamer room');g.querySelector('small').textContent=tx('Qualquer jogador pode criar uma sala, convidar amigos e competir.','Any player can create a room, invite friends and compete.')}
+ const j=$('#joinRoom');if(j){j.querySelector('b').textContent=tx('Entrar com código','Join with code');j.querySelector('small').textContent=tx('Entre em uma sala Gamer ou Pedagógica usando o código.','Join a Gamer or Learning room using its code.')}
+ const p=$('#createRoom');if(p){p.querySelector('b').textContent=tx('Modo Pedagógico','Learning Mode');p.querySelector('small').textContent=tx('Área do professor • aula, questões, Tangram e acompanhamento.','Teacher area • lesson, questions, Tangram and monitoring.')}
+ setText('.portal-note',tx('⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.','⚡ Gamer is open to students. 🎓 Learning Mode requires the teacher password.'));
+ setText('#pilotHomeLink',tx('📝 Participou do piloto? Avalie o X1','📝 Joined the pilot? Rate X1'));
+ const gs=$('#gamerSetup');if(gs){setText('#gamerSetup .section-head span',tx('MODO GAMER','GAMER MODE'));setText('#gamerSetup .section-head h2',tx('Criar sala','Create room'));setText('#gamerSetup h3',tx('Sua Arena','Your Arena'));const pp=$('#gamerSetup .gamer-setup>p');if(pp)pp.textContent=tx('Crie a sala, compartilhe o código e jogue junto com seus colegas. Quem cria também participa.','Create the room, share the code and play with your classmates. The host also plays.')}
+ const gl=$('#gamerSetup label');if(gl[0])gl[0].childNodes[0].nodeValue=tx('Seu apelido','Nickname');if(gl[1])gl[1].childNodes[0].nodeValue=tx('Desafio','Challenge');if(gl[2])gl[2].childNodes[0].nodeValue=tx('Rodadas','Rounds');
+ setText('#createGamerOnline',tx('Criar sala Gamer','Create Gamer room'));setText('#gamerCreateStatus',tx('Não é necessária senha.','No password required.'));
+ const gate=$('#teacherGate');if(gate){setText('#teacherGate .section-head span',tx('ÁREA RESTRITA','RESTRICTED AREA'));setText('#teacherGate .section-head h2',tx('Modo professor','Teacher mode'));setText('#teacherGate h3',tx('Acesso do professor','Teacher access'));const gp=$('#teacherGate .teacher-gate>p');if(gp)gp.textContent=tx('Digite a senha para acessar as atividades pedagógicas e o controle do professor.','Enter the password to access learning activities and teacher controls.');const lbl=$('#teacherPassword')?.closest('label');if(lbl)lbl.childNodes[0].nodeValue=tx('Senha do professor','Teacher password');setText('#unlockTeacher',tx('Entrar no modo professor','Enter teacher mode'))}
+ setText('#teacherSetup .section-head span',tx('PROFESSOR','TEACHER'));setText('#teacherSetup .section-head h2',tx('Criar Arena','Create Arena'));const cls=$('#className')?.closest('label');if(cls)cls.childNodes[0].nodeValue=tx('Nome da turma','Class name');setText('.pedagogical-badge b',tx('Modo Pedagógico','Learning Mode'));setText('.pedagogical-badge small',tx('Aula → questões → Tangram → ranking','Lesson → questions → Tangram → ranking'));
+ const cp=$('#contentPack')?.closest('label');if(cp)cp.childNodes[0].nodeValue=tx('Conteúdo','Content');const tc=$('#teacherChallenge')?.closest('label');if(tc)tc.childNodes[0].nodeValue=tx('Desafio Tangram','Tangram challenge');
+ setText('#createDemoRoom',tx('Criar sala','Create room'));
+ setText('#join .section-head span',tx('ALUNO','PLAYER'));setText('#join .section-head h2',tx('Entrar na Arena','Join the Arena'));const rc=$('#roomCodeInput')?.closest('label');if(rc)rc.childNodes[0].nodeValue=tx('Código da sala','Room code');const nn=$('#nickname')?.closest('label');if(nn)nn.childNodes[0].nodeValue=tx('Seu apelido','Nickname');setText('#joinOnline',tx('Entrar','Join'));
+ setText('#copyCode',tx('Copiar código','Copy code'));setText('#startMatch',tx('Começar partida','Start match'));
+ setText('#countdown .eyebrow',tx('R.A.I. • ÁRBITRA','R.A.I. • REFEREE'));setText('#countdown h2',tx('Todo mundo pronto?','Everyone ready?'));setText('#countdown p',tx('O mesmo desafio começa para todos.','The same challenge starts for everyone.'));
+ setText('#lesson .progress small',tx('Aula','Lesson'));setText('#lesson .kicker',tx('MATEMÁTICA • 9º ANO','MATHEMATICS • GRADE 9'));setText('#lesson h2',tx('Semelhança e proporcionalidade','Similarity and proportionality'));const rs=$('#lesson .rai-says p');if(rs)rs.innerHTML=tx('<b>Vamos por partes.</b> Figuras semelhantes mantêm a mesma forma, mesmo quando mudam de tamanho. O segredo é comparar ângulos correspondentes e a proporção entre os lados.','<b>Let’s go step by step.</b> Similar figures keep the same shape even when their size changes. The key is to compare corresponding angles and the proportion between sides.');const ex=$('#lesson .example');if(ex)ex.innerHTML=tx('<b>Exemplo</b><p>Se um lado de 3 cm passa a medir 6 cm, o fator de ampliação é 2. Os demais lados correspondentes também devem dobrar.</p>','<b>Example</b><p>If a 3 cm side becomes 6 cm, the scale factor is 2. The other corresponding sides must also double.</p>');setText('#lessonDone',tx('Entendi • ir para as questões','Got it • go to questions'));
+ setText('#quiz .progress small',tx('Questões','Questions'));setText('#quiz .kicker',tx('QUESTÃO 1 DE 3','QUESTION 1 OF 3'));setText('#quiz h2',tx('Uma figura foi ampliada com fator 2. Um lado que media 4 cm passará a medir:','A figure was enlarged by a factor of 2. A side that measured 4 cm will measure:'));
+ setText('#arena .progress small',tx('Arena','Arena'));setText('#results .section-head span',tx('RESULTADO','RESULT'));setText('#results .section-head h2',tx('Pódio da rodada','Round podium'));setText('#openPilotForm',tx('📝 Avaliar o piloto X1','📝 Rate the X1 pilot'));setText('#results [data-home]',tx('Voltar ao portal','Back to portal'));
+ setText('#pilotForm .section-head span',tx('PILOTO X1 — ARENA TANGRAM','X1 PILOT — TANGRAM ARENA'));setText('#pilotForm .section-head h2',tx('Conte como foi a experiência','Tell us about your experience'));setText('.pilot-intro b',tx('Sua opinião ajuda a evoluir o projeto.','Your feedback helps improve the project.'));const pip=$('.pilot-intro p');if(pip)pip.textContent=tx('O formulário é curto e registra dados do piloto para aperfeiçoar o X1 e documentar seu impacto pedagógico.','This short form records pilot feedback to improve X1 and document its educational impact.');setText('#submitPilotForm',tx('Enviar avaliação','Submit feedback'));
+ updateSelectLabels();
+ if(room.id&&$('#lobby').classList.contains('show'))openLobby();
+}
+function updateSelectLabels(){
+ const go=$('#gamerChallenge'),to=$('#teacherChallenge');
+ const labels=lang==='en'?['🎲 Random • surprise each round','6. Angular Cat','7. Runner','8. Swan','9. Rocket','10. R.A.I. Dragon','11. Mirrored Cat 🎯','12. Reversed Runner 🎯','13. Reflected Swan 🎯','14. Reverse Rocket 🎯']:['🎲 Aleatório • surpresa a cada rodada','6. Gato Angular','7. Corredor','8. Cisne','9. Foguete','10. Dragão R.A.I.','11. Gato Espelhado 🎯','12. Corredor Invertido 🎯','13. Cisne Reflexo 🎯','14. Foguete Reverso 🎯'];
+ [go,to].forEach(sel=>{if(!sel)return;[...sel.options].forEach((o,i)=>{if(labels[i])o.textContent=labels[i]})});
+ if(to?.options[0])to.options[0].textContent=tx('🤖 Recomendado pela R.A.I. • surpresa','🤖 R.A.I. recommended • surprise');
+ const po=$('#contentPack');if(po){[...po.options].forEach(o=>o.textContent=packLabel(o.value))}
+}
 
-$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
+
+$('#langToggle')?.addEventListener('click',()=>{lang=lang==='pt'?'en':'pt';localStorage.setItem('tangramX1Lang',lang);applyLanguage()});
+$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
 $('#createGamerRoom').addEventListener('click',()=>show('gamerSetup'));
 $('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
 $('#unlockTeacher').addEventListener('click',async()=>{
  const pw=$('#teacherPassword').value;
  const btn=$('#unlockTeacher');const status=$('#teacherGateStatus');
- if(!pw){status.textContent='Digite a senha do professor.';status.style.color='#ff9cab';return}
- btn.disabled=true;btn.textContent='Verificando…';status.textContent='';
+ if(!pw){status.textContent=tx('Digite a senha do professor.','Enter the teacher password.');status.style.color='#ff9cab';return}
+ btn.disabled=true;btn.textContent=tx('Verificando…','Checking…');status.textContent='';
  try{
   const {data,error}=await sb.rpc('x1_verify_teacher_password',{p_password:pw});
   if(error)throw error;
-  if(!data){status.textContent='Senha incorreta.';status.style.color='#ff9cab';return}
+  if(!data){status.textContent=tx('Senha incorreta.','Incorrect password.');status.style.color='#ff9cab';return}
   teacherPassword=pw;$('#teacherPassword').value='';status.textContent='';show('teacherSetup');
- }catch(e){status.textContent='Não foi possível validar a senha.';status.style.color='#ff9cab'}
- finally{btn.disabled=false;btn.textContent='Entrar no modo professor'}
+ }catch(e){status.textContent=tx('Não foi possível validar a senha.','Could not validate the password.');status.style.color='#ff9cab'}
+ finally{btn.disabled=false;btn.textContent=tx('Entrar no modo professor','Enter teacher mode')}
 });
 $('#teacherPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#unlockTeacher').click()});
 $('#joinRoom').addEventListener('click',()=>show('join'));
 
 async function createRoom(){
- if(!sb)return alert('Realtime indisponível neste navegador.');
- const btn=$('#createDemoRoom');btn.disabled=true;btn.textContent='Criando sala…';
+ if(!sb)return alert(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'));
+ const btn=$('#createDemoRoom');btn.disabled=true;btn.textContent=tx('Criando sala…','Creating room…');
  try{
-  if(!teacherPassword){alert('Acesso do professor expirou. Digite a senha novamente.');show('teacherGate');return}
+  if(!teacherPassword){alert(tx('Acesso do professor expirou. Digite a senha novamente.','Teacher access expired. Enter the password again.'));show('teacherGate');return}
   const args={
    p_teacher_password:teacherPassword,
-   p_class_name:$('#className').value.trim()||'Turma X1',
+   p_class_name:$('#className').value.trim()||tx('Turma X1','X1 Class'),
    p_mode:'pedagogico',
    p_content_pack:$('#contentPack').value,
    p_question_count:Number($('#questionCount').value)||3,
@@ -55,14 +104,14 @@ async function createRoom(){
   };
   const {data,error}=await sb.rpc('x1_create_room_secure',args);
   if(error)throw error;
-  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não criada.');
+  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error(tx('Sala não criada.','Room was not created.'));
   room={id:x.room_id,code:x.code,teacher:true,isHost:true,pack:args.p_content_pack,mode:'pedagogico',nickname:'Professor',hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
   sessionStorage.setItem('tangramX1Host',JSON.stringify(room));
   await subscribeRoom();
   await fetchRoom();
   await openLobby();
- }catch(e){alert('Não foi possível criar a sala: '+(e.message||e))}
- finally{btn.disabled=false;btn.textContent='Criar sala'}
+ }catch(e){alert(tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e))}
+ finally{btn.disabled=false;btn.textContent=tx('Criar sala','Create room')}
 }
 async function createGamerRoom(){
  if(!sb)return;
@@ -70,8 +119,8 @@ async function createGamerRoom(){
  const rounds=Number($('#gamerRounds').value)||1;
  const challenge=$('#gamerChallenge').value||'random';
  const status=$('#gamerCreateStatus'),btn=$('#createGamerOnline');
- if(!nickname){status.textContent='Informe um apelido.';status.style.color='#ff9cab';return}
- btn.disabled=true;btn.textContent='Criando sala…';status.textContent='Conectando à Arena…';status.style.color='';
+ if(!nickname){status.textContent=tx('Informe um apelido.','Enter a nickname.');status.style.color='#ff9cab';return}
+ btn.disabled=true;btn.textContent=tx('Criando sala…','Creating room…');status.textContent=tx('Conectando à Arena…','Connecting to the Arena…');status.style.color='';
  try{
   const {data,error}=await sb.rpc('x1_create_gamer_room',{p_nickname:nickname,p_round_count:rounds,p_challenge:challenge});
   if(error)throw error;
@@ -80,8 +129,8 @@ async function createGamerRoom(){
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
   await subscribeRoom();await fetchRoom();await openLobby();
- }catch(e){status.textContent='Não foi possível criar a sala: '+(e.message||e);status.style.color='#ff9cab'}
- finally{btn.disabled=false;btn.textContent='Criar sala Gamer'}
+ }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
+ finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
 $('#createGamerOnline').addEventListener('click',createGamerRoom);
 $('#gamerNickname').addEventListener('keydown',e=>{if(e.key==='Enter')createGamerRoom()});
@@ -89,22 +138,22 @@ $('#gamerNickname').addEventListener('keydown',e=>{if(e.key==='Enter')createGame
 $('#createDemoRoom').addEventListener('click',createRoom);
 
 async function joinRoom(){
- if(!sb)return setJoinStatus('Realtime indisponível neste navegador.',true);
+ if(!sb)return setJoinStatus(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'),true);
  const code=$('#roomCodeInput').value.trim().toUpperCase(),nickname=$('#nickname').value.trim();
- if(!/^RAI-\d{4}$/.test(code)||!nickname)return setJoinStatus('Digite um código no formato RAI-1234 e um apelido.',true);
- const btn=$('#joinOnline');btn.disabled=true;btn.textContent='Entrando…';setJoinStatus('Conectando à sala…');
+ if(!/^RAI-\d{4}$/.test(code)||!nickname)return setJoinStatus(tx('Digite um código no formato RAI-1234 e um apelido.','Enter a code in the RAI-1234 format and a nickname.'),true);
+ const btn=$('#joinOnline');btn.disabled=true;btn.textContent=tx('Entrando…','Joining…');setJoinStatus(tx('Conectando à sala…','Connecting to room…'));
  try{
   const {data,error}=await sb.rpc('x1_join_room',{p_code:code,p_nickname:nickname});
   if(error)throw error;
-  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não encontrada ou encerrada.');
+  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error(tx('Sala não encontrada ou encerrada.','Room not found or already closed.'));
   room={id:x.room_id,code,teacher:false,isHost:false,pack:x.content_pack,mode:x.room_mode,nickname,hostToken:'',playerId:x.player_id,playerToken:x.player_token,status:x.room_status};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   await subscribeRoom();
   await fetchRoom();
   await openLobby();
   applyRoomState(room.status);
- }catch(e){setJoinStatus('Não foi possível entrar: '+(e.message||e),true)}
- finally{btn.disabled=false;btn.textContent='Entrar'}
+ }catch(e){setJoinStatus(tx('Não foi possível entrar: ','Could not join: ')+(e.message||e),true)}
+ finally{btn.disabled=false;btn.textContent=tx('Entrar','Join')}
 }
 $('#joinOnline').addEventListener('click',joinRoom);
 
@@ -124,20 +173,20 @@ async function fetchPlayers(){
 async function renderPlayers(){
  let players=[];try{players=await fetchPlayers()}catch(e){}
  const items=[];
- if(room.teacher)items.push({nickname:'Professor',role:'teacher',id:'host'});
+ if(room.teacher)items.push({nickname:tx('Professor','Teacher'),role:'teacher',id:'host'});
  for(const p of players)items.push(p);
  $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><b>'+esc(p.nickname)+(p.id===room.playerId?' • você':'')+'</b><small>'+(p.role==='teacher'?'Professor • anfitrião':(p.id===room.playerId&&room.isHost)?'Anfitrião • pronto ✓':p.tangram_finished_at?'Concluiu 🏁':p.quiz_finished_at?'Etapa pedagógica ✓':'Pronto ✓')+'</small></div>').join('');
- $('#lobbyCount').textContent=items.length+' '+(items.length===1?'participante':'participantes')+' na sala';
+ $('#lobbyCount').textContent=items.length+' '+(items.length===1?tx('participante','participant'):tx('participantes','participants'))+tx(' na sala',' in the room');
 }
 async function openLobby(){
  $('#roomCode').textContent=room.code;
  const pedagogico=room.mode==='pedagogico';
- $('#lobbyModeLabel').textContent=pedagogico?'MODO PEDAGÓGICO':'MODO GAMER';
- const challengeLabel=room.challenge==='random'?'🎲 Desafio surpresa • igual para todos':(CHALLENGES[Number(room.challenge)]||'Desafio selecionado');
- $('#lobbyPack').textContent=pedagogico?(PACKS[room.pack]||room.pack)+' • '+challengeLabel:challengeLabel;
- $('#lobbyModeText').textContent=pedagogico?'Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.':'Sem etapa didática: contagem regressiva, Tangram e ranking.';
+ $('#lobbyModeLabel').textContent=pedagogico?tx('MODO PEDAGÓGICO','LEARNING MODE'):tx('MODO GAMER','GAMER MODE');
+ const challengeLabel=room.challenge==='random'?tx('🎲 Desafio surpresa • igual para todos','🎲 Surprise challenge • same for everyone'):(challengeLabelByIndex(Number(room.challenge))||tx('Desafio selecionado','Selected challenge'));
+ $('#lobbyPack').textContent=pedagogico?packLabel(room.pack)+' • '+challengeLabel:challengeLabel;
+ $('#lobbyModeText').textContent=pedagogico?tx('Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.','Lesson and questions come first. Then every player unlocks the same Tangram challenge.'):tx('Sem etapa didática: contagem regressiva, Tangram e ranking.','No lesson stage: countdown, Tangram and ranking.');
  $('#startMatch').style.display=room.isHost?'block':'none';
- const lobbyNote=document.querySelector('.lobby-title small');if(lobbyNote)lobbyNote.textContent=room.isHost?'Você controla o início da partida':'Aguardando o anfitrião iniciar';
+ const lobbyNote=document.querySelector('.lobby-title small');if(lobbyNote)lobbyNote.textContent=room.isHost?tx('Você controla o início da partida','You control the match start'):tx('Aguardando o anfitrião iniciar','Waiting for the host to start');
  await renderPlayers();
  show('lobby');
 }
@@ -161,16 +210,16 @@ function stopArenaObserver(){try{arenaObserver?.disconnect()}catch(e){}arenaObse
 function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank'}catch(e){}}}
 function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);countdownBusy=false;resetArenaFrame()}
 
-$('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent='Copiado ✓';setTimeout(()=>$('#copyCode').textContent='Copiar código',1300)}catch(e){}});
+$('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
 
 $('#startMatch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken)return;
- const b=$('#startMatch');b.disabled=true;b.textContent='Iniciando…';
+ const b=$('#startMatch');b.disabled=true;b.textContent=tx('Iniciando…','Starting…');
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
-  if(error)throw error;if(!data)throw new Error('A sala não pôde ser iniciada.');
+  if(error)throw error;if(!data)throw new Error(tx('A sala não pôde ser iniciada.','The room could not be started.'));
   runCountdown(true);
- }catch(e){alert(e.message||e);b.disabled=false;b.textContent='Começar partida'}
+ }catch(e){alert(e.message||e);b.disabled=false;b.textContent=tx('Começar partida','Start match')}
 });
 
 function runCountdown(hostAdvances=false){
@@ -179,7 +228,7 @@ function runCountdown(hostAdvances=false){
  const t=setInterval(async()=>{
   n--;
   if(n>0){$('#countNum').textContent=n;return}
-  clearInterval(t);$('#countNum').textContent='VALENDO!';
+  clearInterval(t);$('#countNum').textContent=tx('VALENDO!','GO!');
   if(hostAdvances&&room.isHost){
    setTimeout(async()=>{
     const next=room.mode==='pedagogico'?'lesson':'playing';
@@ -202,8 +251,8 @@ $('#lessonDone').addEventListener('click',()=>show('quiz'));
 
 $$('[data-answer]').forEach(b=>b.addEventListener('click',async()=>{
  const ok=b.dataset.answer==='2';$$('[data-answer]').forEach(x=>x.classList.remove('correct','wrong'));b.classList.add(ok?'correct':'wrong');
- if(!ok){quizWrong++;$('#quizFeedback').textContent='Ainda não. Pense: fator 2 significa multiplicar a medida original por 2.';return}
- $('#quizFeedback').textContent='✓ Isso! O fator 2 dobra a medida. Arena liberada.';
+ if(!ok){quizWrong++;$('#quizFeedback').textContent=tx('Ainda não. Pense: fator 2 significa multiplicar a medida original por 2.','Not yet. Think: a factor of 2 means multiplying the original measure by 2.');return}
+ $('#quizFeedback').textContent=tx('✓ Isso! O fator 2 dobra a medida. Arena liberada.','✓ Correct! A factor of 2 doubles the measure. Arena unlocked.');
  if(room.playerId&&room.playerToken){
   try{await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:1,p_wrong:quizWrong})}catch(e){}
  }
@@ -234,7 +283,7 @@ function arenaChallengeIndex(){
 }
 function arenaChallengeLabel(){
  const i=arenaChallengeIndex();
- return CHALLENGES[i]||('Desafio '+(i+1));
+ return challengeLabelByIndex(i);
 }
 
 function styleArenaDocument(doc){
@@ -295,7 +344,7 @@ async function prepareTangramArena(){
  loader.innerHTML='<div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>Motor oficial do Tangram Educativo.</small>';
  const token=++arenaLoadToken;
  frame.onload=()=>wireArenaFrame(frame,token);
- frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&round='+(room.currentRound||1)+'&t='+(Date.now());
+ frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&lang='+lang+'&round='+(room.currentRound||1)+'&t='+(Date.now());
 }
 
 async function onTangramComplete(message){
@@ -441,6 +490,8 @@ $('#submitPilotForm')?.addEventListener('click',async()=>{
 });
 
 $('#demoStart')?.addEventListener('click',()=>{alert('No Gamer, qualquer aluno pode criar uma sala. O modo Pedagógico continua protegido pela senha do professor.')});
+
+applyLanguage();
 
 (async()=>{
  if(!sb){document.body.classList.add('offline');return}
