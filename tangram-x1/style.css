@@ -93,3 +93,20 @@ box-shadow:0 22px 70px rgba(0,0,0,.34),inset 0 0 0 1px rgba(70,221,244,.06)}
 
 .pilot-home-link{display:block;margin:10px auto 0;border:1px solid rgba(130,215,240,.14);background:transparent;color:#89b8c7;border-radius:999px;padding:8px 12px;font-size:10px;font-weight:850;cursor:pointer}
 .pilot-home-link:hover{border-color:rgba(255,215,94,.35);color:#ffe47b}
+
+/* X1 Arena fullscreen — desafio sempre ampliado */
+body.x1-arena-full{overflow:hidden!important}
+body.x1-arena-full .shell{width:100%!important;max-width:none!important;padding:0!important;margin:0!important}
+body.x1-arena-full .hero,
+body.x1-arena-full #arena>.progress,
+body.x1-arena-full #arena>.arena-head,
+body.x1-arena-full #arena>.race-feed,
+body.x1-arena-full .arena-frame-head{display:none!important}
+body.x1-arena-full #arena{display:block!important;position:fixed!important;inset:0!important;z-index:2147483000!important;background:#020912!important;padding:0!important;margin:0!important}
+body.x1-arena-full .arena-stage{position:absolute!important;inset:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#020912!important}
+body.x1-arena-full #tangramArenaFrame{display:block!important;width:100vw!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;border:0!important;border-radius:0!important;background:#020912!important}
+body.x1-arena-full .arena-loader{position:absolute!important;inset:0!important;z-index:4!important;min-height:100dvh!important;background:#020912!important}
+@supports not (height:100dvh){
+ body.x1-arena-full #tangramArenaFrame,
+ body.x1-arena-full .arena-loader{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
+}
