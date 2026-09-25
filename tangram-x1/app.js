@@ -65,17 +65,19 @@ function applyLanguage(){
   concentration:tx('O X1 ajudou a manter atenção e concentração?','Did X1 help you stay focused and attentive?'),
   again:tx('Você gostaria de jogar novamente?','Would you like to play again?')
  };
- $('.pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&ratingTexts[el.dataset.field])b.textContent=ratingTexts[el.dataset.field]});
+ $$('.pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&ratingTexts[el.dataset.field])b.textContent=ratingTexts[el.dataset.field]});
  const scoreLabel=$('#pilotScore')?.closest('label');if(scoreLabel)scoreLabel.childNodes[0].nodeValue=tx('Nota geral para o X1 – Arena Tangram','Overall rating for X1 – Tangram Arena');
  const fav=$('#pilotFavorite')?.closest('label');if(fav)fav.childNodes[0].nodeValue=tx('O que você mais gostou?','What did you like most?');
  const imp=$('#pilotImprove')?.closest('label');if(imp)imp.childNodes[0].nodeValue=tx('O que poderia melhorar?','What could be improved?');
  if($('#pilotFavorite'))$('#pilotFavorite').placeholder=tx('Conte em poucas palavras...','Tell us in a few words...');
  if($('#pilotImprove'))$('#pilotImprove').placeholder=tx('Sua sugestão...','Your suggestion...');
  const legend=$('.pilot-future legend');if(legend)legend.textContent=tx('Que desafios você gostaria de ver no futuro?','What challenges would you like to see in the future?');
- const flabels=$('.pilot-future label');const ftexts=lang==='en'?['More Tangram figures','Mosaics','Pairs or teams','Subject-based challenges','Championships','Level-based challenges']:['Mais figuras de Tangram','Mosaicos','Duplas ou equipes','Desafios por disciplinas','Campeonatos','Desafios por níveis'];flabels.forEach((l,i)=>{if(ftexts[i]){const input=l.querySelector('input');l.childNodes[l.childNodes.length-1].nodeValue=' '+ftexts[i];if(input)input.value=['Mais figuras de Tangram','Mosaicos','Equipes','Disciplinas','Campeonatos','Níveis'][i]}});
+ const flabels=$$('.pilot-future label');const ftexts=lang==='en'?['More Tangram figures','Mosaics','Pairs or teams','Subject-based challenges','Championships','Level-based challenges']:['Mais figuras de Tangram','Mosaicos','Duplas ou equipes','Desafios por disciplinas','Campeonatos','Desafios por níveis'];flabels.forEach((l,i)=>{if(ftexts[i]){const input=l.querySelector('input');l.childNodes[l.childNodes.length-1].nodeValue=' '+ftexts[i];if(input)input.value=['Mais figuras de Tangram','Mosaicos','Equipes','Disciplinas','Campeonatos','Níveis'][i]}});
  const gradeOpts=$('#pilotGrade')?.options;if(gradeOpts){const vals=lang==='en'?['Select','Grade 5','Grade 6','Grade 7','Grade 8','Grade 9','High School','Other']:['Selecione','5º ano','6º ano','7º ano','8º ano','9º ano','Ensino Médio','Outro'];[...gradeOpts].forEach((o,i)=>{if(vals[i])o.textContent=vals[i]})}
  const deviceOpts=$('#pilotDevice')?.options;if(deviceOpts){const vals=lang==='en'?['Computer / laptop','Mobile phone','Tablet','Other']:['Computador / notebook','Celular','Tablet','Outro'];[...deviceOpts].forEach((o,i)=>{if(vals[i])o.textContent=vals[i]})}
  setText('#submitPilotForm',tx('Enviar avaliação','Submit feedback'));
+ const thanks=$('#pilotThanksText');if(thanks)thanks.textContent=tx('Obrigado por contribuir com o desenvolvimento do X1 – Arena Tangram. Seu feedback é muito importante para aprimorar esta experiência educativa.','Thank you for contributing to the development of X1 – Tangram Arena. Your feedback is very important to help improve this educational experience.');
+ const sign=$('#pilotThanksSign');if(sign)sign.textContent='Professor João Faustino Júnior';
  updateSelectLabels();
  applyPilotLanguage();
  if(room.id&&$('#lobby').classList.contains('show'))openLobby();
@@ -510,6 +512,7 @@ function buildPilotScales(){
 
 function setPilotRole(role){
  pilotRole=role==='teacher'?'teacher':'student';
+ applyPilotLanguage();
  $$('[data-pilot-role]').forEach(b=>b.classList.toggle('active',b.dataset.pilotRole===pilotRole));
  $('#pilotStudentFields').hidden=pilotRole!=='student';
  $('#pilotTeacherFields').hidden=pilotRole!=='teacher';
@@ -525,6 +528,7 @@ function setPilotRole(role){
 
 function openPilotForm(){
  pilotReturn=document.querySelector('.view.show')?.id||'home';
+ applyPilotLanguage();
  setPilotRole('student');buildPilotScales();
  const score=$('#pilotScore');if(score){score.value='8';$('#pilotScoreValue').textContent='8/10'}
  const tscore=$('#teacherPilotScore');if(tscore){tscore.value='8';$('#teacherPilotScoreValue').textContent='8/10'}
