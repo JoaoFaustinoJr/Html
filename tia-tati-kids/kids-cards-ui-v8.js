@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_KIDS_CARDS_UI_V31__)return;
-window.__TIA_TATI_KIDS_CARDS_UI_V31__=true;
+if(window.__TIA_TATI_KIDS_CARDS_UI_V32__)return;
+window.__TIA_TATI_KIDS_CARDS_UI_V32__=true;
 const CARDS=[
  {id:'reward-espelho-v24',title:'Você é especial!',subtitle:'Espelho Mágico',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[0,0,390,350]},
  {id:'reward-abelha-v24',title:'Você consegue!',subtitle:'Abelhinha',image:'assets/cards/tia-tati-rewards-v23.webp',crop:[390,0,350,350]},
@@ -59,11 +59,12 @@ function preload(){[...new Set(CARDS.map(c=>c.image||c.sprite))].forEach(src=>{c
 function artMarkup(c){
  if(c.crop){
   const [x,y,w,h]=c.crop,W=1900,H=1267;
-  const iw=(W/w)*100, ih=(H/h)*100, left=-(x/w)*100, top=-(y/h)*100;
-  return `<span class="tati-card-art" style="position:relative;overflow:hidden;background:#fff"><img class="tati-sprite-img" src="${c.image}?v=31" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="position:absolute;width:${iw}%;height:${ih}%;max-width:none;left:${left}%;top:${top}%;object-fit:fill"></span>`;
+  const sx=(W/w)*100, sy=(H/h)*100;
+  const px=(W===w)?0:(x/(W-w))*100, py=(H===h)?0:(y/(H-h))*100;
+  return `<span class="tati-card-art tati-diecut-art" role="img" aria-label="${c.title}" style="display:block;width:100%;height:100%;background-image:url('${c.image}?v=32');background-repeat:no-repeat;background-size:${sx}% ${sy}%;background-position:${px}% ${py}%;background-color:#fff"></span>`;
  }
- if(c.image)return `<span class="tati-card-art${c.sheet?' tati-sheet-art':''}"><img class="tati-sprite-img" src="${c.image}?v=31" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:${c.sheet?'contain':'cover'};object-position:center"></span>`;
- const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=31" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;
+ if(c.image)return `<span class="tati-card-art${c.sheet?' tati-sheet-art':''}"><img class="tati-sprite-img" src="${c.image}?v=32" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:${c.sheet?'contain':'cover'};object-position:center"></span>`;
+ const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=32" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;
 }
 function cardMarkup(c){const direct=c.sheet;return `<article class="tati-card tati-sticker-card" data-tati-card="${c.id}"><button class="tati-sticker-preview-btn" type="button" data-preview="${c.id}" aria-label="Ver figurinha ${c.title}" ${direct?`data-direct-image="${c.image}?v=29"`:`data-preview="${c.id}"`}>${artMarkup(c)}</button><strong class="tati-sticker-title">${c.title}</strong><small class="tati-sticker-subtitle">${c.subtitle}</small><button class="tati-sticker-download" type="button" data-sticker="${c.id}">⬇️ Baixar figurinha</button></article>`;}
 function buildSection(){
