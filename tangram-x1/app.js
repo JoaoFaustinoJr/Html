@@ -77,6 +77,7 @@ function applyLanguage(){
  const deviceOpts=$('#pilotDevice')?.options;if(deviceOpts){const vals=lang==='en'?['Computer / laptop','Mobile phone','Tablet','Other']:['Computador / notebook','Celular','Tablet','Outro'];[...deviceOpts].forEach((o,i)=>{if(vals[i])o.textContent=vals[i]})}
  setText('#submitPilotForm',tx('Enviar avaliação','Submit feedback'));
  updateSelectLabels();
+ applyPilotLanguage();
  if(room.id&&$('#lobby').classList.contains('show'))openLobby();
 }
 function updateSelectLabels(){
@@ -444,62 +445,141 @@ $('#rematch').addEventListener('click',async()=>{
 });
 
 const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
-let pilotReturn='home';
-function buildPilotScales(){
- $$('.pilot-rating').forEach(block=>{
-  const field=block.dataset.field,scale=block.querySelector('.scale');if(!field||!scale)return;
-  scale.innerHTML='';
-  for(let i=1;i<=5;i++){
-   const b=document.createElement('button');b.type='button';b.textContent=i;b.dataset.value=String(i);
-   if(i===pilotRatings[field])b.classList.add('active');
-   b.addEventListener('click',()=>{pilotRatings[field]=i;scale.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b))});
-   scale.appendChild(b);
-  }
-  const labels=document.createElement('div');labels.className='scale-labels';labels.innerHTML='<span>'+tx('1 • pouco','1 • low')+'</span><span>'+tx('5 • muito','5 • high')+'</span>';scale.after(labels);
- });
+const teacherPilotRatings={engagement:5,reasoning:5,attention:5,review:5,gamification:5,inclusion:5,digital:5,subjects:5,balance:5,interest:5,resource:5};
+let pilotRole='student',pilotReturn='home';
+
+function applyPilotLanguage(){
+ const roleButtons=$$('[data-pilot-role]');
+ if(roleButtons[0])roleButtons[0].textContent=tx('🎮 Estudante','🎮 Student');
+ if(roleButtons[1])roleButtons[1].textContent=tx('🎓 Professor / observador','🎓 Teacher / observer');
+
+ const note=$('.teacher-prospective-note');
+ if(note){
+  const b=note.querySelector('b'),p=note.querySelector('p');
+  if(b)b.textContent=tx('Percepção docente prospectiva','Prospective teacher perception');
+  if(p)p.textContent=tx(
+   'Após conhecer a proposta e observar o X1 – Arena Tangram, avalie o potencial pedagógico que você percebe para o recurso.',
+   'After learning about the proposal and observing X1 – Tangram Arena, assess the educational potential you perceive in the resource.'
+  );
+ }
+
+ const teacherText={
+  engagement:tx('O X1 tem potencial para aumentar o engajamento dos estudantes?','Does X1 have the potential to increase student engagement?'),
+  reasoning:tx('A dinâmica pode favorecer raciocínio lógico e resolução de problemas?','Can the activity support logical reasoning and problem solving?'),
+  attention:tx('A competição em tempo real pode contribuir para atenção e concentração?','Can real-time competition contribute to attention and concentration?'),
+  review:tx('O formato pode favorecer a revisão de conteúdos escolares?','Can the format support review of school content?'),
+  gamification:tx('O fluxo aula → questões → desafio parece adequado para integrar aprendizagem e gamificação?','Does the lesson → questions → challenge flow seem appropriate for integrating learning and gamification?'),
+  inclusion:tx('O recurso pode estimular a participação de estudantes que normalmente se envolvem menos?','Could the resource encourage participation from students who are usually less engaged?'),
+  digital:tx('Você percebe potencial de uso em Educação Digital, Programação e Robótica?','Do you see potential for use in Digital Education, Programming and Robotics?'),
+  subjects:tx('Você percebe possibilidades de uso em outras disciplinas?','Do you see possibilities for use in other subjects?'),
+  balance:tx('O sistema de salas, ranking e desafios pode ser usado sem reduzir a atividade apenas à competição?','Can the room, ranking and challenge system be used without reducing the activity to competition alone?'),
+  interest:tx('Você teria interesse em utilizar o Modo Professor quando ele estiver disponível para testes?','Would you be interested in using Teacher Mode when it becomes available for testing?'),
+  resource:tx('Na sua percepção, o X1 apresenta potencial para ser utilizado como recurso de aprendizagem, e não apenas como jogo?','In your view, does X1 have potential to be used as a learning resource, not only as a game?')
+ };
+ $$('.teacher-ratings .pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&teacherText[el.dataset.teacherField])b.textContent=teacherText[el.dataset.teacherField]});
+
+ const ts=$('#teacherPilotScore')?.closest('label');if(ts)ts.childNodes[0].nodeValue=tx('Nota para o potencial pedagógico do X1 – Arena Tangram','Rating for the educational potential of X1 – Tangram Arena');
+ const uc=$('#teacherUseCases')?.closest('label');if(uc)uc.childNodes[0].nodeValue=tx('Em quais situações pedagógicas você imagina utilizar o X1?','In which educational situations could you imagine using X1?');
+ const nf=$('#teacherNeededFeatures')?.closest('label');if(nf)nf.childNodes[0].nodeValue=tx('Que recursos deveriam existir no Modo Professor para que ele fosse útil em sua prática?','What features should Teacher Mode include to be useful in your practice?');
+ const ca=$('#teacherCautions')?.closest('label');if(ca)ca.childNodes[0].nodeValue=tx('Que cuidados pedagógicos você considera importantes nesse tipo de competição?','What educational safeguards do you consider important in this type of competition?');
+ if($('#teacherUseCases'))$('#teacherUseCases').placeholder=tx('Ex.: revisão, desafio de lógica, trabalho em equipe...','E.g. review, logic challenge, teamwork...');
+ if($('#teacherNeededFeatures'))$('#teacherNeededFeatures').placeholder=tx('Sua sugestão...','Your suggestion...');
+ if($('#teacherCautions'))$('#teacherCautions').placeholder=tx('Sua observação...','Your observation...');
+ const tf=$('.teacher-future legend');if(tf)tf.textContent=tx('Que desafios você gostaria de ver no futuro?','What challenges would you like to see in the future?');
+
+ buildPilotScales();
 }
+
+function buildOneScale(block,store,key){
+ const scale=block.querySelector('.scale');if(!scale||!key)return;
+ scale.innerHTML='';
+ for(let i=1;i<=5;i++){
+  const b=document.createElement('button');b.type='button';b.textContent=i;b.dataset.value=String(i);
+  if(i===store[key])b.classList.add('active');
+  b.addEventListener('click',()=>{store[key]=i;scale.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b))});
+  scale.appendChild(b);
+ }
+ let labels=block.querySelector('.scale-labels');
+ if(!labels){labels=document.createElement('div');labels.className='scale-labels';scale.after(labels)}
+ labels.innerHTML='<span>'+tx('1 • pouco','1 • low')+'</span><span>'+tx('5 • muito','5 • high')+'</span>';
+}
+function buildPilotScales(){
+ $$('#pilotStudentFields .pilot-rating').forEach(block=>buildOneScale(block,pilotRatings,block.dataset.field));
+ $$('#pilotTeacherFields .pilot-rating').forEach(block=>buildOneScale(block,teacherPilotRatings,block.dataset.teacherField));
+}
+
+function setPilotRole(role){
+ pilotRole=role==='teacher'?'teacher':'student';
+ $$('[data-pilot-role]').forEach(b=>b.classList.toggle('active',b.dataset.pilotRole===pilotRole));
+ $('#pilotStudentFields').hidden=pilotRole!=='student';
+ $('#pilotTeacherFields').hidden=pilotRole!=='teacher';
+ const introB=$('.pilot-intro b'),introP=$('.pilot-intro p');
+ if(pilotRole==='teacher'){
+  if(introB)introB.textContent=tx('Sua percepção ajuda a orientar os próximos passos do X1 – Arena Tangram.','Your perspective helps guide the next steps for X1 – Tangram Arena.');
+  if(introP)introP.textContent=tx('Avalie o potencial pedagógico da proposta. O Modo Professor permanece fechado nesta etapa do piloto.','Assess the educational potential of the proposal. Teacher Mode remains closed at this stage of the pilot.');
+ }else{
+  if(introB)introB.textContent=tx('Sua opinião ajuda a melhorar o X1 – Arena Tangram.','Your feedback helps improve X1 – Tangram Arena.');
+  if(introP)introP.textContent=tx('Responda pensando na experiência que você acabou de ter.','Answer based on the experience you just had.');
+ }
+}
+
 function openPilotForm(){
  pilotReturn=document.querySelector('.view.show')?.id||'home';
- buildPilotScales();
+ setPilotRole('student');buildPilotScales();
  const score=$('#pilotScore');if(score){score.value='8';$('#pilotScoreValue').textContent='8/10'}
+ const tscore=$('#teacherPilotScore');if(tscore){tscore.value='8';$('#teacherPilotScoreValue').textContent='8/10'}
  $('#pilotStatus').textContent='';
  show('pilotForm');
 }
+$$('[data-pilot-role]').forEach(b=>b.addEventListener('click',()=>setPilotRole(b.dataset.pilotRole)));
 $('#openPilotForm')?.addEventListener('click',openPilotForm);
 $('#pilotHomeLink')?.addEventListener('click',openPilotForm);
 $('#pilotBack')?.addEventListener('click',()=>show(pilotReturn));
 $('#pilotScore')?.addEventListener('input',e=>{$('#pilotScoreValue').textContent=e.target.value+'/10'});
+$('#teacherPilotScore')?.addEventListener('input',e=>{$('#teacherPilotScoreValue').textContent=e.target.value+'/10'});
 
 $('#submitPilotForm')?.addEventListener('click',async()=>{
- const grade=$('#pilotGrade').value;
- if(!grade){$('#pilotStatus').textContent=tx('Selecione sua turma ou ano.','Select your grade or class.');$('#pilotStatus').style.color='#ff9cab';return}
  const b=$('#submitPilotForm');b.disabled=true;b.textContent=tx('Enviando…','Sending…');
  $('#pilotStatus').textContent='';$('#pilotStatus').style.color='';
  try{
-  const future=$$('.pilot-future input:checked').map(x=>x.value);
-  const args={
-   p_room_id:room.id||null,
-   p_room_code:room.code||null,
-   p_player_id:room.playerId||null,
-   p_nickname:room.nickname||null,
-   p_mode:room.mode||null,
-   p_grade_level:grade,
-   p_device_type:$('#pilotDevice').value,
-   p_access_ease:pilotRatings.access,
-   p_visual_appeal:pilotRatings.visual,
-   p_competition_engagement:pilotRatings.competition,
-   p_learning_value:pilotRatings.learning,
-   p_concentration:pilotRatings.concentration,
-   p_would_play_again:pilotRatings.again,
-   p_overall_score:Number($('#pilotScore').value)||0,
-   p_favorite_part:$('#pilotFavorite').value.trim()||null,
-   p_improvement:$('#pilotImprove').value.trim()||null,
-   p_future_challenges:future
-  };
-  const {data,error}=await sb.rpc('x1_submit_pilot_feedback',args);
+  let data,error;
+  if(pilotRole==='teacher'){
+   const future=$$('.teacher-future input:checked').map(x=>x.value);
+   ({data,error}=await sb.rpc('x1_submit_teacher_feedback',{
+    p_overall_score:Number($('#teacherPilotScore').value)||0,
+    p_engagement_potential:teacherPilotRatings.engagement,
+    p_reasoning_potential:teacherPilotRatings.reasoning,
+    p_attention_potential:teacherPilotRatings.attention,
+    p_review_potential:teacherPilotRatings.review,
+    p_gamification_fit:teacherPilotRatings.gamification,
+    p_inclusion_potential:teacherPilotRatings.inclusion,
+    p_digital_ed_use:teacherPilotRatings.digital,
+    p_other_subjects:teacherPilotRatings.subjects,
+    p_competition_balance:teacherPilotRatings.balance,
+    p_interest_mode:teacherPilotRatings.interest,
+    p_learning_resource:teacherPilotRatings.resource,
+    p_use_cases:$('#teacherUseCases').value.trim()||null,
+    p_needed_features:$('#teacherNeededFeatures').value.trim()||null,
+    p_pedagogical_cautions:$('#teacherCautions').value.trim()||null,
+    p_future_challenges:future
+   }));
+  }else{
+   const grade=$('#pilotGrade').value;
+   if(!grade){$('#pilotStatus').textContent=tx('Selecione sua turma ou ano.','Select your grade or class.');$('#pilotStatus').style.color='#ff9cab';b.disabled=false;b.textContent=tx('Enviar avaliação','Submit feedback');return}
+   const future=$$('#pilotStudentFields .pilot-future input:checked').map(x=>x.value);
+   ({data,error}=await sb.rpc('x1_submit_pilot_feedback',{
+    p_room_id:room.id||null,p_room_code:room.code||null,p_player_id:room.playerId||null,p_nickname:room.nickname||null,p_mode:room.mode||null,
+    p_grade_level:grade,p_device_type:$('#pilotDevice').value,p_access_ease:pilotRatings.access,p_visual_appeal:pilotRatings.visual,
+    p_competition_engagement:pilotRatings.competition,p_learning_value:pilotRatings.learning,p_concentration:pilotRatings.concentration,
+    p_would_play_again:pilotRatings.again,p_overall_score:Number($('#pilotScore').value)||0,p_favorite_part:$('#pilotFavorite').value.trim()||null,
+    p_improvement:$('#pilotImprove').value.trim()||null,p_future_challenges:future
+   }));
+  }
   if(error)throw error;
-  localStorage.setItem('x1PilotFeedbackLast',JSON.stringify({id:data,at:Date.now()}));
-  $('#pilotStatus').textContent=tx('✓ Obrigado! Sua avaliação foi registrada no piloto X1 — Arena Tangram.','✓ Thank you! Your feedback was recorded for the X1 — Tangram Arena pilot.');
+  localStorage.setItem('x1PilotFeedbackLast',JSON.stringify({id:data,role:pilotRole,at:Date.now()}));
+  $('#pilotStatus').textContent=pilotRole==='teacher'
+   ?tx('✓ Obrigado! Sua percepção docente prospectiva foi registrada.','✓ Thank you! Your prospective teacher feedback was recorded.')
+   :tx('✓ Obrigado! Sua avaliação foi registrada no piloto X1 – Arena Tangram.','✓ Thank you! Your feedback was recorded for the X1 – Tangram Arena pilot.');
   $('#pilotStatus').style.color='#79e6ab';
   b.textContent=tx('Avaliação enviada ✓','Feedback sent ✓');
   setTimeout(()=>show(pilotReturn),1600);
