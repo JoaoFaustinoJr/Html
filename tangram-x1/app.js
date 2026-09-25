@@ -28,7 +28,7 @@ const setText=(sel,value)=>{const el=$(sel);if(el)el.textContent=value};
 function applyLanguage(){
  document.documentElement.lang=lang==='en'?'en':'pt-BR';
  const t=$('#langToggle');if(t){t.textContent=lang==='en'?'PT':'EN';t.title=lang==='en'?'Mudar para Português':'Switch to English'}
- document.title=tx('Tangram X1 — Arena','Tangram X1 — Arena');
+ document.title=tx('X1 – Arena Tangram','X1 – Tangram Arena');
  setText('.back',tx('← Tangram','← Tangram'));
  setText('.brand p',tx('Aprenda. Responda. Monte. Vença.','Learn. Answer. Build. Win.'));
  setText('.x1-new',tx('NOVO • TEMPO REAL','NEW • REAL TIME'));
@@ -54,7 +54,28 @@ function applyLanguage(){
  setText('#lesson .progress small',tx('Aula','Lesson'));setText('#lesson .kicker',tx('MATEMÁTICA • 9º ANO','MATHEMATICS • GRADE 9'));setText('#lesson h2',tx('Semelhança e proporcionalidade','Similarity and proportionality'));const rs=$('#lesson .rai-says p');if(rs)rs.innerHTML=tx('<b>Vamos por partes.</b> Figuras semelhantes mantêm a mesma forma, mesmo quando mudam de tamanho. O segredo é comparar ângulos correspondentes e a proporção entre os lados.','<b>Let’s go step by step.</b> Similar figures keep the same shape even when their size changes. The key is to compare corresponding angles and the proportion between sides.');const ex=$('#lesson .example');if(ex)ex.innerHTML=tx('<b>Exemplo</b><p>Se um lado de 3 cm passa a medir 6 cm, o fator de ampliação é 2. Os demais lados correspondentes também devem dobrar.</p>','<b>Example</b><p>If a 3 cm side becomes 6 cm, the scale factor is 2. The other corresponding sides must also double.</p>');setText('#lessonDone',tx('Entendi • ir para as questões','Got it • go to questions'));
  setText('#quiz .progress small',tx('Questões','Questions'));setText('#quiz .kicker',tx('QUESTÃO 1 DE 3','QUESTION 1 OF 3'));setText('#quiz h2',tx('Uma figura foi ampliada com fator 2. Um lado que media 4 cm passará a medir:','A figure was enlarged by a factor of 2. A side that measured 4 cm will measure:'));
  setText('#arena .progress small',tx('Arena','Arena'));setText('#results .section-head span',tx('RESULTADO','RESULT'));setText('#results .section-head h2',tx('Pódio da rodada','Round podium'));setText('#openPilotForm',tx('📝 Avaliar o piloto X1','📝 Rate the X1 pilot'));setText('#results [data-home]',tx('Voltar ao portal','Back to portal'));
- setText('#pilotForm .section-head span',tx('PILOTO X1 — ARENA TANGRAM','X1 PILOT — TANGRAM ARENA'));setText('#pilotForm .section-head h2',tx('Conte como foi a experiência','Tell us about your experience'));setText('.pilot-intro b',tx('Sua opinião ajuda a evoluir o projeto.','Your feedback helps improve the project.'));const pip=$('.pilot-intro p');if(pip)pip.textContent=tx('O formulário é curto e registra dados do piloto para aperfeiçoar o X1 e documentar seu impacto pedagógico.','This short form records pilot feedback to improve X1 and document its educational impact.');setText('#submitPilotForm',tx('Enviar avaliação','Submit feedback'));
+ setText('#pilotForm .section-head span',tx('PILOTO X1 — ARENA TANGRAM','X1 PILOT — TANGRAM ARENA'));setText('#pilotForm .section-head h2',tx('Conte como foi a experiência','Tell us about your experience'));setText('.pilot-intro b',tx('Sua opinião ajuda a melhorar o X1 – Arena Tangram.','Your feedback helps improve X1 – Tangram Arena.'));const pip=$('.pilot-intro p');if(pip)pip.textContent=tx('Responda pensando na experiência que você acabou de ter.','Answer based on the experience you just had.');
+ const pg=$('#pilotGrade')?.closest('label');if(pg)pg.childNodes[0].nodeValue=tx('Turma / ano','Grade / class');
+ const pd=$('#pilotDevice')?.closest('label');if(pd)pd.childNodes[0].nodeValue=tx('Dispositivo usado','Device used');
+ const ratingTexts={
+  access:tx('Foi fácil entrar e entender a dinâmica?','Was it easy to join and understand how the activity works?'),
+  visual:tx('O visual do X1 chamou sua atenção?','Did the X1 visual design catch your attention?'),
+  competition:tx('A competição deixou a atividade mais interessante?','Did competition make the activity more interesting?'),
+  learning:tx('Você percebeu valor para aprender ou revisar conteúdos?','Did you see value in using X1 to learn or review content?'),
+  concentration:tx('O X1 ajudou a manter atenção e concentração?','Did X1 help you stay focused and attentive?'),
+  again:tx('Você gostaria de jogar novamente?','Would you like to play again?')
+ };
+ $('.pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&ratingTexts[el.dataset.field])b.textContent=ratingTexts[el.dataset.field]});
+ const scoreLabel=$('#pilotScore')?.closest('label');if(scoreLabel)scoreLabel.childNodes[0].nodeValue=tx('Nota geral para o X1 – Arena Tangram','Overall rating for X1 – Tangram Arena');
+ const fav=$('#pilotFavorite')?.closest('label');if(fav)fav.childNodes[0].nodeValue=tx('O que você mais gostou?','What did you like most?');
+ const imp=$('#pilotImprove')?.closest('label');if(imp)imp.childNodes[0].nodeValue=tx('O que poderia melhorar?','What could be improved?');
+ if($('#pilotFavorite'))$('#pilotFavorite').placeholder=tx('Conte em poucas palavras...','Tell us in a few words...');
+ if($('#pilotImprove'))$('#pilotImprove').placeholder=tx('Sua sugestão...','Your suggestion...');
+ const legend=$('.pilot-future legend');if(legend)legend.textContent=tx('Que desafios você gostaria de ver no futuro?','What challenges would you like to see in the future?');
+ const flabels=$('.pilot-future label');const ftexts=lang==='en'?['More Tangram figures','Mosaics','Pairs or teams','Subject-based challenges','Championships','Level-based challenges']:['Mais figuras de Tangram','Mosaicos','Duplas ou equipes','Desafios por disciplinas','Campeonatos','Desafios por níveis'];flabels.forEach((l,i)=>{if(ftexts[i]){const input=l.querySelector('input');l.childNodes[l.childNodes.length-1].nodeValue=' '+ftexts[i];if(input)input.value=['Mais figuras de Tangram','Mosaicos','Equipes','Disciplinas','Campeonatos','Níveis'][i]}});
+ const gradeOpts=$('#pilotGrade')?.options;if(gradeOpts){const vals=lang==='en'?['Select','Grade 5','Grade 6','Grade 7','Grade 8','Grade 9','High School','Other']:['Selecione','5º ano','6º ano','7º ano','8º ano','9º ano','Ensino Médio','Outro'];[...gradeOpts].forEach((o,i)=>{if(vals[i])o.textContent=vals[i]})}
+ const deviceOpts=$('#pilotDevice')?.options;if(deviceOpts){const vals=lang==='en'?['Computer / laptop','Mobile phone','Tablet','Other']:['Computador / notebook','Celular','Tablet','Outro'];[...deviceOpts].forEach((o,i)=>{if(vals[i])o.textContent=vals[i]})}
+ setText('#submitPilotForm',tx('Enviar avaliação','Submit feedback'));
  updateSelectLabels();
  if(room.id&&$('#lobby').classList.contains('show'))openLobby();
 }
@@ -124,7 +145,7 @@ async function createGamerRoom(){
  try{
   const {data,error}=await sb.rpc('x1_create_gamer_room',{p_nickname:nickname,p_round_count:rounds,p_challenge:challenge});
   if(error)throw error;
-  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error('Sala não criada.');
+  const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error(tx('Sala não criada.','Room was not created.'));
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
@@ -175,7 +196,7 @@ async function renderPlayers(){
  const items=[];
  if(room.teacher)items.push({nickname:tx('Professor','Teacher'),role:'teacher',id:'host'});
  for(const p of players)items.push(p);
- $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><b>'+esc(p.nickname)+(p.id===room.playerId?' • você':'')+'</b><small>'+(p.role==='teacher'?'Professor • anfitrião':(p.id===room.playerId&&room.isHost)?'Anfitrião • pronto ✓':p.tangram_finished_at?'Concluiu 🏁':p.quiz_finished_at?'Etapa pedagógica ✓':'Pronto ✓')+'</small></div>').join('');
+ $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><b>'+esc(p.nickname)+(p.id===room.playerId?tx(' • você',' • you'):'')+'</b><small>'+(p.role==='teacher'?tx('Professor • anfitrião','Teacher • host'):(p.id===room.playerId&&room.isHost)?tx('Anfitrião • pronto ✓','Host • ready ✓'):p.tangram_finished_at?tx('Concluiu 🏁','Finished 🏁'):p.quiz_finished_at?tx('Etapa pedagógica ✓','Learning stage ✓'):tx('Pronto ✓','Ready ✓'))+'</small></div>').join('');
  $('#lobbyCount').textContent=items.length+' '+(items.length===1?tx('participante','participant'):tx('participantes','participants'))+tx(' na sala',' in the room');
 }
 async function openLobby(){
