@@ -129,3 +129,24 @@ body.x1-arena-full .arena-loader{position:absolute!important;inset:0!important;z
 /* X1 v1.4 — agradecimento do piloto */
 .pilot-thanks{margin-top:18px;padding:15px 16px;border-radius:16px;border:1px solid rgba(255,215,94,.20);background:linear-gradient(135deg,rgba(255,215,94,.06),rgba(54,214,238,.04));text-align:center}
 .pilot-thanks p{margin:0;color:#b9d6df;font-size:11px;line-height:1.55}.pilot-thanks strong{display:block;margin-top:8px;color:#ffe58a;font-size:12px}
+
+/* X1 v1.5 — navegação destacada para o Tangram Educativo */
+.main-project-link{display:flex!important;align-items:center;gap:10px;min-width:210px;padding:10px 14px!important;border:1px solid rgba(54,214,238,.58)!important;border-radius:999px!important;background:linear-gradient(135deg,rgba(10,34,48,.94),rgba(8,25,37,.90))!important;color:#effcff!important;text-decoration:none!important;box-shadow:0 0 0 1px rgba(54,214,238,.08) inset,0 0 24px rgba(54,214,238,.14);transition:.18s}
+.main-project-link:hover{transform:translateY(-1px);border-color:rgba(54,214,238,.82)!important;box-shadow:0 0 0 1px rgba(54,214,238,.11) inset,0 0 30px rgba(54,214,238,.20)}
+.main-project-arrow{font-size:24px;line-height:1;color:var(--cyan);font-weight:900;text-shadow:0 0 14px rgba(54,214,238,.35)}
+.main-project-copy{display:flex;flex-direction:column;line-height:1.08}.main-project-copy b{font-size:13px;letter-spacing:.01em}.main-project-copy small{margin-top:4px;color:#79b9ca;font-size:9px;font-weight:850;letter-spacing:.04em}
+.x1-parent-strip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin:0 0 14px;padding:11px 14px;border:1px solid rgba(54,214,238,.26);border-radius:15px;background:linear-gradient(90deg,rgba(54,214,238,.07),rgba(255,255,255,.025));color:#bcd7e0;text-decoration:none;font-size:12px;line-height:1.35;box-shadow:inset 0 0 0 1px rgba(54,214,238,.03)}
+.x1-parent-strip b{color:var(--cyan)}.x1-parent-info{color:var(--cyan);font-size:18px;line-height:1}.x1-parent-chevron{color:var(--cyan);font-size:23px;line-height:1;transition:.18s}.x1-parent-strip:hover .x1-parent-chevron{transform:translateX(2px)}
+@media(max-width:680px){
+ .hero{gap:10px!important}
+ .main-project-link{min-width:0;padding:9px 11px!important;gap:8px}
+ .main-project-copy b{font-size:12px}.main-project-copy small{font-size:8px}
+ .main-project-arrow{font-size:21px}
+ .x1-parent-strip{font-size:11px;margin-top:2px}
+}
+@media(max-width:470px){
+ .hero{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important}
+ .main-project-link{grid-column:1/2;grid-row:1/2}
+ .brand{grid-column:1/-1;grid-row:2/3}
+ .header-actions{grid-column:2/3;grid-row:1/2}
+}
