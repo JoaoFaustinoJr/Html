@@ -75,6 +75,25 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
  .portal-actions{position:fixed!important;bottom:max(10px,env(safe-area-inset-bottom))!important}
  .love-hotspot{left:44%;top:29%;width:16%;height:10%}
 }
+
+/* Refinamento mobile v7: interface limpa e amigável */
+@media(max-width:520px){
+ .portal-cover{padding:10px 12px 96px!important}
+ .portal-head{padding:12px 14px!important;border-radius:22px!important;gap:10px}
+ .portal-brand{min-width:0;flex:0 0 44%}.portal-brand strong{font-size:25px!important}.portal-brand span{font-size:9px!important;line-height:1.15;text-align:center;padding:5px 8px!important}
+ .portal-person{flex:1;font-size:9px!important;line-height:1.2}.portal-person strong{font-size:10px!important}.portal-person button{font-size:10px}
+ .portal-hero{margin:12px -12px 10px!important;border-radius:0;aspect-ratio:1.42/1;background:#f7fcff}
+ .portal-hero img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+ .portal-hero-copy{display:none!important}
+ .portal-choices{gap:8px!important;margin-top:8px!important}
+ .portal-choice{min-height:218px!important;border-radius:22px!important;padding:14px 12px!important}
+ .portal-choice .icons{font-size:18px!important;letter-spacing:-2px}.portal-choice h2{font-size:25px!important}.portal-choice.young h2 b{font-size:24px!important}
+ .portal-choice p{font-size:11px!important;margin-bottom:12px!important}.portal-choice .enter{font-size:11px!important;padding:10px 8px!important}
+ .portal-traits{gap:4px!important;margin:10px 0!important}.portal-traits span{font-size:8px!important;padding:7px 1px!important}
+ .portal-motto{font-size:13px!important;margin:10px 0 0!important;padding-bottom:40px}
+ .portal-actions{bottom:max(8px,env(safe-area-inset-bottom))!important}
+ .love-hotspot{display:none}
+}
 </style>
 </head>
 <body>
