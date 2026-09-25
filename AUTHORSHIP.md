@@ -2,7 +2,7 @@
 
 © 2022–2026 João Faustino Júnior.
 
-Este repositório reúne aplicativos educacionais e projetos digitais concebidos, dirigidos e evoluídos por **Prof. João Faustino Júnior**, incluindo **Tangram Educativo**, **Maker Quest** e a família de aplicativos **Tia Tati**.
+Este repositório reúne aplicativos educacionais e projetos digitais concebidos, dirigidos e evoluídos por **Prof. João Faustino Júnior**, incluindo **Tangram Educativo**, **X1 – Arena Tangram**, **Maker Quest** e a família de aplicativos **Tia Tati**.
 
 ## Contribuição autoral
 
@@ -28,5 +28,9 @@ O código-fonte deste repositório é distribuído sob a licença **MIT**, confo
 ## Forma recomendada de crédito
 
 > Concepção, direção do produto, arquitetura da experiência, curadoria de conteúdo, testes, validação e evolução: Prof. João Faustino Júnior.
+
+## X1 – Arena Tangram
+
+**X1 – Arena Tangram** é uma extensão competitiva e em tempo real do Tangram Educativo. Sua concepção pedagógica e de produto, direção, arquitetura da experiência, definição das funcionalidades, integração com a R.A.I., testes, validação e evolução integram a autoria de **Prof. João Faustino Júnior**.
 
 Repositório oficial: `JoaoFaustinoJr/Html`.
