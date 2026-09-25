@@ -425,7 +425,7 @@ $('#rematch').addEventListener('click',async()=>{
 const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
 let pilotReturn='home';
 function buildPilotScales(){
- $('.pilot-rating').forEach(block=>{
+ $$('.pilot-rating').forEach(block=>{
   const field=block.dataset.field,scale=block.querySelector('.scale');if(!field||!scale)return;
   scale.innerHTML='';
   for(let i=1;i<=5;i++){
@@ -455,7 +455,7 @@ $('#submitPilotForm')?.addEventListener('click',async()=>{
  const b=$('#submitPilotForm');b.disabled=true;b.textContent=tx('Enviando…','Sending…');
  $('#pilotStatus').textContent='';$('#pilotStatus').style.color='';
  try{
-  const future=$('.pilot-future input:checked').map(x=>x.value);
+  const future=$$('.pilot-future input:checked').map(x=>x.value);
   const args={
    p_room_id:room.id||null,
    p_room_code:room.code||null,
