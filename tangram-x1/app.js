@@ -13,7 +13,7 @@ let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
 
-const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
+const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setJoinStatus=(t,bad=false)=>{const el=$('#joinStatus');if(el){el.textContent=t;el.style.color=bad?'#ff9cab':''}};
 const fmtDurationMs=ms=>{if(!Number.isFinite(ms)||ms<0)return'—';const s=ms/1000,m=Math.floor(s/60),sec=s-m*60;return String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0')};
@@ -263,6 +263,7 @@ function wireArenaFrame(frame,token){
    const root=doc.getElementById('tangram-levels'),msg=doc.getElementById('msg');
    if(!root||!msg){if(tries<50)setTimeout(attempt,180);return}
    styleArenaDocument(doc);
+   try{doc.documentElement.classList.add('x1-embed');doc.body.classList.add('x1-embed')}catch(e){}
    const bridge=win.__raiTangramBonusBridge;
    if(bridge?.open){
     bridge.open(arenaChallengeIndex());
@@ -294,7 +295,7 @@ async function prepareTangramArena(){
  loader.innerHTML='<div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>Motor oficial do Tangram Educativo.</small>';
  const token=++arenaLoadToken;
  frame.onload=()=>wireArenaFrame(frame,token);
- frame.src='../tangram-prof-junior-v12/?x1=1&round='+(room.currentRound||1)+'&t='+(Date.now());
+ frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&round='+(room.currentRound||1)+'&t='+(Date.now());
 }
 
 async function onTangramComplete(message){
