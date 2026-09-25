@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <div class="header-actions"><button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">EN</button><span class="badge">REALTIME • v1.3</span></div>
+    <div class="header-actions"><button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">EN</button><span class="badge">REALTIME • v1.4</span></div>
   </header>
 
   <section id="home" class="view show">
@@ -320,10 +320,14 @@
 
       <button class="primary big" id="submitPilotForm">Enviar avaliação</button>
       <p id="pilotStatus" class="server-note"></p>
+      <div class="pilot-thanks">
+        <p id="pilotThanksText">Obrigado por contribuir com o desenvolvimento do X1 – Arena Tangram. Seu feedback é muito importante para aprimorar esta experiência educativa.</p>
+        <strong id="pilotThanksSign">Professor João Faustino Júnior</strong>
+      </div>
     </div>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
 </body>
 </html>
