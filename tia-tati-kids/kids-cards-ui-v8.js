@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__TIA_TATI_KIDS_CARDS_UI_V29__)return;
-window.__TIA_TATI_KIDS_CARDS_UI_V29__=true;
+if(window.__TIA_TATI_KIDS_CARDS_UI_V30__)return;
+window.__TIA_TATI_KIDS_CARDS_UI_V30__=true;
 const CARDS=[
  {id:'reward-espelho-v24',title:'Você é especial!',subtitle:'Espelho Mágico',image:'assets/cards/reward-v29-espelho.svg'},
  {id:'reward-abelha-v24',title:'Você consegue!',subtitle:'Abelhinha',image:'assets/cards/reward-v29-abelha.svg'},
@@ -56,7 +56,7 @@ window.TiaTatiKidsCardsData=CARDS;
 function normalizeBrand(){const a=q('.brand small');if(a)a.textContent='Fisio Sensório-Motora';const b=q('.home-v22-pill');if(b)b.textContent='FISIO SENSÓRIO-MOTORA';const c=q('.home-v22-footer-phrase small');if(c)c.textContent='Tia Tati • Fisio Sensório-Motora';document.title='Tia Tati – Fisio Sensório-Motora';}
 function fixHeaderImages(){qa('img[src*="assets/welcome.webp"]').forEach(img=>img.src='assets/cards/boas-vindas-v2.webp?v=8');}
 function preload(){[...new Set(CARDS.map(c=>c.image||c.sprite))].forEach(src=>{const i=new Image();i.src=src+'?v=8';});}
-function artMarkup(c){if(c.crop){const [x,y,w,h]=c.crop;return `<span class="tati-card-art"><span style="display:block;width:100%;height:100%;overflow:hidden;position:relative;background:#fff"><img class="tati-sprite-img" src="${c.image}?v=29" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:cover;object-position:center"></span></span>`;}if(c.image)return `<span class="tati-card-art${c.sheet?' tati-sheet-art':''}"><img class="tati-sprite-img" src="${c.image}?v=29" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:${c.sheet?'contain':'cover'};object-position:center"></span>`;const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=8" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;}
+function artMarkup(c){if(c.image)return `<span class="tati-card-art${c.sheet?' tati-sheet-art':''}"><img class="tati-sprite-img" src="${c.image}?v=30" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="width:100%;height:100%;object-fit:${c.sheet?'contain':'cover'};object-position:center"></span>`;const shift=c.side?'-50%':'0%';return `<span class="tati-card-art"><img class="tati-sprite-img" src="${c.sprite}?v=30" alt="${c.title}" decoding="async" loading="eager" draggable="false" style="--tati-shift:${shift}"></span>`;}
 function cardMarkup(c){const direct=c.sheet;return `<article class="tati-card tati-sticker-card" data-tati-card="${c.id}"><button class="tati-sticker-preview-btn" type="button" data-preview="${c.id}" aria-label="Ver figurinha ${c.title}" ${direct?`data-direct-image="${c.image}?v=29"`:`data-preview="${c.id}"`}>${artMarkup(c)}</button><strong class="tati-sticker-title">${c.title}</strong><small class="tati-sticker-subtitle">${c.subtitle}</small><button class="tati-sticker-download" type="button" data-sticker="${c.id}">⬇️ Baixar figurinha</button></article>`;}
 function buildSection(){
  const home=q('#screen-home'),head=q('.home-v22-section-head.compact',home),grid=q('.home-v22-cards',home);if(!home||!head||!grid)return false;
@@ -64,7 +64,7 @@ function buildSection(){
  head.classList.add('tati-cards-head','is-collapsed');
  head.innerHTML=`<div><h2>Cards da Tia Tati</h2><p>Figurinhas fofas para acolher, incentivar e celebrar.</p></div><button class="tati-cards-toggle" type="button" aria-expanded="false">Expandir ↓</button>`;
  grid.className='home-v22-cards tati-cards-grid';grid.innerHTML=CARDS.map(cardMarkup).join('');grid.hidden=true;
- grid.querySelectorAll('.tati-sprite-img').forEach(img=>{img.addEventListener('error',()=>{img.classList.add('tati-img-error');img.alt='Imagem temporariamente indisponível';});});
+ grid.querySelectorAll('.tati-sprite-img').forEach(img=>{img.addEventListener('error',()=>{const card=img.closest('[data-tati-card]'),id=card?.dataset.tatiCard||'',fallback=id.startsWith('reward-')?'assets/cards/tia-tati-rewards-v23.webp?v=30':'';if(fallback&&!img.dataset.fallback){img.dataset.fallback='1';img.src=fallback;img.style.objectFit='contain';return;}img.classList.add('tati-img-error');img.alt='Imagem temporariamente indisponível';});});
  const toggle=head.querySelector('.tati-cards-toggle');
  const setExpanded=expanded=>{grid.hidden=!expanded;head.classList.toggle('is-collapsed',!expanded);toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'Recolher ↑':'Expandir ↓';};
  toggle.onclick=()=>setExpanded(toggle.getAttribute('aria-expanded')!=='true');
