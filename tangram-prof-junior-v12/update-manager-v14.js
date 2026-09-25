@@ -82,9 +82,9 @@
   }
   if(!document.getElementById('raiX1Launch')){
    const m=document.createElement('div');m.id='raiX1Launch';m.className='rai-x1-launch';m.innerHTML='<div class="rai-x1-launch-card" role="dialog" aria-modal="true" aria-label="Piloto Tangram X1 Arena"><button class="rai-x1-launch-close" type="button" aria-label="Fechar">×</button><img class="rai-x1-launch-rai" src="rai-icon.svg?v=rai3" alt="R.A.I."><h2><b>PILOTO</b> • Tangram X1</h2><p>Estamos testando a Arena em tempo real com alunos e professores. Entre, jogue e ajude a aperfeiçoar esta nova experiência.</p><div class="rai-x1-launch-modes"><div class="g"><b>⚡ Partidas ao vivo</b>Salas por código, rodadas e ranking em tempo real.</div><div class="p"><b>🧪 Fase piloto</b>Sua experiência ajuda a identificar melhorias antes da versão definitiva.</div></div><div class="rai-x1-launch-actions"><button class="go" type="button">Participar do piloto</button><button class="later" type="button">Agora não</button></div></div>';
-   let autoClose=setTimeout(()=>close(),5000);const close=()=>{clearTimeout(autoClose);m.classList.remove('show');setTimeout(()=>m.remove(),240)};
+   let autoClose=setTimeout(()=>close(),9000);const close=()=>{clearTimeout(autoClose);m.classList.remove('show');setTimeout(()=>m.remove(),240)};
    m.querySelector('.go').addEventListener('click',()=>{x1Open();close()});m.querySelector('.later').addEventListener('click',close);m.querySelector('.rai-x1-launch-close').addEventListener('click',close);m.addEventListener('click',e=>{if(e.target===m)close()});
-   document.body.appendChild(m);setTimeout(()=>m.classList.add('show'),850);
+   document.body.appendChild(m);Object.assign(m.style,{position:'fixed',inset:'0',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px',boxSizing:'border-box',zIndex:'2147483000'});const mc=m.querySelector('.rai-x1-launch-card');if(mc)Object.assign(mc.style,{margin:'0 auto',maxHeight:'calc(100dvh - 32px)',overflowY:'auto',transformOrigin:'center center'});setTimeout(()=>m.classList.add('show'),650);
   }
  }
  function wireX1Portal(){
