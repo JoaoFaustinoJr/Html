@@ -263,10 +263,10 @@ async function updateRaceFeed(){
  const feed=$('#raceFeed');if(!feed||!room.id)return;
  try{
   const players=await fetchPlayers(),done=players.filter(p=>p.tangram_finished_at);
-  if(!players.length){feed.innerHTML='<span>🏁 Aguardando jogadores.</span>';return}
-  if(!done.length){feed.innerHTML='<span>🏁 Todos receberam o mesmo desafio.</span><strong>0/'+players.length+' concluíram</strong>';return}
+  if(!players.length){feed.innerHTML='<span>'+tx('🏁 Aguardando jogadores.','🏁 Waiting for players.')+'</span>';return}
+  if(!done.length){feed.innerHTML='<span>'+tx('🏁 Todos receberam o mesmo desafio.','🏁 Everyone received the same challenge.')+'</span><strong>0/'+players.length+' '+tx('concluíram','finished')+'</strong>';return}
   const last=done.sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at)).at(-1);
-  feed.innerHTML='<span>🏁 '+esc(last.nickname)+' concluiu.</span><strong>'+done.length+'/'+players.length+' concluíram</strong>';
+  feed.innerHTML='<span>🏁 '+esc(last.nickname)+' '+tx('concluiu.','finished.')+'</span><strong>'+done.length+'/'+players.length+' '+tx('concluíram','finished')+'</strong>';
  }catch(e){}
 }
 
@@ -325,10 +325,10 @@ function wireArenaFrame(frame,token){
    stopArenaObserver();
    arenaObserver=new MutationObserver(()=>{
     const text=(msg.textContent||'').replace(/\s+/g,' ').trim();
-    if(/miss[aã]o conclu[ií]da/i.test(text))onTangramComplete(text);
+    if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text))onTangramComplete(text);
    });
    arenaObserver.observe(msg,{subtree:true,childList:true,characterData:true});
-  }catch(e){if(tries<50)setTimeout(attempt,180);else{$('#arenaLoader').innerHTML='<b>Não foi possível abrir o motor do Tangram.</b><small>Recarregue a página e tente novamente.</small>'}}
+  }catch(e){if(tries<50)setTimeout(attempt,180);else{$('#arenaLoader').innerHTML='<b>'+tx('Não foi possível abrir o motor do Tangram.','Could not open the Tangram engine.')+'</b><small>'+tx('Recarregue a página e tente novamente.','Reload the page and try again.')+'</small>'}}
  };
  attempt();
 }
@@ -337,11 +337,11 @@ async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole');
  stopArenaObserver();arenaFinished=false;
  if(room.teacher){
-  frame.style.display='none';loader.hidden=true;spectator.hidden=false;role.textContent='Professor • acompanhamento';
+  frame.style.display='none';loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');
   await updateRaceFeed();return;
  }
- spectator.hidden=true;loader.hidden=false;frame.style.display='none';role.textContent=(room.nickname||'Jogador')+' • competidor';
- loader.innerHTML='<div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>Motor oficial do Tangram Educativo.</small>';
+ spectator.hidden=true;loader.hidden=false;frame.style.display='none';role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
+ loader.innerHTML='<div class="spinner"></div><b>'+tx('Preparando o mesmo desafio para todos…','Preparing the same challenge for everyone…')+'</b><small>'+tx('Motor oficial do Tangram Educativo.','Official Tangram Educativo engine.')+'</small>';
  const token=++arenaLoadToken;
  frame.onload=()=>wireArenaFrame(frame,token);
  frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&lang='+lang+'&round='+(room.currentRound||1)+'&t='+(Date.now());
@@ -349,15 +349,15 @@ async function prepareTangramArena(){
 
 async function onTangramComplete(message){
  if(arenaFinished||room.teacher)return;arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
- $('#raceFeed').innerHTML='<span>🏁 Encaixe correto! Registrando sua chegada…</span>';
+ $('#raceFeed').innerHTML='<span>'+tx('🏁 Encaixe correto! Registrando sua chegada…','🏁 Correct fit! Recording your finish…')+'</span>';
  try{
   if(room.playerId&&room.playerToken){
    const {data,error}=await sb.rpc('x1_finish_tangram',{p_player_id:room.playerId,p_player_token:room.playerToken});
-   if(error)throw error;if(!data)throw new Error('Resultado não registrado.');
+   if(error)throw error;if(!data)throw new Error(tx('Resultado não registrado.','Result was not recorded.'));
   }
   await updateRaceFeed();
   setTimeout(()=>renderResults(),700);
- }catch(e){arenaFinished=false;$('#raceFeed').textContent='Não foi possível registrar o resultado: '+(e.message||e)}
+ }catch(e){arenaFinished=false;$('#raceFeed').textContent=tx('Não foi possível registrar o resultado: ','Could not record the result: ')+(e.message||e)}
 }
 
 async function startArena(){
@@ -370,8 +370,8 @@ async function startArena(){
   const s=(performance.now()-startedAt)/1000,m=Math.floor(s/60),sec=s-m*60;
   $('#timer').textContent=String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0');
  },100);
- const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent='Figura: '+arenaChallengeLabel();
- $('#raceFeed').innerHTML='<span>🏁 Todos receberam o mesmo desafio no Modo Gamer.</span>';
+ const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent=tx('Figura: ','Figure: ')+arenaChallengeLabel();
+ $('#raceFeed').innerHTML='<span>'+tx('🏁 Todos receberam o mesmo desafio no Modo Gamer.','🏁 Everyone received the same challenge in Gamer Mode.')+'</span>';
  await prepareTangramArena();
 }
 
@@ -390,36 +390,36 @@ async function renderResults(){
   const el=$(s.sel),p=top[s.rank];if(!el)continue;
   el.querySelector('b').textContent=s.label;
   el.querySelector('span').textContent=p?p.nickname:'—';
-  el.querySelector('small').textContent=p?elapsedFromArenaStart(p.tangram_finished_at):'aguardando';
+  el.querySelector('small').textContent=p?elapsedFromArenaStart(p.tangram_finished_at):tx('aguardando','waiting');
  }
  const me=room.teacher?null:players.find(p=>p.id===room.playerId);
  const pedagogico=room.mode==='pedagogico';
- $('#metricPrecisionLabel').textContent=pedagogico?'Precisão':'Modo';
- $('#metricErrorsLabel').textContent=pedagogico?'Erros pedagógicos':'Posição';
+ $('#metricPrecisionLabel').textContent=pedagogico?tx('Precisão','Accuracy'):tx('Modo','Mode');
+ $('#metricErrorsLabel').textContent=pedagogico?tx('Erros pedagógicos','Learning errors'):tx('Posição','Position');
  if(pedagogico){
   const correct=me?.quiz_correct??0,wrong=me?.quiz_wrong??0,total=correct+wrong;
-  $('#metricPrecision').textContent=me?(correct+'/'+Math.max(1,total)+' respostas'):'Visão do professor';
+  $('#metricPrecision').textContent=me?(correct+'/'+Math.max(1,total)+' '+tx('respostas','answers')):tx('Visão do professor','Teacher view');
   $('#metricErrors').textContent=me?String(wrong):'—';
  }else{
   $('#metricPrecision').textContent='Gamer';
   const pos=me?ranked.findIndex(p=>p.id===me.id)+1:0;
-  $('#metricErrors').textContent=pos>0?(pos+'º lugar'):'—';
+  $('#metricErrors').textContent=pos>0?(pos+tx('º lugar',' place')):'—';
  }
  $('#totalTime').textContent=me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—');
  const rematch=$('#rematch');
- if(room.isHost){rematch.disabled=false;rematch.textContent='Revanche • nova rodada'}
- else{rematch.disabled=true;rematch.textContent='Aguardando revanche do anfitrião'}
+ if(room.isHost){rematch.disabled=false;rematch.textContent=tx('Revanche • nova rodada','Rematch • new round')}
+ else{rematch.disabled=true;rematch.textContent=tx('Aguardando revanche do anfitrião','Waiting for host rematch')}
  show('results');
 }
 $('#rematch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken)return;
- const b=$('#rematch');b.disabled=true;b.textContent='Preparando nova rodada…';
+ const b=$('#rematch');b.disabled=true;b.textContent=tx('Preparando nova rodada…','Preparing new round…');
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
-  if(error)throw error;if(!data)throw new Error('Não foi possível reiniciar a sala.');
+  if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
   quizWrong=0;resetArenaFrame();await fetchRoom();await openLobby();
  }catch(e){alert(e.message||e)}
- finally{b.disabled=false;b.textContent='Revanche • nova rodada'}
+ finally{b.disabled=false;b.textContent=tx('Revanche • nova rodada','Rematch • new round')}
 });
 
 const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
@@ -434,7 +434,7 @@ function buildPilotScales(){
    b.addEventListener('click',()=>{pilotRatings[field]=i;scale.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b))});
    scale.appendChild(b);
   }
-  const labels=document.createElement('div');labels.className='scale-labels';labels.innerHTML='<span>1 • pouco</span><span>5 • muito</span>';scale.after(labels);
+  const labels=document.createElement('div');labels.className='scale-labels';labels.innerHTML='<span>'+tx('1 • pouco','1 • low')+'</span><span>'+tx('5 • muito','5 • high')+'</span>';scale.after(labels);
  });
 }
 function openPilotForm(){
@@ -451,8 +451,8 @@ $('#pilotScore')?.addEventListener('input',e=>{$('#pilotScoreValue').textContent
 
 $('#submitPilotForm')?.addEventListener('click',async()=>{
  const grade=$('#pilotGrade').value;
- if(!grade){$('#pilotStatus').textContent='Selecione sua turma ou ano.';$('#pilotStatus').style.color='#ff9cab';return}
- const b=$('#submitPilotForm');b.disabled=true;b.textContent='Enviando…';
+ if(!grade){$('#pilotStatus').textContent=tx('Selecione sua turma ou ano.','Select your grade or class.');$('#pilotStatus').style.color='#ff9cab';return}
+ const b=$('#submitPilotForm');b.disabled=true;b.textContent=tx('Enviando…','Sending…');
  $('#pilotStatus').textContent='';$('#pilotStatus').style.color='';
  try{
   const future=$('.pilot-future input:checked').map(x=>x.value);
@@ -478,14 +478,14 @@ $('#submitPilotForm')?.addEventListener('click',async()=>{
   const {data,error}=await sb.rpc('x1_submit_pilot_feedback',args);
   if(error)throw error;
   localStorage.setItem('x1PilotFeedbackLast',JSON.stringify({id:data,at:Date.now()}));
-  $('#pilotStatus').textContent='✓ Obrigado! Sua avaliação foi registrada no piloto X1 — Arena Tangram.';
+  $('#pilotStatus').textContent=tx('✓ Obrigado! Sua avaliação foi registrada no piloto X1 — Arena Tangram.','✓ Thank you! Your feedback was recorded for the X1 — Tangram Arena pilot.');
   $('#pilotStatus').style.color='#79e6ab';
-  b.textContent='Avaliação enviada ✓';
+  b.textContent=tx('Avaliação enviada ✓','Feedback sent ✓');
   setTimeout(()=>show(pilotReturn),1600);
  }catch(e){
-  $('#pilotStatus').textContent='Não foi possível enviar agora: '+(e.message||e);
+  $('#pilotStatus').textContent=tx('Não foi possível enviar agora: ','Could not send now: ')+(e.message||e);
   $('#pilotStatus').style.color='#ff9cab';
-  b.disabled=false;b.textContent='Enviar avaliação';
+  b.disabled=false;b.textContent=tx('Enviar avaliação','Submit feedback');
  }
 });
 
