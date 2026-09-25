@@ -3,7 +3,7 @@
 
 const SUPABASE_URL='https://hfryzntefzjlqitpxbxw.supabase.co';
 const SUPABASE_KEY='sb_publishable_WmUv7bOqiavIoXYdtKBZKg__hpnqaZq';
-const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{params:{eventsPerSecond:10}}});
+const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{params:{eventsPerSecond:30}}});
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const views=$$('.view');
@@ -14,7 +14,7 @@ const CHALLENGES_EN={0:'Challenge 1',1:'Challenge 2',2:'Challenge 3',3:'Challeng
 let lang=localStorage.getItem('tangramX1Lang')==='en'?'en':'pt';
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
-let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0;
+let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null;
 
 const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -195,7 +195,7 @@ async function fetchRoom(){
  if(!sb||!room.id)return null;
  const {data,error}=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at').eq('id',room.id).maybeSingle();
  if(error)throw error;
- if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status;room.currentRound=data.current_round||1;room.challenge=data.challenge||'casa';room.startedAt=data.started_at||null}
+ if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status;room.currentRound=data.current_round||1;room.roundCount=data.round_count||1;room.questionCount=data.question_count||3;room.challenge=data.challenge||'random';room.startedAt=data.started_at||null}
  return data;
 }
 async function fetchPlayers(){
@@ -209,7 +209,8 @@ async function renderPlayers(){
  const items=[];
  if(room.teacher)items.push({nickname:tx('Professor','Teacher'),role:'teacher',id:'host'});
  for(const p of players)items.push(p);
- $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><b>'+esc(p.nickname)+(p.id===room.playerId?tx(' • você',' • you'):'')+'</b><small>'+(p.role==='teacher'?tx('Professor • anfitrião','Teacher • host'):(p.id===room.playerId&&room.isHost)?tx('Anfitrião • pronto ✓','Host • ready ✓'):p.tangram_finished_at?tx('Concluiu 🏁','Finished 🏁'):p.quiz_finished_at?tx('Etapa pedagógica ✓','Learning stage ✓'):tx('Pronto ✓','Ready ✓'))+'</small></div>').join('');
+ $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><div><b>'+esc(p.nickname)+(p.id===room.playerId?tx(' • você',' • you'):'')+'</b><small>'+(p.role==='teacher'?tx('Professor • anfitrião','Teacher • host'):(p.id===room.playerId&&room.isHost)?tx('Anfitrião • pronto ✓','Host • ready ✓'):p.tangram_finished_at?tx('Concluiu 🏁','Finished 🏁'):p.quiz_finished_at?tx('Etapa pedagógica ✓','Learning stage ✓'):tx('Pronto ✓','Ready ✓'))+'</small></div>'+(room.isHost&&p.id!=='host'&&p.id!==room.playerId?'<button class="kick-player" data-kick="'+p.id+'" title="'+tx('Retirar da sala','Remove from room')+'">✕</button>':'')+'</div>').join('');
+ $('.kick-player').forEach(b=>b.addEventListener('click',()=>removePlayer(b.dataset.kick)));
  $('#lobbyCount').textContent=items.length+' '+(items.length===1?tx('participante','participant'):tx('participantes','participants'))+tx(' na sala',' in the room');
 }
 async function openLobby(){
@@ -224,6 +225,13 @@ async function openLobby(){
  await renderPlayers();
  show('lobby');
 }
+async function removePlayer(playerId){
+ if(!room.isHost||!room.hostToken||!playerId)return;
+ if(!confirm(tx('Retirar este participante da sala?','Remove this participant from the room?')))return;
+ try{const {data,error}=await sb.rpc('x1_remove_player',{p_code:room.code,p_host_token:room.hostToken,p_player_id:playerId});if(error)throw error;if(!data)throw new Error(tx('Não foi possível retirar o participante.','Could not remove participant.'));await renderPlayers()}catch(e){alert(e.message||e)}
+}
+function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshTimer=setTimeout(async()=>{await renderPlayers();if($('#arena').classList.contains('show'))await updateRaceFeed();if($('#results').classList.contains('show'))await renderResults()},180)}
+
 async function subscribeRoom(){
  disconnectSubscriptions();
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
@@ -233,7 +241,7 @@ async function subscribeRoom(){
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
-  .on('postgres_changes',{event:'*',schema:'public',table:'x1_players',filter:playerFilter},()=>{renderPlayers();updateRaceFeed();if($('#results').classList.contains('show'))renderResults()})
+  .on('postgres_changes',{event:'*',schema:'public',table:'x1_players',filter:playerFilter},payload=>{if(payload.eventType==='DELETE'&&payload.old?.id===room.playerId){alert(tx('O anfitrião retirou você desta sala.','The host removed you from this room.'));disconnectRoom();sessionStorage.removeItem('tangramX1Player');show('home');return}schedulePlayerRefresh()})
   .subscribe();
 }
 function disconnectSubscriptions(){
@@ -242,7 +250,7 @@ function disconnectSubscriptions(){
 }
 function stopArenaObserver(){try{arenaObserver?.disconnect()}catch(e){}arenaObserver=null}
 function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank'}catch(e){}}}
-function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);countdownBusy=false;resetArenaFrame()}
+function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);clearTimeout(playerRefreshTimer);countdownBusy=false;resetArenaFrame()}
 
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
 
@@ -276,7 +284,7 @@ function applyRoomState(status){
  room.status=status;
  if(status==='lobby'){openLobby();return}
  if(status==='countdown'){runCountdown(false);return}
- if(status==='lesson'){if(room.mode==='pedagogico')show('lesson');else startArena();return}
+ if(status==='lesson'){if(room.mode==='pedagogico'){if(room.teacher){startArena()}else show('lesson')}else startArena();return}
  if(status==='quiz'){if(room.mode==='pedagogico')show('quiz');return}
  if(status==='playing'){startArena();return}
  if(status==='results'){renderResults();return}
@@ -404,7 +412,7 @@ async function startArena(){
   const s=(performance.now()-startedAt)/1000,m=Math.floor(s/60),sec=s-m*60;
   $('#timer').textContent=String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0');
  },100);
- const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent=tx('Figura: ','Figure: ')+arenaChallengeLabel();
+ const roundLabel=document.querySelector('#arena .arena-head span');if(roundLabel)roundLabel.textContent='⚔️ '+tx('RODADA ','ROUND ')+(room.currentRound||1)+'/'+(room.roundCount||1);const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent=tx('Figura: ','Figure: ')+arenaChallengeLabel();
  $('#raceFeed').innerHTML='<span>'+tx('🏁 Todos receberam o mesmo desafio no Modo Gamer.','🏁 Everyone received the same challenge in Gamer Mode.')+'</span>';
  await prepareTangramArena();
 }
@@ -441,7 +449,7 @@ async function renderResults(){
  }
  $('#totalTime').textContent=me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—');
  const rematch=$('#rematch');
- if(room.isHost){rematch.disabled=false;rematch.textContent=tx('Revanche • nova rodada','Rematch • new round')}
+ if(room.isHost){rematch.disabled=false;rematch.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada • ','Next round • ')+(Number(room.currentRound||1)+1)+'/'+(room.roundCount||1):tx('Revanche • reiniciar partida','Rematch • restart match')}
  else{rematch.disabled=true;rematch.textContent=tx('Aguardando revanche do anfitrião','Waiting for host rematch')}
  show('results');
 }
@@ -453,7 +461,7 @@ $('#rematch').addEventListener('click',async()=>{
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
   quizWrong=0;resetArenaFrame();await fetchRoom();await openLobby();
  }catch(e){alert(e.message||e)}
- finally{b.disabled=false;b.textContent=tx('Revanche • nova rodada','Rematch • new round')}
+ finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
 });
 
 const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
