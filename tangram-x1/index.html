@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 <main class="shell">
@@ -16,7 +16,7 @@
       <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
       <div><span class="eyebrow">TANGRAM X1</span><h1>ARENA</h1><p>Aprenda. Responda. Monte. Vença.</p></div>
     </div>
-    <div class="header-actions"><button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">EN</button><span class="badge">REALTIME • v1.2</span></div>
+    <div class="header-actions"><button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">EN</button><span class="badge">REALTIME • v1.3</span></div>
   </header>
 
   <section id="home" class="view show">
@@ -224,18 +224,24 @@
         <div><b>Sua opinião ajuda a melhorar o X1 – Arena Tangram.</b><p>Responda pensando na experiência que você acabou de ter.</p></div>
       </div>
 
-      <div class="pilot-grid">
-        <label>Turma / ano
-          <select id="pilotGrade">
-            <option value="">Selecione</option><option>5º ano</option><option>6º ano</option><option>7º ano</option><option>8º ano</option><option>9º ano</option><option>Ensino Médio</option><option>Outro</option>
-          </select>
-        </label>
-        <label>Dispositivo usado
-          <select id="pilotDevice"><option>Computador / notebook</option><option>Celular</option><option>Tablet</option><option>Outro</option></select>
-        </label>
+      <div class="pilot-role-picker" role="group" aria-label="Tipo de participante">
+        <button type="button" class="active" data-pilot-role="student">🎮 Estudante</button>
+        <button type="button" data-pilot-role="teacher">🎓 Professor / observador</button>
       </div>
 
-      <div class="pilot-ratings">
+      <div id="pilotStudentFields">
+        <div class="pilot-grid">
+          <label>Turma / ano
+            <select id="pilotGrade">
+              <option value="">Selecione</option><option>5º ano</option><option>6º ano</option><option>7º ano</option><option>8º ano</option><option>9º ano</option><option>Ensino Médio</option><option>Outro</option>
+            </select>
+          </label>
+          <label>Dispositivo usado
+            <select id="pilotDevice"><option>Computador / notebook</option><option>Celular</option><option>Tablet</option><option>Outro</option></select>
+          </label>
+        </div>
+
+        <div class="pilot-ratings">
         <div class="pilot-rating" data-field="access"><b>Foi fácil entrar e entender a dinâmica?</b><div class="scale"></div></div>
         <div class="pilot-rating" data-field="visual"><b>O visual do X1 chamou sua atenção?</b><div class="scale"></div></div>
         <div class="pilot-rating" data-field="competition"><b>A competição deixou a atividade mais interessante?</b><div class="scale"></div></div>
@@ -265,6 +271,52 @@
         <label><input type="checkbox" value="Campeonatos"> Campeonatos</label>
         <label><input type="checkbox" value="Níveis"> Desafios por níveis</label>
       </fieldset>
+      </div>
+
+      <div id="pilotTeacherFields" hidden>
+        <div class="teacher-prospective-note">
+          <b>Percepção docente prospectiva</b>
+          <p>Após conhecer a proposta e observar o X1 – Arena Tangram, avalie o potencial pedagógico que você percebe para o recurso.</p>
+        </div>
+        <div class="pilot-ratings teacher-ratings">
+          <div class="pilot-rating" data-teacher-field="engagement"><b>O X1 tem potencial para aumentar o engajamento dos estudantes?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="reasoning"><b>A dinâmica pode favorecer raciocínio lógico e resolução de problemas?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="attention"><b>A competição em tempo real pode contribuir para atenção e concentração?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="review"><b>O formato pode favorecer a revisão de conteúdos escolares?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="gamification"><b>O fluxo aula → questões → desafio parece adequado para integrar aprendizagem e gamificação?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="inclusion"><b>O recurso pode estimular a participação de estudantes que normalmente se envolvem menos?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="digital"><b>Você percebe potencial de uso em Educação Digital, Programação e Robótica?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="subjects"><b>Você percebe possibilidades de uso em outras disciplinas?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="balance"><b>O sistema de salas, ranking e desafios pode ser usado sem reduzir a atividade apenas à competição?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="interest"><b>Você teria interesse em utilizar o Modo Professor quando ele estiver disponível para testes?</b><div class="scale"></div></div>
+          <div class="pilot-rating" data-teacher-field="resource"><b>Na sua percepção, o X1 apresenta potencial para ser utilizado como recurso de aprendizagem, e não apenas como jogo?</b><div class="scale"></div></div>
+        </div>
+
+        <label class="pilot-score-label">Nota para o potencial pedagógico do X1 – Arena Tangram
+          <input id="teacherPilotScore" type="range" min="0" max="10" value="8">
+          <strong id="teacherPilotScoreValue">8/10</strong>
+        </label>
+
+        <label>Em quais situações pedagógicas você imagina utilizar o X1?
+          <textarea id="teacherUseCases" maxlength="1500" rows="3" placeholder="Ex.: revisão, desafio de lógica, trabalho em equipe..."></textarea>
+        </label>
+        <label>Que recursos deveriam existir no Modo Professor para que ele fosse útil em sua prática?
+          <textarea id="teacherNeededFeatures" maxlength="1500" rows="3" placeholder="Sua sugestão..."></textarea>
+        </label>
+        <label>Que cuidados pedagógicos você considera importantes nesse tipo de competição?
+          <textarea id="teacherCautions" maxlength="1500" rows="3" placeholder="Sua observação..."></textarea>
+        </label>
+
+        <fieldset class="pilot-future teacher-future">
+          <legend>Que desafios você gostaria de ver no futuro?</legend>
+          <label><input type="checkbox" value="Mais figuras de Tangram"> Mais figuras de Tangram</label>
+          <label><input type="checkbox" value="Mosaicos"> Mosaicos</label>
+          <label><input type="checkbox" value="Equipes"> Duplas ou equipes</label>
+          <label><input type="checkbox" value="Disciplinas"> Desafios por disciplinas</label>
+          <label><input type="checkbox" value="Campeonatos"> Campeonatos</label>
+          <label><input type="checkbox" value="Níveis"> Desafios por níveis</label>
+        </fieldset>
+      </div>
 
       <button class="primary big" id="submitPilotForm">Enviar avaliação</button>
       <p id="pilotStatus" class="server-note"></p>
@@ -272,6 +324,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
