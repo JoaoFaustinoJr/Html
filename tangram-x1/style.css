@@ -114,3 +114,5 @@ body.x1-arena-full .arena-loader{position:absolute!important;inset:0!important;z
 /* X1 v1.1 — seletor de idioma */
 .header-actions{display:flex;align-items:center;gap:8px}.lang-toggle{min-width:42px;height:32px;border-radius:999px;border:1px solid rgba(54,214,238,.35);background:#0a2230;color:#dff8ff;font-size:11px;font-weight:950;letter-spacing:.08em;cursor:pointer;box-shadow:0 0 14px rgba(54,214,238,.08)}.lang-toggle:hover{border-color:rgba(255,215,94,.45);color:#ffe889}
 @media(max-width:680px){.header-actions{margin-left:auto}.lang-toggle{height:30px;min-width:38px}.header-actions .badge{display:none}}
+
+.x1-authorship{margin:18px auto 2px;text-align:center;color:#5f8799;font-size:10px;font-weight:750;letter-spacing:.03em}
