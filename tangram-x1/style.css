@@ -150,3 +150,10 @@ body.x1-arena-full .arena-loader{position:absolute!important;inset:0!important;z
  .brand{grid-column:1/-1;grid-row:2/3}
  .header-actions{grid-column:2/3;grid-row:1/2}
 }
+
+/* Hotfix piloto: telas internas e controle do host */
+body.x1-internal .hero{display:none!important}
+.player{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.player>div{min-width:0;display:flex;flex-direction:column}
+.kick-player{flex:0 0 auto;border:1px solid rgba(255,120,140,.35);background:rgba(130,20,40,.18);color:#ffb3c0;border-radius:10px;padding:7px 10px;cursor:pointer;font-weight:800}
+.kick-player:hover{background:rgba(180,30,55,.3)}
