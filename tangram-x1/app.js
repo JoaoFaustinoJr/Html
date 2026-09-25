@@ -34,7 +34,7 @@ function applyLanguage(){
  setText('.x1-new',tx('NOVO • TEMPO REAL','NEW • REAL TIME'));
  setText('.x1-hero-tag',tx('Aprenda. Responda. Monte. Vença.','Learn. Answer. Build. Win.'));
  const heroP=$('.x1-hero-copy>p:not(.x1-hero-tag)');if(heroP)heroP.textContent=tx('Crie salas, jogue em tempo real e dispute com seus colegas usando o mesmo desafio.','Create rooms, play in real time and compete with classmates on the same challenge.');
- const chips=$('.x1-hero-chips span');if(chips[0])chips[0].textContent=tx('⚡ Gamer livre','⚡ Open Gamer');if(chips[1])chips[1].textContent=tx('🎓 Pedagógico com senha','🎓 Password-protected Learning');if(chips[2])chips[2].textContent=tx('🏆 Ranking ao vivo','🏆 Live ranking');
+ const chips=$$('.x1-hero-chips span');if(chips[0])chips[0].textContent=tx('⚡ Gamer livre','⚡ Open Gamer');if(chips[1])chips[1].textContent=tx('🎓 Pedagógico com senha','🎓 Password-protected Learning');if(chips[2])chips[2].textContent=tx('🏆 Ranking ao vivo','🏆 Live ranking');
  setText('.x1-rai-bubble',tx('Vamos para o X1?','Ready for X1?'));
  const g=$('#createGamerRoom');if(g){g.querySelector('b').textContent=tx('Criar sala Gamer','Create Gamer room');g.querySelector('small').textContent=tx('Qualquer jogador pode criar uma sala, convidar amigos e competir.','Any player can create a room, invite friends and compete.')}
  const j=$('#joinRoom');if(j){j.querySelector('b').textContent=tx('Entrar com código','Join with code');j.querySelector('small').textContent=tx('Entre em uma sala Gamer ou Pedagógica usando o código.','Join a Gamer or Learning room using its code.')}
@@ -42,7 +42,7 @@ function applyLanguage(){
  setText('.portal-note',tx('⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.','⚡ Gamer is open to students. 🎓 Learning Mode requires the teacher password.'));
  setText('#pilotHomeLink',tx('📝 Participou do piloto? Avalie o X1','📝 Joined the pilot? Rate X1'));
  const gs=$('#gamerSetup');if(gs){setText('#gamerSetup .section-head span',tx('MODO GAMER','GAMER MODE'));setText('#gamerSetup .section-head h2',tx('Criar sala','Create room'));setText('#gamerSetup h3',tx('Sua Arena','Your Arena'));const pp=$('#gamerSetup .gamer-setup>p');if(pp)pp.textContent=tx('Crie a sala, compartilhe o código e jogue junto com seus colegas. Quem cria também participa.','Create the room, share the code and play with your classmates. The host also plays.')}
- const gl=$('#gamerSetup label');if(gl[0])gl[0].childNodes[0].nodeValue=tx('Seu apelido','Nickname');if(gl[1])gl[1].childNodes[0].nodeValue=tx('Desafio','Challenge');if(gl[2])gl[2].childNodes[0].nodeValue=tx('Rodadas','Rounds');
+ const gl=$$('#gamerSetup label');if(gl[0])gl[0].childNodes[0].nodeValue=tx('Seu apelido','Nickname');if(gl[1])gl[1].childNodes[0].nodeValue=tx('Desafio','Challenge');if(gl[2])gl[2].childNodes[0].nodeValue=tx('Rodadas','Rounds');
  setText('#createGamerOnline',tx('Criar sala Gamer','Create Gamer room'));setText('#gamerCreateStatus',tx('Não é necessária senha.','No password required.'));
  const gate=$('#teacherGate');if(gate){setText('#teacherGate .section-head span',tx('ÁREA RESTRITA','RESTRICTED AREA'));setText('#teacherGate .section-head h2',tx('Modo professor','Teacher mode'));setText('#teacherGate h3',tx('Acesso do professor','Teacher access'));const gp=$('#teacherGate .teacher-gate>p');if(gp)gp.textContent=tx('Digite a senha para acessar as atividades pedagógicas e o controle do professor.','Enter the password to access learning activities and teacher controls.');const lbl=$('#teacherPassword')?.closest('label');if(lbl)lbl.childNodes[0].nodeValue=tx('Senha do professor','Teacher password');setText('#unlockTeacher',tx('Entrar no modo professor','Enter teacher mode'))}
  setText('#teacherSetup .section-head span',tx('PROFESSOR','TEACHER'));setText('#teacherSetup .section-head h2',tx('Criar Arena','Create Arena'));const cls=$('#className')?.closest('label');if(cls)cls.childNodes[0].nodeValue=tx('Nome da turma','Class name');setText('.pedagogical-badge b',tx('Modo Pedagógico','Learning Mode'));setText('.pedagogical-badge small',tx('Aula → questões → Tangram → ranking','Lesson → questions → Tangram → ranking'));
@@ -89,7 +89,7 @@ function updateSelectLabels(){
 
 
 $('#langToggle')?.addEventListener('click',()=>{lang=lang==='pt'?'en':'pt';localStorage.setItem('tangramX1Lang',lang);applyLanguage()});
-$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
+$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
 $('#createGamerRoom').addEventListener('click',()=>show('gamerSetup'));
 $('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
 $('#unlockTeacher').addEventListener('click',async()=>{
