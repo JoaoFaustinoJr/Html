@@ -1,8 +1,9 @@
 (()=>{
- const VERSION='15.13.1',PATH='/Html/tangram-prof-junior-v12/';
+ const VERSION='15.13.2',PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,verifyAssistStarted=false,x1PortalWired=false,x1PromoWired=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
+ const x1Embed=()=>{try{return new URLSearchParams(location.search).get('x1')==='1'}catch(e){return false}};
  function repairViewport(){if(!handheld())return;try{const sw=Number(screen.width)||0,sh=Number(screen.height)||0,short=Math.min(sw,sh),long=Math.max(sw,sh);const portrait=matchMedia('(orientation:portrait)').matches;const width=short&&short<=640?Math.round(portrait?short:long):0;let v=document.querySelector('meta[name="viewport"]');if(!v){v=document.createElement('meta');v.name='viewport';document.head.prepend(v)}v.content=width?'width='+width+',initial-scale=1,viewport-fit=cover':'width=device-width,initial-scale=1,viewport-fit=cover'}catch(e){}}
  function narrationText(value){
   const clean=s=>{
@@ -71,6 +72,7 @@
   `;document.head.appendChild(s)
  }
  function wireX1Promo(){
+  if(x1Embed()){document.getElementById('raiX1PortalCard')?.remove();document.getElementById('raiX1Launch')?.remove();return}
   if(x1PromoWired)return;const root=document.getElementById('tangram-levels');if(!root)return;x1PromoWired=true;ensureX1PromoStyle();
   if(!document.getElementById('raiX1PortalCard')){
    const card=document.createElement('section');card.id='raiX1PortalCard';card.className='rai-x1-portal-card';card.innerHTML='<div class="rai-x1-copy"><span class="rai-x1-kicker"><i></i> NOVO • TEMPO REAL</span><h3>Tangram <b>X1 — Arena</b></h3><p>Jogue ao vivo com seus colegas • sala por código • ranking em tempo real</p></div><div class="rai-x1-cta"><img src="rai-icon.svg?v=rai3" alt="R.A.I."><button type="button">⚡ Entrar no X1</button></div>';
@@ -85,6 +87,7 @@
   }
  }
  function wireX1Portal(){
+  if(x1Embed()){document.getElementById('tangramX1Portal')?.remove();return}
   if(x1PortalWired)return;const host=tools();if(!host)return;x1PortalWired=true;ensureX1PromoStyle();
   if(document.getElementById('tangramX1Portal'))return;
   const b=document.createElement('button');b.type='button';b.id='tangramX1Portal';b.className='tl-mini-action';b.innerHTML='⚡ <span>X1 Arena</span>';b.title='Abrir Tangram X1 — Arena';
