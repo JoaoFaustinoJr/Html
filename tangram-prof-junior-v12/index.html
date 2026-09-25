@@ -124,6 +124,18 @@ if('serviceWorker' in navigator){
   page=page.replace("function scheduleDropMetrics(){\n if(dropMetricTimer)clearTimeout(dropMetricTimer);\n dropMetricTimer=setTimeout(updateDropMetrics,110);\n}","function scheduleDropMetrics(){\n if(dropMetricTimer)clearTimeout(dropMetricTimer);\n dropMetricTimer=setTimeout(updateDropMetrics,110);\n}\nwindow.__tlRefreshMetrics=updateDropMetrics;");
   page=page.replace("function sound(k='click'){try{","window.__tlMuteLegacyAudio=true;\nfunction sound(k='click'){if(window.__tlMuteLegacyAudio)return;try{");
   page=page.replace('</body>','<script src="app-v10.js?v=15b"><\/script><script src="comfort-v11.js?v=12a"><\/script><script src="rai-tutor-v13.js?v=13f" data-rai-tutor="1"><\/script><script src="performance-v12.js?v=15a"><\/script><script src="rai-aula-v17.js?v=17"><\/script><script src="game-polish-v13.js?v=13k"><\/script><script src="gamer-official-v1.js?v=2"><\/script><script src="update-manager-v14.js?v=7"><\/script></body>');document.open();document.write(page);document.close();
+  setTimeout(()=>{
+    try{
+      if(new URLSearchParams(location.search).get('x1')==='1')return;
+      const root=document.getElementById('tangram-levels'),head=root?.querySelector('.tl-head');
+      if(!root||!head||document.getElementById('x1ArenaBanner'))return;
+      const a=document.createElement('a');a.id='x1ArenaBanner';a.href='../tangram-x1/';a.setAttribute('aria-label','Abrir X1 — Arena Tangram');
+      a.innerHTML='<span class="x1b-live">● TEMPO REAL</span><span class="x1b-main"><b>⚔️ X1 — ARENA TANGRAM</b><small>Desafie seus colegas em tempo real</small></span><span class="x1b-go">Entrar na Arena ›</span>';
+      a.style.cssText='display:flex;align-items:center;gap:12px;margin:10px auto 14px;max-width:980px;padding:12px 16px;border:1px solid rgba(255,205,80,.38);border-radius:16px;background:linear-gradient(135deg,rgba(10,34,53,.96),rgba(33,21,62,.96));color:#f7fbff;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.2);font-family:system-ui';
+      const st=document.createElement('style');st.textContent='#x1ArenaBanner .x1b-live{font-size:10px;font-weight:900;color:#7ef0b3;white-space:nowrap}#x1ArenaBanner .x1b-main{display:flex;flex:1;flex-direction:column;gap:2px}#x1ArenaBanner .x1b-main b{font-size:15px;color:#ffd86a}#x1ArenaBanner .x1b-main small{opacity:.82}#x1ArenaBanner .x1b-go{font-size:12px;font-weight:800;white-space:nowrap}@media(max-width:620px){#x1ArenaBanner{margin:8px 10px 12px!important;padding:10px 12px!important}.x1b-live{display:none}.x1b-go{font-size:0!important}.x1b-go:after{content:"›";font-size:22px}}';document.head.appendChild(st);
+      head.insertAdjacentElement('afterend',a);
+    }catch(e){}
+  },60);
  }catch(e){const el=document.getElementById('loading');if(el)el.innerHTML='<div><h1>🧩 Tangram Educativo</h1><p>Não foi possível carregar o aplicativo. Atualize a página.</p></div>';console.error(e)}
 })();
 </script></body></html>
