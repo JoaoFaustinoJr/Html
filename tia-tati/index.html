@@ -100,6 +100,12 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
  .portal-actions{position:static!important;transform:none!important;display:flex!important;justify-content:center!important;margin:14px auto 0!important;padding:0 0 max(8px,env(safe-area-inset-bottom))!important}
  .portal-motto{padding-bottom:0!important;margin-bottom:0!important}
 }
+
+@media(max-width:520px){
+ .hero-love-hotspot{display:block;position:absolute;z-index:40;left:52%;top:18%;width:17%;height:30%;border:0;background:transparent;border-radius:50%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+ .love-hotspot{display:none!important}
+}
+@media(min-width:521px){.hero-love-hotspot{display:none}}
 </style>
 </head>
 <body>
@@ -111,6 +117,7 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
     </header>
     <div class="portal-hero">
       <img src="assets/file_00000000780c820e88262032cd55d236.png?v=2" alt="Tia Tati em jardim com borboletas">
+      <button class="hero-love-hotspot" id="heroLoveHotspot" type="button" aria-label="Surpresa na borboleta azul"></button>
       <div class="portal-hero-copy"><strong>Pequenas conquistas</strong><em>movem grandes caminhos!</em><span>Missões terapêuticas para um amanhã mais independente! 💗</span></div>
     </div>
     <div class="portal-choices">
@@ -154,7 +161,7 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
 <script>
 (()=>{
 'use strict';
-const btn=document.getElementById('installAppBtn'),shareBtn=document.getElementById('shareAppBtn'),modal=document.getElementById('installModal'),closeBtn=document.getElementById('installClose'),nativeBtn=document.getElementById('installNative'),steps=document.getElementById('installSteps'),aboutHotspot=document.getElementById('aboutHotspot'),aboutModal=document.getElementById('aboutModal'),aboutClose=document.getElementById('aboutClose'),loveHotspot=document.getElementById('loveHotspot'),loveSecret=document.getElementById('loveSecret');
+const btn=document.getElementById('installAppBtn'),shareBtn=document.getElementById('shareAppBtn'),modal=document.getElementById('installModal'),closeBtn=document.getElementById('installClose'),nativeBtn=document.getElementById('installNative'),steps=document.getElementById('installSteps'),aboutHotspot=document.getElementById('aboutHotspot'),aboutModal=document.getElementById('aboutModal'),aboutClose=document.getElementById('aboutClose'),loveHotspot=document.getElementById('loveHotspot'),heroLoveHotspot=document.getElementById('heroLoveHotspot'),loveSecret=document.getElementById('loveSecret');
 let deferredPrompt=null,loveClicks=0,loveTimer=null,loveHideTimer=null;
 function loveTap(){
  loveClicks++;
@@ -187,7 +194,7 @@ function openHelp(){
  modal.classList.add('open');
 }
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
-btn.addEventListener('click',openHelp);shareBtn.addEventListener('click',sharePortal);loveHotspot.addEventListener('click',loveTap);aboutHotspot.addEventListener('click',()=>aboutModal.classList.add('open'));aboutClose.addEventListener('click',()=>aboutModal.classList.remove('open'));aboutModal.addEventListener('click',e=>{if(e.target===aboutModal)aboutModal.classList.remove('open')});
+btn.addEventListener('click',openHelp);shareBtn.addEventListener('click',sharePortal);loveHotspot.addEventListener('click',loveTap);if(heroLoveHotspot)heroLoveHotspot.addEventListener('click',loveTap);aboutHotspot.addEventListener('click',()=>aboutModal.classList.add('open'));aboutClose.addEventListener('click',()=>aboutModal.classList.remove('open'));aboutModal.addEventListener('click',e=>{if(e.target===aboutModal)aboutModal.classList.remove('open')});
 closeBtn.addEventListener('click',()=>modal.classList.remove('open'));
 modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
 nativeBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;const p=deferredPrompt;deferredPrompt=null;modal.classList.remove('open');try{await p.prompt();await p.userChoice}catch(_){}});
