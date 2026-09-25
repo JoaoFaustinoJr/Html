@@ -57,10 +57,44 @@ body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",san
 .install-native[hidden]{display:none}
 @media(display-mode:standalone){#installAppBtn{display:none}}
 @media(max-width:520px){.portal-action{padding:8px 11px;font-size:11px}.portal-actions{gap:6px;bottom:max(2.2%,env(safe-area-inset-bottom))}}
+
+/* Portal responsivo v20260924 */
+.portal-ui{display:none}
+@media(max-width:520px){
+ body{background:#eefaff;color:#173d71}
+ .portal-cover{min-height:100svh;height:auto!important;overflow:visible!important;padding:14px 14px 92px;background:linear-gradient(#e9f9ff,#fff)}
+ .portal-cover>img,.kids-hotspot,.young-hotspot,.about-hotspot{display:none!important}
+ .portal-ui{display:block}
+ .portal-head{background:rgba(255,255,255,.94);border-radius:24px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 24px rgba(23,61,113,.10)}
+ .portal-brand strong{display:block;font:900 28px/1 Georgia,cursive;color:#0b4382;font-style:italic}.portal-brand span{display:inline-block;margin-top:5px;padding:4px 11px;border-radius:999px;background:#f2479a;color:#fff;font-size:11px;font-weight:900;letter-spacing:.08em}
+ .portal-person{text-align:right;font-size:11px}.portal-person strong{display:block;font-size:12px}.portal-person button{border:0;background:transparent;color:#f2479a;text-decoration:underline;font-weight:800;padding:5px 0}
+ .portal-hero{position:relative;margin:14px -14px 8px;overflow:hidden}.portal-hero img{display:block;width:100%;height:auto}.portal-hero-copy{position:absolute;right:5%;top:10%;width:49%;text-align:center;color:#173d71;text-shadow:0 1px 4px rgba(255,255,255,.9)}.portal-hero-copy strong{display:block;font:900 21px/1.08 Georgia,cursive}.portal-hero-copy em{display:block;color:#f2479a;font:900 20px/1.1 Georgia,cursive;margin-top:4px}.portal-hero-copy span{display:block;font-size:11px;font-weight:800;margin-top:10px}
+ .portal-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.portal-choice{min-height:238px;border-radius:26px;padding:18px 14px;text-decoration:none;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 10px 25px rgba(23,61,113,.12);border:3px solid rgba(255,255,255,.8)}.portal-choice.kids{background:linear-gradient(155deg,#f4ffff,#fff8dd 52%,#ffe7f3);color:#173d71}.portal-choice.young{background:radial-gradient(circle at 50% 20%,#125c8d,#081c4b 64%,#241051);color:#fff}.portal-choice .icons{font-size:22px;margin-bottom:auto}.portal-choice h2{margin:8px 0 5px;font-size:29px;line-height:.95}.portal-choice.kids h2 b{color:#f2479a}.portal-choice.young h2 b{display:block;color:#ff43b2;font:italic 27px Georgia,cursive}.portal-choice p{font-size:12px;font-weight:700;line-height:1.3;margin:0 0 14px}.portal-choice .enter{padding:11px 12px;border-radius:999px;text-align:center;color:#fff;font-weight:900;font-size:13px}.kids .enter{background:linear-gradient(90deg,#f22d91,#f65fb1)}.young .enter{background:linear-gradient(90deg,#00bfd9,#22a8f4)}
+ .portal-traits{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:12px 0}.portal-traits span{background:#fff;border:1px solid #e5edf4;border-radius:999px;padding:8px 2px;text-align:center;font-size:9px;font-weight:800;box-shadow:0 4px 12px rgba(23,61,113,.06)}
+ .portal-motto{text-align:center;color:#f2479a;font:italic 15px Georgia,cursive;margin:14px 0 0}
+ .portal-actions{position:fixed!important;bottom:max(10px,env(safe-area-inset-bottom))!important}
+ .love-hotspot{left:44%;top:29%;width:16%;height:10%}
+}
 </style>
 </head>
 <body>
 <main class="portal-cover" aria-label="Portal Tia Tati – Fisio Sensório-Motora">
+  <section class="portal-ui" aria-label="Portal Tia Tati">
+    <header class="portal-head">
+      <div class="portal-brand"><strong>Tia Tati</strong><span>FISIO SENSÓRIO-MOTORA</span></div>
+      <div class="portal-person"><strong>Dra. Tatiana de Oliveira Machado</strong><span>FISIOTERAPEUTA</span><button type="button" onclick="document.getElementById('aboutModal').classList.add('open')">Sobre a Dra. Tatiana ›</button></div>
+    </header>
+    <div class="portal-hero">
+      <img src="assets/file_00000000780c820e88262032cd55d236.png?v=2" alt="Tia Tati em jardim com borboletas">
+      <div class="portal-hero-copy"><strong>Pequenas conquistas</strong><em>movem grandes caminhos!</em><span>Missões terapêuticas para um amanhã mais independente! 💗</span></div>
+    </div>
+    <div class="portal-choices">
+      <a class="portal-choice kids" href="launch-kids.html"><div class="icons">🚗 🐝 🌸 🎯</div><h2>Área <b>Kids</b></h2><p>Brincar, aprender e se desenvolver com leveza.</p><span class="enter">Entrar na Área Kids →</span></a>
+      <a class="portal-choice young" href="../tia-tati-jovem/entry-j12.html?v=j14"><div class="icons">🎮 ⚡ 🎵 🧠</div><h2>Modo <b>Jovem</b></h2><p>Ritmo, foco, memória e resposta motora.</p><span class="enter">Entrar no Modo Jovem →</span></a>
+    </div>
+    <div class="portal-traits"><span>🧠 Atenção</span><span>🏃 Movimento</span><span>💗 Autonomia</span><span>🌱 Inclusão</span></div>
+    <div class="portal-motto">♡ Cada passo importa. ♡</div>
+  </section>
   <img src="assets/file_00000000780c820e88262032cd55d236.png?v=1" alt="Portal Tia Tati com borboletas, Área Kids e Modo Jovem">
   <a class="hotspot kids-hotspot" href="launch-kids.html" aria-label="Entrar na Área Kids"></a>
   <a class="hotspot young-hotspot" href="../tia-tati-jovem/entry-j12.html?v=j14" aria-label="Entrar no Modo Jovem"></a>
