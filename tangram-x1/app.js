@@ -352,28 +352,29 @@ function wireArenaFrame(frame,token){
    const win=frame.contentWindow,doc=frame.contentDocument;
    if(!win||!doc)throw new Error('frame');
    const root=doc.getElementById('tangram-levels'),msg=doc.getElementById('msg');
-   if(!root||!msg){if(tries<50)setTimeout(attempt,180);return}
+   if(!root||!msg){if(tries<80)setTimeout(attempt,180);return}
    styleArenaDocument(doc);
    try{doc.documentElement.classList.add('x1-embed');doc.body.classList.add('x1-embed')}catch(e){}
-   const bridge=win.__raiTangramBonusBridge;
-   if(!bridge?.open){if(tries<50){setTimeout(attempt,180);return}throw new Error('bridge')}
-   if(!bridge.open(arenaChallengeIndex())){if(tries<50){setTimeout(attempt,180);return}throw new Error('challenge')}
-   const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.active)return true;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}const btn=doc.getElementById('gamerApp');if(btn){btn.click();return true}}catch(e){}return false};
-   if(!enterGamer()){if(tries<50){setTimeout(attempt,180);return}throw new Error('gamer')}\n   if(!doc.body.classList.contains('rai-gamer-running')){if(tries<50){setTimeout(attempt,180);return}throw new Error('gamer-class')}
-   setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},120);
-   $('#arenaLoader').hidden=true;
-   frame.style.display='block';
+   const bridge=win.__raiTangramBonusBridge,gamer=win.__raiGamerOfficial;
+   if(!bridge?.open||!gamer){if(tries<80){setTimeout(attempt,180);return}throw new Error('runtime')}
+   if(!frame.dataset.x1ChallengeOpened){
+    if(!bridge.open(arenaChallengeIndex())){if(tries<80){setTimeout(attempt,180);return}throw new Error('challenge')}
+    frame.dataset.x1ChallengeOpened='1';
+    setTimeout(attempt,120);return;
+   }
+   if(!gamer.active){
+    try{gamer.enterInstant?.()}catch(e){}
+    if(!gamer.active){if(tries<80){setTimeout(attempt,180);return}throw new Error('gamer')}
+   }
+   $('#arenaLoader').hidden=true;frame.style.display='block';
+   setTimeout(()=>{try{gamer.fitGamerBoard?.();doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},100);
    stopArenaObserver();
-   arenaObserver=new MutationObserver(()=>{
-    const text=(msg.textContent||'').replace(/\s+/g,' ').trim();
-    if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text)){const sample=(()=>{try{return !!win.__raiTangramBonusBridge?.isSampleActive?.()}catch(e){return false}})();if(!sample)onTangramComplete(text);}
-   });
+   arenaObserver=new MutationObserver(()=>{const text=(msg.textContent||'').replace(/\s+/g,' ').trim();if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text)){let sample=false;try{sample=!!bridge.isSampleActive?.()}catch(e){}if(!sample)onTangramComplete(text)}});
    arenaObserver.observe(msg,{subtree:true,childList:true,characterData:true});
-  }catch(e){if(tries<50)setTimeout(attempt,180);else{$('#arenaLoader').innerHTML='<b>'+tx('Não foi possível abrir o motor do Tangram.','Could not open the Tangram engine.')+'</b><small>'+tx('Recarregue a página e tente novamente.','Reload the page and try again.')+'</small>'}}
+  }catch(e){if(tries<80)setTimeout(attempt,180);else{$('#arenaLoader').innerHTML='<b>'+tx('Não foi possível abrir o motor do Tangram.','Could not open the Tangram engine.')+'</b><small>'+tx('Falha na integração da Arena. Reabra a sala.','Arena integration failed. Reopen the room.')+'</small>'}}
  };
  attempt();
 }
-
 async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole');
  stopArenaObserver();arenaFinished=false;
@@ -384,6 +385,7 @@ async function prepareTangramArena(){
  spectator.hidden=true;loader.hidden=false;frame.style.display='none';role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
  loader.innerHTML='<div class="spinner"></div><b>'+tx('Preparando o mesmo desafio para todos…','Preparing the same challenge for everyone…')+'</b><small>'+tx('Motor oficial do Tangram Educativo.','Official Tangram Educativo engine.')+'</small>';
  const token=++arenaLoadToken;
+ delete frame.dataset.x1ChallengeOpened;
  frame.onload=()=>wireArenaFrame(frame,token);
  frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&lang='+lang+'&challenge='+arenaChallengeIndex()+'&round='+(room.currentRound||1)+'&t='+(Date.now());
 }
