@@ -356,12 +356,11 @@ function wireArenaFrame(frame,token){
    styleArenaDocument(doc);
    try{doc.documentElement.classList.add('x1-embed');doc.body.classList.add('x1-embed')}catch(e){}
    const bridge=win.__raiTangramBonusBridge;
-   if(bridge?.open){
-    bridge.open(arenaChallengeIndex());
-    const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}}catch(e){}return false};
-    if(!enterGamer())setTimeout(enterGamer,220);
-    setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},220);
-   }else if(tries<50){setTimeout(attempt,180);return}
+   if(!bridge?.open){if(tries<50){setTimeout(attempt,180);return}throw new Error('bridge')}
+   if(!bridge.open(arenaChallengeIndex())){if(tries<50){setTimeout(attempt,180);return}throw new Error('challenge')}
+   const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.active)return true;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}const btn=doc.getElementById('gamerApp');if(btn){btn.click();return true}}catch(e){}return false};
+   if(!enterGamer()||!doc.body.classList.contains('rai-gamer-running')){if(tries<50){setTimeout(attempt,180);return}throw new Error('gamer')}
+   setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},120);
    $('#arenaLoader').hidden=true;
    frame.style.display='block';
    stopArenaObserver();
