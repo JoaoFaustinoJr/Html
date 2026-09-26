@@ -237,7 +237,7 @@ async function subscribeRoom(){
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
-    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||room.currentRound||1;applyRoomState(payload.new.status)}
+    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';applyRoomState(payload.new.status)}
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
@@ -462,7 +462,7 @@ $('#rematch').addEventListener('click',async()=>{
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  quizWrong=0;resetArenaFrame();await fetchRoom();await openLobby();
+  quizWrong=0;countdownBusy=false;clearInterval(tick);tick=null;resetArenaFrame();await fetchRoom();await openLobby();applyRoomState(room.status);
  }catch(e){alert(e.message||e)}
  finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
 });
