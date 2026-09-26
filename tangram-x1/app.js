@@ -241,7 +241,7 @@ async function subscribeRoom(){
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
-  .on('postgres_changes',{event:'*',schema:'public',table:'x1_players',filter:playerFilter},payload=>{if(payload.eventType==='DELETE'&&payload.old?.id===room.playerId){alert(tx('O anfitrião retirou você desta sala.','The host removed you from this room.'));disconnectRoom();sessionStorage.removeItem('tangramX1Player');show('home');return}schedulePlayerRefresh()})
+  .on('postgres_changes',{event:'*',schema:'public',table:'x1_players',filter:playerFilter},payload=>{if(payload.eventType==='DELETE'&&payload.old?.id===room.playerId){alert(tx('O anfitrião retirou você desta sala.','The host removed you from this room.'));disconnectRoom();sessionStorage.removeItem('tangramX1Player');show('home');return}schedulePlayerRefresh();if(room.status==='playing'||room.status==='results')updateRaceFeed()})
   .subscribe();
 }
 function disconnectSubscriptions(){
@@ -249,7 +249,7 @@ function disconnectSubscriptions(){
  roomChannel=playerChannel=null;
 }
 function stopArenaObserver(){try{arenaObserver?.disconnect()}catch(e){}arenaObserver=null}
-function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank'}catch(e){}}}
+function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}window.__x1NativeGame=null;const native=$('#nativeArena');if(native){native.innerHTML='';native.hidden=true}const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank';f.style.display='none'}catch(e){}}}
 function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);clearTimeout(playerRefreshTimer);clearTimeout(roomStateTimer);tick=null;playerRefreshTimer=null;roomStateTimer=null;countdownBusy=false;resetArenaFrame()}
 
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
