@@ -14,7 +14,7 @@ const CHALLENGES_EN={0:'Challenge 1',1:'Challenge 2',2:'Challenge 3',3:'Challeng
 let lang=localStorage.getItem('tangramX1Lang')==='en'?'en':'pt';
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
-let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null;
+let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null;
 
 const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-internal',id!=='home');document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -237,7 +237,7 @@ async function subscribeRoom(){
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
-    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';applyRoomState(payload.new.status)}
+    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';clearTimeout(roomStateTimer);roomStateTimer=setTimeout(()=>applyRoomState(payload.new.status),90)}
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
@@ -250,7 +250,7 @@ function disconnectSubscriptions(){
 }
 function stopArenaObserver(){try{arenaObserver?.disconnect()}catch(e){}arenaObserver=null}
 function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank'}catch(e){}}}
-function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);clearTimeout(playerRefreshTimer);countdownBusy=false;resetArenaFrame()}
+function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);clearTimeout(playerRefreshTimer);clearTimeout(roomStateTimer);tick=null;playerRefreshTimer=null;roomStateTimer=null;countdownBusy=false;resetArenaFrame()}
 
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
 
@@ -462,7 +462,7 @@ $('#rematch').addEventListener('click',async()=>{
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  quizWrong=0;countdownBusy=false;clearInterval(tick);tick=null;resetArenaFrame();await fetchRoom();await openLobby();applyRoomState(room.status);
+  quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();await fetchRoom();await openLobby();
  }catch(e){alert(e.message||e)}
  finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
 });
