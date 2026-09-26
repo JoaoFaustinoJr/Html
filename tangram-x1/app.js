@@ -205,12 +205,12 @@ async function fetchPlayers(){
  return data||[];
 }
 async function renderPlayers(){
- let players=[];try{players=await fetchPlayers()}catch(e){}
+ let players=[];try{players=await fetchPlayers()}catch(e){console.warn('X1 fetchPlayers',e);players=[]}
  const items=[];
  if(room.teacher)items.push({nickname:tx('Professor','Teacher'),role:'teacher',id:'host'});
  for(const p of players)items.push(p);
  $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><div><b>'+esc(p.nickname)+(p.id===room.playerId?tx(' • você',' • you'):'')+'</b><small>'+(p.role==='teacher'?tx('Professor • anfitrião','Teacher • host'):(p.id===room.playerId&&room.isHost)?tx('Anfitrião • pronto ✓','Host • ready ✓'):p.tangram_finished_at?tx('Concluiu 🏁','Finished 🏁'):p.quiz_finished_at?tx('Etapa pedagógica ✓','Learning stage ✓'):tx('Pronto ✓','Ready ✓'))+'</small></div>'+(room.isHost&&p.id!=='host'&&p.id!==room.playerId?'<button class="kick-player" data-kick="'+p.id+'" title="'+tx('Retirar da sala','Remove from room')+'">✕</button>':'')+'</div>').join('');
- $$('.kick-player').forEach(b=>b.addEventListener('click',()=>removePlayer(b.dataset.kick)));
+ const kickButtons=document.querySelectorAll('.kick-player');if(kickButtons)Array.from(kickButtons).forEach(b=>b.addEventListener('click',()=>removePlayer(b.dataset.kick)));
  $('#lobbyCount').textContent=items.length+' '+(items.length===1?tx('participante','participant'):tx('participantes','participants'))+tx(' na sala',' in the room');
 }
 async function openLobby(){
