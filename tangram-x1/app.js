@@ -375,24 +375,19 @@ function wireArenaFrame(frame,token){
  attempt();
 }
 async function prepareTangramArena(){
- const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole');
+ const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole'),native=$('#nativeArena');
  stopArenaObserver();arenaFinished=false;
- if(room.teacher){
-  frame.style.display='none';loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');
-  await updateRaceFeed();return;
- }
- spectator.hidden=true;loader.hidden=false;frame.style.display='none';role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
- loader.innerHTML='<div class="spinner"></div><b>'+tx('Preparando o mesmo desafio para todos…','Preparing the same challenge for everyone…')+'</b><small>'+tx('Motor oficial do Tangram Educativo.','Official Tangram Educativo engine.')+'</small>';
- const token=++arenaLoadToken;
- delete frame.dataset.x1ChallengeOpened;
- frame.onload=()=>wireArenaFrame(frame,token);
- frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&lang='+lang+'&challenge='+arenaChallengeIndex()+'&round='+(room.currentRound||1)+'&t='+(Date.now());
+ frame.style.display='none';frame.src='about:blank';
+ if(room.teacher){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');await updateRaceFeed();return}
+ spectator.hidden=true;loader.hidden=true;native.hidden=false;role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
+ if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}
+ if(!window.X1NativeArena){native.innerHTML='<p class="x1n-msg">Arena nativa indisponível.</p>';return}
+ window.__x1NativeGame=window.X1NativeArena.create(native,{challenge:arenaChallengeIndex(),onComplete:()=>onTangramComplete('native')});
 }
-
 async function onTangramComplete(message){
  if(arenaFinished||room.teacher)return;
  /* Nunca aceite uma conclusão disparada enquanto a amostra de solução estiver visível. */
- try{const w=$('#tangramArenaFrame')?.contentWindow;if(w?.__raiTangramBonusBridge?.isSampleActive?.())return}catch(e){}
+ if(message!=='native'){try{const w=$('#tangramArenaFrame')?.contentWindow;if(w?.__raiTangramBonusBridge?.isSampleActive?.())return}catch(e){}}
  arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
  $('#raceFeed').innerHTML='<span>'+tx('🏁 Encaixe correto! Registrando sua chegada…','🏁 Correct fit! Recording your finish…')+'</span>';
  try{
