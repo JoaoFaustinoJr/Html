@@ -386,7 +386,7 @@ async function prepareTangramArena(){
  loader.innerHTML='<div class="spinner"></div><b>'+tx('Preparando o mesmo desafio para todos…','Preparing the same challenge for everyone…')+'</b><small>'+tx('Motor oficial do Tangram Educativo.','Official Tangram Educativo engine.')+'</small>';
  const token=++arenaLoadToken;
  frame.onload=()=>wireArenaFrame(frame,token);
- frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&lang='+lang+'&round='+(room.currentRound||1)+'&t='+(Date.now());
+ frame.src='../tangram-prof-junior-v12/?x1=1&expanded=1&gamer=1&lang='+lang+'&challenge='+arenaChallengeIndex()+'&round='+(room.currentRound||1)+'&t='+(Date.now());
 }
 
 async function onTangramComplete(message){
