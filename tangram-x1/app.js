@@ -359,7 +359,7 @@ function wireArenaFrame(frame,token){
    if(!bridge?.open){if(tries<50){setTimeout(attempt,180);return}throw new Error('bridge')}
    if(!bridge.open(arenaChallengeIndex())){if(tries<50){setTimeout(attempt,180);return}throw new Error('challenge')}
    const enterGamer=()=>{try{const g=win.__raiGamerOfficial;if(g?.active)return true;if(g?.enterInstant){g.enterInstant();return true}if(g?.enter){g.enter();return true}const btn=doc.getElementById('gamerApp');if(btn){btn.click();return true}}catch(e){}return false};
-   if(!enterGamer()||!doc.body.classList.contains('rai-gamer-running')){if(tries<50){setTimeout(attempt,180);return}throw new Error('gamer')}
+   if(!enterGamer()){if(tries<50){setTimeout(attempt,180);return}throw new Error('gamer')}\n   if(!doc.body.classList.contains('rai-gamer-running')){if(tries<50){setTimeout(attempt,180);return}throw new Error('gamer-class')}
    setTimeout(()=>{try{doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},120);
    $('#arenaLoader').hidden=true;
    frame.style.display='block';
