@@ -367,7 +367,7 @@ function wireArenaFrame(frame,token){
    stopArenaObserver();
    arenaObserver=new MutationObserver(()=>{
     const text=(msg.textContent||'').replace(/\s+/g,' ').trim();
-    if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text))onTangramComplete(text);
+    if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text)){const sample=(()=>{try{return !!win.__raiTangramBonusBridge?.isSampleActive?.()}catch(e){return false}})();if(!sample)onTangramComplete(text);}
    });
    arenaObserver.observe(msg,{subtree:true,childList:true,characterData:true});
   }catch(e){if(tries<50)setTimeout(attempt,180);else{$('#arenaLoader').innerHTML='<b>'+tx('Não foi possível abrir o motor do Tangram.','Could not open the Tangram engine.')+'</b><small>'+tx('Recarregue a página e tente novamente.','Reload the page and try again.')+'</small>'}}
@@ -390,7 +390,10 @@ async function prepareTangramArena(){
 }
 
 async function onTangramComplete(message){
- if(arenaFinished||room.teacher)return;arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
+ if(arenaFinished||room.teacher)return;
+ /* Nunca aceite uma conclusão disparada enquanto a amostra de solução estiver visível. */
+ try{const w=$('#tangramArenaFrame')?.contentWindow;if(w?.__raiTangramBonusBridge?.isSampleActive?.())return}catch(e){}
+ arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
  $('#raceFeed').innerHTML='<span>'+tx('🏁 Encaixe correto! Registrando sua chegada…','🏁 Correct fit! Recording your finish…')+'</span>';
  try{
   if(room.playerId&&room.playerToken){
