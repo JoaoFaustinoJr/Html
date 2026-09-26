@@ -321,7 +321,7 @@ function roomHash(){
 function arenaChallengeIndex(){
  const fixed=Number(room.challenge);
  if(room.challenge!=='random'&&Number.isInteger(fixed)&&fixed>=0&&fixed<=13)return fixed;
- return roomHash()%14;
+ return 5+(roomHash()%9);
 }
 function arenaChallengeLabel(){
  const i=arenaChallengeIndex();
