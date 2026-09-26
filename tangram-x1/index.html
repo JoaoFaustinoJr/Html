@@ -7,7 +7,7 @@
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
 <link rel="stylesheet" href="style.css?v=15">
-</head>
+<link rel="stylesheet" href="native-arena.css?v=1"></head>
 <body>
 <main class="shell">
   <header class="hero">
@@ -197,7 +197,7 @@
         <div class="arena-rai"><img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I."><span>R.A.I. acompanha a rodada</span></div>
       </div>
       <div class="arena-loader" id="arenaLoader"><div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>O motor oficial do Tangram está sendo carregado.</small></div>
-      <iframe id="tangramArenaFrame" title="Tangram X1 — desafio da rodada" src="about:blank" loading="eager"></iframe>
+      <div id="nativeArena" class="x1-native" hidden></div><iframe id="tangramArenaFrame" title="Tangram X1 — desafio da rodada" src="about:blank" loading="eager" hidden></iframe>
       <div class="spectator-card" id="spectatorCard" hidden>
         <img src="../tangram-prof-junior-v12/rai-icon.svg?v=rai3" alt="R.A.I.">
         <h3>Modo professor</h3>
@@ -336,6 +336,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js?v=26"></script>
+<script src="native-arena.js?v=1"></script><script src="app.js?v=27"></script>
 </body>
 </html>
