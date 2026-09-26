@@ -75,7 +75,7 @@ function applyLanguage(){
   concentration:tx('O X1 ajudou a manter atenção e concentração?','Did X1 help you stay focused and attentive?'),
   again:tx('Você gostaria de jogar novamente?','Would you like to play again?')
  };
- $('.pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&ratingTexts[el.dataset.field])b.textContent=ratingTexts[el.dataset.field]});
+ $$('.pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&ratingTexts[el.dataset.field])b.textContent=ratingTexts[el.dataset.field]});
  const scoreLabel=$('#pilotScore')?.closest('label');if(scoreLabel)scoreLabel.childNodes[0].nodeValue=tx('Nota geral para o X1 – Arena Tangram','Overall rating for X1 – Tangram Arena');
  const fav=$('#pilotFavorite')?.closest('label');if(fav)fav.childNodes[0].nodeValue=tx('O que você mais gostou?','What did you like most?');
  const imp=$('#pilotImprove')?.closest('label');if(imp)imp.childNodes[0].nodeValue=tx('O que poderia melhorar?','What could be improved?');
@@ -102,7 +102,7 @@ function updateSelectLabels(){
 
 
 $('#langToggle')?.addEventListener('click',()=>{lang=lang==='pt'?'en':'pt';localStorage.setItem('tangramX1Lang',lang);applyLanguage()});
-$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
+$$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
 $('#createGamerRoom').addEventListener('click',()=>show('gamerSetup'));
 $('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
 $('#unlockTeacher').addEventListener('click',async()=>{
@@ -291,8 +291,8 @@ function applyRoomState(status){
 }
 $('#lessonDone').addEventListener('click',()=>show('quiz'));
 
-$('[data-answer]').forEach(b=>b.addEventListener('click',async()=>{
- const ok=b.dataset.answer==='2';$('[data-answer]').forEach(x=>x.classList.remove('correct','wrong'));b.classList.add(ok?'correct':'wrong');
+$$('[data-answer]').forEach(b=>b.addEventListener('click',async()=>{
+ const ok=b.dataset.answer==='2';$$('[data-answer]').forEach(x=>x.classList.remove('correct','wrong'));b.classList.add(ok?'correct':'wrong');
  if(!ok){quizWrong++;$('#quizFeedback').textContent=tx('Ainda não. Pense: fator 2 significa multiplicar a medida original por 2.','Not yet. Think: a factor of 2 means multiplying the original measure by 2.');return}
  $('#quizFeedback').textContent=tx('✓ Isso! O fator 2 dobra a medida. Arena liberada.','✓ Correct! A factor of 2 doubles the measure. Arena unlocked.');
  if(room.playerId&&room.playerToken){
@@ -499,7 +499,7 @@ function applyPilotLanguage(){
   interest:tx('Você teria interesse em utilizar o Modo Professor quando ele estiver disponível para testes?','Would you be interested in using Teacher Mode when it becomes available for testing?'),
   resource:tx('Na sua percepção, o X1 apresenta potencial para ser utilizado como recurso de aprendizagem, e não apenas como jogo?','In your view, does X1 have potential to be used as a learning resource, not only as a game?')
  };
- $('.teacher-ratings .pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&teacherText[el.dataset.teacherField])b.textContent=teacherText[el.dataset.teacherField]});
+ $$('.teacher-ratings .pilot-rating').forEach(el=>{const b=el.querySelector('b');if(b&&teacherText[el.dataset.teacherField])b.textContent=teacherText[el.dataset.teacherField]});
 
  const ts=$('#teacherPilotScore')?.closest('label');if(ts)ts.childNodes[0].nodeValue=tx('Nota para o potencial pedagógico do X1 – Arena Tangram','Rating for the educational potential of X1 – Tangram Arena');
  const uc=$('#teacherUseCases')?.closest('label');if(uc)uc.childNodes[0].nodeValue=tx('Em quais situações pedagógicas você imagina utilizar o X1?','In which educational situations could you imagine using X1?');
@@ -527,14 +527,14 @@ function buildOneScale(block,store,key){
  labels.innerHTML='<span>'+tx('1 • pouco','1 • low')+'</span><span>'+tx('5 • muito','5 • high')+'</span>';
 }
 function buildPilotScales(){
- $('#pilotStudentFields .pilot-rating').forEach(block=>buildOneScale(block,pilotRatings,block.dataset.field));
- $('#pilotTeacherFields .pilot-rating').forEach(block=>buildOneScale(block,teacherPilotRatings,block.dataset.teacherField));
+ $$('#pilotStudentFields .pilot-rating').forEach(block=>buildOneScale(block,pilotRatings,block.dataset.field));
+ $$('#pilotTeacherFields .pilot-rating').forEach(block=>buildOneScale(block,teacherPilotRatings,block.dataset.teacherField));
 }
 
 function setPilotRole(role){
  pilotRole=role==='teacher'?'teacher':'student';
  applyPilotLanguage();
- $('[data-pilot-role]').forEach(b=>b.classList.toggle('active',b.dataset.pilotRole===pilotRole));
+ $$('[data-pilot-role]').forEach(b=>b.classList.toggle('active',b.dataset.pilotRole===pilotRole));
  $('#pilotStudentFields').hidden=pilotRole!=='student';
  $('#pilotTeacherFields').hidden=pilotRole!=='teacher';
  const introB=$('.pilot-intro b'),introP=$('.pilot-intro p');
@@ -556,7 +556,7 @@ function openPilotForm(){
  $('#pilotStatus').textContent='';
  show('pilotForm');
 }
-$('[data-pilot-role]').forEach(b=>b.addEventListener('click',()=>setPilotRole(b.dataset.pilotRole)));
+$$('[data-pilot-role]').forEach(b=>b.addEventListener('click',()=>setPilotRole(b.dataset.pilotRole)));
 $('#openPilotForm')?.addEventListener('click',openPilotForm);
 $('#pilotHomeLink')?.addEventListener('click',openPilotForm);
 $('#pilotBack')?.addEventListener('click',()=>show(pilotReturn));
