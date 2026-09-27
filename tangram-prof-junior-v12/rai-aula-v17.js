@@ -66,7 +66,7 @@
     '</div>'+
     '<div class="rai-lesson-body">'+
       '<div id="raiLessonHome">'+
-        '<button type="button" class="rai-v17-new-banner" data-open-robotics="1"><b>🆕 Programação & Robótica • 3º trimestre</b><span>16 novas aulas • 6º ao 9º ano • conclua as aulas e desbloqueie silhuetas inéditas do Tangram.</span><em>Abrir novas aulas ›</em></button>'+
+        '<button type="button" class="rai-v17-new-banner rai-v17-opening" data-open-robotics="1"><b>🚀 NOVIDADE • Programação & Robótica</b><strong>3º trimestre • 16 novas aulas</strong><span>6º ao 9º ano • novas silhuetas desbloqueadas conforme você avança.</span><em>ABRIR AGORA ›</em></button>'+
         '<div class="rai-v17-sections" id="raiV17Sections"></div>'+
         '<div class="rai-v17-curriculum"><b>Organização curricular</b><span>As trilhas seguem os eixos Pensamento Computacional, Mundo Digital e Cultura Digital da BNCC Computação e do Referencial Curricular do Paraná, além das referências de Matemática.</span></div>'+
       '</div>'+
