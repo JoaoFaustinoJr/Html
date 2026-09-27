@@ -21,9 +21,8 @@
   }
 
   const years=[5,6,7,8,9];
-  const order=['robotics','parana','fund','pc','prog','math','digital'];
+  const order=['robotics','fund','pc','prog','math','digital'];
   const meta={
-    parana:{icon:'🎯',title:'Especial Prova Paraná 2026',sub:'Matemática + Língua Portuguesa • habilidades recorrentes • desafios especiais abertos',count:4,yearless:true},
     fund:{icon:'🧠',title:'Fundamentos',sub:'Lógica, algoritmos, linguagens, dados, eixos da Computação e depuração',count:8,yearless:true},
     pc:{icon:'🧩',title:'Pensamento Computacional',sub:'Representar problemas, decompor, generalizar, reutilizar e modelar soluções',count:10},
     prog:{icon:'💻',title:'Programação',sub:'Progressão do 5º ao 9º ano, de algoritmos em blocos a estruturas, projetos e eventos',count:15},
@@ -31,11 +30,10 @@
     digital:{icon:'🌐',title:'Mundo & Cultura Digital',sub:'Computadores, redes, segurança, cidadania, privacidade, autoria e impacto social',count:10},
     robotics:{icon:'🤖',title:'Programação & Robótica • 3º trimestre',sub:'Trilha curricular SEED-PR • 6º ao 9º ano • desafios progressivos',count:16}
   };
-  let banks={fund:[],pc:[],prog:[],math:[],digital:[],robotics:[],parana:[]};
+  let banks={fund:[],pc:[],prog:[],math:[],digital:[],robotics:[]};
   let ready=false;
 
   const sources={
-    parana:null,
     fund:'rai-fundamentos-v17.json?v=17',
     pc:'rai-pensamento-v17.json?v=17',
     prog:'rai-programacao-v17.json?v=17',
@@ -46,12 +44,7 @@
 
   Promise.all(order.filter(s=>sources[s]).map(s=>fetch(sources[s],{cache:'no-store'})
     .then(r=>{if(!r.ok)throw new Error('Aulas '+s);return r.json()})
-    .then(d=>{banks[s]=Array.isArray(d)?d:[]}))).then(()=>{banks.parana=[
-      {id:'parana-11',section:'parana',icon:'🐱',topic:'Gato Espelhado',objective:'Desafio especial de transformação e reflexão.',axis:'Especial Prova Paraná',level:5},
-      {id:'parana-12',section:'parana',icon:'🏃',topic:'Corredor Invertido',objective:'Desafio especial de orientação espacial e transformação.',axis:'Especial Prova Paraná',level:6},
-      {id:'parana-13',section:'parana',icon:'🦢',topic:'Cisne Reflexo',objective:'Desafio especial de reflexão e composição geométrica.',axis:'Especial Prova Paraná',level:7},
-      {id:'parana-14',section:'parana',icon:'🚀',topic:'Foguete Reverso',objective:'Desafio especial de rotação, reflexão e estratégia.',axis:'Especial Prova Paraná',level:8}
-    ]})
+    .then(d=>{banks[s]=Array.isArray(d)?d:[]})))
     .then(()=>{ready=true;if(overlay.classList.contains('show'))renderHome()})
     .catch(e=>console.warn('Aulas R.A.I. v17',e));
 
@@ -160,7 +153,6 @@
   let fixSeen=new Set();
 
   function countLabel(section){
-    if(section==='parana')return '4 desafios • acesso livre';
     const actual=(banks[section]||[]).length;
     return (actual||meta[section].count)+' aulas';
   }
@@ -194,11 +186,6 @@
 
   function renderSection(section){
     if(!meta[section])section='fund';
-    if(section==='parana'){
-      state.section=section;save();home.hidden=true;detail.hidden=true;sectionView.hidden=false;
-      const m=meta[section];sectionCrumb.textContent=m.title;sectionTitle.innerHTML='<b>'+m.icon+' '+m.title+'</b><small>'+m.sub+'</small>';tabs.style.display='none';curriculumChallenges.innerHTML='';
-      list.innerHTML=banks.parana.map((l,i)=>'<button type="button" class="rai-lesson-item rai-done" data-parana-level="'+l.level+'"><span class="rai-lesson-item-icon">'+l.icon+'</span><span><b>'+(11+i)+'. '+l.topic+'</b><small>'+l.objective+'</small><u>🎯 Prova Paraná 2026 • ABERTO</u></span><em>›</em></button>').join('');return;
-    }
     state.section=section;save();
     home.hidden=true;detail.hidden=true;sectionView.hidden=false;
     const m=meta[section];
@@ -281,8 +268,7 @@
     if(tryBtn&&current.section==='robotics'&&lr){tryBtn.textContent=(doneLessons.includes(current.id)?'🎯 Abrir desafio: ':'🔒 Concluir para liberar: ')+lr.title;tryBtn.disabled=!doneLessons.includes(current.id);tryBtn.dataset.curriculumLevel=lr.level;tryBtn.title=lr.mission}else if(tryBtn){tryBtn.disabled=false;delete tryBtn.dataset.curriculumLevel;tryBtn.textContent='🎯 Aplicar desafio';tryBtn.title=''}
   }
 
-  overlay.querySelector('#raiLessonHome').addEventListener('click',e=>{const nb=e.target.closest('[data-open-robotics]');if(nb){state.year=6;renderSection('robotics');return}const pb=e.target.closest('[data-parana-level]');if(pb){try{const opened=window.__raiTangramBonusBridge?.open(Number(pb.dataset.paranaLevel));if(opened)overlay.classList.remove('show')}catch(err){}}});
-  list.addEventListener('click',e=>{const pb=e.target.closest('[data-parana-level]');if(!pb)return;try{const opened=window.__raiTangramBonusBridge?.open(Number(pb.dataset.paranaLevel));if(opened)overlay.classList.remove('show')}catch(err){}});
+  overlay.querySelector('#raiLessonHome').addEventListener('click',e=>{const nb=e.target.closest('[data-open-robotics]');if(nb){state.year=6;renderSection('robotics');return}});
   sections.addEventListener('click',e=>{
     const b=e.target.closest('[data-section]');if(!b)return;
     renderSection(b.dataset.section);
