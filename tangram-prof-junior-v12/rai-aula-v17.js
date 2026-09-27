@@ -110,17 +110,17 @@
   let doneLessons=[];try{doneLessons=JSON.parse(localStorage.getItem(DONE_KEY)||'[]')}catch(e){}
   const saveDone=()=>{try{localStorage.setItem(DONE_KEY,JSON.stringify(doneLessons))}catch(e){}};
   const gradeRewards={
-    6:[{step:1,level:5,label:'6. Gato Angular • Decomposição'},{step:2,level:6,label:'7. Corredor • Fluxo de dados'},{step:3,level:8,label:'9. Foguete • Coordenadas'},{step:4,level:7,label:'8. Cisne • Dados e padrões'}],
+    6:[{step:1,level:14,label:'15. Robô Algoritmo 🆕'},{step:2,level:15,label:'16. Rede de Dados 🆕'},{step:3,level:16,label:'17. Rota Coordenada 🆕'},{step:4,level:17,label:'18. Dados em Movimento 🆕'}],
     7:[{step:1,level:7,label:'8. Cisne'},{step:3,level:8,label:'9. Foguete'}],
     8:[{step:1,level:9,label:'10. Dragão R.A.I.'},{step:2,level:10,label:'11. Gato Espelhado'},{step:4,level:11,label:'12. Corredor Invertido'}],
     9:[{step:1,level:12,label:'13. Cisne Reflexo'},{step:3,level:13,label:'14. Foguete Reverso'}]
   };
   const allRewards=Object.values(gradeRewards).flat();
   const lessonReward={
-    'rob6t3-1':{level:5,title:'Gato Angular',mission:'Decomponha a silhueta: resolva primeiro corpo, extremidades e detalhes.'},
-    'rob6t3-2':{level:6,title:'Corredor',mission:'Pense nas peças como pacotes: organize partes diferentes para reconstruir uma única informação.'},
-    'rob6t3-3':{level:8,title:'Foguete',mission:'Use posição, direção e rotação como se estivesse programando uma rota por coordenadas.'},
-    'rob6t3-4':{level:7,title:'Cisne',mission:'Observe a forma, compare regiões e procure padrões antes de mover as peças.'}
+    'rob6t3-1':{level:14,title:'Robô Algoritmo 🆕',mission:'Decomponha a silhueta: resolva primeiro corpo, extremidades e detalhes.'},
+    'rob6t3-2':{level:15,title:'Rede de Dados 🆕',mission:'Pense nas peças como pacotes: organize partes diferentes para reconstruir uma única informação.'},
+    'rob6t3-3':{level:16,title:'Rota Coordenada 🆕',mission:'Use posição, direção e rotação como se estivesse programando uma rota por coordenadas.'},
+    'rob6t3-4':{level:17,title:'Dados em Movimento 🆕',mission:'Observe a forma, compare regiões e procure padrões antes de mover as peças.'}
   };
 
   const els={
