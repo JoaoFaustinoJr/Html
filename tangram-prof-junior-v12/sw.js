@@ -1,6 +1,6 @@
-// Tangram Educativo — Service Worker v15.15.1
+// Tangram Educativo — Service Worker v15.15.2
 // Rede é a fonte de verdade. O cache existe somente para contingência offline.
-const CACHE='tangram-rai-v12-82';
+const CACHE='tangram-rai-v12-83';
 const PREFIX='tangram-rai-v12-';
 const OFFLINE_SHELL=['./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.webp','./apple-touch-icon.png'];
 
