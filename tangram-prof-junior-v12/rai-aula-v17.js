@@ -59,7 +59,7 @@
     '</div>'+
     '<div class="rai-lesson-body">'+
       '<div id="raiLessonHome">'+
-        '<div class="rai-v17-philosophy"><b>No modo pedagógico, ensinar faz parte do jogo.</b><span>Escolha uma área. Para uma experiência sem intervenção didática, use o Modo Gamer.</span></div>'+
+        '<div class="rai-v17-philosophy"><b>✨ Novos desafios • Programação & Robótica</b><span>Silhuetas inéditas estão chegando pela trilha do 3º trimestre e serão desbloqueadas com as aulas.</span></div><div class="rai-v17-philosophy"><b>No modo pedagógico, ensinar faz parte do jogo.</b><span>Escolha uma área. Para uma experiência sem intervenção didática, use o Modo Gamer.</span></div>'+
         '<div class="rai-v17-sections" id="raiV17Sections"></div>'+
         '<div class="rai-v17-curriculum"><b>Organização curricular</b><span>As trilhas seguem os eixos Pensamento Computacional, Mundo Digital e Cultura Digital da BNCC Computação e do Referencial Curricular do Paraná, além das referências de Matemática.</span></div>'+
       '</div>'+
