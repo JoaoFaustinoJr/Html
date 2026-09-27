@@ -24,7 +24,7 @@
  function curriculumDone(){try{return new Set(JSON.parse(localStorage.getItem('raiAulaT3DoneV18')||'[]'))}catch(e){return new Set()}}
  function decorateCurriculum(buttons){
   const done=curriculumDone(),ids=['rob6t3-1','rob6t3-2','rob6t3-3','rob6t3-4'];
-  ids.forEach((id,i)=>{const b=buttons[14+i];if(!b)return;const unlocked=done.has(id);b.dataset.raiCurriculum=String(i);b.disabled=!unlocked;b.setAttribute('aria-disabled',unlocked?'false':'true');b.classList.toggle('rai-bonus-unlocked',unlocked);b.classList.toggle('rai-bonus-locked',!unlocked);let badge=b.querySelector('.rai-curriculum-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge rai-curriculum-badge';b.appendChild(badge)}badge.textContent=unlocked?'🔓 ABRIR':'🔒 Aula '+(i+1);b.title=unlocked?'Abrir novo desafio curricular':'Conclua a aula '+(i+1)+' de Programação & Robótica do 6º ano'});
+  ids.forEach((id,i)=>{const b=buttons[14+i];if(!b)return;const unlocked=done.has(id);b.dataset.raiCurriculum=String(i);delete b.dataset.raiBonus;b.disabled=!unlocked;b.setAttribute('aria-disabled',unlocked?'false':'true');b.classList.toggle('rai-bonus-unlocked',unlocked);b.classList.toggle('rai-bonus-locked',!unlocked);let badge=b.querySelector('.rai-curriculum-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge rai-curriculum-badge';b.appendChild(badge)}badge.textContent=unlocked?'🔓 ABRIR':'🔒 Aula '+(i+1);b.title=unlocked?'Abrir novo desafio curricular':'Conclua a aula '+(i+1)+' de Programação & Robótica do 6º ano'});
  }
  function decorate(){
   if(!root)return;levelsHost=root.querySelector('#levels');if(!levelsHost)return;const buttons=[...levelsHost.querySelectorAll('button.tl-level')],n=count();
