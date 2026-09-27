@@ -27,14 +27,15 @@
   ids.forEach((id,i)=>{const b=buttons[14+i];if(!b)return;const unlocked=done.has(id);b.dataset.raiCurriculum=String(i);delete b.dataset.raiBonus;b.disabled=!unlocked;b.setAttribute('aria-disabled',unlocked?'false':'true');b.classList.toggle('rai-bonus-unlocked',unlocked);b.classList.toggle('rai-bonus-locked',!unlocked);let badge=b.querySelector('.rai-curriculum-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge rai-curriculum-badge';b.appendChild(badge)}badge.textContent=unlocked?'🔓 ABRIR':'🔒 Aula '+(i+1);b.title=unlocked?'Abrir novo desafio curricular':'Conclua a aula '+(i+1)+' de Programação & Robótica do 6º ano'});
  }
  function decorate(){
-  if(!root)return;levelsHost=root.querySelector('#levels');if(!levelsHost)return;const buttons=[...levelsHost.querySelectorAll('button.tl-level')],n=count();
-  BONUS.forEach((meta,i)=>{const b=buttons[BONUS_START+i];if(!b)return;const unlocked=n>=meta.need;b.dataset.raiBonus=String(i);b.dataset.raiBonusNeed=String(meta.need);b.setAttribute('aria-disabled',unlocked?'false':'true');b.classList.add('rai-bonus-level');b.classList.toggle('rai-bonus-locked',!unlocked);b.classList.toggle('rai-bonus-unlocked',unlocked);let badge=b.querySelector('.rai-bonus-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge';b.appendChild(badge)}badge.textContent=unlocked?'🔓 ABRIR':`🔒 ${meta.need} aula${meta.need>1?'s':''}`;b.title=unlocked?'Abrir Desafio Bônus liberado pela conclusão das aulas do Especial Prova Paraná':`Conclua ${meta.need} aula${meta.need>1?'s':''} do Especial Prova Paraná`});decorateCurriculum(buttons);ensureSection();lastCount=n;
+  if(!root)return;levelsHost=root.querySelector('#levels');if(!levelsHost)return;
+  const buttons=[...levelsHost.querySelectorAll('button.tl-level')];
+  // Legado Prova Paraná (11–14): coleção histórica, agora aberta para todos.
+  [5,6,7,8].forEach((idx,j)=>{const b=buttons[idx];if(!b)return;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.disabled=false;b.removeAttribute('disabled');b.setAttribute('aria-disabled','false');b.classList.remove('locked','rai-bonus-locked');b.classList.add('rai-bonus-unlocked','rai-parana-legacy');let badge=b.querySelector('.rai-bonus-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge';b.appendChild(badge)}badge.textContent='🎯 PROVA PARANÁ • ABERTO';b.title='Desafio especial da coleção Prova Paraná — acesso livre'});
+  decorateCurriculum(buttons);
+  let old=levelsHost.querySelector('.rai-bonus-section');if(old)old.remove();
+  let head=levelsHost.querySelector('.rai-curriculum-section');if(!head){head=document.createElement('div');head.className='rai-bonus-section rai-curriculum-section';const anchor=buttons[9];anchor?levelsHost.insertBefore(head,anchor):levelsHost.appendChild(head)}
+  const done=curriculumDone(),n=['rob6t3-1','rob6t3-2','rob6t3-3','rob6t3-4'].filter(id=>done.has(id)).length;
+  head.innerHTML='<div class="rai-bonus-icon">🆕</div><div><b>Novos desafios • Programação & Robótica</b><span>3º trimestre • 6º ano • '+n+'/4 desbloqueados pelas aulas</span></div>';
+  lastCount=4;
  }
- function wire(){
-  root=document.getElementById('tangram-levels');if(!root){setTimeout(wire,120);return}levelsHost=root.querySelector('#levels');if(!levelsHost){setTimeout(wire,120);return}
-  root.addEventListener('click',e=>{const b=e.target?.closest?.('#levels button.tl-level[data-rai-bonus]');if(!b)return;const i=Number(b.dataset.raiBonus),meta=BONUS[i];if(!meta)return;if(count()<meta.need){e.preventDefault();e.stopImmediatePropagation();showLocked(i)}},true);
-  let queued=false;observer=new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;decorate()})});observer.observe(levelsHost,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','class']});decorate();
-  setInterval(()=>{const n=count();if(n!==lastCount){try{window.__raiTangramBonusBridge?.refresh?.()}catch(e){}}decorate()},400);
- }
- window.__raiProvaRewardsV2={mounted:true,count,refresh:decorate,showLocked};wire();
-})();
+
