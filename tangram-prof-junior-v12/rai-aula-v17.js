@@ -21,15 +21,16 @@
   }
 
   const years=[5,6,7,8,9];
-  const order=['fund','pc','prog','math','digital'];
+  const order=['fund','pc','prog','math','digital','robotics'];
   const meta={
     fund:{icon:'🧠',title:'Fundamentos',sub:'Lógica, algoritmos, linguagens, dados, eixos da Computação e depuração',count:8,yearless:true},
     pc:{icon:'🧩',title:'Pensamento Computacional',sub:'Representar problemas, decompor, generalizar, reutilizar e modelar soluções',count:10},
     prog:{icon:'💻',title:'Programação',sub:'Progressão do 5º ao 9º ano, de algoritmos em blocos a estruturas, projetos e eventos',count:15},
     math:{icon:'🔷',title:'Matemática & Geometria',sub:'Tangram, ângulos, transformações, área, escala, semelhança e Pitágoras',count:15},
-    digital:{icon:'🌐',title:'Mundo & Cultura Digital',sub:'Computadores, redes, segurança, cidadania, privacidade, autoria e impacto social',count:10}
+    digital:{icon:'🌐',title:'Mundo & Cultura Digital',sub:'Computadores, redes, segurança, cidadania, privacidade, autoria e impacto social',count:10},
+    robotics:{icon:'🤖',title:'Programação & Robótica • 3º trimestre',sub:'Trilha curricular SEED-PR • 6º ao 9º ano • desafios progressivos',count:16}
   };
-  let banks={fund:[],pc:[],prog:[],math:[],digital:[]};
+  let banks={fund:[],pc:[],prog:[],math:[],digital:[],robotics:[]};
   let ready=false;
 
   const sources={
@@ -37,7 +38,8 @@
     pc:'rai-pensamento-v17.json?v=17',
     prog:'rai-programacao-v17.json?v=17',
     math:'rai-matematica-v17.json?v=17',
-    digital:'rai-mundo-digital-v17.json?v=17'
+    digital:'rai-mundo-digital-v17.json?v=17',
+    robotics:'rai-robotica-t3-v18.json?v=18'
   };
 
   Promise.all(order.map(s=>fetch(sources[s],{cache:'no-store'})
@@ -65,7 +67,7 @@
         '<div class="rai-v17-breadcrumb"><button type="button" id="raiHomeFromSection">Trilhas</button><span>›</span><b id="raiSectionCrumb"></b></div>'+
         '<div class="rai-section-title" id="raiSectionTitle"></div>'+
         '<div class="rai-year-tabs" id="raiYearTabs"></div>'+
-        '<div class="rai-lesson-list" id="raiLessonList"></div>'+
+        '<div id="raiCurriculumChallenges"></div><div class="rai-lesson-list" id="raiLessonList"></div>'+
       '</div>'+
       '<div class="rai-lesson-detail" id="raiLessonDetail" hidden>'+
         '<div class="rai-v17-breadcrumb"><button type="button" id="raiHomeFromDetail">Trilhas</button><span>›</span><button type="button" id="raiSectionFromDetail"></button><span>›</span><b id="raiLessonCrumb"></b></div>'+
@@ -84,7 +86,7 @@
         '<button type="button" class="rai-teacher-toggle" id="raiTeacherToggle">ⓘ Professor</button>'+
         '<div class="rai-teacher-box" id="raiTeacherBox"><b>Alinhamento curricular e uso docente</b><p id="raiTeacherAxis"></p><p id="raiTeacherReference"></p><p id="raiTeacherObjective"></p><p id="raiTeacherTip"></p><small>Referências curriculares orientam o planejamento; não representam homologação institucional do aplicativo.</small></div>'+
         '<div class="rai-v17-lesson-nav"><button type="button" id="raiPrevLesson">← Anterior</button><button type="button" id="raiListLessons">☰ Aulas desta área</button><button type="button" id="raiNextLesson">Próxima →</button></div>'+
-        '<div class="rai-lesson-actions"><button type="button" class="primary" id="raiLessonSpeak">🔊 Ouvir com a R.A.I.</button><button type="button" id="raiLessonTry">🎯 Aplicar desafio</button><button type="button" id="raiSwitchSection">🧭 Trocar disciplina</button><button type="button" id="raiLessonClose">Continuar jogando</button></div>'+
+        '<div class="rai-lesson-actions"><button type="button" class="primary" id="raiLessonComplete">✓ Concluir aula</button><button type="button" id="raiLessonSpeak">🔊 Ouvir com a R.A.I.</button><button type="button" id="raiLessonTry">🎯 Aplicar desafio</button><button type="button" id="raiSwitchSection">🧭 Trocar disciplina</button><button type="button" id="raiLessonClose">Continuar jogando</button></div>'+
       '</div>'+
     '</div>'+
   '</div>';
@@ -102,6 +104,12 @@
   const sectionFromDetail=overlay.querySelector('#raiSectionFromDetail');
   const fixList=overlay.querySelector('#raiFixList');
   const fixDone=overlay.querySelector('#raiFixDone');
+  const curriculumChallenges=overlay.querySelector('#raiCurriculumChallenges');
+  const completeBtn=overlay.querySelector('#raiLessonComplete');
+  const DONE_KEY='raiAulaT3DoneV18';
+  let doneLessons=[];try{doneLessons=JSON.parse(localStorage.getItem(DONE_KEY)||'[]')}catch(e){}
+  const saveDone=()=>{try{localStorage.setItem(DONE_KEY,JSON.stringify(doneLessons))}catch(e){}};
+  const rewardSteps=[1,2,4,6,8,10,12,14,16];
 
   const els={
     topic:overlay.querySelector('#raiLessonTopic'),
@@ -174,12 +182,19 @@
     renderTabs(section);
     const arr=getSectionLessons(section);
     list.innerHTML=arr.length?arr.map((l,i)=>
-      '<button type="button" class="rai-lesson-item" data-id="'+l.id+'">'+
-        '<span class="rai-lesson-item-icon">'+l.icon+'</span><span><b>'+(i+1)+'. '+l.topic+'</b><small>'+l.objective+'</small><u>'+l.axis+'</u></span><em>›</em>'+
+      '<button type="button" class="rai-lesson-item '+(doneLessons.includes(l.id)?'rai-done':'')+'" data-id="'+l.id+'">'+
+        '<span class="rai-lesson-item-icon">'+l.icon+'</span><span><b>'+(i+1)+'. '+l.topic+'</b><small>'+l.objective+'</small><u>'+l.axis+(doneLessons.includes(l.id)?' • ✓ concluída':'')+'</u></span><em>›</em>'+
       '</button>'
     ).join(''):'<div class="rai-lesson-loading">'+(ready?'Nenhuma aula nesta seleção.':'Carregando aulas...')+'</div>';
+    renderCurriculumChallenges(section);
   }
 
+  function renderCurriculumChallenges(section){
+    if(section!=='robotics'){curriculumChallenges.innerHTML='';return}
+    const n=doneLessons.filter(id=>/^rob[6-9]t3-/.test(id)).length;
+    curriculumChallenges.innerHTML='<div class="rai-t3-rewards"><b>🏆 Desafios desbloqueados pelas aulas</b><small>'+n+'/16 aulas concluídas</small><div>'+rewardSteps.map((step,i)=>'<button type="button" data-reward="'+(i+5)+'" '+(n<step?'disabled':'')+'>'+(n>=step?'🧩':'🔒')+' '+(i+6)+'. '+(n>=step?'Abrir desafio':'libera com '+step+' aula'+(step>1?'s':''))+'</button>').join('')+'</div></div>';
+  }
+  curriculumChallenges.addEventListener('click',e=>{const b=e.target.closest('[data-reward]');if(!b||b.disabled)return;const idx=Number(b.dataset.reward);try{window.__raiTangramBonusBridge?.open(idx);overlay.classList.remove('show')}catch(err){}});
   function findLesson(id){
     for(const s of order){
       const l=(banks[s]||[]).find(x=>x.id===id);
@@ -234,6 +249,8 @@
     els.prev.disabled=currentIndex<=0;
     els.next.disabled=currentIndex<0||currentIndex>=currentList.length-1;
     renderFixation();
+    completeBtn.style.display=current.section==='robotics'?'':'none';
+    completeBtn.textContent=doneLessons.includes(current.id)?'✓ Aula concluída':'✓ Concluir aula e liberar progresso';
   }
 
   sections.addEventListener('click',e=>{
@@ -284,6 +301,8 @@
     els.answerBtn.textContent=show?'Ocultar resposta':'Ver resposta comentada';
   });
   overlay.querySelector('#raiTeacherToggle').addEventListener('click',()=>els.teacherBox.classList.toggle('show'));
+
+  completeBtn.addEventListener('click',()=>{if(!current||current.section!=='robotics')return;if(!doneLessons.includes(current.id)){doneLessons.push(current.id);saveDone();try{window.tangramAnalytics&&window.tangramAnalytics('curriculum_lesson_complete',{year:String(current.year),lesson_id:current.id})}catch(e){}}completeBtn.textContent='✓ Aula concluída';const bubble=document.querySelector('.rai-tutor-bubble');if(bubble){const n=doneLessons.filter(id=>/^rob[6-9]t3-/.test(id)).length;const unlocked=rewardSteps.filter(x=>n>=x).length;bubble.innerHTML='<b>🎓 R.A.I.</b><br>Aula concluída! Progresso: '+n+'/16 • '+unlocked+'/9 desafios liberados.';bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),6000)}});
 
   overlay.querySelector('#raiLessonSpeak').addEventListener('click',()=>{
     if(!current)return;
