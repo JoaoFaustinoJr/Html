@@ -1,42 +1,22 @@
 (()=>{
- if(window.__raiProvaRewardsV2?.mounted)return;
- const STORE='raiProvaParana2026V2',BONUS_START=5;
- const BONUS=[
-  {title:'Gato Espelhado',need:1,icon:'🐈'},
-  {title:'Corredor Invertido',need:2,icon:'🏃'},
-  {title:'Cisne Reflexo',need:3,icon:'🦢'},
-  {title:'Foguete Reverso',need:4,icon:'🚀'}
- ];
- let root=null,levelsHost=null,observer=null,overlay=null,lastCount=-1;
- function state(){try{const v=JSON.parse(localStorage.getItem(STORE)||'{}');return{done:Array.isArray(v.done)?v.done:[]}}catch(e){return{done:[]}}}
- function count(){return Math.min(4,new Set(state().done).size)}
- function openProva(){try{if(window.__raiProvaParanaV1?.open){window.__raiProvaParanaV1.open();return}document.querySelector('.rai-pp-hero')?.click()}catch(e){}}
- function ensureOverlay(){
-  if(overlay?.isConnected)return overlay;
-  overlay=document.createElement('div');overlay.className='rai-bonus-overlay';
-  overlay.innerHTML=`<div class="rai-bonus-card" role="dialog" aria-modal="true"><button type="button" class="rai-bonus-close" aria-label="Fechar">×</button><div class="rai-bonus-trophy">🎁</div><small>MISSÃO DA RAÍ</small><h3></h3><p></p><div class="rai-bonus-actions"><button type="button" data-study>🎯 Ir para Prova Paraná</button><button type="button" data-close>Fechar</button></div></div>`;
-  document.body.appendChild(overlay);const close=()=>overlay.classList.remove('show');
-  overlay.querySelector('.rai-bonus-close').onclick=close;overlay.querySelector('[data-close]').onclick=close;overlay.querySelector('[data-study]').onclick=()=>{close();openProva()};overlay.addEventListener('click',e=>{if(e.target===overlay)close()});return overlay;
+ if(window.__raiCurriculumRewards?.mounted)return;
+ const KEY='raiAulaT3DoneV18', ids=['rob6t3-1','rob6t3-2','rob6t3-3','rob6t3-4'];
+ let root=null,host=null,obs=null,timer=null;
+ const done=()=>{try{return new Set(JSON.parse(localStorage.getItem(KEY)||'[]'))}catch(e){return new Set()}};
+ const buttons=()=>[...(host?.querySelectorAll('button.tl-level,#levels .tl-level')||[])];
+ const numberOf=b=>{const m=(b?.textContent||'').trim().match(/^(?:🔒\s*)?(\d+)\./);return m?Number(m[1]):0};
+ const byNumber=n=>buttons().find(b=>numberOf(b)===n)||null;
+ function paint(){
+  root=document.getElementById('tangram-levels');host=root?.querySelector('#levels');if(!host)return;
+  // 11–14: progressão comum; sem regra Prova Paraná.
+  for(let n=11;n<=14;n++){const b=byNumber(n);if(!b)continue;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.classList.remove('rai-bonus-unlocked','rai-bonus-locked','rai-parana-legacy');b.querySelectorAll('.rai-bonus-badge,.rai-curriculum-badge').forEach(x=>x.remove())}
+  // 15–18: única coleção condicionada às aulas.
+  const d=done();
+  ids.forEach((id,i)=>{const n=15+i,b=byNumber(n);if(!b)return;const ok=d.has(id);b.dataset.raiCurriculum=String(n);b.disabled=!ok;b.setAttribute('aria-disabled',ok?'false':'true');b.classList.toggle('rai-bonus-unlocked',ok);b.classList.toggle('rai-bonus-locked',!ok);let badge=b.querySelector('.rai-curriculum-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge rai-curriculum-badge';b.appendChild(badge)}badge.textContent=ok?'🔓 ABRIR':'🔒 Aula '+(i+1);b.title=ok?'Abrir desafio curricular':'Conclua a aula '+(i+1)+' de Programação & Robótica'});
+  host.querySelectorAll('.rai-bonus-section').forEach(x=>x.remove());
+  const first=byNumber(15);if(first){const s=document.createElement('div');s.className='rai-bonus-section rai-curriculum-section';const n=ids.filter(id=>d.has(id)).length;s.innerHTML='<div class="rai-bonus-icon">🆕</div><div><b>Novos desafios • Programação & Robótica</b><span>3º trimestre • 6º ano • '+n+'/4 desbloqueados pelas aulas</span></div>';first.parentNode.insertBefore(s,first)}
  }
- function showLocked(i){const meta=BONUS[i],n=count(),missing=Math.max(1,meta.need-n),o=ensureOverlay();o.querySelector('.rai-bonus-trophy').textContent='🔒';o.querySelector('h3').textContent=meta.icon+' '+meta.title;o.querySelector('p').innerHTML=missing===1?'Conclua mais <b>1 aula</b> do Especial Prova Paraná para liberar esta missão.':`Conclua mais <b>${missing} aulas</b> do Especial Prova Paraná para liberar esta missão.`;o.classList.add('show')}
- function bonusButton(i){if(!levelsHost)return null;return [...levelsHost.querySelectorAll('button.tl-level')][BONUS_START+i]||null}
- function ensureSection(){const first=bonusButton(0);if(!first)return;let s=levelsHost.querySelector('.rai-bonus-section');if(!s){s=document.createElement('div');s.className='rai-bonus-section';first.parentNode.insertBefore(s,first)}s.innerHTML=`<span>🎯</span><div><b>Desafios Bônus</b><small>Prova Paraná • ${count()}/4 liberados</small></div>`}
- function curriculumDone(){try{return new Set(JSON.parse(localStorage.getItem('raiAulaT3DoneV18')||'[]'))}catch(e){return new Set()}}
- function decorateCurriculum(buttons){
-  const done=curriculumDone(),ids=['rob6t3-1','rob6t3-2','rob6t3-3','rob6t3-4'];
-  ids.forEach((id,i)=>{const b=buttons[14+i];if(!b)return;const unlocked=done.has(id);b.dataset.raiCurriculum=String(i);delete b.dataset.raiBonus;b.disabled=!unlocked;b.setAttribute('aria-disabled',unlocked?'false':'true');b.classList.toggle('rai-bonus-unlocked',unlocked);b.classList.toggle('rai-bonus-locked',!unlocked);let badge=b.querySelector('.rai-curriculum-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge rai-curriculum-badge';b.appendChild(badge)}badge.textContent=unlocked?'🔓 ABRIR':'🔒 Aula '+(i+1);b.title=unlocked?'Abrir novo desafio curricular':'Conclua a aula '+(i+1)+' de Programação & Robótica do 6º ano'});
- }
- function decorate(){
-  if(!root)return;levelsHost=root.querySelector('#levels');if(!levelsHost)return;
-  const buttons=[...levelsHost.querySelectorAll('button.tl-level')];
-  // 11–14 voltam a ser níveis comuns: seguem a progressão normal do Tangram.
-  [5,6,7,8].forEach(idx=>{const b=buttons[idx];if(!b)return;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.classList.remove('rai-bonus-unlocked','rai-bonus-locked','rai-parana-legacy');b.querySelectorAll('.rai-bonus-badge').forEach(x=>x.remove());b.title='Origem: desafio especial Prova Paraná 2026'});
-  // Somente 15–18 são condicionados às novas aulas.
-  decorateCurriculum(buttons);
-  levelsHost.querySelectorAll('.rai-bonus-section:not(.rai-curriculum-section)').forEach(x=>x.remove());
-  let head=levelsHost.querySelector('.rai-curriculum-section');if(!head){head=document.createElement('div');head.className='rai-bonus-section rai-curriculum-section';const anchor=buttons[9];anchor?levelsHost.insertBefore(head,anchor):levelsHost.appendChild(head)}
-  const done=curriculumDone(),n=['rob6t3-1','rob6t3-2','rob6t3-3','rob6t3-4'].filter(id=>done.has(id)).length;
-  head.innerHTML='<div class="rai-bonus-icon">🆕</div><div><b>Novos desafios • Programação & Robótica</b><span>3º trimestre • 6º ano • '+n+'/4 desbloqueados pelas aulas</span></div>';
-  lastCount=4;
- }
-
+ function schedule(){clearTimeout(timer);timer=setTimeout(paint,60)}
+ function boot(){root=document.getElementById('tangram-levels');host=root?.querySelector('#levels');if(!host){setTimeout(boot,120);return}paint();obs=new MutationObserver(schedule);obs.observe(host,{childList:true,subtree:true});window.addEventListener('storage',e=>{if(e.key===KEY)schedule()});document.addEventListener('rai:lesson-complete',schedule)}
+ boot();window.__raiCurriculumRewards={mounted:true,refresh:paint};
+})();
