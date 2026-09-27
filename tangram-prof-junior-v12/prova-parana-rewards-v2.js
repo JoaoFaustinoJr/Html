@@ -29,10 +29,11 @@
  function decorate(){
   if(!root)return;levelsHost=root.querySelector('#levels');if(!levelsHost)return;
   const buttons=[...levelsHost.querySelectorAll('button.tl-level')];
-  // Legado Prova Paraná (11–14): coleção histórica, agora aberta para todos.
-  [5,6,7,8].forEach((idx,j)=>{const b=buttons[idx];if(!b)return;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.disabled=false;b.removeAttribute('disabled');b.setAttribute('aria-disabled','false');b.classList.remove('locked','rai-bonus-locked');b.classList.add('rai-bonus-unlocked','rai-parana-legacy');let badge=b.querySelector('.rai-bonus-badge');if(!badge){badge=document.createElement('span');badge.className='rai-bonus-badge';b.appendChild(badge)}badge.textContent='🎯 PROVA PARANÁ • ABERTO';b.title='Desafio especial da coleção Prova Paraná — acesso livre'});
+  // 11–14 voltam a ser níveis comuns: seguem a progressão normal do Tangram.
+  [5,6,7,8].forEach(idx=>{const b=buttons[idx];if(!b)return;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.classList.remove('rai-bonus-unlocked','rai-bonus-locked','rai-parana-legacy');b.querySelectorAll('.rai-bonus-badge').forEach(x=>x.remove());b.title=''});
+  // Somente 15–18 são condicionados às novas aulas.
   decorateCurriculum(buttons);
-  let old=levelsHost.querySelector('.rai-bonus-section');if(old)old.remove();
+  levelsHost.querySelectorAll('.rai-bonus-section:not(.rai-curriculum-section)').forEach(x=>x.remove());
   let head=levelsHost.querySelector('.rai-curriculum-section');if(!head){head=document.createElement('div');head.className='rai-bonus-section rai-curriculum-section';const anchor=buttons[9];anchor?levelsHost.insertBefore(head,anchor):levelsHost.appendChild(head)}
   const done=curriculumDone(),n=['rob6t3-1','rob6t3-2','rob6t3-3','rob6t3-4'].filter(id=>done.has(id)).length;
   head.innerHTML='<div class="rai-bonus-icon">🆕</div><div><b>Novos desafios • Programação & Robótica</b><span>3º trimestre • 6º ano • '+n+'/4 desbloqueados pelas aulas</span></div>';
