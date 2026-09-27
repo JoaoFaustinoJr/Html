@@ -1,5 +1,5 @@
 (()=>{const root=document.getElementById('tangram-levels');if(!root)return;
-const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.6 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:true,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
+const sub=root.querySelector('.tl-sub');if(sub&&/v12/i.test(sub.textContent||''))sub.textContent='Prof. João Faustino Junior • v13.6 • R.A.I. Tutora';const STORE='tangram_rai_tutora_v13';let prefs={auto:false,voice:false,rating:0};try{prefs={...prefs,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(prefs))}catch(e){}};
 const rai='rai-icon.svg?v=rai3';const title=()=>((root.querySelector('#title')?.textContent||'Missão atual').replace(/\s+/g,' ').trim());const allText=()=>[...root.querySelectorAll('.tl-metertext,.tl-msg,#msg,.tl-chip,.tl-stats')].map(x=>x.textContent||'').join(' ').replace(/\s+/g,' ').trim();
 const metric=(t,n)=>{const m=t.match(new RegExp(n+'\\s*:?\\s*([0-9]+(?:[\\.,][0-9]+)?)','i'));return m?Number(m[1].replace(',','.')):null};const metrics=()=>{const t=allText();return{coverage:metric(t,'cobertura'),overlap:metric(t,'sobreposição'),outside:metric(t,'fora')}};
 let raiVoice=null;
@@ -39,7 +39,7 @@ const say=(t,opts={})=>{
 window.__raiSpeak=say;
 window.__raiStopSpeak=stopSay;
 
-const fab=document.createElement('button');fab.type='button';fab.className='rai-tutor-fab';fab.setAttribute('aria-label','Abrir R.A.I.');fab.innerHTML='<img src="'+rai+'" alt="R.A.I.">';document.body.appendChild(fab);
+const fab=document.createElement('button');fab.type='button';fab.className='rai-tutor-fab rai-easter';fab.setAttribute('aria-label','Abrir R.A.I.');fab.innerHTML='<img src="'+rai+'" alt="R.A.I.">';document.body.appendChild(fab);
 const bubble=document.createElement('div');bubble.className='rai-tutor-bubble';document.body.appendChild(bubble);const show=(msg,speak=false)=>{bubble.innerHTML='<b>🤖 R.A.I.</b><br>'+msg;bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),4700);if(speak)say(msg)};
 
 const panel=document.createElement('div');panel.className='rai-tutor-overlay';panel.innerHTML='<div class="rai-tutor-card"><div class="rai-tutor-head"><img src="'+rai+'" alt="R.A.I."><div><h3>R.A.I. • Tutora</h3><small>Dicas, explicações e incentivo</small></div><button class="rai-tutor-close" type="button">×</button></div><p>Posso ajudar sem entregar a solução.</p><div class="rai-tutor-grid"><button class="rai-tutor-action primary" id="raiHint" type="button"><b>💡 Dica</b><small>Ajuda em níveis</small></button><button class="rai-tutor-action" id="raiExplain" type="button"><b>🧠 Explicar</b><small>Entenda a geometria</small></button><button class="rai-tutor-action" id="raiAnalyse" type="button"><b>🔎 Analisar</b><small>Leia os indicadores</small></button><button class="rai-tutor-action" id="raiCheer" type="button"><b>🌟 Incentivar</b><small>Motivação curta</small></button><button class="rai-tutor-action" id="raiFeedback" type="button"><b>💬 Feedback</b><small>Enviar ao professor</small></button><button class="rai-tutor-action" id="raiContinue" type="button"><b>✓ Continuar</b><small>Voltar ao desafio</small></button></div><div class="rai-tutor-setting"><span>Intervenções automáticas</span><button class="rai-tutor-toggle" id="raiAuto" type="button"></button></div><div class="rai-tutor-setting"><span>Fala da R.A.I.</span><button class="rai-tutor-toggle" id="raiVoice" type="button"></button></div></div>';document.body.appendChild(panel);
@@ -83,21 +83,21 @@ const successMessage=()=>{
   return successLines[i]+(next?' A missão '+next+' foi desbloqueada. Vou mostrar onde ela está.':'');
 };
 let lastTitle='',lastMsg='',lastAuto=0;
-const intro=()=>{const t=title();if(!prefs.auto||!t||t===lastTitle)return;lastTitle=t;setTimeout(()=>{if(Date.now()-lastAuto<4500)return;lastAuto=Date.now();show('Nova missão! Observe primeiro a silhueta e imagine onde as peças maiores podem formar a estrutura.')},700)};
+const intro=()=>{const t=title();if(!t||t===lastTitle)return;lastTitle=t;};
 const inspect=()=>{
   const msg=(root.querySelector('#msg')?.textContent||'').replace(/\s+/g,' ').trim();
-  if(!prefs.auto||!msg||msg===lastMsg)return;
+  if(!msg||msg===lastMsg)return;
   lastMsg=msg;
   const low=msg.toLowerCase(),now=Date.now();
   if(now-lastAuto<1600)return;
-  if(/miss[aã]o conclu[ií]da/.test(low)){
+  if(false&&/miss[aã]o conclu[ií]da/.test(low)){
     const m=metrics();
     const valid=(m.coverage==null||m.coverage>=99.7)&&(m.overlap==null||m.overlap<=0.12)&&(m.outside==null||m.outside<=0.12);
     if(valid){lastAuto=now;show(successMessage(),true)}
-  }else if(/tente novamente|ainda n[aã]o|sobrepos|fora/.test(low)){lastAuto=now;show(analyse())}
+  }else if(false&&/tente novamente|ainda n[aã]o|sobrepos|fora/.test(low)){lastAuto=now;show(analyse())}
 };
 const te=root.querySelector('#title');if(te)new MutationObserver(()=>setTimeout(intro,50)).observe(te,{subtree:true,childList:true,characterData:true});const me=root.querySelector('#msg');if(me)new MutationObserver(()=>setTimeout(inspect,70)).observe(me,{subtree:true,childList:true,characterData:true,attributes:true});
-root.addEventListener('click',e=>{const b=e.target?.closest?.('button');if(!b)return;const l=((b.textContent||'')+' '+(b.id||'')).toLowerCase();if(/dica/.test(l))setTimeout(()=>show(hint()),140);else if(/verificar|check/.test(l)&&prefs.auto)setTimeout(()=>{if(Date.now()-lastAuto>1700){lastAuto=Date.now();show(analyse())}},520);else if(/amostra|sample/.test(l))show('A amostra é apoio visual. Compare a organização e depois tente reconstruir com sua própria estratégia.')});intro();
+root.addEventListener('click',e=>{const b=e.target?.closest?.('button');if(!b)return;const l=((b.textContent||'')+' '+(b.id||'')).toLowerCase();if(/dica/.test(l))setTimeout(()=>show(hint()),140);else if(false&&/verificar|check/.test(l)){}else if(false&&/amostra|sample/.test(l)){}});intro();
 })();
 /* RAI_ENHANCE_SHAPES_DRAG */
 (()=>{
