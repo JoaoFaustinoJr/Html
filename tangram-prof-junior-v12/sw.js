@@ -1,49 +1,77 @@
-const CACHE='tangram-rai-v12-81';
-const ASSETS=['./index.html','./content-v12.json','./manifest.webmanifest','./v10.css','./comfort-v11.css','./focus-v11.css','./performance-v12.css','./app-v10.js','./comfort-v11.js','./performance-v12.js','./rai-tutor-v13.js','./rai-tutor-v13.css','./rai-icon.svg','./rai-aula-v17.js','./rai-aula-v14.css','./rai-aula-v16.css','./rai-aula-v17.css','./rai-fundamentos-v17.json','./rai-pensamento-v17.json','./rai-programacao-v17.json','./rai-matematica-v17.json','./rai-mundo-digital-v17.json','./rai-ensino-medio-v1.json','./rai-ensino-medio-v1.css','./aulas-entry-v1595.js','./aulas-entry-v1595.css','./answer-order-v1.js','./verify-assist-v1.js','./prova-parana-v1.js','./prova-parana-v1.css','./prova-parana-subjects.css','./prova-parana-rewards-v2.js','./prova-parana-rewards-v1.css','./prova-parana-welcome-v2.js','./prova-parana-welcome-v1.css','./prova-parana-6-v1.json','./prova-parana-7-v1.json','./prova-parana-8a-v1.json','./prova-parana-8b-v1.json','./prova-parana-8c-v1.json','./prova-parana-8d-v1.json','./prova-parana-9-v1.json','./prova-parana-professor-v1.json','./prova-parana-portugues-6-v1.json','./prova-parana-portugues-professor-v1.json','./pp-lp-7-v1.js','./pp-lp-8-v1.js','./pp-lp-9-v1.js','./ios-install-v1.js','./ios-install-v1.css','./gamer-official-v1.js','./gamer-official-v1.css','./shared-ui-v14.css','./identity-v15.css','./update-manager-v14.js','./game-polish-v13.js','./game-polish-v13.css','./icon-192.png','./icon-512.webp','./apple-touch-icon.png','../tangram-prof-junior/rai-chalk.webp','../tangram-prof-junior/chunk01.txt','../tangram-prof-junior/chunk02-03.txt','../tangram-prof-junior/chunk04-05.txt','../tangram-prof-junior/chunk06-07.txt','../tangram-prof-junior/chunk08-09.txt'];
-const LIVE_RE=/\/(app-v10\.js|comfort-v11\.js|performance-v12\.js|rai-tutor-v13\.js|rai-aula-v17\.js|aulas-entry-v1595\.js|answer-order-v1\.js|prova-parana-v1\.js|prova-parana-rewards-v2\.js|prova-parana-welcome-v2\.js|pp-lp-(?:7|8|9)-v1\.js|ios-install-v1\.js|gamer-official-v1\.js|update-manager-v14\.js|game-polish-v13\.js|v10\.css|comfort-v11\.css|focus-v11\.css|performance-v12\.css|rai-tutor-v13\.css|rai-aula-v14\.css|rai-aula-v16\.css|rai-aula-v17\.css|rai-ensino-medio-v1\.css|aulas-entry-v1595\.css|prova-parana-v1\.css|prova-parana-subjects\.css|prova-parana-rewards-v1\.css|prova-parana-welcome-v1\.css|ios-install-v1\.css|gamer-official-v1\.css|shared-ui-v14\.css|identity-v15\.css|game-polish-v13\.css|rai-icon\.svg|rai-fundamentos-v17\.json|rai-pensamento-v17\.json|rai-programacao-v17\.json|rai-matematica-v17\.json|rai-mundo-digital-v17\.json|rai-ensino-medio-v1\.json|prova-parana-(?:6|7|8a|8b|8c|8d|9|professor)-v1\.json|prova-parana-portugues-(?:6|professor)-v1\.json|content-v12\.json|manifest\.webmanifest|icon-192\.png|icon-512\.webp|apple-touch-icon\.png)$/;
-const INDEX_MARK="  const raiImg='rai-icon.svg?v=rai2';";
-const INDEX_PATCH=`  // raiBonusNativeAccess: bônus 11–14 seguem a conclusão das aulas do Especial Prova Paraná.\n  page=page.replace("function canAccess(i){return i===0||completed.has(i-1)}","function canAccess(i){if(i>=10&&i<=13){try{const s=JSON.parse(localStorage.getItem('raiProvaParana2026V2')||'{}');const d=Array.isArray(s.done)?new Set(s.done).size:0;return Math.min(4,d)>=(i-9)}catch(e){return false}}return i===0||completed.has(i-1)}");\n`;
-function patchIndexText(html){return html.includes('raiBonusNativeAccess')?html:html.replace(INDEX_MARK,INDEX_PATCH+INDEX_MARK)}
-function patchAulaText(js){
- if(js.includes("title:'Ensino Médio • Mídias Digitais'")&&js.includes('raiLessonExpand'))return js;
- if(!js.includes("title:'Ensino Médio • Mídias Digitais'")){
-  js=js.replace("  if(!game)return;\n\n  const KEY", "  if(!game)return;\n  if(!document.querySelector('link[data-rai-em-style]')){const em=document.createElement('link');em.rel='stylesheet';em.href='rai-ensino-medio-v1.css?v=1';em.dataset.raiEmStyle='1';document.head.appendChild(em)}\n\n  const KEY");
-  js=js.replace("const order=['fund','pc','prog','math','digital'];", "const order=['fund','pc','prog','math','digital','em'];");
-  js=js.replace("    digital:{icon:'🌐',title:'Mundo & Cultura Digital',sub:'Computadores, redes, segurança, cidadania, privacidade, autoria e impacto social',count:10}\n  };", "    digital:{icon:'🌐',title:'Mundo & Cultura Digital',sub:'Computadores, redes, segurança, cidadania, privacidade, autoria e impacto social',count:10},\n    em:{icon:'🎓',title:'Ensino Médio • Mídias Digitais',sub:'Comunicação, plataformas, linguagem, algoritmos, público e leitura crítica',count:1,yearless:true}\n  };");
-  js=js.replace("let banks={fund:[],pc:[],prog:[],math:[],digital:[]};", "let banks={fund:[],pc:[],prog:[],math:[],digital:[],em:[]};");
-  js=js.replace("    digital:'rai-mundo-digital-v17.json?v=17'\n  };", "    digital:'rai-mundo-digital-v17.json?v=17',\n    em:'rai-ensino-medio-v1.json?v=1'\n  };");
-  js=js.replace("<small>Modo pedagógico • 5º ao 9º ano</small><div class=\"rai-lesson-every\">58 microaulas • BNCC + Referencial Curricular do Paraná</div>", "<small>Modo pedagógico • 5º ao 9º ano + Ensino Médio</small><div class=\"rai-lesson-every\">59 microaulas • Fundamental + Ensino Médio • referências curriculares do Paraná</div>");
-  js=js.replace("As trilhas seguem os eixos Pensamento Computacional, Mundo Digital e Cultura Digital da BNCC Computação e do Referencial Curricular do Paraná, além das referências de Matemática.", "As trilhas reúnem Computação, Matemática e Cultura Digital do Ensino Fundamental e passam a incorporar conteúdos selecionados do Ensino Médio, começando por Mídias Digitais.");
-  js=js.replace("    return (actual||meta[section].count)+' aulas';", "    const n=actual||meta[section].count;return n+' '+(n===1?'aula':'aulas');");
-  js=js.replace("    lessonCrumb.textContent=(current.year?current.year+'º ano • ':'')+current.topic;\n    els.topic.textContent=current.icon+' '+(current.year?current.year+'º ano • ':'')+current.topic;", "    const levelLabel=current.levelLabel||(current.year?current.year+'º ano':'');\n    lessonCrumb.textContent=(levelLabel?levelLabel+' • ':'')+current.topic;\n    els.topic.textContent=current.icon+' '+(levelLabel?levelLabel+' • ':'')+current.topic;");
-  js=js.replace("    const prefix=current.year?'Aula do '+current.year+'º ano. ':'Fundamento. ';", "    const prefix=current.levelLabel?'Aula da '+current.levelLabel+'. ':(current.year?'Aula do '+current.year+'º ano. ':'Fundamento. ');");
-  js=js.replace("(current.year?current.year+'º ano':'Fundamentos')", "(current.levelLabel||(current.year?current.year+'º ano':'Fundamentos'))");
- }
- if(!js.includes('raiLessonExpand')){
-  js=js.replace("      '<button type=\"button\" class=\"rai-lesson-close\" aria-label=\"Fechar\">×</button>'+", "      '<button type=\"button\" class=\"rai-lesson-expand\" id=\"raiLessonExpand\" aria-label=\"Expandir aulas\" title=\"Expandir aulas\">⛶</button>'+\n      '<button type=\"button\" class=\"rai-lesson-close\" aria-label=\"Fechar\">×</button>'+" );
-  js=js.replace("  document.body.appendChild(overlay);", "  document.body.appendChild(overlay);\n  const lessonExpand=overlay.querySelector('#raiLessonExpand');\n  const setLessonExpanded=on=>{overlay.classList.toggle('rai-lesson-expanded',!!on);if(lessonExpand){lessonExpand.textContent=on?'🗗':'⛶';lessonExpand.setAttribute('aria-label',on?'Reduzir aulas':'Expandir aulas');lessonExpand.title=on?'Reduzir aulas':'Expandir aulas'}};\n  lessonExpand?.addEventListener('click',()=>setLessonExpanded(!overlay.classList.contains('rai-lesson-expanded')));\n  new MutationObserver(()=>{if(!overlay.classList.contains('show')&&overlay.classList.contains('rai-lesson-expanded'))setLessonExpanded(false)}).observe(overlay,{attributes:true,attributeFilter:['class']});\n  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('rai-lesson-expanded')){e.preventDefault();e.stopImmediatePropagation();setLessonExpanded(false)}},true);" );
- }
- return js;
-}
-function textResponse(resp,text,type='text/plain; charset=utf-8'){const h=new Headers(resp.headers);h.set('content-type',type);h.delete('content-length');return new Response(text,{status:resp.status,statusText:resp.statusText,headers:h})}
-function indexResponse(resp,html){return textResponse(resp,html,'text/html; charset=utf-8')}
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(ASSETS.map(u=>cache.add(u)))).then(()=>self.skipWaiting()))});
-self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tangram-rai-v12-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
-self.addEventListener('fetch',event=>{
- if(event.request.method!=='GET')return;
- if(event.request.mode==='navigate'){
-  event.respondWith(fetch(event.request,{cache:'no-store'}).then(async resp=>{if(!resp||!resp.ok)throw new Error('navigation');const html=patchIndexText(await resp.text()),out=indexResponse(resp,html);caches.open(CACHE).then(c=>c.put('./index.html',out.clone())).catch(()=>{});return out}).catch(async()=>{const cached=await caches.match('./index.html');if(!cached)return cached;const html=patchIndexText(await cached.text());return indexResponse(cached,html)}));
-  return;
- }
- const u=new URL(event.request.url);
- if(/\/rai-aula-v17\.js$/.test(u.pathname)){
-  event.respondWith(fetch(event.request,{cache:'no-store'}).then(async resp=>{if(!resp||!resp.ok)throw new Error('aulas');const out=textResponse(resp,patchAulaText(await resp.text()),'text/javascript; charset=utf-8');caches.open(CACHE).then(c=>c.put(event.request,out.clone())).catch(()=>{});return out}).catch(async()=>{const cached=await caches.match(event.request,{ignoreSearch:true});if(!cached)return cached;return textResponse(cached,patchAulaText(await cached.text()),'text/javascript; charset=utf-8')}));
-  return;
- }
- if(LIVE_RE.test(u.pathname)){
-  event.respondWith(fetch(event.request,{cache:'no-store'}).then(resp=>{if(!resp||!resp.ok)throw new Error('asset');const clone=resp.clone();caches.open(CACHE).then(c=>c.put(event.request,clone)).catch(()=>{});return resp}).catch(()=>caches.match(event.request,{ignoreSearch:true})));
-  return;
- }
- event.respondWith(caches.match(event.request,{ignoreSearch:true}).then(cached=>cached||fetch(event.request).then(resp=>{if(resp&&resp.ok&&u.origin===self.location.origin){const clone=resp.clone();caches.open(CACHE).then(c=>c.put(event.request,clone)).catch(()=>{})}return resp})));
+// Tangram Educativo — Service Worker v15.15.1
+// Rede é a fonte de verdade. O cache existe somente para contingência offline.
+const CACHE='tangram-rai-v12-82';
+const PREFIX='tangram-rai-v12-';
+const OFFLINE_SHELL=['./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.webp','./apple-touch-icon.png'];
+
+self.addEventListener('install',event=>{
+  event.waitUntil(
+    caches.open(CACHE)
+      .then(cache=>cache.addAll(OFFLINE_SHELL.map(url=>new Request(url,{cache:'reload'}))))
+      .catch(()=>{})
+      .then(()=>self.skipWaiting())
+  );
 });
-self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting()});
+
+self.addEventListener('activate',event=>{
+  event.waitUntil(
+    caches.keys()
+      .then(keys=>Promise.all(keys.filter(key=>key.startsWith(PREFIX)&&key!==CACHE).map(key=>caches.delete(key))))
+      .then(()=>self.clients.claim())
+  );
+});
+
+async function networkFirst(request, fallbackUrl){
+  const cache=await caches.open(CACHE);
+  try{
+    const response=await fetch(request,{cache:'no-store'});
+    if(response&&response.ok){
+      await cache.put(request,response.clone()).catch(()=>{});
+      if(fallbackUrl)await cache.put(fallbackUrl,response.clone()).catch(()=>{});
+    }
+    return response;
+  }catch(error){
+    const cached=await cache.match(request,{ignoreSearch:true}) || (fallbackUrl&&await cache.match(fallbackUrl,{ignoreSearch:true}));
+    if(cached)return cached;
+    throw error;
+  }
+}
+
+self.addEventListener('fetch',event=>{
+  if(event.request.method!=='GET')return;
+  const url=new URL(event.request.url);
+  if(url.origin!==self.location.origin)return;
+
+  if(event.request.mode==='navigate'){
+    event.respondWith(networkFirst(event.request,'./index.html'));
+    return;
+  }
+
+  // HTML, JS, CSS, JSON e manifesto nunca devem ser substituídos por uma
+  // versão antiga enquanto a rede estiver disponível.
+  if(/\.(?:html?|js|css|json|webmanifest)$/i.test(url.pathname)){
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+
+  // Imagens/fontes: cache primeiro é seguro; atualiza o cache quando necessário.
+  event.respondWith(
+    caches.match(event.request,{ignoreSearch:true}).then(cached=>{
+      if(cached)return cached;
+      return fetch(event.request).then(response=>{
+        if(response&&response.ok){
+          const copy=response.clone();
+          caches.open(CACHE).then(cache=>cache.put(event.request,copy)).catch(()=>{});
+        }
+        return response;
+      });
+    })
+  );
+});
+
+self.addEventListener('message',event=>{
+  if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();
+  if(event.data&&event.data.type==='CLEAR_OLD_CACHES'){
+    event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))));
+  }
+});
