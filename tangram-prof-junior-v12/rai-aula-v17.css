@@ -80,3 +80,13 @@
  .rai-lesson-v17.rai-lesson-expanded .rai-lesson-card{height:100dvh;border-radius:0}
 }
 @media(prefers-reduced-motion:reduce){.rai-lesson-v17 *{scroll-behavior:auto!important}}
+
+/* v18 — trilha curricular Programação & Robótica, 3º trimestre */
+.rai-v17-section.robotics{border-color:rgba(71,211,149,.35);background:linear-gradient(135deg,rgba(16,67,62,.78),rgba(8,28,45,.92))}
+.rai-lesson-item.rai-done{box-shadow:inset 3px 0 #4bd39b}
+.rai-t3-rewards{margin:10px 0 14px;padding:12px;border:1px solid rgba(93,218,173,.3);border-radius:14px;background:rgba(8,34,43,.75)}
+.rai-t3-rewards>b,.rai-t3-rewards>small{display:block}.rai-t3-rewards>small{opacity:.75;margin:3px 0 9px}
+.rai-t3-rewards>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}
+.rai-t3-rewards button{border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:9px;background:#123847;color:#eefaff;text-align:left}
+.rai-t3-rewards button:disabled{opacity:.45;filter:saturate(.45)}
+#raiLessonComplete{background:linear-gradient(135deg,#1d9b6c,#2dbe87)}
