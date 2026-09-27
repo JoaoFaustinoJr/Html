@@ -91,7 +91,7 @@ if('serviceWorker' in navigator){
 (async()=>{
  try{
   const files=['../tangram-prof-junior/chunk01.txt?v=12a','../tangram-prof-junior/chunk02-03.txt?v=12a','../tangram-prof-junior/chunk04-05.txt?v=12a','../tangram-prof-junior/chunk06-07.txt?v=12a','../tangram-prof-junior/chunk08-09.txt?v=12a'];
-  const [content,parts]=await Promise.all([fetch('content-v12.json?v=12c',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('conteúdo v12');return r.json()}),Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(f);return r.text()})))]);
+  const [content,parts]=await Promise.all([fetch('content-v12.json?v=12d',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('conteúdo v12');return r.json()}),Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(f);return r.text()})))]);
   const b64=parts.join('').replace(/\s+/g,'');const bin=atob(b64);const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));let page=new TextDecoder('utf-8').decode(bytes).replace(/\r\n/g,'\n');
   const add=(marker,items,label)=>{if(!Array.isArray(items)||!items.length)return;const p=page.indexOf(marker);if(p<0)throw new Error('Estrutura não encontrada: '+label);page=page.slice(0,p)+','+items.map(x=>JSON.stringify(x)).join(',')+page.slice(p)};
   add('];\nconst board=',content.levels,'missões');add('];\nconst mathQA=',content.levelConfig,'configurações');add('];\nconst starts=',content.mathQA,'matemática');
