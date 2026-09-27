@@ -1,5 +1,5 @@
 (()=>{
- const VERSION='15.15.2',PATH='/Html/tangram-prof-junior-v12/';
+ const VERSION='15.15.7',PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,verifyAssistStarted=false,x1PortalWired=false,x1PromoWired=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
@@ -116,6 +116,7 @@
  sync();setTimeout(sync,160);setTimeout(sync,420);
  const b=button();b?.addEventListener('click',()=>apply().catch(()=>{}));document.getElementById('aboutApp')?.addEventListener('click',()=>setTimeout(aboutVersion,0));setTimeout(aboutVersion,500);
  addEventListener('pageshow',sync);addEventListener('orientationchange',()=>setTimeout(repairViewport,140));addEventListener('focus',()=>{sync();check()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){sync();check()}});
- if('serviceWorker'in navigator){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!reloading){reloading=true;location.reload()}});registration().then(()=>check()).catch(()=>{});setInterval(check,30*60*1000)}
+ // v15.15.7: atualização gerenciada pelo shell; não reativar nem recarregar por Service Worker legado.
+
  window.__raiUpdate={version:VERSION,path:PATH,check,repairViewport,narrationText,stopLessonNarration};
 })();
