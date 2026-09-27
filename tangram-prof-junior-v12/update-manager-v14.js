@@ -1,5 +1,5 @@
 (()=>{
- const VERSION='15.13.2',PATH='/Html/tangram-prof-junior-v12/';
+ const VERSION='15.15.1',PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,verifyAssistStarted=false,x1PortalWired=false,x1PromoWired=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
