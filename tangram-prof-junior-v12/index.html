@@ -84,7 +84,7 @@ window.addEventListener('appinstalled',function(){window.__raiDeferredInstall=nu
 <div id="loading"><div><h1>🧩 Tangram Educativo</h1><p>Preparando desafios...</p></div></div>
 <script>
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js?v=15152',{scope:'./',updateViaCache:'none'}).then(async reg=>{
+  navigator.serviceWorker.register('./sw.js?v=15154',{scope:'./',updateViaCache:'none'}).then(async reg=>{
     try{
       await reg.update();
       if(reg.waiting)reg.waiting.postMessage({type:'SKIP_WAITING'});
