@@ -30,7 +30,7 @@
   if(!root)return;levelsHost=root.querySelector('#levels');if(!levelsHost)return;
   const buttons=[...levelsHost.querySelectorAll('button.tl-level')];
   // 11–14 voltam a ser níveis comuns: seguem a progressão normal do Tangram.
-  [5,6,7,8].forEach(idx=>{const b=buttons[idx];if(!b)return;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.classList.remove('rai-bonus-unlocked','rai-bonus-locked','rai-parana-legacy');b.querySelectorAll('.rai-bonus-badge').forEach(x=>x.remove());b.title=''});
+  [5,6,7,8].forEach(idx=>{const b=buttons[idx];if(!b)return;delete b.dataset.raiBonus;delete b.dataset.raiCurriculum;b.classList.remove('rai-bonus-unlocked','rai-bonus-locked','rai-parana-legacy');b.querySelectorAll('.rai-bonus-badge').forEach(x=>x.remove());b.title='Origem: desafio especial Prova Paraná 2026'});
   // Somente 15–18 são condicionados às novas aulas.
   decorateCurriculum(buttons);
   levelsHost.querySelectorAll('.rai-bonus-section:not(.rai-curriculum-section)').forEach(x=>x.remove());
