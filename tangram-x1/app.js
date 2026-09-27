@@ -378,14 +378,14 @@ async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole'),native=$('#nativeArena');
  stopArenaObserver();arenaFinished=false;
  frame.style.display='none';frame.src='about:blank';
- if(room.teacher){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');await updateRaceFeed();return}
+ if(room.teacher&&room.mode==='pedagogico'){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');await updateRaceFeed();return}
  spectator.hidden=true;loader.hidden=true;native.hidden=false;role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
  if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}
  if(!window.X1NativeArena){native.innerHTML='<p class="x1n-msg">Arena nativa indisponível.</p>';return}
  window.__x1NativeGame=window.X1NativeArena.create(native,{challenge:arenaChallengeIndex(),onComplete:()=>onTangramComplete('native')});
 }
 async function onTangramComplete(message){
- if(arenaFinished||room.teacher)return;
+ if(arenaFinished||(room.teacher&&room.mode==='pedagogico'))return;
  /* Nunca aceite uma conclusão disparada enquanto a amostra de solução estiver visível. */
  if(message!=='native'){try{const w=$('#tangramArenaFrame')?.contentWindow;if(w?.__raiTangramBonusBridge?.isSampleActive?.())return}catch(e){}}
  arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
