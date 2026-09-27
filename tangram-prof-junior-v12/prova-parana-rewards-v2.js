@@ -1,6 +1,6 @@
 (()=>{
  if(window.__raiProvaRewardsV2?.mounted)return;
- const STORE='raiProvaParana2026V2',BONUS_START=10;
+ const STORE='raiProvaParana2026V2',BONUS_START=5;
  const BONUS=[
   {title:'Gato Espelhado',need:1,icon:'🐈'},
   {title:'Corredor Invertido',need:2,icon:'🏃'},
