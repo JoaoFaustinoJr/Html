@@ -109,7 +109,13 @@
   const DONE_KEY='raiAulaT3DoneV18';
   let doneLessons=[];try{doneLessons=JSON.parse(localStorage.getItem(DONE_KEY)||'[]')}catch(e){}
   const saveDone=()=>{try{localStorage.setItem(DONE_KEY,JSON.stringify(doneLessons))}catch(e){}};
-  const rewardSteps=[1,2,4,6,8,10,12,14,16];
+  const gradeRewards={
+    6:[{step:1,level:5,label:'6. Gato Angular'},{step:3,level:6,label:'7. Corredor'}],
+    7:[{step:1,level:7,label:'8. Cisne'},{step:3,level:8,label:'9. Foguete'}],
+    8:[{step:1,level:9,label:'10. Dragão R.A.I.'},{step:2,level:10,label:'11. Gato Espelhado'},{step:4,level:11,label:'12. Corredor Invertido'}],
+    9:[{step:1,level:12,label:'13. Cisne Reflexo'},{step:3,level:13,label:'14. Foguete Reverso'}]
+  };
+  const allRewards=Object.values(gradeRewards).flat();
 
   const els={
     topic:overlay.querySelector('#raiLessonTopic'),
@@ -191,8 +197,8 @@
 
   function renderCurriculumChallenges(section){
     if(section!=='robotics'){curriculumChallenges.innerHTML='';return}
-    const n=doneLessons.filter(id=>/^rob[6-9]t3-/.test(id)).length;
-    curriculumChallenges.innerHTML='<div class="rai-t3-rewards"><b>🏆 Desafios desbloqueados pelas aulas</b><small>'+n+'/16 aulas concluídas</small><div>'+rewardSteps.map((step,i)=>'<button type="button" data-reward="'+(i+5)+'" '+(n<step?'disabled':'')+'>'+(n>=step?'🧩':'🔒')+' '+(i+6)+'. '+(n>=step?'Abrir desafio':'libera com '+step+' aula'+(step>1?'s':''))+'</button>').join('')+'</div></div>';
+    const y=Number(state.year), prefix='rob'+y+'t3-', n=doneLessons.filter(id=>id.startsWith(prefix)).length, rewards=gradeRewards[y]||[];
+    curriculumChallenges.innerHTML='<div class="rai-t3-rewards"><b>🏆 Desafios do '+y+'º ano</b><small>'+n+'/4 aulas concluídas • liberação progressiva</small><div>'+rewards.map(r=>'<button type="button" data-reward="'+r.level+'" '+(n<r.step?'disabled':'')+'>'+(n>=r.step?'🧩':'🔒')+' '+r.label+' • '+(n>=r.step?'Abrir desafio':'libera após '+r.step+' aula'+(r.step>1?'s':''))+'</button>').join('')+'</div></div>';
   }
   curriculumChallenges.addEventListener('click',e=>{const b=e.target.closest('[data-reward]');if(!b||b.disabled)return;const idx=Number(b.dataset.reward);try{window.__raiTangramBonusBridge?.open(idx);overlay.classList.remove('show')}catch(err){}});
   function findLesson(id){
@@ -302,7 +308,7 @@
   });
   overlay.querySelector('#raiTeacherToggle').addEventListener('click',()=>els.teacherBox.classList.toggle('show'));
 
-  completeBtn.addEventListener('click',()=>{if(!current||current.section!=='robotics')return;if(!doneLessons.includes(current.id)){doneLessons.push(current.id);saveDone();try{window.tangramAnalytics&&window.tangramAnalytics('curriculum_lesson_complete',{year:String(current.year),lesson_id:current.id})}catch(e){}}completeBtn.textContent='✓ Aula concluída';const bubble=document.querySelector('.rai-tutor-bubble');if(bubble){const n=doneLessons.filter(id=>/^rob[6-9]t3-/.test(id)).length;const unlocked=rewardSteps.filter(x=>n>=x).length;bubble.innerHTML='<b>🎓 R.A.I.</b><br>Aula concluída! Progresso: '+n+'/16 • '+unlocked+'/9 desafios liberados.';bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),6000)}});
+  completeBtn.addEventListener('click',()=>{if(!current||current.section!=='robotics')return;if(!doneLessons.includes(current.id)){doneLessons.push(current.id);saveDone();try{window.tangramAnalytics&&window.tangramAnalytics('curriculum_lesson_complete',{year:String(current.year),lesson_id:current.id})}catch(e){}}completeBtn.textContent='✓ Aula concluída';const bubble=document.querySelector('.rai-tutor-bubble');if(bubble){const y=Number(current.year),n=doneLessons.filter(id=>id.startsWith('rob'+y+'t3-')).length,unlocked=(gradeRewards[y]||[]).filter(r=>n>=r.step).length,total=(gradeRewards[y]||[]).length;bubble.innerHTML='<b>🎓 R.A.I.</b><br>Aula concluída! '+y+'º ano: '+n+'/4 • '+unlocked+'/'+total+' desafios liberados.';bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),6000)}});
 
   overlay.querySelector('#raiLessonSpeak').addEventListener('click',()=>{
     if(!current)return;
