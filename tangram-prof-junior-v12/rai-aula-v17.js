@@ -21,7 +21,7 @@
   }
 
   const years=[5,6,7,8,9];
-  const order=['robotics','fund','pc','prog','math','digital'];
+  const order=['fund','pc','prog','math','digital','robotics'];
   const meta={
     fund:{icon:'🧠',title:'Fundamentos',sub:'Lógica, algoritmos, linguagens, dados, eixos da Computação e depuração',count:8,yearless:true},
     pc:{icon:'🧩',title:'Pensamento Computacional',sub:'Representar problemas, decompor, generalizar, reutilizar e modelar soluções',count:10},
@@ -42,7 +42,7 @@
     robotics:'rai-robotica-t3-v18.json?v=18'
   };
 
-  Promise.all(order.filter(s=>sources[s]).map(s=>fetch(sources[s],{cache:'no-store'})
+  Promise.all(order.map(s=>fetch(sources[s],{cache:'no-store'})
     .then(r=>{if(!r.ok)throw new Error('Aulas '+s);return r.json()})
     .then(d=>{banks[s]=Array.isArray(d)?d:[]})))
     .then(()=>{ready=true;if(overlay.classList.contains('show'))renderHome()})
@@ -59,7 +59,7 @@
     '</div>'+
     '<div class="rai-lesson-body">'+
       '<div id="raiLessonHome">'+
-        '<button type="button" class="rai-v17-new-banner rai-v17-opening" data-open-robotics="1"><b>🚀 NOVIDADE • Programação & Robótica</b><strong>3º trimestre • 16 novas aulas</strong><span>6º ao 9º ano • novas silhuetas desbloqueadas conforme você avança.</span><em>ABRIR AGORA ›</em></button>'+
+        '<div class="rai-v17-philosophy"><b>No modo pedagógico, ensinar faz parte do jogo.</b><span>Escolha uma área. Para uma experiência sem intervenção didática, use o Modo Gamer.</span></div>'+
         '<div class="rai-v17-sections" id="raiV17Sections"></div>'+
         '<div class="rai-v17-curriculum"><b>Organização curricular</b><span>As trilhas seguem os eixos Pensamento Computacional, Mundo Digital e Cultura Digital da BNCC Computação e do Referencial Curricular do Paraná, além das referências de Matemática.</span></div>'+
       '</div>'+
@@ -110,17 +110,17 @@
   let doneLessons=[];try{doneLessons=JSON.parse(localStorage.getItem(DONE_KEY)||'[]')}catch(e){}
   const saveDone=()=>{try{localStorage.setItem(DONE_KEY,JSON.stringify(doneLessons))}catch(e){}};
   const gradeRewards={
-    6:[{step:1,level:15,label:'15. Robô Algoritmo 🆕'},{step:2,level:16,label:'16. Rede de Dados 🆕'},{step:3,level:17,label:'17. Rota Coordenada 🆕'},{step:4,level:18,label:'18. Dados em Movimento 🆕'}],
+    6:[{step:1,level:5,label:'6. Gato Angular • Decomposição'},{step:2,level:6,label:'7. Corredor • Fluxo de dados'},{step:3,level:8,label:'9. Foguete • Coordenadas'},{step:4,level:7,label:'8. Cisne • Dados e padrões'}],
     7:[{step:1,level:7,label:'8. Cisne'},{step:3,level:8,label:'9. Foguete'}],
     8:[{step:1,level:9,label:'10. Dragão R.A.I.'},{step:2,level:10,label:'11. Gato Espelhado'},{step:4,level:11,label:'12. Corredor Invertido'}],
     9:[{step:1,level:12,label:'13. Cisne Reflexo'},{step:3,level:13,label:'14. Foguete Reverso'}]
   };
   const allRewards=Object.values(gradeRewards).flat();
   const lessonReward={
-    'rob6t3-1':{level:15,title:'Robô Algoritmo 🆕',mission:'Decomponha a silhueta: resolva primeiro corpo, extremidades e detalhes.'},
-    'rob6t3-2':{level:16,title:'Rede de Dados 🆕',mission:'Pense nas peças como pacotes: organize partes diferentes para reconstruir uma única informação.'},
-    'rob6t3-3':{level:17,title:'Rota Coordenada 🆕',mission:'Use posição, direção e rotação como se estivesse programando uma rota por coordenadas.'},
-    'rob6t3-4':{level:18,title:'Dados em Movimento 🆕',mission:'Observe a forma, compare regiões e procure padrões antes de mover as peças.'}
+    'rob6t3-1':{level:5,title:'Gato Angular',mission:'Decomponha a silhueta: resolva primeiro corpo, extremidades e detalhes.'},
+    'rob6t3-2':{level:6,title:'Corredor',mission:'Pense nas peças como pacotes: organize partes diferentes para reconstruir uma única informação.'},
+    'rob6t3-3':{level:8,title:'Foguete',mission:'Use posição, direção e rotação como se estivesse programando uma rota por coordenadas.'},
+    'rob6t3-4':{level:7,title:'Cisne',mission:'Observe a forma, compare regiões e procure padrões antes de mover as peças.'}
   };
 
   const els={
@@ -206,7 +206,7 @@
     const y=Number(state.year), prefix='rob'+y+'t3-', n=doneLessons.filter(id=>id.startsWith(prefix)).length, rewards=gradeRewards[y]||[];
     curriculumChallenges.innerHTML='<div class="rai-t3-rewards"><b>🏆 Desafios do '+y+'º ano</b><small>'+n+'/4 aulas concluídas • liberação progressiva</small><div>'+rewards.map(r=>'<button type="button" data-reward="'+r.level+'" '+(n<r.step?'disabled':'')+'>'+(n>=r.step?'🧩':'🔒')+' '+r.label+' • '+(n>=r.step?'Abrir desafio':'libera após '+r.step+' aula'+(r.step>1?'s':''))+'</button>').join('')+'</div></div>';
   }
-  curriculumChallenges.addEventListener('click',e=>{const b=e.target.closest('[data-reward]');if(!b||b.disabled)return;const idx=Number(b.dataset.reward);try{const opened=window.__raiTangramBonusBridge?.openLevel(idx);if(opened)overlay.classList.remove('show')}catch(err){}});
+  curriculumChallenges.addEventListener('click',e=>{const b=e.target.closest('[data-reward]');if(!b||b.disabled)return;const idx=Number(b.dataset.reward);try{window.__raiTangramBonusBridge?.open(idx);overlay.classList.remove('show')}catch(err){}});
   function findLesson(id){
     for(const s of order){
       const l=(banks[s]||[]).find(x=>x.id===id);
@@ -268,7 +268,6 @@
     if(tryBtn&&current.section==='robotics'&&lr){tryBtn.textContent=(doneLessons.includes(current.id)?'🎯 Abrir desafio: ':'🔒 Concluir para liberar: ')+lr.title;tryBtn.disabled=!doneLessons.includes(current.id);tryBtn.dataset.curriculumLevel=lr.level;tryBtn.title=lr.mission}else if(tryBtn){tryBtn.disabled=false;delete tryBtn.dataset.curriculumLevel;tryBtn.textContent='🎯 Aplicar desafio';tryBtn.title=''}
   }
 
-  overlay.querySelector('#raiLessonHome').addEventListener('click',e=>{const nb=e.target.closest('[data-open-robotics]');if(nb){state.year=6;renderSection('robotics');return}});
   sections.addEventListener('click',e=>{
     const b=e.target.closest('[data-section]');if(!b)return;
     renderSection(b.dataset.section);
@@ -318,9 +317,9 @@
   });
   overlay.querySelector('#raiTeacherToggle').addEventListener('click',()=>els.teacherBox.classList.toggle('show'));
 
-  completeBtn.addEventListener('click',()=>{if(!current||current.section!=='robotics')return;if(!doneLessons.includes(current.id)){doneLessons.push(current.id);saveDone();try{window.tangramAnalytics&&window.tangramAnalytics('curriculum_lesson_complete',{year:String(current.year),lesson_id:current.id})}catch(e){}}completeBtn.textContent='✓ Aula concluída';const tryBtn=overlay.querySelector('#raiLessonTry'),lr=lessonReward[current.id];if(tryBtn&&lr){tryBtn.disabled=false;tryBtn.dataset.curriculumLevel=lr.level;tryBtn.textContent='🎯 Abrir desafio: '+lr.title;tryBtn.title=lr.mission}const bubble=document.querySelector('.rai-tutor-bubble');if(bubble){const y=Number(current.year),n=doneLessons.filter(id=>id.startsWith('rob'+y+'t3-')).length,unlocked=(gradeRewards[y]||[]).filter(r=>n>=r.step).length,total=(gradeRewards[y]||[]).length;bubble.innerHTML='<b>🎓 R.A.I.</b><br>Aula concluída! '+y+'º ano: '+n+'/4 • '+unlocked+'/'+total+' desafios liberados.';bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),1800)}if(lr){setTimeout(()=>{try{const ok=window.__raiTangramBonusBridge?.openLevel(lr.level);if(ok)overlay.classList.remove('show')}catch(e){}},500)}});
+  completeBtn.addEventListener('click',()=>{if(!current||current.section!=='robotics')return;if(!doneLessons.includes(current.id)){doneLessons.push(current.id);saveDone();try{window.tangramAnalytics&&window.tangramAnalytics('curriculum_lesson_complete',{year:String(current.year),lesson_id:current.id})}catch(e){}}completeBtn.textContent='✓ Aula concluída';const tryBtn=overlay.querySelector('#raiLessonTry'),lr=lessonReward[current.id];if(tryBtn&&lr){tryBtn.disabled=false;tryBtn.dataset.curriculumLevel=lr.level;tryBtn.textContent='🎯 Abrir desafio: '+lr.title;tryBtn.title=lr.mission}const bubble=document.querySelector('.rai-tutor-bubble');if(bubble){const y=Number(current.year),n=doneLessons.filter(id=>id.startsWith('rob'+y+'t3-')).length,unlocked=(gradeRewards[y]||[]).filter(r=>n>=r.step).length,total=(gradeRewards[y]||[]).length;bubble.innerHTML='<b>🎓 R.A.I.</b><br>Aula concluída! '+y+'º ano: '+n+'/4 • '+unlocked+'/'+total+' desafios liberados.';bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),6000)}});
 
-  overlay.querySelector('#raiLessonTry').addEventListener('click',e=>{const b=e.currentTarget,lv=Number(b.dataset.curriculumLevel);if(Number.isFinite(lv)){try{const opened=window.__raiTangramBonusBridge?.openLevel(lv);if(opened){overlay.classList.remove('show')}else{const direct=[...root.querySelectorAll('#levels button.tl-level,#levels .tl-level')].find(el=>(el.textContent||'').trim().startsWith(lv+'.'));if(direct){direct.disabled=false;direct.removeAttribute('disabled');direct.click();overlay.classList.remove('show')}}const bubble=document.querySelector('.rai-tutor-bubble'),lr=current&&lessonReward[current.id];if(bubble&&lr){bubble.innerHTML='<b>🎯 Missão curricular</b><br>'+lr.mission;bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),8000)}}catch(err){}return}});
+  overlay.querySelector('#raiLessonTry').addEventListener('click',e=>{const b=e.currentTarget,lv=Number(b.dataset.curriculumLevel);if(Number.isFinite(lv)){try{window.__raiTangramBonusBridge?.open(lv);overlay.classList.remove('show');const bubble=document.querySelector('.rai-tutor-bubble'),lr=current&&lessonReward[current.id];if(bubble&&lr){bubble.innerHTML='<b>🎯 Missão curricular</b><br>'+lr.mission;bubble.classList.add('show');clearTimeout(bubble._t);bubble._t=setTimeout(()=>bubble.classList.remove('show'),8000)}}catch(err){}return}});
   overlay.querySelector('#raiLessonSpeak').addEventListener('click',()=>{
     if(!current)return;
     const prefix=current.year?'Aula do '+current.year+'º ano. ':'Fundamento. ';
