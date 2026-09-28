@@ -24,6 +24,11 @@ const elapsedFromArenaStart=t=>{if(!t||!room.startedAt)return'—';return fmtDur
 const tx=(pt,en)=>lang==='en'?en:pt;
 const packLabel=k=>(lang==='en'?PACKS_EN:PACKS_PT)[k]||k;
 const challengeLabelByIndex=i=>(lang==='en'?CHALLENGES_EN:CHALLENGES_PT)[i]||tx('Desafio '+(i+1),'Challenge '+(i+1));
+const CLASS_ACTIVITY_KEY='x1ClassActivitiesV1';
+function classActivityDraft(){return{classId:$('#classProfile')?.value||'',pack:$('#contentPack')?.value||'',title:$('#customLessonTitle')?.value?.trim()||'',lesson:$('#customLessonText')?.value?.trim()||'',exercises:($('#customExercises')?.value||'').split(/\\n+/).map(x=>x.trim()).filter(Boolean)}}
+function saveClassActivityDraft(){try{const d=classActivityDraft(),all=JSON.parse(localStorage.getItem(CLASS_ACTIVITY_KEY)||'{}');if(d.classId){all[d.classId]=d;localStorage.setItem(CLASS_ACTIVITY_KEY,JSON.stringify(all))}}catch(e){}}
+function wireClassActivities(){const pack=$('#contentPack'),cls=$('#classProfile'),ed=$('#customLessonEditor');if(!pack||!cls||!ed)return;const sync=()=>{ed.hidden=pack.value!=='customLesson';try{const all=JSON.parse(localStorage.getItem(CLASS_ACTIVITY_KEY)||'{}'),d=all[cls.value];if(d&&pack.value==='customLesson'){if($('#customLessonTitle'))$('#customLessonTitle').value=d.title||'';if($('#customLessonText'))$('#customLessonText').value=d.lesson||'';if($('#customExercises'))$('#customExercises').value=(d.exercises||[]).join('\\n')}}catch(e){}};pack.addEventListener('change',sync);cls.addEventListener('change',sync);['#customLessonTitle','#customLessonText','#customExercises'].forEach(s=>$(s)?.addEventListener('input',saveClassActivityDraft));sync()}
+
 const setText=(sel,value)=>{const el=$(sel);if(el)el.textContent=value};
 function applyLanguage(){
  document.documentElement.lang=lang==='en'?'en':'pt-BR';
@@ -613,7 +618,7 @@ $('#submitPilotForm')?.addEventListener('click',async()=>{
 
 $('#demoStart')?.addEventListener('click',()=>{alert('No Gamer, qualquer aluno pode criar uma sala. O modo Pedagógico continua protegido pela senha do professor.')});
 
-applyLanguage();
+applyLanguage();wireClassActivities();
 
 (async()=>{
  if(!sb){document.body.classList.add('offline');return}
