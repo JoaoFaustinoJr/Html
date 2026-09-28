@@ -646,6 +646,6 @@ applyLanguage();wireClassActivities();loadEducativoLessons();
  }catch(e){}
  show('home');
 })();
+/* Navegação pós-partida: permanece dentro do controlador X1. */
+$('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;disconnectSubscriptions();try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 })();
-/* Navegação pós-partida: aluno não precisa reabrir o link. */
-$('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver?.();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
