@@ -24,10 +24,14 @@ const elapsedFromArenaStart=t=>{if(!t||!room.startedAt)return'—';return fmtDur
 const tx=(pt,en)=>lang==='en'?en:pt;
 const packLabel=k=>(lang==='en'?PACKS_EN:PACKS_PT)[k]||k;
 const challengeLabelByIndex=i=>(lang==='en'?CHALLENGES_EN:CHALLENGES_PT)[i]||tx('Desafio '+(i+1),'Challenge '+(i+1));
+const EDU_LESSON_SOURCES={fund:'../tangram-prof-junior-v12/rai-fundamentos-v17.json?v=17',pc:'../tangram-prof-junior-v12/rai-pensamento-v17.json?v=17',prog:'../tangram-prof-junior-v12/rai-programacao-v17.json?v=17',math:'../tangram-prof-junior-v12/rai-matematica-v17.json?v=17',digital:'../tangram-prof-junior-v12/rai-mundo-digital-v17.json?v=17',robotics:'../tangram-prof-junior-v12/rai-robotica-t3-v18.json?v=18'};
+let EDU_LESSONS=[];
+async function loadEducativoLessons(){try{const groups=await Promise.all(Object.entries(EDU_LESSON_SOURCES).map(async([section,url])=>{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error(section);const a=await r.json();return(Array.isArray(a)?a:[]).map(x=>({...x,section:x.section||section}))}));EDU_LESSONS=groups.flat();syncEducativoLessonOptions()}catch(e){console.warn('Banco de aulas do Tangram Educativo indisponível',e)}}
+function syncEducativoLessonOptions(){const sel=$('#contentPack'),year=Number($('#classProfile')?.value);if(!sel||!year)return;[...sel.querySelectorAll('option[data-edu]')].forEach(o=>o.remove());EDU_LESSONS.filter(x=>!x.year||Number(x.year)===year).forEach(x=>{const o=document.createElement('option');o.dataset.edu='1';o.value='edu:'+x.id;o.textContent=(x.icon?x.icon+' ':'')+(x.topic||x.title||x.id);sel.insertBefore(o,sel.querySelector('option[value="customLesson"]'))})}
 const CLASS_ACTIVITY_KEY='x1ClassActivitiesV1';
 function classActivityDraft(){return{classId:$('#classProfile')?.value||'',pack:$('#contentPack')?.value||'',title:$('#customLessonTitle')?.value?.trim()||'',lesson:$('#customLessonText')?.value?.trim()||'',exercises:($('#customExercises')?.value||'').split(/\\n+/).map(x=>x.trim()).filter(Boolean)}}
 function saveClassActivityDraft(){try{const d=classActivityDraft(),all=JSON.parse(localStorage.getItem(CLASS_ACTIVITY_KEY)||'{}');if(d.classId){all[d.classId]=d;localStorage.setItem(CLASS_ACTIVITY_KEY,JSON.stringify(all))}}catch(e){}}
-function wireClassActivities(){const pack=$('#contentPack'),cls=$('#classProfile'),ed=$('#customLessonEditor');if(!pack||!cls||!ed)return;const sync=()=>{ed.hidden=pack.value!=='customLesson';try{const all=JSON.parse(localStorage.getItem(CLASS_ACTIVITY_KEY)||'{}'),d=all[cls.value];if(d&&pack.value==='customLesson'){if($('#customLessonTitle'))$('#customLessonTitle').value=d.title||'';if($('#customLessonText'))$('#customLessonText').value=d.lesson||'';if($('#customExercises'))$('#customExercises').value=(d.exercises||[]).join('\\n')}}catch(e){}};pack.addEventListener('change',sync);cls.addEventListener('change',sync);['#customLessonTitle','#customLessonText','#customExercises'].forEach(s=>$(s)?.addEventListener('input',saveClassActivityDraft));sync()}
+function wireClassActivities(){const pack=$('#contentPack'),cls=$('#classProfile'),ed=$('#customLessonEditor');if(!pack||!cls||!ed)return;const sync=()=>{ed.hidden=pack.value!=='customLesson';try{const all=JSON.parse(localStorage.getItem(CLASS_ACTIVITY_KEY)||'{}'),d=all[cls.value];if(d&&pack.value==='customLesson'){if($('#customLessonTitle'))$('#customLessonTitle').value=d.title||'';if($('#customLessonText'))$('#customLessonText').value=d.lesson||'';if($('#customExercises'))$('#customExercises').value=(d.exercises||[]).join('\\n')}}catch(e){}};pack.addEventListener('change',sync);cls.addEventListener('change',()=>{sync();syncEducativoLessonOptions()});['#customLessonTitle','#customLessonText','#customExercises'].forEach(s=>$(s)?.addEventListener('input',saveClassActivityDraft));sync()}
 
 const setText=(sel,value)=>{const el=$(sel);if(el)el.textContent=value};
 function applyLanguage(){
@@ -618,7 +622,7 @@ $('#submitPilotForm')?.addEventListener('click',async()=>{
 
 $('#demoStart')?.addEventListener('click',()=>{alert('No Gamer, qualquer aluno pode criar uma sala. O modo Pedagógico continua protegido pela senha do professor.')});
 
-applyLanguage();wireClassActivities();
+applyLanguage();wireClassActivities();loadEducativoLessons();
 
 (async()=>{
  if(!sb){document.body.classList.add('offline');return}
