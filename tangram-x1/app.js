@@ -441,7 +441,7 @@ async function renderResults(){
  try{await fetchRoom()}catch(e){}
  let players=[];try{players=await fetchPlayers()}catch(e){}
  const ranked=players.filter(p=>p.tangram_finished_at).sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at));
- const top=ranked.slice(0,3);
+ const top=ranked.slice(0,3);const full=$('#fullRankingList');if(full)full.innerHTML=ranked.slice(0,10).map((p,i)=>'<div class="player"><div><b>'+(i+1)+'º • '+esc(p.nickname)+'</b><small>'+elapsedFromArenaStart(p.tangram_finished_at)+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>';
  const slots=[
   {sel:'.place.first',rank:0,label:'1º'},
   {sel:'.place.second',rank:1,label:'2º'},
