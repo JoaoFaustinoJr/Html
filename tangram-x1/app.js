@@ -290,8 +290,19 @@ function runCountdown(hostAdvances=false){
   }else setTimeout(()=>{countdownBusy=false},900);
  },700);
 }
+function selectedEduLesson(){if(!String(room.pack||'').startsWith('edu:'))return null;return EDU_LESSONS.find(x=>'edu:'+x.id===room.pack)||null}
+function renderPedagogicalContent(){
+ const l=selectedEduLesson();if(!l)return;
+ const kicker=$('#lesson .kicker'),title=$('#lesson h2'),rai=$('#lesson .rai-says p'),example=$('#lesson .example p');
+ if(kicker)kicker.textContent=((l.section||'AULA').toUpperCase())+' • '+(l.year?l.year+'º ANO':'');
+ if(title)title.textContent=l.topic||l.title||'Aula R.A.I.';
+ if(rai)rai.innerHTML='<b>'+esc(l.objective||'Vamos aprender.')+'</b> '+esc(l.concept||l.keyDefinition||'');
+ if(example)example.textContent=l.example||l.representation||l.use||'Observe o conceito e aplique-o no desafio.';
+ const qs=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q):[];
+ const q=qs[0];if(q){const qh=$('#quiz h2'),kick=$('#quiz .kicker'),answers=$('#quiz [data-answer]');if(qh)qh.textContent=q.q;if(kick)kick.textContent='QUESTÃO 1 DE '+Math.max(1,qs.length);if(answers[0])answers[0].textContent='A) '+q.a;if(answers[1])answers[1].textContent='B) '+(l.keyDefinition||'Outra possibilidade');if(answers[2])answers[2].textContent='C) '+(l.example||'Outro exemplo');if(answers[3])answers[3].textContent='D) '+(l.observe||'Outra observação');answers.forEach((b,i)=>b.dataset.answer=i===0?'2':String(i+3))}
+}
 function applyRoomState(status){
- room.status=status;
+ room.status=status;renderPedagogicalContent();
  if(status==='lobby'){openLobby();return}
  if(status==='countdown'){runCountdown(false);return}
  if(status==='lesson'){if(room.mode==='pedagogico'){if(room.teacher){startArena()}else show('lesson')}else startArena();return}
