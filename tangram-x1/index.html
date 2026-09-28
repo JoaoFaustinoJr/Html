@@ -102,12 +102,12 @@
     <div class="card form-card">
       <label>Nome da turma<input id="className" value="Turma X1" maxlength="30"></label>
       <div class="pedagogical-badge"><span>🎓</span><div><b>Modo Pedagógico</b><small>Aula → questões → Tangram → ranking</small></div></div>
-      <label id="contentPackLabel">Conteúdo<select id="contentPack">
+      <label>Turma<select id="classProfile"><option value="6A">6º A</option><option value="7A">7º A</option><option value="7B">7º B</option><option value="8A">8º A</option><option value="9A">9º A</option><option value="custom">Outra turma</option></select></label><label id="contentPackLabel">Aula / atividade<select id="contentPack">
         <option value="pp9">Prova Paraná • Matemática • 9º ano</option>
         <option value="prog8">Programação • 8º ano</option>
         <option value="logic7">Pensamento Computacional • 7º ano</option>
-        <option value="geo6">Matemática & Geometria • 6º ano</option>
-      </select></label>
+        <option value="geo6">Matemática & Geometria • 6º ano</option><option value="rob6">Robótica • 6º ano • Fundamentos e decomposição</option><option value="logic8">Lógica • 8º ano • Algoritmos e condicionais</option><option value="customLesson">✏️ Aula personalizada da turma</option>
+      </select></label><div id="customLessonEditor" class="card" hidden><label>Título da aula<input id="customLessonTitle" maxlength="80" placeholder="Ex.: Condicionais e tomada de decisão"></label><label>Resumo / orientação<textarea id="customLessonText" rows="4" placeholder="Texto que os alunos lerão antes dos exercícios."></textarea></label><label>Exercícios reais<textarea id="customExercises" rows="6" placeholder="Uma questão por linha. Ex.: Se x=8, qual condição verifica se x é par?"></textarea></label></div>
       <label>Desafio Tangram<select id="teacherChallenge">
         <option value="random">🤖 Recomendado pela R.A.I. • surpresa</option>
         <option value="5">6. Gato Angular</option>
