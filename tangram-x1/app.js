@@ -461,6 +461,7 @@ async function renderResults(){
  else{rematch.disabled=true;rematch.textContent=tx('Aguardando revanche do anfitrião','Waiting for host rematch')}
  show('results');
 }
+$('#newMatch')?.addEventListener('click',()=>{disconnectRoom();arenaFinished=false;quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 $('#rematch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken)return;
  const b=$('#rematch');b.disabled=true;b.textContent=tx('Preparando nova rodada…','Preparing new round…');
