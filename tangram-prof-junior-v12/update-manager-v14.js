@@ -1,5 +1,5 @@
 (()=>{
- const VERSION='15.15.7',PATH='/Html/tangram-prof-junior-v12/';
+ const VERSION=window.__TANGRAM_VERSION||'15.16.3',PATH='/Html/tangram-prof-junior-v12/';
  let reg=null,checking=null,reloading=false,specialStarted=false,aulasEntryStarted=false,iosInstallStarted=false,rewardsStarted=false,welcomeStarted=false,answerOrderStarted=false,verifyAssistStarted=false,x1PortalWired=false,x1PromoWired=false,lessonNarrationWired=false,lessonNarrationActive=false,lessonNarrationWatch=null;
  const handheld=()=>{try{return /Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(navigator.userAgent||'')||!!navigator.userAgentData?.mobile||(navigator.maxTouchPoints>0&&matchMedia('(pointer:coarse)').matches)}catch(e){return false}};
  const appleMobile=()=>{try{return /iPhone|iPad|iPod/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(e){return false}};
@@ -109,13 +109,13 @@
  function button(){const host=tools();if(!host)return null;let b=document.getElementById('updateApp');if(!b){b=document.createElement('button');b.type='button';b.id='updateApp';b.className='tl-mini-action tl-update-action';b.innerHTML='↻ <span>Atualizar</span>';const about=document.getElementById('aboutApp');about?host.insertBefore(b,about):host.appendChild(b)}return b}
  function ready(){const b=button();if(b){b.classList.add('show','ready');b.innerHTML='✨ <span>Atualizar</span>';b.title='Nova versão disponível'}}
  function aboutVersion(){const body=document.querySelector('.tl-about-main .tl-about-body');if(!body)return;let p=body.querySelector('.rai-version-line');if(!p){p=document.createElement('p');p.className='rai-version-line';const sig=body.querySelector('.tl-signature');sig?body.insertBefore(p,sig):body.appendChild(p)}p.innerHTML='<b>Versão '+VERSION+'</b> • endereço oficial permanente • atualizações pelo próprio aplicativo'}
- async function registration(){if(!('serviceWorker'in navigator))return null;if(reg)return reg;try{return reg=await navigator.serviceWorker.getRegistration('./')}catch(e){return null}}
+ async function registration(){return null}
  async function check(){if(checking)return checking;checking=(async()=>{try{const r=await registration();if(!r)return null;await r.update();if(r.waiting&&navigator.serviceWorker.controller)ready();return r}catch(e){console.warn('Atualização Tangram',e);return null}})();try{return await checking}finally{checking=null}}
  async function apply(){const r=await registration();if(r?.waiting){const b=button();if(b){b.classList.add('show');b.innerHTML='⏳ <span>Atualizando</span>'}r.waiting.postMessage({type:'SKIP_WAITING'});return}await check()}
  function sync(){syncHead();syncVersion();patchNarration();wireLessonNarration();wireX1Portal();wireX1Promo();loadCurriculumOpening();loadVerifyAssist();loadAnswerOrder();loadAulasEntry();loadSpecial();loadRewards();loadWelcome();loadIOSInstall();try{window.__raiAnswerOrderV1?.scan?.();window.__raiEnsureAulasEntry?.();window.__raiProvaParanaV1?.ensureEntryPoints?.();window.__raiProvaRewardsV2?.refresh?.();window.__raiIOSInstall?.wire?.()}catch(e){}repairViewport()}
  sync();setTimeout(sync,160);setTimeout(sync,420);
  const b=button();b?.addEventListener('click',()=>apply().catch(()=>{}));document.getElementById('aboutApp')?.addEventListener('click',()=>setTimeout(aboutVersion,0));setTimeout(aboutVersion,500);
- addEventListener('pageshow',sync);addEventListener('orientationchange',()=>setTimeout(repairViewport,140));addEventListener('focus',()=>{sync();check()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){sync();check()}});
+ addEventListener('pageshow',sync);addEventListener('orientationchange',()=>setTimeout(repairViewport,140));addEventListener('focus',()=>sync());document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')sync()});
  // v15.15.7: atualização gerenciada pelo shell; não reativar nem recarregar por Service Worker legado.
 
  window.__raiUpdate={version:VERSION,path:PATH,check,repairViewport,narrationText,stopLessonNarration};
