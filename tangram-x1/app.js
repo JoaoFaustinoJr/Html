@@ -16,7 +16,15 @@ let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null;
 
-const show=id=>{views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-internal',id!=='home');document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
+const x1AudioPrefs=()=>{try{return {...{music:false,volume:.18},...JSON.parse(localStorage.getItem('tangram2Audio')||'{}')}}catch(_){return {music:false,volume:.18}}};
+let x1AC=null,x1Gain=null,x1Timer=0,x1Step=0,x1View='home';
+function x1Tone(f,t,d=.14,v=.12){if(!x1AC||!x1Gain)return;const o=x1AC.createOscillator(),g=x1AC.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.025);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(x1Gain);o.start(t);o.stop(t+d+.03)}
+function x1Pulse(){if(!x1AC)return;const now=x1AC.currentTime+.02,arena=x1View==='arena',seq=arena?[164.81,220,246.94,329.63,246.94,220,196,246.94]:[164.81,196,220,196],f=seq[x1Step++%seq.length];x1Tone(f,now,arena?.16:.24,arena?.15:.08);if(arena)x1Tone(f*2,now+.09,.08,.055)}
+function x1MusicStart(){const p=x1AudioPrefs();if(!p.music)return;if(!x1AC){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;x1AC=new AC();x1Gain=x1AC.createGain();x1Gain.connect(x1AC.destination)}x1AC.resume?.();x1Gain.gain.setTargetAtTime(Math.max(.012,p.volume*.30),x1AC.currentTime,.1);clearInterval(x1Timer);x1Pulse();x1Timer=setInterval(x1Pulse,x1View==='arena'?300:760)}
+function x1MusicStop(){clearInterval(x1Timer);x1Timer=0;if(x1Gain&&x1AC)x1Gain.gain.setTargetAtTime(0,x1AC.currentTime,.08)}
+function x1MusicView(id){x1View=id;if(id==='arena'||id==='countdown'||id==='lobby')x1MusicStart();else x1MusicStop()}
+addEventListener('pointerdown',()=>{if(x1AudioPrefs().music&&(x1View==='arena'||x1View==='countdown'||x1View==='lobby'))x1MusicStart()},{once:true});
+const show=id=>{x1MusicView(id);views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-internal',id!=='home');document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setJoinStatus=(t,bad=false)=>{const el=$('#joinStatus');if(el){el.textContent=t;el.style.color=bad?'#ff9cab':''}};
 const fmtDurationMs=ms=>{if(!Number.isFinite(ms)||ms<0)return'—';const s=ms/1000,m=Math.floor(s/60),sec=s-m*60;return String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0')};
