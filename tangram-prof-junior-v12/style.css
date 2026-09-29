@@ -334,3 +334,23 @@ button.ui-press{animation:uiPress .20s ease-out}
 @keyframes uiPress{45%{transform:scale(.965);filter:brightness(1.18)}100%{transform:scale(1);filter:none}}
 body.comfort-motion button.ui-press,body.comfort-calm button.ui-press{animation:none!important}
 body.comfort-motion button.ui-press::after,body.comfort-calm button.ui-press::after{display:none!important}
+
+/* v2.0.108 — modo computador / tela estendida */
+@media (min-width:1000px){
+  body{overflow-x:hidden}
+  main{width:min(1540px,calc(100vw - 36px))!important;max-width:none!important;margin-inline:auto!important}
+  header{min-height:74px}
+  .modes{grid-template-columns:repeat(3,minmax(210px,1fr))!important;gap:14px!important}
+  .game-shell,.game-area,.workspace{max-width:none!important}
+  .game-layout{display:grid!important;grid-template-columns:minmax(620px,1.45fr) minmax(330px,.72fr)!important;gap:22px!important;align-items:start!important}
+  .board-wrap,.board-shell,.stage-wrap{min-width:0!important}
+  #board,svg.board,.board svg{width:100%!important;max-height:calc(100vh - 230px)!important}
+  .side-panel,.game-side,.challenge-panel{position:sticky!important;top:86px!important;max-height:calc(100vh - 104px)!important;overflow:auto!important}
+  .controls{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:10px!important}
+  .lesson-grid,.lessons-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .app-menu{width:min(390px,32vw)!important;max-height:calc(100vh - 92px)!important;overflow:auto!important}
+}
+@media (min-width:1400px){
+  main{width:min(1720px,calc(100vw - 52px))!important}
+  .game-layout{grid-template-columns:minmax(760px,1.65fr) minmax(360px,.68fr)!important;gap:28px!important}
+}
