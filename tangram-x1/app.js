@@ -301,6 +301,25 @@ $('#startMatch').addEventListener('click',async()=>{
  }catch(e){clearTimeout(fallback);b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(e.message||e)}
 });
 
+function applyRoomState(nextStatus){
+ if(!nextStatus)return;
+ const previous=room.status;room.status=nextStatus;
+ if(nextStatus==='lobby'){countdownBusy=false;openLobby().catch(e=>console.warn('X1 lobby',e));return}
+ if(nextStatus==='countdown'){if(!countdownBusy)runCountdown(false);return}
+ if(nextStatus==='lesson'){
+  countdownBusy=false;
+  if(room.mode!=='pedagogico'){startArena();return}
+  const l=selectedEduLesson();
+  if(l){renderPedagogicalContent();show('lesson')}
+  else{quizQuestions=[];quizIndex=0;quizWrong=0;show('lesson')}
+  return
+ }
+ if(nextStatus==='quiz'){countdownBusy=false;renderQuizQuestion();show('quiz');return}
+ if(nextStatus==='playing'){countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e));return}
+ if(nextStatus==='results'){countdownBusy=false;renderResults().catch(e=>console.warn('X1 results',e));return}
+ if(nextStatus==='closed'){disconnectRoom();show('home');return}
+ console.warn('X1 estado desconhecido',nextStatus,'anterior',previous)
+}
 function runCountdown(hostAdvances=false){
  if(countdownBusy)return;countdownBusy=true;show('countdown');
  let n=3;$('#countNum').textContent=n;
