@@ -213,7 +213,12 @@ $('#joinOnline').addEventListener('click',joinRoom);
 
 async function fetchRoom(){
  if(!sb||!room.id)return null;
- const {data,error}=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at').eq('id',room.id).maybeSingle();
+ let data=null,error=null;
+ if(!room.isHost&&room.playerId&&room.playerToken){
+  const res=await sb.rpc('x1_get_room_state',{p_player_id:room.playerId,p_player_token:room.playerToken});error=res.error;const x=Array.isArray(res.data)?res.data[0]:res.data;if(x)data={id:x.room_id,status:x.room_status,mode:x.room_mode,content_pack:x.content_pack,question_count:x.question_count,round_count:x.round_count,challenge:x.challenge,current_round:x.current_round,started_at:x.started_at};
+ }else{
+  const res=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at').eq('id',room.id).maybeSingle();data=res.data;error=res.error;
+ }
  if(error)throw error;
  if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status;room.currentRound=data.current_round||1;room.roundCount=data.round_count||1;room.questionCount=data.question_count||3;room.challenge=data.challenge||'random';room.startedAt=data.started_at||null}
  return data;
