@@ -1,22 +1,24 @@
 {
   "name": "Tangram Educativo",
   "short_name": "Tangram",
-  "description": "Tangram Educativo com R.A.I., 10 desafios, Modo Gamer e 58 microaulas em Fundamentos, Pensamento Computacional, Programação, Matemática e Mundo/Cultura Digital, do 5º ao 9º ano.",
+  "description": "Tangram Educativo com R.A.I., desafios, X1 Arena, Gamer, mosaicos e aulas.",
   "id": "/Html/tangram-prof-junior-v12/",
   "start_url": "/Html/tangram-prof-junior-v12/?source=pwa",
   "scope": "/Html/tangram-prof-junior-v12/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
-  "orientation": "any",
   "background_color": "#050f18",
-  "theme_color": "#07131f",
+  "theme_color": "#061827",
   "lang": "pt-BR",
-  "dir": "ltr",
-  "categories": ["education", "games"],
-  "prefer_related_applications": false,
+  "categories": [
+    "education",
+    "games"
+  ],
   "icons": [
-    {"src":"icon-192.png?v=154","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"icon-512.webp?v=154","sizes":"512x512","type":"image/webp","purpose":"any"},
-    {"src":"icon-512.webp?v=154","sizes":"512x512","type":"image/webp","purpose":"maskable"}
+    {
+      "src": "app-icon.svg?v=296",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
