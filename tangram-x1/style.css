@@ -181,3 +181,17 @@ body{background:radial-gradient(circle at 50% -10%,#0a4b63 0,#052d40 28%,#031923
 .x1-authorship{display:grid!important;gap:3px!important;padding-top:13px!important;border-top:1px solid #d8b66a55!important}.x1-authorship b{color:#d8b66a;font:700 11px Georgia,serif;text-transform:none}.x1-authorship small{color:#6f929f;font-size:8px}.x1-authorship em{color:#d8b66a99;font:italic 9px Georgia,serif}
 .x1-report-item strong{color:#f0d486;font-size:10px}.x1-report-item details{margin-top:7px;padding-top:6px;border-top:1px solid #ffffff10}.x1-report-item summary{cursor:pointer;color:#9de9fa;font-size:9px;font-weight:900}.x1-report-item details p{margin:5px 0;color:#9eb5bd;font-size:9px}
 @media(max-width:470px){.x1-brand-mark span{font-size:21px}.x1-brand-mark b{font-size:9px}.x1-brand-mark small{font-size:8px}}
+
+/* X1 v1.9 — acabamento visual + painel docente */
+.x1-hero-card{position:relative;overflow:hidden;border-color:#d8b66a55!important;background:linear-gradient(135deg,#073247,#052535)!important}
+.x1-hero-card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 58%,#d8b66a0c 59%,transparent 60%)}
+.x1-new{color:#e8cd80!important}.x1-hero-copy h2 em{color:#d8b66a!important}
+.x1-rai-stage{isolation:isolate}.x1-rai-stage:after{content:"";position:absolute;width:74%;height:18%;left:13%;bottom:4%;border-radius:50%;background:#d8b66a22;filter:blur(8px);z-index:-1}
+.x1-hero-rai img{filter:drop-shadow(0 0 12px #27cde055) drop-shadow(0 7px 15px #0008)}
+.x1-orbit{border-color:#d8b66a55!important}
+.choice .ico{filter:drop-shadow(0 3px 8px #0007)}.choice b{letter-spacing:.01em}
+.progress{border-color:#d8b66a55!important}.progress b,.progress strong{color:#f3dc99!important}
+.x1-report-card>p:has(.report-kpi){display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}
+.report-kpi{display:grid;padding:9px 10px;border:1px solid #d8b66a30;border-radius:11px;background:#082735;color:#91adb7;font-size:9px}.report-kpi b{color:#f0d486;font-size:16px}
+.x1-report-item{position:relative;overflow:hidden}.x1-report-item:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(#d8b66a,#1dc6ef)}
+@media(max-width:420px){.x1-report-card>p:has(.report-kpi){grid-template-columns:1fr 1fr}.report-kpi b{font-size:14px}}
