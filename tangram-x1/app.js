@@ -240,7 +240,7 @@ async function openLobby(){
  const challengeLabel=room.challenge==='random'?tx('🎲 Desafio surpresa • igual para todos','🎲 Surprise challenge • same for everyone'):(challengeLabelByIndex(Number(room.challenge))||tx('Desafio selecionado','Selected challenge'));
  $('#lobbyPack').textContent=pedagogico?packLabel(room.pack)+' • '+challengeLabel:challengeLabel;
  $('#lobbyModeText').textContent=pedagogico?tx('Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.','Lesson and questions come first. Then every player unlocks the same Tangram challenge.'):tx('Sem etapa didática: contagem regressiva, Tangram e ranking.','No lesson stage: countdown, Tangram and ranking.');
- $('#startMatch').style.display=room.isHost?'block':'none';if(room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer');$('#startMatch').disabled=competitors.length<2;$('#startMatch').textContent=competitors.length<2?tx('Aguardando oponente…','Waiting for opponent…'):tx('Começar partida','Start match')}
+ $('#startMatch').style.display=room.isHost?'block':'none';if(room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;$('#startMatch').disabled=competitors.length<minPlayers;$('#startMatch').textContent=competitors.length<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}
  const lobbyNote=document.querySelector('.lobby-title small');if(lobbyNote)lobbyNote.textContent=room.isHost?tx('Você controla o início da partida','You control the match start'):tx('Aguardando o anfitrião iniciar','Waiting for the host to start');
  await renderPlayers();
  show('lobby');
@@ -250,7 +250,7 @@ async function removePlayer(playerId){
  if(!confirm(tx('Retirar este participante da sala?','Remove this participant from the room?')))return;
  try{const {data,error}=await sb.rpc('x1_remove_player',{p_code:room.code,p_host_token:room.hostToken,p_player_id:playerId});if(error)throw error;if(!data)throw new Error(tx('Não foi possível retirar o participante.','Could not remove participant.'));await renderPlayers()}catch(e){alert(e.message||e)}
 }
-function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshTimer=setTimeout(async()=>{await renderPlayers();if($('#lobby').classList.contains('show')&&room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),b=$('#startMatch');b.disabled=competitors.length<2;b.textContent=competitors.length<2?tx('Aguardando oponente…','Waiting for opponent…'):tx('Começar partida','Start match')}if($('#arena').classList.contains('show'))await updateRaceFeed();if($('#results').classList.contains('show'))await renderResults()},180)}
+function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshTimer=setTimeout(async()=>{await renderPlayers();if($('#lobby').classList.contains('show')&&room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2,b=$('#startMatch');b.disabled=competitors.length<minPlayers;b.textContent=competitors.length<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}if($('#arena').classList.contains('show'))await updateRaceFeed();if($('#results').classList.contains('show'))await renderResults()},180)}
 
 async function subscribeRoom(){
  disconnectSubscriptions();
@@ -276,7 +276,7 @@ $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.
 
 $('#startMatch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken)return;
- const readyPlayers=await fetchPlayers();if(readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer').length<2){alert(tx('Aguarde pelo menos um oponente entrar na sala.','Wait for at least one opponent to join the room.'));return}
+ const readyPlayers=await fetchPlayers(),competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
  const b=$('#startMatch');b.disabled=true;b.textContent=tx('Iniciando…','Starting…');
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
