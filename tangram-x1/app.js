@@ -278,11 +278,13 @@ $('#startMatch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken)return;
  const readyPlayers=await fetchPlayers(),competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
  const b=$('#startMatch');b.disabled=true;b.textContent=tx('Iniciando…','Starting…');
+ let advanced=false;const advance=()=>{if(advanced)return;advanced=true;runCountdown(true)};
+ const fallback=setTimeout(advance,1200);
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('A sala não pôde ser iniciada.','The room could not be started.'));
-  runCountdown(true);
- }catch(e){alert(e.message||e);b.disabled=false;b.textContent=tx('Começar partida','Start match')}
+  clearTimeout(fallback);advance();
+ }catch(e){clearTimeout(fallback);b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(e.message||e)}
 });
 
 function runCountdown(hostAdvances=false){
