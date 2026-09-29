@@ -14,7 +14,7 @@ const CHALLENGES_EN={0:'Challenge 1',1:'Challenge 2',2:'Challenge 3',3:'Challeng
 let lang=localStorage.getItem('tangramX1Lang')==='en'?'en':'pt';
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
-let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null;
+let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null,roomWatchTimer=null;
 
 const x1AudioPrefs=()=>{try{return {...{music:false,volume:.18},...JSON.parse(localStorage.getItem('tangram2Audio')||'{}')}}catch(_){return {music:false,volume:.18}}};
 let x1AC=null,x1Gain=null,x1Timer=0,x1Step=0,x1View='home';
@@ -254,6 +254,7 @@ function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshT
 
 async function subscribeRoom(){
  disconnectSubscriptions();
+ clearInterval(roomWatchTimer);roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{const before=room.status,fresh=await fetchRoom();if(fresh&&fresh.status!==before)applyRoomState(fresh.status)}catch(e){}},1800);
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
@@ -270,7 +271,15 @@ function disconnectSubscriptions(){
 }
 function stopArenaObserver(){try{arenaObserver?.disconnect()}catch(e){}arenaObserver=null}
 function resetArenaFrame(){arenaLoadToken++;stopArenaObserver();arenaFinished=false;if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}window.__x1NativeGame=null;const native=$('#nativeArena');if(native){native.innerHTML='';native.hidden=true}const f=$('#tangramArenaFrame');if(f){try{f.src='about:blank';f.style.display='none'}catch(e){}}}
-function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);clearTimeout(playerRefreshTimer);clearTimeout(roomStateTimer);tick=null;playerRefreshTimer=null;roomStateTimer=null;countdownBusy=false;resetArenaFrame()}
+function disconnectRoom(){disconnectSubscriptions();clearInterval(tick);clearInterval(roomWatchTimer);clearTimeout(playerRefreshTimer);clearTimeout(roomStateTimer);tick=null;roomWatchTimer=null;playerRefreshTimer=null;roomStateTimer=null;countdownBusy=false;resetArenaFrame()}
+
+
+async function returnToLobby(){
+ countdownBusy=false;clearInterval(tick);resetArenaFrame();
+ if(room.isHost&&room.hostToken){try{await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:'lobby'});room.status='lobby'}catch(e){}}
+ await openLobby();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-lobby]');if(b){e.preventDefault();returnToLobby()} });
 
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
 
