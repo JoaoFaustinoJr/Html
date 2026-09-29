@@ -354,3 +354,21 @@ body.comfort-motion button.ui-press::after,body.comfort-calm button.ui-press::af
   main{width:min(1720px,calc(100vw - 52px))!important}
   .game-layout{grid-template-columns:minmax(760px,1.65fr) minmax(360px,.68fr)!important;gap:28px!important}
 }
+
+/* v2.0.109 — desktop real: tabuleiro e painel pedagógico lado a lado */
+@media (min-width:1000px){
+  .game{width:100%!important;max-width:none!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"gamer gamer" "head head" "work tools" "work status"!important;column-gap:18px!important;align-items:start!important}
+  .game>.gamer-strip,.game>.gamer-countdown,.game>.gamer-result{grid-area:gamer}
+  .game>.gamehead{grid-area:head}
+  .game>.workspace{grid-area:work!important;width:100%!important;max-width:none!important}
+  .game>.tools{grid-area:tools!important;display:grid!important;grid-template-columns:repeat(2,minmax(110px,1fr))!important;width:260px!important;margin:0!important;align-self:start}
+  .game>#status{grid-area:status!important;width:260px!important;margin:10px 0 0!important}
+  .playzone{width:100%!important;max-width:none!important;display:grid!important;grid-template-columns:minmax(560px,1.5fr) minmax(280px,.7fr)!important;gap:18px!important;align-items:start!important}
+  .board{width:100%!important;max-width:none!important;min-height:560px!important;height:calc(100vh - 275px)!important;max-height:720px!important}
+  .tray{width:100%!important;max-width:none!important;min-height:560px!important;height:calc(100vh - 275px)!important;max-height:720px!important;align-content:center!important}
+  .accordions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+}
+@media (min-width:1400px){
+  .game>.tools,.game>#status{width:300px!important}
+  .playzone{grid-template-columns:minmax(680px,1.65fr) minmax(320px,.68fr)!important}
+}
