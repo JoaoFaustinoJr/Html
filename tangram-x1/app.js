@@ -295,8 +295,7 @@ function runCountdown(hostAdvances=false){
   if(hostAdvances&&room.isHost){
    setTimeout(async()=>{
     const next=room.mode==='pedagogico'?'lesson':'playing';
-    try{await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next})}catch(e){}
-    countdownBusy=false;
+    try{const {data,error}=await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next});if(error)throw error;if(data===false)throw new Error('status');room.status=next;countdownBusy=false;applyRoomState(next)}catch(e){countdownBusy=false;alert(tx('Não foi possível avançar a sala. Tente iniciar novamente.','Could not advance the room. Try starting again.'));try{const fresh=await fetchRoom();if(fresh)applyRoomState(fresh.status)}catch(_){show('lobby')}}
    },600);
   }else setTimeout(()=>{countdownBusy=false},900);
  },700);
