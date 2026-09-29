@@ -293,11 +293,10 @@ function runCountdown(hostAdvances=false){
   if(n>0){$('#countNum').textContent=n;return}
   clearInterval(t);$('#countNum').textContent=tx('VALENDO!','GO!');
   if(hostAdvances&&room.isHost){
-   setTimeout(async()=>{
-    const next=room.mode==='pedagogico'?'lesson':'playing';
-    try{const {data,error}=await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next});if(error)throw error;if(data===false)throw new Error('status');room.status=next;countdownBusy=false;applyRoomState(next)}catch(e){countdownBusy=false;alert(tx('Não foi possível avançar a sala. Tente iniciar novamente.','Could not advance the room. Try starting again.'));try{const fresh=await fetchRoom();if(fresh)applyRoomState(fresh.status)}catch(_){show('lobby')}}
-   },600);
-  }else setTimeout(()=>{countdownBusy=false},900);
+   const next=room.mode==='pedagogico'?'lesson':'playing';
+   setTimeout(()=>{countdownBusy=false;room.status=next;applyRoomState(next)},450);
+   sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next}).then(({error})=>{if(error)console.warn('X1 status sync',error)}).catch(e=>console.warn('X1 status sync',e));
+  }else setTimeout(()=>{countdownBusy=false;const next=room.mode==='pedagogico'?'lesson':'playing';if(room.status==='countdown'||room.status==='lobby'){fetchRoom().then(fresh=>{if(fresh)applyRoomState(fresh.status)}).catch(()=>{})}},900);
  },700);
 }
 function selectedEduLesson(){if(!String(room.pack||'').startsWith('edu:'))return null;return EDU_LESSONS.find(x=>'edu:'+x.id===room.pack)||null}
