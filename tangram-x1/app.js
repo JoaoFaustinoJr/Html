@@ -27,6 +27,8 @@ addEventListener('pointerdown',()=>{if(x1AudioPrefs().music&&(x1View==='arena'||
 const show=id=>{x1MusicView(id);views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-internal',id!=='home');document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setJoinStatus=(t,bad=false)=>{const el=$('#joinStatus');if(el){el.textContent=t;el.style.color=bad?'#ff9cab':''}};
+function clickAck(el,label){if(!el)return;el.classList.remove('x1-click-ack');void el.offsetWidth;el.classList.add('x1-click-ack');const old=el.querySelector('.x1-click-mark');old?.remove();const mark=document.createElement('span');mark.className='x1-click-mark';mark.textContent='✓';mark.setAttribute('aria-hidden','true');el.appendChild(mark);if(navigator.vibrate)try{navigator.vibrate(18)}catch(e){}el.setAttribute('aria-label',(label||el.textContent.trim())+' • '+tx('clique confirmado','click confirmed'));setTimeout(()=>{mark.remove();el.classList.remove('x1-click-ack')},520)}
+document.addEventListener('click',e=>{const b=e.target.closest('button,.choice,.x1-parent-strip,.main-project-link');if(!b||b.disabled)return;clickAck(b)},true);
 const fmtDurationMs=ms=>{if(!Number.isFinite(ms)||ms<0)return'—';const s=ms/1000,m=Math.floor(s/60),sec=s-m*60;return String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0')};
 const elapsedFromArenaStart=t=>{if(!t||!room.startedAt)return'—';return fmtDurationMs(new Date(t).getTime()-new Date(room.startedAt).getTime())};
 const tx=(pt,en)=>lang==='en'?en:pt;
