@@ -506,41 +506,27 @@ async function startArena(){
  await prepareTangramArena();
 }
 
+function teamStandings(players){
+ const base=room.startedAt?new Date(room.startedAt).getTime():0;
+ return [1,2,3,4].map(n=>{const ps=players.filter(p=>p.team_no===n),done=ps.filter(p=>p.tangram_finished_at);if(!ps.length)return null;const complete=done.length===ps.length;const times=done.map(p=>Math.max(0,new Date(p.tangram_finished_at).getTime()-base));const avg=complete&&times.length?times.reduce((a,b)=>a+b,0)/times.length:null;return {n,name:room.teamNames?.[n]||room.teamNames?.[String(n)]||tx('Equipe ','Team ')+n,ps,done,complete,avg}}).filter(Boolean).sort((a,b)=>a.complete!==b.complete?(a.complete?-1:1):a.complete?a.avg-b.avg:b.done.length-a.done.length)
+}
+function fmtMs(ms){const s=Math.max(0,ms)/1000,m=Math.floor(s/60),sec=s-m*60;return String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0')}
 async function renderResults(){
- clearInterval(tick);tick=null;
- try{await fetchRoom()}catch(e){}
+ clearInterval(tick);tick=null;try{await fetchRoom()}catch(e){}
  let players=[];try{players=await fetchPlayers()}catch(e){}
- const ranked=players.filter(p=>p.tangram_finished_at).sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at));
- const top=ranked.slice(0,3);persistCurrentX1Report(players,ranked);const full=$('#fullRankingList');if(full)full.innerHTML=ranked.slice(0,10).map((p,i)=>'<div class="player"><div><b>'+(i+1)+'º • '+esc(p.nickname)+'</b><small>'+elapsedFromArenaStart(p.tangram_finished_at)+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>';
- const slots=[
-  {sel:'.place.first',rank:0,label:'1º'},
-  {sel:'.place.second',rank:1,label:'2º'},
-  {sel:'.place.third',rank:2,label:'3º'}
- ];
- for(const s of slots){
-  const el=$(s.sel),p=top[s.rank];if(!el)continue;
-  el.querySelector('b').textContent=s.label;
-  el.querySelector('span').textContent=p?p.nickname:'—';
-  el.querySelector('small').textContent=p?elapsedFromArenaStart(p.tangram_finished_at):tx('aguardando','waiting');
- }
- const me=room.teacher?null:players.find(p=>p.id===room.playerId);
- const pedagogico=room.mode==='pedagogico';
- $('#metricPrecisionLabel').textContent=pedagogico?tx('Precisão','Accuracy'):tx('Modo','Mode');
- $('#metricErrorsLabel').textContent=pedagogico?tx('Erros pedagógicos','Learning errors'):tx('Posição','Position');
- if(pedagogico){
-  const correct=me?.quiz_correct??0,wrong=me?.quiz_wrong??0,total=correct+wrong;
-  $('#metricPrecision').textContent=me?(correct+'/'+Math.max(1,total)+' '+tx('respostas','answers')):tx('Visão do professor','Teacher view');
-  $('#metricErrors').textContent=me?String(wrong):'—';
- }else{
-  $('#metricPrecision').textContent='Gamer';
-  const pos=me?ranked.findIndex(p=>p.id===me.id)+1:0;
-  $('#metricErrors').textContent=pos>0?(pos+tx('º lugar',' place')):'—';
- }
- $('#totalTime').textContent=me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—');
- const rematch=$('#rematch');
- if(room.isHost){rematch.disabled=false;rematch.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada • ','Next round • ')+(Number(room.currentRound||1)+1)+'/'+(room.roundCount||1):tx('Revanche • reiniciar partida','Rematch • restart match')}
- else{rematch.disabled=true;rematch.textContent=tx('Aguardando revanche do anfitrião','Waiting for host rematch')}
- show('results');
+ const ranked=players.filter(p=>p.tangram_finished_at).sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at)),teamMode=room.mode==='gamer'&&room.teamMode,teams=teamMode?teamStandings(players):[],top=teamMode?teams.filter(t=>t.complete).slice(0,3):ranked.slice(0,3);
+ persistCurrentX1Report(players,ranked);
+ const full=$('#fullRankingList');
+ if(full)full.innerHTML=teamMode?(teams.map((t,i)=>'<div class="player team-result"><div><b>'+(t.complete?(i+1)+'º • ':'')+esc(t.name)+'</b><small>'+t.done.length+'/'+t.ps.length+' '+tx('concluíram','finished')+(t.complete?' • '+tx('média ','average ')+fmtMs(t.avg):' • '+tx('aguardando equipe','waiting for team'))+'</small><small>'+t.ps.map(p=>esc(p.nickname)+(p.tangram_finished_at?' '+elapsedFromArenaStart(p.tangram_finished_at):' …')).join(' • ')+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>'):(ranked.slice(0,10).map((p,i)=>'<div class="player"><div><b>'+(i+1)+'º • '+esc(p.nickname)+'</b><small>'+elapsedFromArenaStart(p.tangram_finished_at)+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>');
+ const slots=[{sel:'.place.first',rank:0,label:'1º'},{sel:'.place.second',rank:1,label:'2º'},{sel:'.place.third',rank:2,label:'3º'}];
+ for(const s of slots){const el=$(s.sel),p=top[s.rank];if(!el)continue;el.querySelector('b').textContent=s.label;el.querySelector('span').textContent=p?(teamMode?p.name:p.nickname):'—';el.querySelector('small').textContent=p?(teamMode?tx('média ','average ')+fmtMs(p.avg):elapsedFromArenaStart(p.tangram_finished_at)):tx('aguardando','waiting')}
+ const me=room.teacher?null:players.find(p=>p.id===room.playerId),pedagogico=room.mode==='pedagogico';
+ $('#metricPrecisionLabel').textContent=pedagogico?tx('Precisão','Accuracy'):teamMode?tx('Equipe','Team'):tx('Modo','Mode');$('#metricErrorsLabel').textContent=pedagogico?tx('Erros pedagógicos','Learning errors'):tx('Posição','Position');
+ if(pedagogico){const correct=me?.quiz_correct??0,wrong=me?.quiz_wrong??0,total=correct+wrong;$('#metricPrecision').textContent=me?(correct+'/'+Math.max(1,total)+' '+tx('respostas','answers')):tx('Visão do professor','Teacher view');$('#metricErrors').textContent=me?String(wrong):'—'}
+ else if(teamMode){const myTeam=teams.find(t=>t.n===me?.team_no),pos=myTeam?.complete?teams.filter(t=>t.complete).findIndex(t=>t.n===myTeam.n)+1:0;$('#metricPrecision').textContent=myTeam?.name||'—';$('#metricErrors').textContent=pos>0?pos+tx('º lugar',' place'):tx('aguardando equipe','waiting for team')}
+ else{$('#metricPrecision').textContent='Gamer';const pos=me?ranked.findIndex(p=>p.id===me.id)+1:0;$('#metricErrors').textContent=pos>0?pos+tx('º lugar',' place'):'—'}
+ $('#totalTime').textContent=teamMode?(teams.find(t=>t.n===me?.team_no)?.complete?fmtMs(teams.find(t=>t.n===me?.team_no).avg):'—'):(me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—'));
+ const rematch=$('#rematch');if(room.isHost){rematch.disabled=false;rematch.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada • ','Next round • ')+(Number(room.currentRound||1)+1)+'/'+(room.roundCount||1):tx('Revanche • reiniciar partida','Rematch • restart match')}else{rematch.disabled=true;rematch.textContent=tx('Aguardando revanche do anfitrião','Waiting for host rematch')}show('results');
 }
 $('#newMatch')?.addEventListener('click',()=>{disconnectRoom();arenaFinished=false;quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 $('#rematch').addEventListener('click',async()=>{
