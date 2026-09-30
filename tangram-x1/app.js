@@ -367,12 +367,18 @@ function renderPedagogicalContent(){
  if(example)example.textContent=l.example||l.representation||l.use||'Observe o conceito e aplique-o no desafio.';
  quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a):[];quizIndex=0;quizWrong=0;renderQuizQuestion();
 }
+let quizReadTimer=null;
 function renderQuizQuestion(){
+ clearInterval(quizReadTimer);
  const q=quizQuestions[quizIndex],qh=$('#quiz h2'),kick=$('#quiz .kicker'),box=$('#quiz .answers'),fb=$('#quizFeedback');
  if(fb)fb.textContent='';if(!q){if(qh)qh.textContent=tx('Revise a ideia principal e avance para o desafio.','Review the main idea and advance to the challenge.');if(box)box.innerHTML='<button class="primary big" data-reveal-answer>'+tx('Liberar desafio','Unlock challenge')+'</button>';return}
  if(kick)kick.textContent=tx('DESAFIO '+(quizIndex+1)+' DE '+quizQuestions.length,'CHALLENGE '+(quizIndex+1)+' OF '+quizQuestions.length);
  if(qh)qh.textContent=q.q;
- if(box)box.innerHTML='<button class="primary big" data-reveal-answer>'+tx('Pensei na resposta • conferir','I have my answer • check')+'</button><div class="x1-answer-reveal" id="answerReveal" hidden><b>'+tx('Resposta esperada','Expected answer')+'</b><p>'+esc(q.a)+'</p><div class="x1-selfcheck"><button data-selfcheck="retry">'+tx('↻ Preciso rever','↻ I need to review')+'</button><button class="primary" data-selfcheck="ok">'+tx('✓ Acertei / compreendi','✓ I got it / understood')+'</button></div></div>';
+ if(box){
+  box.innerHTML='<div class="x1-question-time" id="questionTime">⏱ '+tx('Tempo de leitura: 20 s','Reading time: 20 s')+'</div><button class="primary big" data-reveal-answer disabled>'+tx('Leia e pense na resposta…','Read and think about the answer…')+'</button><div class="x1-answer-reveal" id="answerReveal" hidden><b>'+tx('Resposta esperada','Expected answer')+'</b><p>'+esc(q.a)+'</p><div class="x1-selfcheck"><button data-selfcheck="retry">'+tx('↻ Preciso rever','↻ I need to review')+'</button><button class="primary" data-selfcheck="ok">'+tx('✓ Acertei / compreendi','✓ I got it / understood')+'</button></div></div>';
+  const reveal=box.querySelector('[data-reveal-answer]'),clock=box.querySelector('#questionTime');let left=20;
+  quizReadTimer=setInterval(()=>{left--;if(clock)clock.textContent='⏱ '+tx('Tempo de leitura: ','Reading time: ')+left+' s';if(left<=0){clearInterval(quizReadTimer);quizReadTimer=null;if(reveal){reveal.disabled=false;reveal.textContent=tx('Pensei na resposta • conferir','I have my answer • check')}if(clock)clock.textContent=tx('✓ Agora responda no seu ritmo.','✓ Now answer at your own pace.')}},1000);
+ }
 }
 $('#lessonDone').addEventListener('click',()=>{quizIndex=0;renderQuizQuestion();show('quiz')});
 $('#quiz').addEventListener('click',async e=>{
@@ -393,6 +399,7 @@ async function renderTeacherDashboard(){
  const done=ps.filter(p=>p.tangram_finished_at),arena=ps.filter(p=>p.quiz_finished_at&&!p.tangram_finished_at),lesson=ps.filter(p=>!p.quiz_finished_at);
  const put=(id,v)=>{const el=$(id);if(el)el.textContent=v};put('#tdTotal',ps.length);put('#tdLesson',lesson.length);put('#tdArena',arena.length);put('#tdDone',done.length);
  const pct=ps.length?Math.round(done.length*100/ps.length):0,bar=$('#tdProgress');if(bar)bar.style.width=pct+'%';put('#tdProgressText',done.length+'/'+ps.length+' '+tx('concluíram • ','finished • ')+pct+'%');
+ const overview=$('#teacherOverview');if(overview){const active=arena.length,waiting=lesson.length;overview.innerHTML='<div class="teacher-overview-title"><b>'+tx('Visão da turma','Class overview')+'</b><span>'+tx('Atualização em tempo real','Live update')+'</span></div><div class="teacher-overview-grid">'+ps.map(p=>{const cls=p.tangram_finished_at?'done':p.quiz_finished_at?'arena':'lesson',state=p.tangram_finished_at?tx('Concluiu','Finished'):p.quiz_finished_at?tx('Na Arena','In Arena'):tx('Aula / questões','Lesson / questions');return '<div class="teacher-overview-student '+cls+'"><b>'+esc(p.nickname)+'</b><small>'+state+'</small></div>'}).join('')+'</div>'}
  const list=$('#teacherStudentList');if(list)list.innerHTML=ps.map(p=>{const state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?tx('⚔️ Na Arena','⚔️ In Arena'):tx('📘 Aula / desafios','📘 Lesson / challenges');return '<div class="teacher-student"><b>'+esc(p.nickname)+'</b><span>'+state+'</span></div>'}).join('')||'<small>'+tx('Aguardando alunos…','Waiting for students…')+'</small>';
 }
 async function updateRaceFeed(){
@@ -539,7 +546,7 @@ $('#rematch').addEventListener('click',async()=>{
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();await fetchRoom();await openLobby();
+  quizWrong=0;quizIndex=0;quizQuestions=[];arenaFinished=false;countdownBusy=false;startedAt=0;clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);tick=null;quizReadTimer=null;roomStateTimer=null;resetArenaFrame();await fetchRoom();room.status='lobby';await openLobby();
  }catch(e){alert(e.message||e)}
  finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
 });
