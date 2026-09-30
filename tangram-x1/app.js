@@ -178,6 +178,7 @@ async function createRoom(){
  }catch(e){alert(tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e))}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala','Create room')}
 }
+function gaEvent(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,{app_name:'x1_arena_tangram',...params})}catch(e){}}
 async function createGamerRoom(){
  if(!sb)return;
  const nickname=$('#gamerNickname').value.trim();
@@ -193,7 +194,7 @@ async function createGamerRoom(){
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
-  await subscribeRoom();await fetchRoom();if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo}catch(e){console.warn('X1 teams',e)}}await openLobby();
+  await subscribeRoom();await fetchRoom();gaEvent('x1_room_created',{game_mode:teamMode?'teams':'individual',rounds,challenge});if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo;gaEvent('x1_team_room_created',{team_count:Object.keys(names).length,rounds,challenge})}catch(e){console.warn('X1 teams',e)}}await openLobby();
  }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
@@ -221,11 +222,12 @@ async function joinRoom(){
   if(error)throw error;
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error(tx('Sala não encontrada ou encerrada.','Room not found or already closed.'));
   room={id:x.room_id,code,teacher:false,isHost:false,pack:x.content_pack,mode:x.room_mode,nickname,hostToken:'',playerId:x.player_id,playerToken:x.player_token,status:x.room_status};
-  if(pendingJoinTeam){const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:pendingJoinTeam});if(tr.error||!tr.data)throw tr.error||new Error(tx('Não foi possível entrar na equipe.','Could not join the team.'));room.teamNo=pendingJoinTeam}
+  if(pendingJoinTeam){const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:pendingJoinTeam});if(tr.error||!tr.data)throw tr.error||new Error(tx('Não foi possível entrar na equipe.','Could not join the team.'));room.teamNo=pendingJoinTeam;gaEvent('x1_team_join',{team_no:pendingJoinTeam})}
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   await subscribeRoom();
   await fetchRoom();
   await openLobby();
+  gaEvent('x1_room_join',{game_mode:room.teamMode?'teams':room.mode,team_no:room.teamNo||0});
   applyRoomState(room.status);
  }catch(e){setJoinStatus(tx('Não foi possível entrar: ','Could not join: ')+(e.message||e),true)}
  finally{btn.disabled=false;btn.textContent=tx('Entrar','Join')}
@@ -320,7 +322,7 @@ $('#startMatch').addEventListener('click',async()=>{
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('A sala não pôde ser iniciada.','The room could not be started.'));
-  room.status='countdown';runCountdown(true);
+  room.status='countdown';gaEvent('x1_match_start',{game_mode:room.teamMode?'teams':room.mode,round:room.currentRound||1,challenge:room.challenge||'random'});runCountdown(true);
  }catch(e){b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(tx('Não foi possível sincronizar o início. Tente novamente. ','Could not synchronize the start. Try again. ')+(e.message||''))}
 });
 
@@ -560,7 +562,7 @@ async function onTangramComplete(message){
    const {data,error}=await sb.rpc('x1_finish_tangram',{p_player_id:room.playerId,p_player_token:room.playerToken});
    if(error)throw error;if(!data)throw new Error(tx('Resultado não registrado.','Result was not recorded.'));
   }
-  await updateRaceFeed();
+  gaEvent('x1_challenge_complete',{game_mode:room.teamMode?'teams':room.mode,team_no:room.teamNo||0,round:room.currentRound||1,challenge:arenaChallengeIndex()});await updateRaceFeed();
   setTimeout(()=>renderResults(),700);
  }catch(e){arenaFinished=false;$('#raceFeed').textContent=tx('Não foi possível registrar o resultado: ','Could not record the result: ')+(e.message||e)}
 }
@@ -609,7 +611,7 @@ $('#rematch').addEventListener('click',async()=>{
  const b=$('#rematch');b.disabled=true;b.textContent=tx('Preparando nova rodada…','Preparing new round…');
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
-  if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
+  if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));gaEvent('x1_rematch',{game_mode:room.teamMode?'teams':room.mode,next_round:(room.currentRound||1)+1});
   quizWrong=0;quizIndex=0;quizQuestions=[];arenaFinished=false;countdownBusy=false;startedAt=0;clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);tick=null;quizReadTimer=null;roomStateTimer=null;resetArenaFrame();await fetchRoom();room.status='lobby';await openLobby();
  }catch(e){alert(e.message||e)}
  finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
