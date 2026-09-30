@@ -338,7 +338,17 @@ function applyRoomState(nextStatus){
   return
  }
  if(nextStatus==='quiz'){countdownBusy=false;renderQuizQuestion();show('quiz');return}
- if(nextStatus==='playing'){countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e));return}
+ if(nextStatus==='playing'){
+  countdownBusy=false;
+  if(room.mode==='pedagogico'&&!room.isHost&&room.playerId&&room.playerToken){
+    sb.from('x1_players').select('quiz_finished_at').eq('id',room.playerId).maybeSingle().then(({data})=>{
+      if(data?.quiz_finished_at)startArena().catch(e=>console.warn('X1 arena',e));
+      else{room.status='lesson';renderPedagogicalContent();show('lesson')}
+    }).catch(()=>{room.status='lesson';renderPedagogicalContent();show('lesson')});
+    return
+  }
+  startArena().catch(e=>console.warn('X1 arena',e));return
+}
  if(nextStatus==='results'){countdownBusy=false;renderResults().catch(e=>console.warn('X1 results',e));return}
  if(nextStatus==='closed'){disconnectRoom();show('home');return}
  console.warn('X1 estado desconhecido',nextStatus,'anterior',previous)
@@ -393,7 +403,7 @@ function renderQuizQuestion(){
 async function finishPedagogicalQuiz(){
  const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Questões concluídas. Arena liberada!','✓ Questions complete. Arena unlocked!');
  if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizCorrect,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){if(fb)fb.textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
- setTimeout(()=>applyRoomState('playing'),650);
+ setTimeout(()=>{countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e))},650);
 }
 $('#lessonDone').addEventListener('click',()=>{quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();show('quiz')});
 $('#quiz').addEventListener('click',async e=>{
