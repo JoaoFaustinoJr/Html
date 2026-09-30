@@ -337,14 +337,28 @@ function applyRoomState(nextStatus){
   else{quizQuestions=[];quizIndex=0;quizWrong=0;quizCorrect=0;show('lesson')}
   return
  }
- if(nextStatus==='quiz'){countdownBusy=false;renderQuizQuestion();show('quiz');return}
+ if(nextStatus==='quiz'){
+  countdownBusy=false;
+  /* v2.0.170: o estado global da sala não pode devolver um aluno que já
+     concluiu a etapa pedagógica para as questões. Cada aluno progride
+     individualmente pelo quiz antes de entrar na Arena. */
+  if(room.mode==='pedagogico'&&!room.isHost&&room.playerId&&room.playerToken){
+    sb.from('x1_players').select('quiz_finished_at').eq('id',room.playerId).maybeSingle().then(({data})=>{
+      if(data?.quiz_finished_at){room.status='playing';startArena().catch(e=>console.warn('X1 arena',e))}
+      else{renderQuizQuestion();show('quiz')}
+    }).catch(()=>{renderQuizQuestion();show('quiz')});
+    return
+  }
+  renderQuizQuestion();show('quiz');return
+ }
  if(nextStatus==='playing'){
   countdownBusy=false;
   if(room.mode==='pedagogico'&&!room.isHost&&room.playerId&&room.playerToken){
     sb.from('x1_players').select('quiz_finished_at').eq('id',room.playerId).maybeSingle().then(({data})=>{
       if(data?.quiz_finished_at)startArena().catch(e=>console.warn('X1 arena',e));
+      else if($('#quiz').classList.contains('show')){room.status='quiz'}
       else{room.status='lesson';renderPedagogicalContent();show('lesson')}
-    }).catch(()=>{room.status='lesson';renderPedagogicalContent();show('lesson')});
+    }).catch(()=>{if(!$('#arena').classList.contains('show')){room.status='lesson';renderPedagogicalContent();show('lesson')}});
     return
   }
   startArena().catch(e=>console.warn('X1 arena',e));return
