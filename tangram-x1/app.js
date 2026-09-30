@@ -182,9 +182,9 @@ async function createGamerRoom(){
  if(!sb)return;
  const nickname=$('#gamerNickname').value.trim();
  const rounds=Number($('#gamerRounds').value)||1;
- const challenge=$('#gamerChallenge').value||'random',teamMode=!!$('#gamerTeams')?.checked;
+ const challenge=$('#gamerChallenge').value||'random',teamMode=!!$('#gamerTeams')?.checked,hostTeamNo=Number($('#hostTeamNo')?.value)||1;
  const status=$('#gamerCreateStatus'),btn=$('#createGamerOnline');
- if(!nickname){status.textContent=tx('Informe um apelido.','Enter a nickname.');status.style.color='#ff9cab';return}
+ if(!nickname){status.textContent=tx('⚠️ Falta seu apelido no campo do início do formulário.','⚠️ Enter your nickname in the first field.');status.style.color='#ff9cab';const n=$('#gamerNickname');n?.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>n?.focus(),250);return}
  btn.disabled=true;btn.textContent=tx('Criando sala…','Creating room…');status.textContent=tx('Conectando à Arena…','Connecting to the Arena…');status.style.color='';
  try{
   const {data,error}=await sb.rpc('x1_create_gamer_room',{p_nickname:nickname,p_round_count:rounds,p_challenge:challenge});
@@ -193,7 +193,7 @@ async function createGamerRoom(){
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
-  await subscribeRoom();await fetchRoom();if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;room.teamMode=true;room.teamNames=names}catch(e){console.warn('X1 teams',e)}}await openLobby();
+  await subscribeRoom();await fetchRoom();if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo}catch(e){console.warn('X1 teams',e)}}await openLobby();
  }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
