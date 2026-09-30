@@ -191,10 +191,11 @@
       </div>
       <div class="arena-loader" id="arenaLoader"><div class="spinner"></div><b>Preparando o mesmo desafio para todos…</b><small>Carregando o motor independente da Arena.</small></div>
       <div id="nativeArena" class="x1-native" hidden></div><iframe id="tangramArenaFrame" title="Tangram X1 — desafio da rodada" src="about:blank" loading="eager" hidden></iframe>
-      <div class="spectator-card" id="spectatorCard" hidden>
-        <img src="https://joaofaustinojr.github.io/Tangram-Educativo-2.0/app-icon.svg?v=310" alt="R.A.I.">
-        <h3>Modo professor</h3>
-        <p>Você acompanha a corrida em tempo real enquanto os alunos montam o mesmo desafio.</p>
+      <div class="spectator-card teacher-dashboard" id="spectatorCard" hidden>
+        <div class="teacher-dash-head"><img src="https://joaofaustinojr.github.io/Tangram-Educativo-2.0/app-icon.svg?v=310" alt="R.A.I."><div><h3>Painel do professor</h3><p>Acompanhe a turma em tempo real sem interferir na disputa.</p></div></div>
+        <div class="teacher-metrics"><div><b id="tdTotal">0</b><small>Alunos</small></div><div><b id="tdLesson">0</b><small>Na etapa pedagógica</small></div><div><b id="tdArena">0</b><small>Na Arena</small></div><div><b id="tdDone">0</b><small>Concluíram</small></div></div>
+        <div class="teacher-progress"><span><i id="tdProgress" style="width:0%"></i></span><small id="tdProgressText">Aguardando progresso da turma</small></div>
+        <div id="teacherStudentList" class="teacher-student-list"></div>
       </div>
     </div>
     <div class="race-feed" id="raceFeed"><span>🏁 Todos começaram juntos.</span></div>
@@ -329,6 +330,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=63-20260929h"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=64-20260929i"></script>
 </body>
 </html>
