@@ -203,16 +203,25 @@ $('#gamerTeams')?.addEventListener('change',e=>{const h=$('#gamerTeamSetup');if(
 
 $('#createDemoRoom').addEventListener('click',createRoom);
 
+let pendingJoinTeam=null;
+async function inspectJoinTeams(){
+ const code=$('#roomCodeInput').value.trim().toUpperCase(),wrap=$('#joinTeamPicker'),box=$('#joinTeamChoices');pendingJoinTeam=null;if(wrap)wrap.hidden=true;if(!/^RAI-\d{4}$/.test(code)||!sb)return;
+ try{const {data,error}=await sb.rpc('x1_get_join_info',{p_code:code});if(error)throw error;const x=Array.isArray(data)?data[0]:data;if(!x?.team_mode)return;room.teamNames=x.team_names||{};if(box)box.innerHTML=[1,2,3,4].map(n=>'<button type="button" class="team-choice" data-team="'+n+'">'+esc(room.teamNames[n]||room.teamNames[String(n)]||tx('Equipe ','Team ')+n)+'</button>').join('');if(wrap)wrap.hidden=false}catch(e){}
+}
+$('#roomCodeInput')?.addEventListener('input',()=>{clearTimeout(window.__x1JoinTeamTimer);window.__x1JoinTeamTimer=setTimeout(inspectJoinTeams,250)});
+$('#joinTeamChoices')?.addEventListener('click',e=>{const b=e.target.closest('[data-team]');if(!b)return;pendingJoinTeam=Number(b.dataset.team);$('#joinTeamChoices .team-choice').forEach(x=>x.classList.toggle('active',x===b))});
 async function joinRoom(){
  if(!sb)return setJoinStatus(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'),true);
  const code=$('#roomCodeInput').value.trim().toUpperCase(),nickname=$('#nickname').value.trim();
  if(!/^RAI-\d{4}$/.test(code)||!nickname)return setJoinStatus(tx('Digite um código no formato RAI-1234 e um apelido.','Enter a code in the RAI-1234 format and a nickname.'),true);
+ if(!$('#joinTeamPicker')?.hidden&&!pendingJoinTeam)return setJoinStatus(tx('Escolha sua equipe antes de entrar.','Choose your team before joining.'),true);
  const btn=$('#joinOnline');btn.disabled=true;btn.textContent=tx('Entrando…','Joining…');setJoinStatus(tx('Conectando à sala…','Connecting to room…'));
  try{
   const {data,error}=await sb.rpc('x1_join_room',{p_code:code,p_nickname:nickname});
   if(error)throw error;
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error(tx('Sala não encontrada ou encerrada.','Room not found or already closed.'));
   room={id:x.room_id,code,teacher:false,isHost:false,pack:x.content_pack,mode:x.room_mode,nickname,hostToken:'',playerId:x.player_id,playerToken:x.player_token,status:x.room_status};
+  if(pendingJoinTeam){const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:pendingJoinTeam});if(tr.error||!tr.data)throw tr.error||new Error(tx('Não foi possível entrar na equipe.','Could not join the team.'));room.teamNo=pendingJoinTeam}
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   await subscribeRoom();
   await fetchRoom();
@@ -227,7 +236,7 @@ async function fetchRoom(){
  if(!sb||!room.id)return null;
  let data=null,error=null;
  if(!room.isHost&&room.playerId&&room.playerToken){
-  const res=await sb.rpc('x1_get_room_state',{p_player_id:room.playerId,p_player_token:room.playerToken});error=res.error;const x=Array.isArray(res.data)?res.data[0]:res.data;if(x)data={id:x.room_id,status:x.room_status,mode:x.room_mode,content_pack:x.content_pack,question_count:x.question_count,round_count:x.round_count,challenge:x.challenge,current_round:x.current_round,started_at:x.started_at};
+  const res=await sb.rpc('x1_get_room_state',{p_player_id:room.playerId,p_player_token:room.playerToken});error=res.error;const x=Array.isArray(res.data)?res.data[0]:res.data;if(x)data={id:x.room_id,status:x.room_status,mode:x.room_mode,content_pack:x.content_pack,question_count:x.question_count,round_count:x.round_count,challenge:x.challenge,current_round:x.current_round,started_at:x.started_at,team_mode:x.team_mode,team_names:x.team_names};
  }else{
   const res=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at,team_mode,team_names').eq('id',room.id).maybeSingle();data=res.data;error=res.error;
  }
@@ -387,6 +396,7 @@ async function updateRaceFeed(){
  try{
   const players=await fetchPlayers(),done=players.filter(p=>p.tangram_finished_at);
   if(!players.length){feed.innerHTML='<span>'+tx('🏁 Aguardando jogadores.','🏁 Waiting for players.')+'</span>';return}
+  if(room.teamMode){const groups=[1,2,3,4].map(n=>({n,name:room.teamNames?.[n]||room.teamNames?.[String(n)]||tx('Equipe ','Team ')+n,ps:players.filter(p=>p.team_no===n)})).filter(g=>g.ps.length);feed.innerHTML=groups.map(g=>{const d=g.ps.filter(p=>p.tangram_finished_at);let avg='';if(d.length===g.ps.length&&d.length){const ms=d.reduce((s,p)=>s+Math.max(0,new Date(p.tangram_finished_at).getTime()-new Date(room.startedAt).getTime()),0)/d.length;avg=' • '+formatElapsedMs(ms)}return '<span><b>'+esc(g.name)+'</b> — '+d.length+'/'+g.ps.length+' '+tx('concluíram','finished')+avg+'</span>'}).join('');return}
   if(!done.length){feed.innerHTML='<span>'+tx('🏁 Todos receberam o mesmo desafio.','🏁 Everyone received the same challenge.')+'</span><strong>0/'+players.length+' '+tx('concluíram','finished')+'</strong>';return}
   const last=done.sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at)).at(-1);
   feed.innerHTML='<span>🏁 '+esc(last.nickname)+' '+tx('concluiu.','finished.')+'</span><strong>'+done.length+'/'+players.length+' '+tx('concluíram','finished')+'</strong>';
