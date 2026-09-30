@@ -210,3 +210,20 @@ body{background:radial-gradient(circle at 50% -10%,#0a4b63 0,#052d40 28%,#031923
 .room-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.room-actions button{width:auto}
 
 .team-lobby-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}.team-lobby-card{border:1px solid rgba(73,222,255,.35);border-radius:16px;padding:10px;background:rgba(3,21,35,.28)}.team-lobby-card header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 4px 9px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px}.team-lobby-card header b{font-size:1.05rem}.team-lobby-card header span{font-size:.78rem;opacity:.75}.team-lobby-card .player{margin:6px 0}.team-lobby-card.unassigned{border-style:dashed}@media(max-width:650px){.team-lobby-grid{grid-template-columns:1fr}}
+
+/* v27 — lobby: organização para turmas grandes */
+#lobby .card{overflow:hidden}
+#lobby .lobby-title{padding-bottom:14px;border-bottom:1px solid rgba(130,215,240,.14)}
+#lobby .players{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;align-items:stretch}
+#lobby .player{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 15px;text-align:left}
+#lobby .player>div{min-width:0;flex:1}
+#lobby .player b{font-size:15px;line-height:1.2;overflow-wrap:anywhere;word-break:normal}
+#lobby .player small{display:block;margin-top:4px;font-size:11px;line-height:1.25}
+#lobby .kick-player{flex:0 0 34px;width:34px;height:34px;border-radius:10px;padding:0;display:grid;place-items:center}
+#lobby .team-lobby-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+#lobby .team-lobby-card{min-width:0;border:1px solid rgba(130,215,240,.16);border-radius:18px;padding:12px;background:rgba(4,20,31,.38)}
+#lobby .team-lobby-card header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 3px 10px;margin-bottom:8px;border-bottom:1px solid rgba(130,215,240,.12)}
+#lobby .team-lobby-card header b{overflow-wrap:anywhere}
+#lobby .team-lobby-card .player{margin-top:8px}
+@media(max-width:700px){#lobby .players{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:460px){#lobby .players{grid-template-columns:1fr}#lobby .lobby-title{align-items:flex-start;flex-direction:column}}
