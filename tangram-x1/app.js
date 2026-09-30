@@ -266,7 +266,7 @@ async function removePlayer(playerId){
  if(!confirm(tx('Retirar este participante da sala?','Remove this participant from the room?')))return;
  try{const {data,error}=await sb.rpc('x1_remove_player',{p_code:room.code,p_host_token:room.hostToken,p_player_id:playerId});if(error)throw error;if(!data)throw new Error(tx('Não foi possível retirar o participante.','Could not remove participant.'));await renderPlayers()}catch(e){alert(e.message||e)}
 }
-function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshTimer=setTimeout(async()=>{await renderPlayers();if($('#lobby').classList.contains('show')&&room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2,b=$('#startMatch');b.disabled=competitors.length<minPlayers;b.textContent=competitors.length<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}if($('#arena').classList.contains('show'))await updateRaceFeed();if($('#results').classList.contains('show'))await renderResults()},180)}
+function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshTimer=setTimeout(async()=>{await renderPlayers();if($('#lobby').classList.contains('show')&&room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2,b=$('#startMatch');b.disabled=competitors.length<minPlayers;b.textContent=competitors.length<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}if($('#arena').classList.contains('show')){await updateRaceFeed();await renderTeacherDashboard();}if($('#results').classList.contains('show'))await renderResults()},180)}
 
 async function subscribeRoom(){
  disconnectSubscriptions();
@@ -372,6 +372,15 @@ $('#quiz').addEventListener('click',async e=>{
  setTimeout(()=>applyRoomState('playing'),650);
 });
 
+async function renderTeacherDashboard(){
+ if(!room.teacher||room.mode!=='pedagogico')return;
+ let ps=[];try{ps=await fetchPlayers()}catch(e){return}
+ ps=ps.filter(p=>p.role!=='teacher');
+ const done=ps.filter(p=>p.tangram_finished_at),arena=ps.filter(p=>p.quiz_finished_at&&!p.tangram_finished_at),lesson=ps.filter(p=>!p.quiz_finished_at);
+ const put=(id,v)=>{const el=$(id);if(el)el.textContent=v};put('#tdTotal',ps.length);put('#tdLesson',lesson.length);put('#tdArena',arena.length);put('#tdDone',done.length);
+ const pct=ps.length?Math.round(done.length*100/ps.length):0,bar=$('#tdProgress');if(bar)bar.style.width=pct+'%';put('#tdProgressText',done.length+'/'+ps.length+' '+tx('concluíram • ','finished • ')+pct+'%');
+ const list=$('#teacherStudentList');if(list)list.innerHTML=ps.map(p=>{const state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?tx('⚔️ Na Arena','⚔️ In Arena'):tx('📘 Aula / desafios','📘 Lesson / challenges');return '<div class="teacher-student"><b>'+esc(p.nickname)+'</b><span>'+state+'</span></div>'}).join('')||'<small>'+tx('Aguardando alunos…','Waiting for students…')+'</small>';
+}
 async function updateRaceFeed(){
  const feed=$('#raceFeed');if(!feed||!room.id)return;
  try{
@@ -449,7 +458,7 @@ async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole'),native=$('#nativeArena');
  stopArenaObserver();arenaFinished=false;
  frame.style.display='none';frame.src='about:blank';
- if(room.teacher&&room.mode==='pedagogico'){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');await updateRaceFeed();return}
+ if(room.teacher&&room.mode==='pedagogico'){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');await renderTeacherDashboard();await updateRaceFeed();return}
  spectator.hidden=true;loader.hidden=true;native.hidden=false;role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
  if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}
  if(!window.X1NativeArena){native.innerHTML='<p class="x1n-msg">Arena nativa indisponível.</p>';return}
