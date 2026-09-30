@@ -334,7 +334,7 @@ function applyRoomState(nextStatus){
   if(room.mode!=='pedagogico'){startArena();return}
   const l=selectedEduLesson();
   if(l){renderPedagogicalContent();show('lesson')}
-  else{quizQuestions=[];quizIndex=0;quizWrong=0;show('lesson')}
+  else{quizQuestions=[];quizIndex=0;quizWrong=0;quizCorrect=0;show('lesson')}
   return
  }
  if(nextStatus==='quiz'){countdownBusy=false;renderQuizQuestion();show('quiz');return}
@@ -365,31 +365,45 @@ function renderPedagogicalContent(){
  if(title)title.textContent=l.topic||l.title||'Aula R.A.I.';
  if(rai)rai.innerHTML='<b>'+esc(l.objective||'Vamos aprender.')+'</b> '+esc(l.concept||l.keyDefinition||'');
  if(example)example.textContent=l.example||l.representation||l.use||'Observe o conceito e aplique-o no desafio.';
- quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a):[];quizIndex=0;quizWrong=0;renderQuizQuestion();
+ quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a).slice(0,Math.max(1,Number(room.questionCount)||3)):[];quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();
 }
-let quizReadTimer=null;
+let quizReadTimer=null,quizCorrect=0,quizAnswered=false;
+function quizChoices(q){
+ if(Array.isArray(q.options)&&q.options.length>=2){const answerIndex=Number.isInteger(q.correct)?q.correct:q.options.findIndex(x=>String(x).trim().toLowerCase()===String(q.a).trim().toLowerCase());return {options:q.options,answerIndex:answerIndex>=0?answerIndex:0}}
+ const l=selectedEduLesson()||{},correct=String(q.a||''),pool=[l.keyDefinition,l.use,l.observe,l.example,l.concept,...quizQuestions.map(x=>x.a)].filter(x=>x&&String(x).trim()!==correct.trim());
+ const clean=[...new Set(pool.map(x=>String(x).trim()))].filter(x=>x.length>8).slice(0,8);
+ let distract=clean.sort((x,y)=>Math.abs(x.length-correct.length)-Math.abs(y.length-correct.length)).slice(0,3);
+ const fallbacks=[tx('É apenas o nome de um comando, sem guardar informação.','It is only a command name and stores no information.'),tx('É uma regra que sempre produz o mesmo resultado, sem condições.','It is a rule that always produces the same result, without conditions.'),tx('É um recurso usado somente para desenhar figuras na tela.','It is a feature used only to draw shapes on screen.')];
+ for(const f of fallbacks)if(distract.length<3&&!distract.includes(f)&&f!==correct)distract.push(f);
+ const options=[correct,...distract.slice(0,3)],seed=(roomHash()+quizIndex*17)%997;
+ options.sort((x,y)=>{const hx=(String(x).length*31+String(x).charCodeAt(0)+seed)%101,hy=(String(y).length*31+String(y).charCodeAt(0)+seed)%101;return hx-hy});
+ return {options,answerIndex:options.indexOf(correct)}
+}
 function renderQuizQuestion(){
- clearInterval(quizReadTimer);
+ clearInterval(quizReadTimer);quizAnswered=false;
  const q=quizQuestions[quizIndex],qh=$('#quiz h2'),kick=$('#quiz .kicker'),box=$('#quiz .answers'),fb=$('#quizFeedback');
- if(fb)fb.textContent='';if(!q){if(qh)qh.textContent=tx('Revise a ideia principal e avance para o desafio.','Review the main idea and advance to the challenge.');if(box)box.innerHTML='<button class="primary big" data-reveal-answer>'+tx('Liberar desafio','Unlock challenge')+'</button>';return}
- if(kick)kick.textContent=tx('DESAFIO '+(quizIndex+1)+' DE '+quizQuestions.length,'CHALLENGE '+(quizIndex+1)+' OF '+quizQuestions.length);
+ if(fb)fb.textContent='';if(!q){if(qh)qh.textContent=tx('Revise a ideia principal e avance para o desafio.','Review the main idea and advance to the challenge.');if(box)box.innerHTML='<button class="primary big" data-quiz-finish>'+tx('Liberar desafio','Unlock challenge')+'</button>';return}
+ if(kick)kick.textContent=tx('QUESTÃO '+(quizIndex+1)+' DE '+quizQuestions.length,'QUESTION '+(quizIndex+1)+' OF '+quizQuestions.length);
  if(qh)qh.textContent=q.q;
  if(box){
-  box.innerHTML='<div class="x1-question-time" id="questionTime">⏱ '+tx('Tempo de leitura: 20 s','Reading time: 20 s')+'</div><button class="primary big" data-reveal-answer disabled>'+tx('Leia e pense na resposta…','Read and think about the answer…')+'</button><div class="x1-answer-reveal" id="answerReveal" hidden><b>'+tx('Resposta esperada','Expected answer')+'</b><p>'+esc(q.a)+'</p><div class="x1-selfcheck"><button data-selfcheck="retry">'+tx('↻ Preciso rever','↻ I need to review')+'</button><button class="primary" data-selfcheck="ok">'+tx('✓ Acertei / compreendi','✓ I got it / understood')+'</button></div></div>';
-  const reveal=box.querySelector('[data-reveal-answer]'),clock=box.querySelector('#questionTime');let left=20;
-  quizReadTimer=setInterval(()=>{left--;if(clock)clock.textContent='⏱ '+tx('Tempo de leitura: ','Reading time: ')+left+' s';if(left<=0){clearInterval(quizReadTimer);quizReadTimer=null;if(reveal){reveal.disabled=false;reveal.textContent=tx('Pensei na resposta • conferir','I have my answer • check')}if(clock)clock.textContent=tx('✓ Agora responda no seu ritmo.','✓ Now answer at your own pace.')}},1000);
+  const c=quizChoices(q);q.__answerIndex=c.answerIndex;
+  box.innerHTML='<div class="x1-question-time" id="questionTime">⏱ '+tx('Leia e responda • sem limite','Read and answer • no time limit')+'</div><div class="x1-mc-options">'+c.options.map((o,i)=>'<button class="x1-mc-option" data-answer="'+i+'"><span>'+String.fromCharCode(65+i)+'</span>'+esc(o)+'</button>').join('')+'</div><div class="x1-answer-reveal" id="answerReveal" hidden></div>';
  }
 }
-$('#lessonDone').addEventListener('click',()=>{quizIndex=0;renderQuizQuestion();show('quiz')});
-$('#quiz').addEventListener('click',async e=>{
- const reveal=e.target.closest('[data-reveal-answer]');if(reveal){const box=$('#answerReveal');if(box)box.hidden=false;reveal.disabled=true;return}
- const b=e.target.closest('[data-selfcheck]');if(!b)return;
- if(b.dataset.selfcheck==='retry'){quizWrong++;$('#quizFeedback').textContent=tx('Revise a aula e tente formular a resposta novamente.','Review the lesson and formulate the answer again.');setTimeout(()=>show('lesson'),500);return}
- quizIndex++;
- if(quizIndex<quizQuestions.length){$('#quizFeedback').textContent=tx('✓ Validado. Próximo desafio.','✓ Validated. Next challenge.');setTimeout(renderQuizQuestion,450);return}
- $('#quizFeedback').textContent=tx('✓ Etapa pedagógica concluída. Arena liberada!','✓ Learning stage complete. Arena unlocked!');
- if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizQuestions.length,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){$('#quizFeedback').textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
+async function finishPedagogicalQuiz(){
+ const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Questões concluídas. Arena liberada!','✓ Questions complete. Arena unlocked!');
+ if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizCorrect,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){if(fb)fb.textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
  setTimeout(()=>applyRoomState('playing'),650);
+}
+$('#lessonDone').addEventListener('click',()=>{quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();show('quiz')});
+$('#quiz').addEventListener('click',async e=>{
+ const finish=e.target.closest('[data-quiz-finish]');if(finish){await finishPedagogicalQuiz();return}
+ const b=e.target.closest('[data-answer]');if(!b||quizAnswered)return;quizAnswered=true;
+ const picked=Number(b.dataset.answer),q=quizQuestions[quizIndex],ok=picked===q.__answerIndex,buttons=[...document.querySelectorAll('#quiz .x1-mc-option')];
+ buttons.forEach((x,i)=>{x.disabled=true;if(i===q.__answerIndex)x.classList.add('correct');else if(i===picked)x.classList.add('wrong')});
+ if(ok)quizCorrect++;else quizWrong++;
+ const fb=$('#quizFeedback');if(fb)fb.textContent=ok?tx('✓ Correto!','✓ Correct!'):tx('Resposta incorreta. A alternativa correta foi destacada.','Incorrect. The correct answer is highlighted.');
+ setTimeout(async()=>{quizIndex++;if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},1100);
 });
 
 async function renderTeacherDashboard(){
