@@ -227,3 +227,21 @@ body{background:radial-gradient(circle at 50% -10%,#0a4b63 0,#052d40 28%,#031923
 #lobby .team-lobby-card .player{margin-top:8px}
 @media(max-width:700px){#lobby .players{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:460px){#lobby .players{grid-template-columns:1fr}#lobby .lobby-title{align-items:flex-start;flex-direction:column}}
+
+/* v28 — teste real 7º ano: tempo pedagógico + painel + rodadas */
+.x1-question-time{margin:0 0 12px;padding:10px 12px;border:1px solid rgba(255,215,94,.32);border-radius:12px;color:var(--gold);font-weight:850;text-align:center;background:rgba(255,215,94,.06)}
+#quiz [data-reveal-answer]:disabled{opacity:.62;cursor:wait}
+.teacher-overview{display:none}
+#arena .arena-stage:has(#spectatorCard:not([hidden])) .teacher-overview{display:block;min-height:330px;padding:18px 20px;background:linear-gradient(160deg,rgba(8,35,50,.95),rgba(5,22,34,.98));border-bottom:1px solid rgba(130,215,240,.18)}
+.teacher-overview-title{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:16px}
+.teacher-overview-title span{font-size:11px;color:var(--cyan);font-weight:850}
+.teacher-overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.teacher-overview-student{min-width:0;padding:12px 13px;border-radius:14px;border:1px solid rgba(130,215,240,.16);background:rgba(255,255,255,.035)}
+.teacher-overview-student b,.teacher-overview-student small{display:block;overflow-wrap:anywhere}.teacher-overview-student small{margin-top:5px;color:var(--muted)}
+.teacher-overview-student.arena{border-color:rgba(54,214,238,.5);box-shadow:inset 3px 0 0 var(--cyan)}
+.teacher-overview-student.done{border-color:rgba(87,234,148,.5);box-shadow:inset 3px 0 0 #57ea94}
+.teacher-overview-student.lesson{box-shadow:inset 3px 0 0 var(--gold)}
+#arena .arena-stage:has(#spectatorCard:not([hidden])){padding:0;overflow:hidden}
+#arena .arena-stage:has(#spectatorCard:not([hidden])) .arena-frame-head{padding:16px 20px}
+#arena .arena-stage:has(#spectatorCard:not([hidden])) #spectatorCard{border-radius:0;border-left:0;border-right:0;border-bottom:0}
+@media(max-width:620px){.teacher-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
