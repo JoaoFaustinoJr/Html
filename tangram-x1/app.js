@@ -368,8 +368,8 @@ $('#quiz').addEventListener('click',async e=>{
  quizIndex++;
  if(quizIndex<quizQuestions.length){$('#quizFeedback').textContent=tx('✓ Validado. Próximo desafio.','✓ Validated. Next challenge.');setTimeout(renderQuizQuestion,450);return}
  $('#quizFeedback').textContent=tx('✓ Etapa pedagógica concluída. Arena liberada!','✓ Learning stage complete. Arena unlocked!');
- if(room.playerId&&room.playerToken){try{await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizQuestions.length,p_wrong:quizWrong})}catch(e){}}
- setTimeout(startArena,650);
+ if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizQuestions.length,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){$('#quizFeedback').textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
+ setTimeout(()=>applyRoomState('playing'),650);
 });
 
 async function updateRaceFeed(){
@@ -482,7 +482,7 @@ async function startArena(){
   $('#timer').textContent=String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0');
  },100);
  const roundLabel=document.querySelector('#arena .arena-head span');if(roundLabel)roundLabel.textContent='⚔️ '+tx('RODADA ','ROUND ')+(room.currentRound||1)+'/'+(room.roundCount||1);const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent=tx('Figura: ','Figure: ')+arenaChallengeLabel();
- $('#raceFeed').innerHTML='<span>'+tx('🏁 Todos receberam o mesmo desafio no Modo Gamer.','🏁 Everyone received the same challenge in Gamer Mode.')+'</span>';
+ $('#raceFeed').innerHTML='<span>'+tx(room.mode==='pedagogico'?'🏁 Etapa pedagógica concluída. Agora é Arena!':'🏁 Todos receberam o mesmo desafio.','🏁 Learning stage complete. Now it is Arena!')+'</span>';
  await prepareTangramArena();
 }
 
