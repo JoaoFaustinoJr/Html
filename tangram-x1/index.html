@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=23">
+<link rel="stylesheet" href="style.css?v=24">
 <link rel="stylesheet" href="native-arena.css?v=9"></head>
 <body>
 <main class="shell">
@@ -138,6 +138,7 @@
     <div class="card form-card compact">
       <label>Código da sala<input id="roomCodeInput" class="code-input" placeholder="RAI-4821" maxlength="8" autocomplete="off"></label>
       <label>Seu apelido<input id="nickname" placeholder="Ex.: João" maxlength="18" autocomplete="off"></label>
+      <div id="joinTeamPicker" hidden><b>Escolha sua equipe</b><div id="joinTeamChoices" class="join-team-choices"></div><small>Você competirá individualmente, mas seu tempo contará para a média da equipe.</small></div>
       <button class="primary big" id="joinOnline">Entrar</button>
       <p id="joinStatus" class="server-note">Digite o código da sala. Pode ser uma sala criada por um colega ou pelo professor.</p>
     </div>
@@ -340,6 +341,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=66-20260930a"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=67-20260930b"></script>
 </body>
 </html>
