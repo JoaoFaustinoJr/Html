@@ -202,3 +202,5 @@ body{background:radial-gradient(circle at 50% -10%,#0a4b63 0,#052d40 28%,#031923
 .teacher-progress>span{display:block;height:9px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}.teacher-progress i{display:block;height:100%;background:currentColor;transition:width .3s ease}.teacher-progress small{display:block;margin-top:6px;opacity:.78}
 .teacher-student-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:15px;max-height:330px;overflow:auto}.teacher-student{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}.teacher-student b,.teacher-student span{display:block}.teacher-student span{font-size:.82rem;opacity:.76;margin-top:3px}
 @media(max-width:620px){.teacher-metrics{grid-template-columns:repeat(2,1fr)}}
+
+.team-name-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 14px}.team-name-grid label{min-width:0}.team-name-grid input{width:100%}@media(max-width:520px){.team-name-grid{grid-template-columns:1fr}}
