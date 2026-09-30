@@ -252,10 +252,13 @@ async function fetchPlayers(){
 }
 async function renderPlayers(){
  let players=[];try{players=await fetchPlayers()}catch(e){console.warn('X1 fetchPlayers',e);players=[]}
- const items=[];
- if(room.teacher)items.push({nickname:tx('Professor','Teacher'),role:'teacher',id:'host'});
- for(const p of players)items.push(p);
- $('#players').innerHTML=items.map(p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><div><b>'+esc(p.nickname)+(p.id===room.playerId?tx(' • você',' • you'):'')+'</b><small>'+(p.role==='teacher'?tx('Professor • anfitrião','Teacher • host'):(p.id===room.playerId&&room.isHost)?tx('Anfitrião • pronto ✓','Host • ready ✓'):p.tangram_finished_at?tx('Concluiu 🏁','Finished 🏁'):p.quiz_finished_at?tx('Etapa pedagógica ✓','Learning stage ✓'):tx('Pronto ✓','Ready ✓'))+'</small></div>'+(room.isHost&&p.id!=='host'&&p.id!==room.playerId?'<button class="kick-player" data-kick="'+p.id+'" title="'+tx('Retirar da sala','Remove from room')+'">✕</button>':'')+'</div>').join('');
+ const items=[];if(room.teacher)items.push({nickname:tx('Professor','Teacher'),role:'teacher',id:'host'});for(const p of players)items.push(p);
+ const card=p=>'<div class="player '+(p.role==='teacher'?'teacher ':'')+(p.id===room.playerId?'me':'')+'"><div><b>'+esc(p.nickname)+(p.id===room.playerId?tx(' • você',' • you'):'')+'</b><small>'+(p.role==='teacher'?tx('Professor • anfitrião','Teacher • host'):(p.id===room.playerId&&room.isHost)?tx('Anfitrião • pronto ✓','Host • ready ✓'):p.tangram_finished_at?tx('Concluiu 🏁','Finished 🏁'):p.quiz_finished_at?tx('Etapa pedagógica ✓','Learning stage ✓'):tx('Pronto ✓','Ready ✓'))+'</small></div>'+(room.isHost&&p.id!=='host'&&p.id!==room.playerId?'<button class="kick-player" data-kick="'+p.id+'" title="'+tx('Retirar da sala','Remove from room')+'">✕</button>':'')+'</div>';
+ if(room.mode==='gamer'&&room.teamMode){
+  const groups=[1,2,3,4].map(n=>({n,name:room.teamNames?.[n]||room.teamNames?.[String(n)]||tx('Equipe ','Team ')+n,ps:players.filter(p=>p.team_no===n)})).filter(g=>g.ps.length);
+  const unassigned=players.filter(p=>!p.team_no);
+  $('#players').innerHTML='<div class="team-lobby-grid">'+groups.map(g=>'<section class="team-lobby-card"><header><b>'+esc(g.name)+'</b><span>'+g.ps.length+' '+(g.ps.length===1?tx('jogador','player'):tx('jogadores','players'))+'</span></header>'+g.ps.map(card).join('')+'</section>').join('')+(unassigned.length?'<section class="team-lobby-card unassigned"><header><b>'+tx('Sem equipe','No team')+'</b></header>'+unassigned.map(card).join('')+'</section>':'')+'</div>';
+ }else $('#players').innerHTML=items.map(card).join('');
  const kickButtons=document.querySelectorAll('.kick-player');if(kickButtons)Array.from(kickButtons).forEach(b=>b.addEventListener('click',()=>removePlayer(b.dataset.kick)));
  $('#lobbyCount').textContent=items.length+' '+(items.length===1?tx('participante','participant'):tx('participantes','participants'))+tx(' na sala',' in the room');
 }
