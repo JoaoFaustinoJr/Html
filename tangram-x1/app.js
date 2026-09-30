@@ -14,7 +14,7 @@ const CHALLENGES_EN={0:'Challenge 1',1:'Challenge 2',2:'Challenge 3',3:'Challeng
 let lang=localStorage.getItem('tangramX1Lang')==='en'?'en':'pt';
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
-let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,quizIndex=0,quizQuestions=[],arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null,roomWatchTimer=null;
+let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,quizCorrect=0,quizIndex=0,quizQuestions=[],quizReview=[],arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null,roomWatchTimer=null;
 
 const x1AudioPrefs=()=>{try{return {...{music:false,volume:.18},...JSON.parse(localStorage.getItem('tangram2Audio')||'{}')}}catch(_){return {music:false,volume:.18}}};
 let x1AC=null,x1Gain=null,x1Timer=0,x1Step=0,x1View='home';
@@ -415,19 +415,34 @@ function renderQuizQuestion(){
  }
 }
 async function finishPedagogicalQuiz(){
- const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Questões concluídas. Arena liberada!','✓ Questions complete. Arena unlocked!');
- if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizCorrect,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){if(fb)fb.textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
- setTimeout(()=>{countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e))},650);
+ const fb=$('#quizFeedback');
+ if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizCorrect,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz')}catch(e){if(fb)fb.textContent=tx('Não foi possível registrar as respostas. Verifique a conexão e tente novamente.','Could not save the answers. Check the connection and try again.');return}}
+ renderPedagogicalReview();
 }
-$('#lessonDone').addEventListener('click',()=>{quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();show('quiz')});
+function renderPedagogicalReview(){
+ const qh=$('#quiz h2'),kick=$('#quiz .kicker'),box=$('#quiz .answers'),fb=$('#quizFeedback'),total=quizCorrect+quizWrong;
+ if(kick)kick.textContent=tx('REVISÃO PEDAGÓGICA','LEARNING REVIEW');
+ if(qh)qh.textContent=tx('Você concluiu as questões: '+quizCorrect+'/'+Math.max(1,total)+' acertos.','You completed the questions: '+quizCorrect+'/'+Math.max(1,total)+' correct.');
+ const wrong=quizReview.filter(x=>!x.ok);
+ if(box)box.innerHTML=(wrong.length?'<div class="x1-quiz-review">'+wrong.map((x,i)=>'<div class="x1-review-item"><b>'+tx('Questão ','Question ')+(x.index+1)+'</b><p>'+esc(x.question)+'</p><small>'+tx('Sua resposta: ','Your answer: ')+esc(x.picked)+'</small><strong>✓ '+tx('Resposta correta: ','Correct answer: ')+esc(x.correct)+'</strong></div>').join('')+'</div>':'<div class="x1-quiz-review"><div class="x1-review-item"><strong>✓ '+tx('Excelente! Todas as respostas estão corretas.','Excellent! All answers are correct.')+'</strong></div></div>')+'<button class="primary big" data-review-arena>'+tx('Continuar para o desafio Tangram','Continue to the Tangram challenge')+'</button>';
+ if(fb)fb.textContent=tx('Revise as respostas. Os erros não acrescentam tempo nem impedem sua participação no jogo.','Review the answers. Mistakes do not add time or prevent you from playing.');
+}
+async function releasePedagogicalArena(){
+ const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Revisão concluída. Arena liberada!','✓ Review complete. Arena unlocked!');
+ room.status='playing';countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e));
+}
+$('#lessonDone').addEventListener('click',()=>{quizIndex=0;quizWrong=0;quizCorrect=0;quizReview=[];renderQuizQuestion();show('quiz')});
 $('#quiz').addEventListener('click',async e=>{
+ const arena=e.target.closest('[data-review-arena]');if(arena){await releasePedagogicalArena();return}
  const finish=e.target.closest('[data-quiz-finish]');if(finish){await finishPedagogicalQuiz();return}
  const b=e.target.closest('[data-answer]');if(!b||quizAnswered)return;quizAnswered=true;
  const picked=Number(b.dataset.answer),q=quizQuestions[quizIndex],ok=picked===q.__answerIndex,buttons=[...document.querySelectorAll('#quiz .x1-mc-option')];
- buttons.forEach((x,i)=>{x.disabled=true;if(i===q.__answerIndex)x.classList.add('correct');else if(i===picked)x.classList.add('wrong')});
+ const pickedText=buttons[picked]?.textContent?.replace(/^[A-D]/,'').trim()||'',correctText=buttons[q.__answerIndex]?.textContent?.replace(/^[A-D]/,'').trim()||String(q.a||'');
+ buttons.forEach(x=>x.disabled=true);
  if(ok)quizCorrect++;else quizWrong++;
- const fb=$('#quizFeedback');if(fb)fb.textContent=ok?tx('✓ Correto!','✓ Correct!'):tx('Resposta incorreta. A alternativa correta foi destacada.','Incorrect. The correct answer is highlighted.');
- setTimeout(async()=>{quizIndex++;if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},1100);
+ quizReview.push({index:quizIndex,question:q.q,picked:pickedText,correct:correctText,ok});
+ const fb=$('#quizFeedback');if(fb)fb.textContent=tx('Resposta registrada. Avançando…','Answer saved. Moving on…');
+ setTimeout(async()=>{quizIndex++;if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},550);
 });
 
 async function renderTeacherDashboard(){
@@ -563,13 +578,14 @@ function fmtMs(ms){const s=Math.max(0,ms)/1000,m=Math.floor(s/60),sec=s-m*60;ret
 async function renderResults(){
  clearInterval(tick);tick=null;try{await fetchRoom()}catch(e){}
  let players=[];try{players=await fetchPlayers()}catch(e){}
- const ranked=players.filter(p=>p.tangram_finished_at).sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at)),teamMode=room.mode==='gamer'&&room.teamMode,teams=teamMode?teamStandings(players):[],top=teamMode?teams.filter(t=>t.complete).slice(0,3):ranked.slice(0,3);
+ const speedRanked=players.filter(p=>p.tangram_finished_at).sort((a,b)=>new Date(a.tangram_finished_at)-new Date(b.tangram_finished_at)),pedagogico=room.mode==='pedagogico',base=room.startedAt?new Date(room.startedAt).getTime():0;
+ const ranked=pedagogico?[...speedRanked].sort((a,b)=>{const ac=(a.quiz_correct||0),bc=(b.quiz_correct||0);if(bc!==ac)return bc-ac;const at=Math.max(0,new Date(a.tangram_finished_at).getTime()-base),bt=Math.max(0,new Date(b.tangram_finished_at).getTime()-base);return at-bt}):speedRanked,teamMode=room.mode==='gamer'&&room.teamMode,teams=teamMode?teamStandings(players):[],top=teamMode?teams.filter(t=>t.complete).slice(0,3):ranked.slice(0,3);
  persistCurrentX1Report(players,ranked);
  const full=$('#fullRankingList');
- if(full)full.innerHTML=teamMode?(teams.map((t,i)=>'<div class="player team-result"><div><b>'+(t.complete?(i+1)+'º • ':'')+esc(t.name)+'</b><small>'+t.done.length+'/'+t.ps.length+' '+tx('concluíram','finished')+(t.complete?' • '+tx('média ','average ')+fmtMs(t.avg):' • '+tx('aguardando equipe','waiting for team'))+'</small><small>'+t.ps.map(p=>esc(p.nickname)+(p.tangram_finished_at?' '+elapsedFromArenaStart(p.tangram_finished_at):' …')).join(' • ')+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>'):(ranked.slice(0,10).map((p,i)=>'<div class="player"><div><b>'+(i+1)+'º • '+esc(p.nickname)+'</b><small>'+elapsedFromArenaStart(p.tangram_finished_at)+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>');
+ if(full)full.innerHTML=teamMode?(teams.map((t,i)=>'<div class="player team-result"><div><b>'+(t.complete?(i+1)+'º • ':'')+esc(t.name)+'</b><small>'+t.done.length+'/'+t.ps.length+' '+tx('concluíram','finished')+(t.complete?' • '+tx('média ','average ')+fmtMs(t.avg):' • '+tx('aguardando equipe','waiting for team'))+'</small><small>'+t.ps.map(p=>esc(p.nickname)+(p.tangram_finished_at?' '+elapsedFromArenaStart(p.tangram_finished_at):' …')).join(' • ')+'</small></div></div>').join('')||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>'):(pedagogico?(ranked.slice(0,5).map((p,i)=>'<div class="player"><div><b>'+(i+1)+'º • '+esc(p.nickname)+'</b><small>'+(p.quiz_correct||0)+'/'+Math.max(1,(p.quiz_correct||0)+(p.quiz_wrong||0))+' '+tx('acertos','correct')+' • '+elapsedFromArenaStart(p.tangram_finished_at)+'</small></div></div>').join('')+((()=>{const me=room.teacher?null:players.find(p=>p.id===room.playerId),pos=me?ranked.findIndex(p=>p.id===me.id)+1:0;if(!me||pos<=5)return '';return '<div class="player me"><div><b>'+tx('Sua colocação: ','Your position: ')+pos+'º</b><small>'+String(me.quiz_correct||0)+'/'+Math.max(1,(me.quiz_correct||0)+(me.quiz_wrong||0))+' '+tx('acertos','correct')+'</small></div></div>'})())):(ranked.slice(0,10).map((p,i)=>'<div class="player"><div><b>'+(i+1)+'º • '+esc(p.nickname)+'</b><small>'+elapsedFromArenaStart(p.tangram_finished_at)+'</small></div></div>').join('')))||'<small>'+tx('Aguardando resultados.','Waiting for results.')+'</small>');
  const slots=[{sel:'.place.first',rank:0,label:'1º'},{sel:'.place.second',rank:1,label:'2º'},{sel:'.place.third',rank:2,label:'3º'}];
- for(const s of slots){const el=$(s.sel),p=top[s.rank];if(!el)continue;el.querySelector('b').textContent=s.label;el.querySelector('span').textContent=p?(teamMode?p.name:p.nickname):'—';el.querySelector('small').textContent=p?(teamMode?tx('média ','average ')+fmtMs(p.avg):elapsedFromArenaStart(p.tangram_finished_at)):tx('aguardando','waiting')}
- const me=room.teacher?null:players.find(p=>p.id===room.playerId),pedagogico=room.mode==='pedagogico';
+ for(const s of slots){const el=$(s.sel),p=top[s.rank];if(!el)continue;el.querySelector('b').textContent=s.label;el.querySelector('span').textContent=p?(teamMode?p.name:p.nickname):'—';el.querySelector('small').textContent=p?(teamMode?tx('média ','average ')+fmtMs(p.avg):pedagogico?(p.quiz_correct||0)+'/'+Math.max(1,(p.quiz_correct||0)+(p.quiz_wrong||0))+' '+tx('acertos','correct'):elapsedFromArenaStart(p.tangram_finished_at)):tx('aguardando','waiting')}
+ const me=room.teacher?null:players.find(p=>p.id===room.playerId);
  $('#metricPrecisionLabel').textContent=pedagogico?tx('Precisão','Accuracy'):teamMode?tx('Equipe','Team'):tx('Modo','Mode');$('#metricErrorsLabel').textContent=pedagogico?tx('Erros pedagógicos','Learning errors'):tx('Posição','Position');
  if(pedagogico){const correct=me?.quiz_correct??0,wrong=me?.quiz_wrong??0,total=correct+wrong;$('#metricPrecision').textContent=me?(correct+'/'+Math.max(1,total)+' '+tx('respostas','answers')):tx('Visão do professor','Teacher view');$('#metricErrors').textContent=me?String(wrong):'—'}
  else if(teamMode){const myTeam=teams.find(t=>t.n===me?.team_no),pos=myTeam?.complete?teams.filter(t=>t.complete).findIndex(t=>t.n===myTeam.n)+1:0;$('#metricPrecision').textContent=myTeam?.name||'—';$('#metricErrors').textContent=pos>0?pos+tx('º lugar',' place'):tx('aguardando equipe','waiting for team')}
