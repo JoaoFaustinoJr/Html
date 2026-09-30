@@ -193,13 +193,13 @@ async function createGamerRoom(){
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
-  await subscribeRoom();await fetchRoom();if(teamMode){try{await sb.from('x1_rooms').update({team_mode:true}).eq('id',room.id).eq('host_token',room.hostToken)}catch(e){console.warn('X1 teams',e)}}await openLobby();
+  await subscribeRoom();await fetchRoom();if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;room.teamMode=true;room.teamNames=names}catch(e){console.warn('X1 teams',e)}}await openLobby();
  }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
 $('#createGamerOnline').addEventListener('click',createGamerRoom);
 $('#gamerNickname').addEventListener('keydown',e=>{if(e.key==='Enter')createGamerRoom()});
-$('#gamerTeams')?.addEventListener('change',e=>{const h=$('#gamerTeamHint');if(h)h.hidden=!e.target.checked});
+$('#gamerTeams')?.addEventListener('change',e=>{const h=$('#gamerTeamSetup');if(h)h.hidden=!e.target.checked});
 
 $('#createDemoRoom').addEventListener('click',createRoom);
 
@@ -229,10 +229,10 @@ async function fetchRoom(){
  if(!room.isHost&&room.playerId&&room.playerToken){
   const res=await sb.rpc('x1_get_room_state',{p_player_id:room.playerId,p_player_token:room.playerToken});error=res.error;const x=Array.isArray(res.data)?res.data[0]:res.data;if(x)data={id:x.room_id,status:x.room_status,mode:x.room_mode,content_pack:x.content_pack,question_count:x.question_count,round_count:x.round_count,challenge:x.challenge,current_round:x.current_round,started_at:x.started_at};
  }else{
-  const res=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at,team_mode').eq('id',room.id).maybeSingle();data=res.data;error=res.error;
+  const res=await sb.from('x1_rooms').select('id,code,mode,status,class_name,content_pack,question_count,round_count,challenge,current_round,started_at,expires_at,team_mode,team_names').eq('id',room.id).maybeSingle();data=res.data;error=res.error;
  }
  if(error)throw error;
- if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status;room.currentRound=data.current_round||1;room.roundCount=data.round_count||1;room.questionCount=data.question_count||3;room.challenge=data.challenge||'random';room.startedAt=data.started_at||null;room.teamMode=!!data.team_mode}
+ if(data){room.mode=data.mode;room.pack=data.content_pack;room.status=data.status;room.currentRound=data.current_round||1;room.roundCount=data.round_count||1;room.questionCount=data.question_count||3;room.challenge=data.challenge||'random';room.startedAt=data.started_at||null;room.teamMode=!!data.team_mode;room.teamNames=data.team_names||room.teamNames||{}}
  return data;
 }
 async function fetchPlayers(){
