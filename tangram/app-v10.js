@@ -146,4 +146,54 @@
 
   document.addEventListener('pointerdown',ensureAudio,{once:true,passive:true});
   if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(err=>console.warn('SW',err))}
+
+
+  // Hotfix 2026-09-30: restaura o seletor ☰ da capa em mouse e toque.
+  // Usa delegação porque a capa oficial é montada dinamicamente.
+  (()=>{
+    let nav=null;
+    const ensureNav=()=>{
+      if(nav)return nav;
+      nav=document.createElement('div');
+      nav.id='tlMainMenuOverlay';
+      nav.setAttribute('aria-hidden','true');
+      nav.innerHTML=`
+        <div class="tl-main-menu-backdrop"></div>
+        <nav class="tl-main-menu-panel" role="dialog" aria-modal="true" aria-label="Menu do Tangram">
+          <div class="tl-main-menu-head"><strong>Menu</strong><button type="button" class="tl-main-menu-close" aria-label="Fechar menu">×</button></div>
+          <a href="../tangram-x1/">⚔️ <span><b>X1 Arena</b><small>Desafie seus amigos</small></span></a>
+          <a href="../tangram-prof-junior-gamer/">🎮 <span><b>Gamer</b><small>Jogue e evolua</small></span></a>
+          <button type="button" class="tl-main-menu-about">ⓘ <span><b>Sobre</b><small>Projeto e autoria</small></span></button>
+        </nav>`;
+      const st=document.createElement('style');
+      st.textContent=`
+        #tlMainMenuOverlay{position:fixed;inset:0;z-index:2147483000;display:none}
+        #tlMainMenuOverlay.open{display:block}
+        .tl-main-menu-backdrop{position:absolute;inset:0;background:rgba(2,10,18,.68);backdrop-filter:blur(3px)}
+        .tl-main-menu-panel{position:absolute;top:max(18px,env(safe-area-inset-top));right:16px;width:min(340px,calc(100vw - 32px));padding:14px;background:#092334;border:1px solid #5f756f;border-radius:22px;box-shadow:0 22px 60px rgba(0,0,0,.5);color:#eefaff}
+        .tl-main-menu-head{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 12px;font-size:20px}
+        .tl-main-menu-close{width:44px;height:44px;border-radius:13px;border:1px solid #607a76;background:#102f40;color:white;font-size:28px;cursor:pointer}
+        .tl-main-menu-panel>a,.tl-main-menu-about{display:flex;width:100%;gap:12px;align-items:center;text-align:left;text-decoration:none;color:#eefaff;background:#0d3043;border:1px solid #285b6d;border-radius:15px;padding:13px;margin:8px 0;font:inherit;cursor:pointer}
+        .tl-main-menu-panel a span,.tl-main-menu-about span{display:grid;gap:2px}.tl-main-menu-panel small{color:#a9cad8}
+      `;
+      document.head.appendChild(st);document.body.appendChild(nav);
+      const close=()=>{nav.classList.remove('open');nav.setAttribute('aria-hidden','true')};
+      nav.querySelector('.tl-main-menu-close').addEventListener('click',close);
+      nav.querySelector('.tl-main-menu-backdrop').addEventListener('click',close);
+      nav.querySelector('.tl-main-menu-about').addEventListener('click',()=>{close();document.getElementById('aboutApp')?.click()});
+      return nav;
+    };
+    const isMenuButton=el=>{
+      const b=el?.closest?.('button,[role="button"]'); if(!b)return null;
+      const s=((b.id||'')+' '+(b.className||'')+' '+(b.getAttribute('aria-label')||'')+' '+(b.textContent||'')).toLowerCase();
+      return (/menu|hamburger|seletor/.test(s)||s.includes('☰')||s.includes('≡'))?b:null;
+    };
+    document.addEventListener('click',e=>{
+      const b=isMenuButton(e.target); if(!b||b.closest('#tlMainMenuOverlay'))return;
+      e.preventDefault();e.stopPropagation();
+      const n=ensureNav();n.classList.add('open');n.setAttribute('aria-hidden','false');
+    },true);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav?.classList.contains('open')){nav.classList.remove('open');nav.setAttribute('aria-hidden','true')}});
+  })();
+
 })();
