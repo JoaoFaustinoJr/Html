@@ -441,6 +441,16 @@ $('#quiz').addEventListener('click',async e=>{
  buttons.forEach(x=>x.disabled=true);
  if(ok)quizCorrect++;else quizWrong++;
  quizReview.push({index:quizIndex,question:q.q,picked:pickedText,correct:correctText,ok});
+ if(room.playerId&&room.playerToken){
+  try{
+   const {error}=await sb.rpc('x1_save_pedagogical_answer',{
+    p_player_id:room.playerId,p_player_token:room.playerToken,p_round_no:Number(room.currentRound||1),
+    p_question_no:quizIndex+1,p_question_text:String(q.q||''),p_selected_answer:pickedText,
+    p_correct_answer:correctText,p_is_correct:ok
+   });
+   if(error)console.warn('X1 pedagogical answer save',error);
+  }catch(err){console.warn('X1 pedagogical answer save',err)}
+ }
  const fb=$('#quizFeedback');if(fb)fb.textContent=tx('Resposta registrada. Avançando…','Answer saved. Moving on…');
  setTimeout(async()=>{quizIndex++;if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},550);
 });
