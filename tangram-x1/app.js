@@ -307,6 +307,7 @@ async function returnToLobby(){
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-lobby]');if(b){e.preventDefault();returnToLobby()} });
 
+$('#leaveLobby')?.addEventListener('click',()=>{if(!confirm(tx('Sair desta sala e voltar ao menu do X1?','Leave this room and return to the X1 menu?')))return;disconnectRoom();sessionStorage.removeItem('tangramX1Player');sessionStorage.removeItem('tangramX1Host');room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
 
 $('#startMatch').addEventListener('click',async()=>{
