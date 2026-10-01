@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=180">
+<link rel="stylesheet" href="style.css?v=169">
 <link rel="stylesheet" href="native-arena.css?v=9"><!-- Google Analytics 4 • joaofaustinojr apps -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KXDY9J9N3V"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-KXDY9J9N3V',{send_page_view:true});</script>
@@ -18,7 +18,7 @@
       <span class="main-project-arrow">←</span>
       <span class="main-project-copy"><b>Tangram Educativo</b><small>Projeto principal</small></span>
     </a>
-    <div class="brand"><div class="x1-brand-mark"><span>TANGRAM</span><b>EDUCATIVO</b><small>X1 • ARENA</small></div></div><div class="header-actions"><button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">EN</button><span class="badge">TANGRAM EDUCATIVO • X1</span></div>
+    <div class="brand"><div class="x1-brand-mark"><span>TANGRAM</span><b>EDUCATIVO</b><small>X1 • ARENA</small></div></div><div class="header-actions"><span class="badge">TANGRAM EDUCATIVO • X1</span></div>
   </header>
 
   <section id="home" class="view show">
@@ -56,7 +56,7 @@
 
     <p class="portal-note">⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.</p>
     <button class="pilot-home-link" id="pilotHomeLink">📝 Participou do piloto? Avalie o X1</button>
-    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior • X1 v2.0.194 • inicialização protegida</small><em>Com carinho: JFJr</em></div>
+    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior</small><em>Com carinho: JFJr</em></div>
   </section>
 
   <section id="gamerSetup" class="view">
@@ -82,7 +82,7 @@
       <label class="toggle"><input id="gamerTeams" type="checkbox"><span>👥 Jogar em equipes</span></label>
       <div id="gamerTeamSetup" hidden>
         <p class="server-note">Cada jogador monta individualmente. Todos precisam concluir e a classificação usa a média dos tempos.</p>
-        <div class="host-team-label"><b>Sua equipe</b><div id="hostTeamChoices" class="host-team-choices"><button type="button" class="team-choice active" data-host-team="1">Equipe 1</button><button type="button" class="team-choice" data-host-team="2">Equipe 2</button><button type="button" class="team-choice" data-host-team="3">Equipe 3</button><button type="button" class="team-choice" data-host-team="4">Equipe 4</button></div><input id="hostTeamNo" type="hidden" value="1"></div>
+        <label class="host-team-label">Sua equipe<select id="hostTeamNo"><option value="1">Equipe 1</option><option value="2">Equipe 2</option><option value="3">Equipe 3</option><option value="4">Equipe 4</option></select></label>
         <div class="team-name-grid">
           <label>Equipe 1<input id="teamName1" maxlength="18" value="Equipe 1"></label>
           <label>Equipe 2<input id="teamName2" maxlength="18" value="Equipe 2"></label>
@@ -154,7 +154,7 @@
       <div class="room-actions"><button id="copyCode">Copiar código</button><button class="secondary" id="leaveLobby">← Sair da sala</button></div>
     </div>
     <div class="card">
-      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">Aguardando jogadores…</b></div><small>Aguardando o anfitrião iniciar</small></div>
+      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">4 jogadores prontos</b></div><small>Aguardando o anfitrião iniciar</small></div>
       <div class="players" id="players"></div>
     </div>
     <div class="card compact-panel">
@@ -369,7 +369,7 @@
     </div>
   </section>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js'"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=boot-guard-20261001n"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=restore-174-20261001"></script>
 </body>
 </html>
