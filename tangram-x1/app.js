@@ -181,7 +181,7 @@ async function createRoom(){
 function gaEvent(name,params={}){try{if(typeof window.gtag==='function')window.gtag('event',name,{app_name:'x1_arena_tangram',...params})}catch(e){}}
 async function dbEvent(name,metadata={}){try{if(sb&&room.playerId&&room.playerToken)await sb.rpc('x1_log_activity',{p_player_id:room.playerId,p_player_token:room.playerToken,p_event_name:name,p_metadata:metadata})}catch(e){console.warn('X1 analytics',e)}}
 async function createGamerRoom(){
- if(!sb){const status=$('#gamerCreateStatus');if(status){status.textContent=tx('Falha ao carregar a conexão da Arena. Recarregue a página.','Arena connection failed to load. Reload the page.');status.style.color='#ff9cab'}return;}
+ if(!sb)return;
  const nickname=$('#gamerNickname').value.trim();
  const rounds=Number($('#gamerRounds').value)||1;
  const challenge=$('#gamerChallenge').value||'random',teamMode=!!$('#gamerTeams')?.checked,hostTeamNo=Number($('#hostTeamNo')?.value)||1;
@@ -368,7 +368,7 @@ function applyRoomState(nextStatus){
     return
   }
   startArena().catch(e=>console.warn('X1 arena',e));return
- }
+}
  if(nextStatus==='results'){countdownBusy=false;renderResults().catch(e=>console.warn('X1 results',e));return}
  if(nextStatus==='closed'){disconnectRoom();show('home');return}
  console.warn('X1 estado desconhecido',nextStatus,'anterior',previous)
@@ -800,7 +800,11 @@ applyLanguage();wireClassActivities();loadEducativoLessons();
 /* Navegação pós-partida: permanece dentro do controlador X1. */
 $('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;disconnectSubscriptions();try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 
-
 addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports')?.addEventListener('click',openX1TeacherReports);if(new URLSearchParams(location.search).get('teacher')==='1'){setTimeout(()=>document.querySelector('#createRoom')?.click(),120)}});
 
+$('#copyTeacherReport')?.addEventListener('click',async()=>{const r=room.teacherReport||{},txt='X1 – Arena Tangram\nSala: '+(room.code||'—')+'\nAlunos: '+(r.total||0)+'\nEtapa pedagógica concluída: '+(r.pedagogy||0)+'/'+(r.total||0)+'\nArena concluída: '+(r.done||0)+'/'+(r.total||0)+'\nTempo médio: '+(r.avg?fmtMs(r.avg):'—');try{await navigator.clipboard.writeText(txt);const b=$('#copyTeacherReport');b.textContent=tx('✓ Resumo copiado','✓ Summary copied');setTimeout(()=>b.textContent=tx('Copiar resumo','Copy summary'),1400)}catch(e){}});
+
+$('#copyRoomReport')?.addEventListener('click',async()=>{if(!room.reportText)return;try{await navigator.clipboard.writeText(room.reportText);const b=$('#copyRoomReport'),old=b.textContent;b.textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>b.textContent=old,1400)}catch(e){alert(room.reportText)}});
+
+$('#releaseArena')?.addEventListener('click',async()=>{if(!room.isHost||room.mode!=='pedagogico'||!room.hostToken)return;const b=$('#releaseArena');b.disabled=true;b.textContent=tx('Liberando Arena…','Releasing Arena…');try{const {data,error}=await sb.rpc('x1_release_pedagogical_arena',{p_code:room.code,p_host_token:room.hostToken});if(error)throw error;if(!data)throw new Error('arena');room.status='playing';gaEvent('x1_pedagogical_arena_released',{round:room.currentRound||1});await renderTeacherDashboard()}catch(e){b.disabled=false;b.textContent=tx('⚔️ Liberar Arena para a turma','⚔️ Release Arena for class');alert(tx('Não foi possível liberar a Arena.','Could not release the Arena.'))}});
 })();
