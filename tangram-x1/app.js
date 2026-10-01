@@ -5,9 +5,7 @@ const SUPABASE_URL='https://hfryzntefzjlqitpxbxw.supabase.co';
 const SUPABASE_KEY='sb_publishable_WmUv7bOqiavIoXYdtKBZKg__hpnqaZq';
 const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{params:{eventsPerSecond:30}}});
 
-const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)];
-// X1 v2.0.194: boot guard — um elemento opcional nunca deve derrubar todo o controlador.
-const on=(sel,event,handler)=>{const el=$(sel);if(el)el.addEventListener(event,handler);return el};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const views=$$('.view');
 const PACKS_PT={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
 const PACKS_EN={pp9:'Prova Paraná • Mathematics • Grade 9',prog8:'Programming • Grade 8',logic7:'Computational Thinking • Grade 7',geo6:'Mathematics & Geometry • Grade 6'};
@@ -136,9 +134,9 @@ function updateSelectLabels(){
 
 $('#langToggle')?.addEventListener('click',()=>{lang=lang==='pt'?'en':'pt';localStorage.setItem('tangramX1Lang',lang);applyLanguage()});
 $$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
-on('#createGamerRoom','click',()=>show('gamerSetup'));
-on('#createRoom','click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
-on('#unlockTeacher','click',async()=>{
+$('#createGamerRoom').addEventListener('click',()=>show('gamerSetup'));
+$('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
+$('#unlockTeacher').addEventListener('click',async()=>{
  const pw=$('#teacherPassword').value;
  const btn=$('#unlockTeacher');const status=$('#teacherGateStatus');
  if(!pw){status.textContent=tx('Digite a senha do professor.','Enter the teacher password.');status.style.color='#ff9cab';return}
@@ -151,8 +149,8 @@ on('#unlockTeacher','click',async()=>{
  }catch(e){status.textContent=tx('Não foi possível validar a senha.','Could not validate the password.');status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Entrar no modo professor','Enter teacher mode')}
 });
-on('#teacherPassword','keydown',e=>{if(e.key==='Enter')$('#unlockTeacher')?.click()});
-on('#joinRoom','click',()=>show('join'));
+$('#teacherPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#unlockTeacher').click()});
+$('#joinRoom').addEventListener('click',()=>show('join'));
 
 async function createRoom(){
  if(!sb)return alert(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'));
@@ -201,11 +199,11 @@ async function createGamerRoom(){
  }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
-on('#createGamerOnline','click',createGamerRoom);
-on('#gamerNickname','keydown',e=>{if(e.key==='Enter')createGamerRoom()});
+$('#createGamerOnline').addEventListener('click',createGamerRoom);
+$('#gamerNickname').addEventListener('keydown',e=>{if(e.key==='Enter')createGamerRoom()});
 $('#gamerTeams')?.addEventListener('change',e=>{const h=$('#gamerTeamSetup');if(h)h.hidden=!e.target.checked});
 
-on('#createDemoRoom','click',createRoom);
+$('#createDemoRoom').addEventListener('click',createRoom);
 
 let pendingJoinTeam=null;
 async function inspectJoinTeams(){
@@ -389,6 +387,7 @@ function runCountdown(hostAdvances=false){
  },700);
 }
 function selectedEduLesson(){if(!String(room.pack||'').startsWith('edu:'))return null;return EDU_LESSONS.find(x=>'edu:'+x.id===room.pack)||null}
+function lessonBits(l){return [l.objective,l.concept,l.keyDefinition,l.example,l.formula,l.representation,l.use,l.observe,l.guided].filter(Boolean)}
 function renderPedagogicalContent(){
  const l=selectedEduLesson();if(!l)return;
  const kicker=$('#lesson .kicker'),title=$('#lesson h2'),rai=$('#lesson .rai-says p'),example=$('#lesson .example p');
@@ -398,7 +397,7 @@ function renderPedagogicalContent(){
  if(example)example.textContent=l.example||l.representation||l.use||'Observe o conceito e aplique-o no desafio.';
  quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a).slice(0,Math.max(1,Number(room.questionCount)||3)):[];quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();
 }
-let quizReadTimer=null,quizAnswered=false;
+let quizReadTimer=null,quizCorrect=0,quizAnswered=false;
 function quizChoices(q){
  if(Array.isArray(q.options)&&q.options.length>=2){const answerIndex=Number.isInteger(q.correct)?q.correct:q.options.findIndex(x=>String(x).trim().toLowerCase()===String(q.a).trim().toLowerCase());return {options:q.options,answerIndex:answerIndex>=0?answerIndex:0}}
  const l=selectedEduLesson()||{},correct=String(q.a||''),pool=[l.keyDefinition,l.use,l.observe,l.example,l.concept,...quizQuestions.map(x=>x.a)].filter(x=>x&&String(x).trim()!==correct.trim());
@@ -521,6 +520,37 @@ function styleArenaDocument(doc){
  doc.head.appendChild(s);
 }
 
+function wireArenaFrame(frame,token){
+ let tries=0,challengeOpened=false,gamerRequested=false;
+ const attempt=()=>{
+  if(token!==arenaLoadToken)return;
+  tries++;
+  try{
+   const win=frame.contentWindow,doc=frame.contentDocument;
+   if(!win||!doc)throw new Error('frame');
+   const root=doc.getElementById('tangram-levels'),msg=doc.getElementById('msg');
+   if(!root||!msg){if(tries<120)setTimeout(attempt,200);return}
+   styleArenaDocument(doc);
+   try{doc.documentElement.classList.add('x1-embed');doc.body.classList.add('x1-embed')}catch(e){}
+   const bridge=win.__raiTangramBonusBridge,gamer=win.__raiGamerOfficial;
+   if(!bridge?.open||!gamer){if(tries<120){setTimeout(attempt,200);return}throw new Error('runtime')}
+   if(!challengeOpened){
+    if(!bridge.open(arenaChallengeIndex())){if(tries<120){setTimeout(attempt,200);return}throw new Error('challenge')}
+    challengeOpened=true;setTimeout(attempt,350);return;
+   }
+   if(!gamer.active){
+    if(!gamerRequested){gamerRequested=true;try{gamer.enterInstant?.()}catch(e){console.warn('X1 gamer',e)}}
+    if(!gamer.active){if(tries<120){setTimeout(attempt,200);return}throw new Error('gamer')}
+   }
+   $('#arenaLoader').hidden=true;frame.style.display='block';
+   setTimeout(()=>{try{gamer.fitGamerBoard?.();doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},100);
+   stopArenaObserver();
+   arenaObserver=new MutationObserver(()=>{const text=(msg.textContent||'').replace(/\s+/g,' ').trim();if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text)){let sample=false;try{sample=!!bridge.isSampleActive?.()}catch(e){}if(!sample)onTangramComplete(text)}});
+   arenaObserver.observe(msg,{subtree:true,childList:true,characterData:true});
+  }catch(e){if(tries<120)setTimeout(attempt,200);else{$('#arenaLoader').innerHTML='<b>'+tx('Não foi possível abrir o motor do Tangram.','Could not open the Tangram engine.')+'</b><small>'+tx('Falha na integração da Arena. Reabra a sala.','Arena integration failed. Reopen the room.')+'</small>'}}
+ };
+ attempt();
+}
 async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole'),native=$('#nativeArena');
  stopArenaObserver();arenaFinished=false;
@@ -769,6 +799,7 @@ applyLanguage();wireClassActivities();loadEducativoLessons();
 })();
 /* Navegação pós-partida: permanece dentro do controlador X1. */
 $('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;disconnectSubscriptions();try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
+})();
 
 addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports')?.addEventListener('click',openX1TeacherReports);if(new URLSearchParams(location.search).get('teacher')==='1'){setTimeout(()=>document.querySelector('#createRoom')?.click(),120)}});
 
@@ -777,4 +808,3 @@ $('#copyTeacherReport')?.addEventListener('click',async()=>{const r=room.teacher
 $('#copyRoomReport')?.addEventListener('click',async()=>{if(!room.reportText)return;try{await navigator.clipboard.writeText(room.reportText);const b=$('#copyRoomReport'),old=b.textContent;b.textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>b.textContent=old,1400)}catch(e){alert(room.reportText)}});
 
 $('#releaseArena')?.addEventListener('click',async()=>{if(!room.isHost||room.mode!=='pedagogico'||!room.hostToken)return;const b=$('#releaseArena');b.disabled=true;b.textContent=tx('Liberando Arena…','Releasing Arena…');try{const {data,error}=await sb.rpc('x1_release_pedagogical_arena',{p_code:room.code,p_host_token:room.hostToken});if(error)throw error;if(!data)throw new Error('arena');room.status='playing';gaEvent('x1_pedagogical_arena_released',{round:room.currentRound||1});await renderTeacherDashboard()}catch(e){b.disabled=false;b.textContent=tx('⚔️ Liberar Arena para a turma','⚔️ Release Arena for class');alert(tx('Não foi possível liberar a Arena.','Could not release the Arena.'))}});
-})();
