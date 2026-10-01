@@ -178,9 +178,9 @@ async function createRoom(){
   const x=Array.isArray(data)?data[0]:data;if(!x)throw new Error(tx('Sala não criada.','Room was not created.'));
   room={id:x.room_id,code:x.code,teacher:true,isHost:true,pack:args.p_content_pack,mode:'pedagogico',nickname:'Professor',className:args.p_class_name,hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
   sessionStorage.setItem('tangramX1Host',JSON.stringify(room));
-  await subscribeRoom();
-  try{await fetchRoom()}catch(e){console.warn('X1 host state refresh',e)}
   await openLobby();
+  subscribeRoom().catch(e=>console.warn('X1 host realtime',e));
+  fetchRoom().catch(e=>console.warn('X1 host state refresh',e));
  }catch(e){alert(tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e))}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala','Create room')}
 }
@@ -201,8 +201,8 @@ async function createGamerRoom(){
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
-  await subscribeRoom();try{await fetchRoom()}catch(e){console.warn('X1 gamer host state refresh',e)}gaEvent('x1_room_created',{game_mode:teamMode?'teams':'individual',rounds,challenge});if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo;gaEvent('x1_team_room_created',{team_count:Object.keys(names).length,rounds,challenge})}catch(e){console.warn('X1 teams',e)}}await openLobby();
- }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
+  await openLobby();subscribeRoom().catch(e=>console.warn('X1 gamer realtime',e));fetchRoom().catch(e=>console.warn('X1 gamer host state refresh',e));gaEvent('x1_room_created',{game_mode:teamMode?'teams':'individual',rounds,challenge});if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo;gaEvent('x1_team_room_created',{team_count:Object.keys(names).length,rounds,challenge})}catch(e){console.warn('X1 teams',e)}}await openLobby();
+ }catch(e){console.error('X1 create gamer room',e);status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e?.message||e?.details||e?.hint||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
 $('#createGamerOnline').addEventListener('click',createGamerRoom);
