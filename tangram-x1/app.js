@@ -426,6 +426,18 @@ $('#quiz').addEventListener('click',async e=>{
  const picked=Number(b.dataset.answer),q=quizQuestions[quizIndex],ok=picked===q.__answerIndex,buttons=[...document.querySelectorAll('#quiz .x1-mc-option')];
  buttons.forEach((x,i)=>{x.disabled=true;if(i===q.__answerIndex)x.classList.add('correct');else if(i===picked)x.classList.add('wrong')});
  if(ok)quizCorrect++;else quizWrong++;
+ /* v1.0.1: registra cada resposta sem bloquear o progresso individual. */
+ if(room.playerId&&room.playerToken){
+  const pickedText=buttons[picked]?.textContent?.replace(/^[A-D]/,'').trim()||'',correctText=buttons[q.__answerIndex]?.textContent?.replace(/^[A-D]/,'').trim()||String(q.a||'');
+  try{
+   const {error}=await sb.rpc('x1_save_pedagogical_answer',{
+    p_player_id:room.playerId,p_player_token:room.playerToken,p_round_no:Number(room.currentRound||1),
+    p_question_no:quizIndex+1,p_question_text:String(q.q||''),p_selected_answer:pickedText,
+    p_correct_answer:correctText,p_is_correct:ok
+   });
+   if(error)console.warn('X1 pedagogical answer save',error);
+  }catch(err){console.warn('X1 pedagogical answer save',err)}
+ }
  const fb=$('#quizFeedback');if(fb)fb.textContent=ok?tx('✓ Correto!','✓ Correct!'):tx('Resposta incorreta. A alternativa correta foi destacada.','Incorrect. The correct answer is highlighted.');
  setTimeout(async()=>{quizIndex++;if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},1100);
 });
