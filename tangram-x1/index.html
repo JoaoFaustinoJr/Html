@@ -212,6 +212,16 @@
         <div class="teacher-metrics"><div><b id="tdTotal">0</b><small>Alunos</small></div><div><b id="tdLesson">0</b><small>Na etapa pedagógica</small></div><div><b id="tdArena">0</b><small>Na Arena</small></div><div><b id="tdDone">0</b><small>Concluíram</small></div></div>
         <div class="teacher-progress"><span><i id="tdProgress" style="width:0%"></i></span><small id="tdProgressText">Aguardando progresso da turma</small></div>
         <div id="teacherStudentList" class="teacher-student-list"></div>
+        <div class="teacher-report">
+          <div class="teacher-overview-title"><b>Relatório da turma</b><span>Resumo da atividade</span></div>
+          <div class="teacher-report-grid">
+            <div><small>Participação</small><b id="trParticipation">—</b></div>
+            <div><small>Etapa pedagógica</small><b id="trPedagogy">—</b></div>
+            <div><small>Concluíram Arena</small><b id="trCompletion">—</b></div>
+            <div><small>Tempo da turma</small><b id="trTime">—</b></div>
+          </div>
+          <button class="secondary" id="copyTeacherReport">Copiar resumo</button>
+        </div>
       </div>
     </div>
     <div class="race-feed" id="raceFeed"><span>🏁 Todos começaram juntos.</span></div>
@@ -346,6 +356,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=172-20260930h"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=173-20260930i"></script>
 </body>
 </html>
