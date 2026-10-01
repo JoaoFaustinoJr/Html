@@ -796,6 +796,7 @@ applyLanguage();wireClassActivities();loadEducativoLessons();
   if(saved){room=saved;await subscribeRoom();const r=await fetchRoom();if(r){await openLobby();applyRoomState(r.status);return}}
  }catch(e){}
  show('home');
+})();
 
 /* Navegação pós-partida: permanece dentro do controlador X1. */
 $('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;disconnectSubscriptions();try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
@@ -808,3 +809,4 @@ $('#copyTeacherReport')?.addEventListener('click',async()=>{const r=room.teacher
 $('#copyRoomReport')?.addEventListener('click',async()=>{if(!room.reportText)return;try{await navigator.clipboard.writeText(room.reportText);const b=$('#copyRoomReport'),old=b.textContent;b.textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>b.textContent=old,1400)}catch(e){alert(room.reportText)}});
 
 $('#releaseArena')?.addEventListener('click',async()=>{if(!room.isHost||room.mode!=='pedagogico'||!room.hostToken)return;const b=$('#releaseArena');b.disabled=true;b.textContent=tx('Liberando Arena…','Releasing Arena…');try{const {data,error}=await sb.rpc('x1_release_pedagogical_arena',{p_code:room.code,p_host_token:room.hostToken});if(error)throw error;if(!data)throw new Error('arena');room.status='playing';gaEvent('x1_pedagogical_arena_released',{round:room.currentRound||1});await renderTeacherDashboard()}catch(e){b.disabled=false;b.textContent=tx('⚔️ Liberar Arena para a turma','⚔️ Release Arena for class');alert(tx('Não foi possível liberar a Arena.','Could not release the Arena.'))}});
+})();
