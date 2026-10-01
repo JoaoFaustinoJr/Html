@@ -179,11 +179,12 @@ async function createRoom(){
  finally{btn.disabled=false;btn.textContent=tx('Criar sala','Create room')}
 }
 async function createGamerRoom(){
- if(!sb)return;
+ const status=$('#gamerCreateStatus');
+ if(!sb){status.textContent=tx('Falha ao carregar a conexão da Arena. Recarregue a página; se persistir, informe esta mensagem.','Arena connection failed to load. Reload the page; if it persists, report this message.');status.style.color='#ff9cab';console.error('X1: Supabase client unavailable');return;}
  const nickname=$('#gamerNickname').value.trim();
  const rounds=Number($('#gamerRounds').value)||1;
  const challenge=$('#gamerChallenge').value||'random',teamMode=!!$('#gamerTeams')?.checked,hostTeamNo=Number($('#hostTeamNo')?.value)||1;
- const status=$('#gamerCreateStatus'),btn=$('#createGamerOnline');
+ const btn=$('#createGamerOnline');
  if(!nickname){status.textContent=tx('⚠️ Falta seu apelido no campo do início do formulário.','⚠️ Enter your nickname in the first field.');status.style.color='#ff9cab';const n=$('#gamerNickname');n?.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>n?.focus(),250);return}
  btn.disabled=true;btn.textContent=tx('Criando sala…','Creating room…');status.textContent=tx('Conectando à Arena…','Connecting to the Arena…');status.style.color='';
  try{
