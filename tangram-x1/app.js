@@ -397,7 +397,7 @@ function renderPedagogicalContent(){
  if(example)example.textContent=l.example||l.representation||l.use||'Observe o conceito e aplique-o no desafio.';
  quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a).slice(0,Math.max(1,Number(room.questionCount)||3)):[];quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();
 }
-let quizReadTimer=null,quizCorrect=0,quizAnswered=false;
+let quizReadTimer=null,quizAnswered=false;
 function quizChoices(q){
  if(Array.isArray(q.options)&&q.options.length>=2){const answerIndex=Number.isInteger(q.correct)?q.correct:q.options.findIndex(x=>String(x).trim().toLowerCase()===String(q.a).trim().toLowerCase());return {options:q.options,answerIndex:answerIndex>=0?answerIndex:0}}
  const l=selectedEduLesson()||{},correct=String(q.a||''),pool=[l.keyDefinition,l.use,l.observe,l.example,l.concept,...quizQuestions.map(x=>x.a)].filter(x=>x&&String(x).trim()!==correct.trim());
