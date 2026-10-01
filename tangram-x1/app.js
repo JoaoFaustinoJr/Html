@@ -801,7 +801,7 @@ applyLanguage();wireClassActivities();loadEducativoLessons();
 $('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;disconnectSubscriptions();try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 
 
-addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports'?.addEventListener('click',openX1TeacherReports);if(new URLSearchParams(location.search).get('teacher')==='1'){setTimeout(()=>document.querySelector('#createRoom')?.click(),120)}});
+addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports')?.addEventListener('click',openX1TeacherReports);if(new URLSearchParams(location.search).get('teacher')==='1'){setTimeout(()=>document.querySelector('#createRoom')?.click(),120)}});
 
 $('#copyTeacherReport')?.addEventListener('click',async()=>{const r=room.teacherReport||{},txt='X1 – Arena Tangram\nSala: '+(room.code||'—')+'\nAlunos: '+(r.total||0)+'\nEtapa pedagógica concluída: '+(r.pedagogy||0)+'/'+(r.total||0)+'\nArena concluída: '+(r.done||0)+'/'+(r.total||0)+'\nTempo médio: '+(r.avg?fmtMs(r.avg):'—');try{await navigator.clipboard.writeText(txt);const b=$('#copyTeacherReport');b.textContent=tx('✓ Resumo copiado','✓ Summary copied');setTimeout(()=>b.textContent=tx('Copiar resumo','Copy summary'),1400)}catch(e){}});
 
