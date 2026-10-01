@@ -335,6 +335,7 @@ function applyRoomState(nextStatus){
  if(nextStatus==='lesson'){
   countdownBusy=false;
   if(room.mode!=='pedagogico'){startArena();return}
+  if(room.isHost){startArena().catch(e=>console.warn('X1 teacher monitor',e));return}
   const l=selectedEduLesson();
   if(l){renderPedagogicalContent();show('lesson')}
   else{quizQuestions=[];quizIndex=0;quizWrong=0;quizCorrect=0;show('lesson')}
@@ -342,6 +343,7 @@ function applyRoomState(nextStatus){
  }
  if(nextStatus==='quiz'){
   countdownBusy=false;
+  if(room.mode==='pedagogico'&&room.isHost){startArena().catch(e=>console.warn('X1 teacher monitor',e));return}
   /* v2.0.170: o estado global da sala não pode devolver um aluno que já
      concluiu a etapa pedagógica para as questões. Cada aluno progride
      individualmente pelo quiz antes de entrar na Arena. */
@@ -356,6 +358,7 @@ function applyRoomState(nextStatus){
  }
  if(nextStatus==='playing'){
   countdownBusy=false;
+  if(room.mode==='pedagogico'&&room.isHost){startArena().catch(e=>console.warn('X1 teacher monitor',e));return}
   if(room.mode==='pedagogico'&&!room.isHost&&room.playerId&&room.playerToken){
     sb.from('x1_players').select('quiz_finished_at').eq('id',room.playerId).maybeSingle().then(({data})=>{
       if(data?.quiz_finished_at)startArena().catch(e=>console.warn('X1 arena',e));
@@ -431,8 +434,10 @@ function renderPedagogicalReview(){
  if(fb)fb.textContent=tx('Revise as respostas. Os erros não acrescentam tempo nem impedem sua participação no jogo.','Review the answers. Mistakes do not add time or prevent you from playing.');
 }
 async function releasePedagogicalArena(){
- const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Revisão concluída. Arena liberada!','✓ Review complete. Arena unlocked!');
- room.status='playing';countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e));
+ const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Revisão concluída. Aguarde o professor liberar a Arena.','✓ Review complete. Wait for the teacher to release the Arena.');
+ dbEvent('lesson_ready',{correct:quizCorrect,wrong:quizWrong});
+ room.status='quiz';renderPedagogicalReview();
+ const b=document.querySelector('[data-review-arena]');if(b){b.disabled=true;b.textContent=tx('✓ Pronto para Arena • aguardando professor','✓ Ready for Arena • waiting for teacher')}
 }
 $('#lessonDone').addEventListener('click',()=>{quizIndex=0;quizWrong=0;quizCorrect=0;quizReview=[];renderQuizQuestion();show('quiz')});
 $('#quiz').addEventListener('click',async e=>{
@@ -462,11 +467,12 @@ async function renderTeacherDashboard(){
  if(!room.teacher||room.mode!=='pedagogico')return;
  let ps=[];try{ps=await fetchPlayers()}catch(e){return}
  ps=ps.filter(p=>p.role!=='teacher');
- const done=ps.filter(p=>p.tangram_finished_at),arena=ps.filter(p=>p.quiz_finished_at&&!p.tangram_finished_at),lesson=ps.filter(p=>!p.quiz_finished_at);
+ const done=ps.filter(p=>p.tangram_finished_at),arena=ps.filter(p=>p.quiz_finished_at&&!p.tangram_finished_at),lesson=ps.filter(p=>!p.quiz_finished_at),arenaReleased=room.status==='playing';
  const put=(id,v)=>{const el=$(id);if(el)el.textContent=v};put('#tdTotal',ps.length);put('#tdLesson',lesson.length);put('#tdArena',arena.length);put('#tdDone',done.length);
  const pct=ps.length?Math.round(done.length*100/ps.length):0,bar=$('#tdProgress');if(bar)bar.style.width=pct+'%';put('#tdProgressText',done.length+'/'+ps.length+' '+tx('concluíram • ','finished • ')+pct+'%');
- const overview=$('#teacherOverview');if(overview){const active=arena.length,waiting=lesson.length;overview.innerHTML='<div class="teacher-overview-title"><b>'+tx('Visão da turma','Class overview')+'</b><span>'+tx('Atualização em tempo real','Live update')+'</span></div><div class="teacher-overview-grid">'+ps.map(p=>{const cls=p.tangram_finished_at?'done':p.quiz_finished_at?'arena':'lesson',state=p.tangram_finished_at?tx('Concluiu','Finished'):p.quiz_finished_at?tx('Na Arena','In Arena'):tx('Aula / questões','Lesson / questions');return '<div class="teacher-overview-student '+cls+'"><b>'+esc(p.nickname)+'</b><small>'+state+'</small></div>'}).join('')+'</div>'}
- const list=$('#teacherStudentList');if(list)list.innerHTML=ps.map(p=>{const state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?tx('⚔️ Na Arena','⚔️ In Arena'):tx('📘 Aula / desafios','📘 Lesson / challenges');return '<div class="teacher-student"><b>'+esc(p.nickname)+'</b><span>'+state+'</span></div>'}).join('')||'<small>'+tx('Aguardando alunos…','Waiting for students…')+'</small>';
+ const release=$('#releaseArena'),releaseNote=$('#releaseArenaNote'),ready=arena.length+done.length;if(release){release.disabled=arenaReleased||ready===0;release.textContent=arenaReleased?tx('⚔️ Arena liberada','⚔️ Arena released'):tx('⚔️ Liberar Arena para a turma','⚔️ Release Arena for class')}if(releaseNote)releaseNote.textContent=arenaReleased?tx('A turma está na Arena. Acompanhe os resultados em tempo real.','The class is in the Arena. Follow results live.'):ready+'/'+ps.length+' '+tx('alunos prontos. Você decide quando liberar.','students ready. You decide when to release.');
+ const overview=$('#teacherOverview');if(overview){const active=arena.length,waiting=lesson.length;overview.innerHTML='<div class="teacher-overview-title"><b>'+tx('Visão da turma','Class overview')+'</b><span>'+tx('Atualização em tempo real','Live update')+'</span></div><div class="teacher-overview-grid">'+ps.map(p=>{const cls=p.tangram_finished_at?'done':p.quiz_finished_at?'arena':'lesson',state=p.tangram_finished_at?tx('Concluiu','Finished'):p.quiz_finished_at?(arenaReleased?tx('Na Arena','In Arena'):tx('Pronto para Arena','Ready for Arena')):tx('Aula / questões','Lesson / questions');return '<div class="teacher-overview-student '+cls+'"><b>'+esc(p.nickname)+'</b><small>'+state+'</small></div>'}).join('')+'</div>'}
+ const list=$('#teacherStudentList');if(list)list.innerHTML=ps.map(p=>{const state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?(arenaReleased?tx('⚔️ Na Arena','⚔️ In Arena'):tx('✓ Pronto para Arena','✓ Ready for Arena')):tx('📘 Aula / questões','📘 Lesson / questions');return '<div class="teacher-student"><b>'+esc(p.nickname)+'</b><span>'+state+'</span></div>'}).join('')||'<small>'+tx('Aguardando alunos…','Waiting for students…')+'</small>';
  const times=done.map(p=>room.startedAt?Math.max(0,new Date(p.tangram_finished_at)-new Date(room.startedAt)):0).filter(Boolean),avg=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
  put('#trParticipation',ps.length+tx(' alunos',' students'));put('#trPedagogy',arena.length+done.length+'/'+ps.length);put('#trCompletion',done.length+'/'+ps.length);put('#trTime',avg?tx('média ','average ')+fmtMs(avg):'—');
  room.teacherReport={total:ps.length,pedagogy:arena.length+done.length,done:done.length,avg};
@@ -800,3 +806,5 @@ addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports'
 $('#copyTeacherReport')?.addEventListener('click',async()=>{const r=room.teacherReport||{},txt='X1 – Arena Tangram\nSala: '+(room.code||'—')+'\nAlunos: '+(r.total||0)+'\nEtapa pedagógica concluída: '+(r.pedagogy||0)+'/'+(r.total||0)+'\nArena concluída: '+(r.done||0)+'/'+(r.total||0)+'\nTempo médio: '+(r.avg?fmtMs(r.avg):'—');try{await navigator.clipboard.writeText(txt);const b=$('#copyTeacherReport');b.textContent=tx('✓ Resumo copiado','✓ Summary copied');setTimeout(()=>b.textContent=tx('Copiar resumo','Copy summary'),1400)}catch(e){}});
 
 $('#copyRoomReport')?.addEventListener('click',async()=>{if(!room.reportText)return;try{await navigator.clipboard.writeText(room.reportText);const b=$('#copyRoomReport'),old=b.textContent;b.textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>b.textContent=old,1400)}catch(e){alert(room.reportText)}});
+
+$('#releaseArena')?.addEventListener('click',async()=>{if(!room.isHost||room.mode!=='pedagogico'||!room.hostToken)return;const b=$('#releaseArena');b.disabled=true;b.textContent=tx('Liberando Arena…','Releasing Arena…');try{const {data,error}=await sb.rpc('x1_release_pedagogical_arena',{p_code:room.code,p_host_token:room.hostToken});if(error)throw error;if(!data)throw new Error('arena');room.status='playing';gaEvent('x1_pedagogical_arena_released',{round:room.currentRound||1});await renderTeacherDashboard()}catch(e){b.disabled=false;b.textContent=tx('⚔️ Liberar Arena para a turma','⚔️ Release Arena for class');alert(tx('Não foi possível liberar a Arena.','Could not release the Arena.'))}});
