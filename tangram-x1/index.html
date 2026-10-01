@@ -369,6 +369,14 @@
     </div>
   </section>
 </main>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ const showView=function(id){document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('show',v.id===id)});document.body.classList.toggle('x1-internal',id!=='home');window.scrollTo(0,0)};
+ document.getElementById('createGamerRoom')?.addEventListener('click',function(){showView('gamerSetup')});
+ document.getElementById('joinRoom')?.addEventListener('click',function(){showView('join')});
+ document.getElementById('createRoom')?.addEventListener('click',function(){showView('teacherGate')});
+});
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=179-20261001e"></script>
 </body>
