@@ -129,7 +129,7 @@
         <label>Rodadas<select id="roundCount"><option>1</option><option>3</option><option>5</option></select></label>
       </div>
       <label class="toggle"><input id="penalty" type="checkbox" checked><span>Aplicar penalidade leve por resposta incorreta</span></label>
-      <div class="teacher-report-entry"><b>📊 Relatórios X1</b><p>Acompanhe resultados da turma, precisão, erros pedagógicos e tempos das partidas.</p><button class="secondary big" type="button" id="openX1Reports">Ver relatórios das partidas</button><small>Os resultados da sala atual aparecem após as rodadas. O histórico deste aparelho fica disponível aqui.</small></div><button class="primary big" id="createDemoRoom">Criar sala</button>
+      <div class="teacher-report-entry"><b>📊 Relatórios X1</b><p>Acompanhe resultados da turma, precisão, erros pedagógicos e tempos das partidas.</p><button class="secondary big" type="button" id="openX1Reports" onclick="openX1TeacherReports()">Ver relatórios das partidas</button><small>Os resultados da sala atual aparecem após as rodadas. O histórico deste aparelho fica disponível aqui.</small></div><button class="primary big" id="createDemoRoom">Criar sala</button>
       <p class="server-note online-note">● Realtime conectado. A sala criada aqui pode ser acessada por outros computadores usando o código.</p>
     </div>
   </section>
@@ -342,8 +342,8 @@
     </div>
   </section>
 </main>
-<div class="footer-version" style="text-align:center;opacity:.55;font-size:.72rem;padding:10px 0 16px">X1 – ARENA TANGRAM · v1.0.1 · ESTÁVEL</div>
+<div class="footer-version" style="text-align:center;opacity:.55;font-size:.72rem;padding:10px 0 16px">X1 – ARENA TANGRAM · v1.0.3 · RELATÓRIOS</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=1.0.2-reports-hotfix"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=1.0.3-reports-direct"></script>
 </body>
 </html>
