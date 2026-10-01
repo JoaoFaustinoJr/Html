@@ -799,7 +799,7 @@ applyLanguage();wireClassActivities();loadEducativoLessons();
 })();
 /* Navegação pós-partida: permanece dentro do controlador X1. */
 $('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.destroy?.()}catch(e){}stopArenaObserver();clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;arenaFinished=false;countdownBusy=false;disconnectSubscriptions();try{sessionStorage.removeItem('tangramX1Player')}catch(e){}room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
-})();
+
 
 addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports')?.addEventListener('click',openX1TeacherReports);if(new URLSearchParams(location.search).get('teacher')==='1'){setTimeout(()=>document.querySelector('#createRoom')?.click(),120)}});
 
