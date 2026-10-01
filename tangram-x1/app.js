@@ -210,8 +210,9 @@ async function inspectJoinTeams(){
  try{const {data,error}=await sb.rpc('x1_get_join_info',{p_code:code});if(error)throw error;const x=Array.isArray(data)?data[0]:data;if(!x?.team_mode)return;room.teamNames=x.team_names||{};if(box)box.innerHTML=[1,2,3,4].map(n=>'<button type="button" class="team-choice" data-team="'+n+'">'+esc(room.teamNames[n]||room.teamNames[String(n)]||tx('Equipe ','Team ')+n)+'</button>').join('');if(wrap)wrap.hidden=false}catch(e){}
 }
 $('#roomCodeInput')?.addEventListener('input',()=>{clearTimeout(window.__x1JoinTeamTimer);window.__x1JoinTeamTimer=setTimeout(inspectJoinTeams,250)});
-$('#joinTeamChoices')?.addEventListener('click',e=>{const b=e.target.closest('[data-team]');if(!b)return;pendingJoinTeam=Number(b.dataset.team);$('#joinTeamChoices .team-choice').forEach(x=>x.classList.toggle('active',x===b))});
+$('#joinTeamChoices')?.addEventListener('click',e=>{const b=e.target.closest('[data-team]');if(!b)return;pendingJoinTeam=Number(b.dataset.team);$('#joinTeamChoices .team-choice').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',x===b?'true':'false')});clickAck(b,tx('Equipe selecionada','Team selected'));setJoinStatus('✓ '+tx('Equipe selecionada: ','Selected team: ')+b.textContent.trim())});
 async function joinRoom(){
+ if(room.playerId&&room.code===$('#roomCodeInput').value.trim().toUpperCase()){setJoinStatus('✓ '+tx('Você já entrou nesta sala.','You already joined this room.'));return}
  if(!sb)return setJoinStatus(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'),true);
  const code=$('#roomCodeInput').value.trim().toUpperCase(),nickname=$('#nickname').value.trim();
  if(!/^RAI-\d{4}$/.test(code)||!nickname)return setJoinStatus(tx('Digite um código no formato RAI-1234 e um apelido.','Enter a code in the RAI-1234 format and a nickname.'),true);
