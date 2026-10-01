@@ -56,7 +56,7 @@
 
     <p class="portal-note">⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.</p>
     <button class="pilot-home-link" id="pilotHomeLink">📝 Participou do piloto? Avalie o X1</button>
-    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior • X1 v2.0.186 • núcleo limpo</small><em>Com carinho: JFJr</em></div>
+    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior • X1 v2.0.187 • núcleo diagnóstico</small><em>Com carinho: JFJr</em></div>
   </section>
 
   <section id="gamerSetup" class="view">
@@ -378,6 +378,44 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js'"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=core-clean-20261001g"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ const btn=document.getElementById('createGamerOnline');
+ if(!btn)return;
+ btn.addEventListener('click',async function x1CoreCreateFallback(ev){
+  if(window.__x1CoreCreating)return;
+  const status=document.getElementById('gamerCreateStatus');
+  setTimeout(async function(){
+   if(document.getElementById('lobby')?.classList.contains('show'))return;
+   const nick=document.getElementById('gamerNickname')?.value.trim();
+   if(!nick)return;
+   const client=window.supabase?.createClient?.('https://hfryzntefzjlqitpxbxw.supabase.co','sb_publishable_WmUv7bOqiavIoXYdtKBZKg__hpnqaZq');
+   if(!client){if(status){status.textContent='Falha de conexão: biblioteca Supabase não carregou.';status.style.color='#ff9cab'}return}
+   window.__x1CoreCreating=true;
+   if(status){status.textContent='Criando sala online…';status.style.color=''}
+   try{
+    const rounds=Number(document.getElementById('gamerRounds')?.value)||1;
+    const challenge=document.getElementById('gamerChallenge')?.value||'random';
+    const {data,error}=await client.rpc('x1_create_gamer_room',{p_nickname:nick,p_round_count:rounds,p_challenge:challenge});
+    if(error)throw error;
+    const x=Array.isArray(data)?data[0]:data;
+    if(!x?.code)throw new Error('Sala não retornou código.');
+    sessionStorage.setItem('tangramX1Player',JSON.stringify({id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname:nick,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'}));
+    document.getElementById('roomCode').textContent=x.code;
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='lobby'));
+    document.body.classList.add('x1-internal');
+    document.getElementById('lobbyModeLabel').textContent='MODO GAMER';
+    document.getElementById('lobbyPack').textContent=challenge==='random'?'🎲 Desafio surpresa • igual para todos':'Desafio '+challenge;
+    document.getElementById('lobbyModeText').textContent='Sala criada. Compartilhe o código com os outros jogadores.';
+    document.getElementById('startMatch').style.display='block';
+    if(status)status.textContent='Sala criada: '+x.code;
+    window.scrollTo(0,0);
+   }catch(err){if(status){status.textContent='Não foi possível criar a sala: '+(err?.message||err);status.style.color='#ff9cab'}}
+   finally{window.__x1CoreCreating=false}
+  },250);
+ },false);
+});
+</script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=core-diagnostic-20261001h"></script>
 </body>
 </html>
