@@ -387,7 +387,6 @@ function runCountdown(hostAdvances=false){
  },700);
 }
 function selectedEduLesson(){if(!String(room.pack||'').startsWith('edu:'))return null;return EDU_LESSONS.find(x=>'edu:'+x.id===room.pack)||null}
-function lessonBits(l){return [l.objective,l.concept,l.keyDefinition,l.example,l.formula,l.representation,l.use,l.observe,l.guided].filter(Boolean)}
 function renderPedagogicalContent(){
  const l=selectedEduLesson();if(!l)return;
  const kicker=$('#lesson .kicker'),title=$('#lesson h2'),rai=$('#lesson .rai-says p'),example=$('#lesson .example p');
@@ -520,37 +519,6 @@ function styleArenaDocument(doc){
  doc.head.appendChild(s);
 }
 
-function wireArenaFrame(frame,token){
- let tries=0,challengeOpened=false,gamerRequested=false;
- const attempt=()=>{
-  if(token!==arenaLoadToken)return;
-  tries++;
-  try{
-   const win=frame.contentWindow,doc=frame.contentDocument;
-   if(!win||!doc)throw new Error('frame');
-   const root=doc.getElementById('tangram-levels'),msg=doc.getElementById('msg');
-   if(!root||!msg){if(tries<120)setTimeout(attempt,200);return}
-   styleArenaDocument(doc);
-   try{doc.documentElement.classList.add('x1-embed');doc.body.classList.add('x1-embed')}catch(e){}
-   const bridge=win.__raiTangramBonusBridge,gamer=win.__raiGamerOfficial;
-   if(!bridge?.open||!gamer){if(tries<120){setTimeout(attempt,200);return}throw new Error('runtime')}
-   if(!challengeOpened){
-    if(!bridge.open(arenaChallengeIndex())){if(tries<120){setTimeout(attempt,200);return}throw new Error('challenge')}
-    challengeOpened=true;setTimeout(attempt,350);return;
-   }
-   if(!gamer.active){
-    if(!gamerRequested){gamerRequested=true;try{gamer.enterInstant?.()}catch(e){console.warn('X1 gamer',e)}}
-    if(!gamer.active){if(tries<120){setTimeout(attempt,200);return}throw new Error('gamer')}
-   }
-   $('#arenaLoader').hidden=true;frame.style.display='block';
-   setTimeout(()=>{try{gamer.fitGamerBoard?.();doc.querySelector('#board')?.scrollIntoView({block:'center'})}catch(e){}},100);
-   stopArenaObserver();
-   arenaObserver=new MutationObserver(()=>{const text=(msg.textContent||'').replace(/\s+/g,' ').trim();if(/miss[aã]o conclu[ií]da|challenge completed/i.test(text)){let sample=false;try{sample=!!bridge.isSampleActive?.()}catch(e){}if(!sample)onTangramComplete(text)}});
-   arenaObserver.observe(msg,{subtree:true,childList:true,characterData:true});
-  }catch(e){if(tries<120)setTimeout(attempt,200);else{$('#arenaLoader').innerHTML='<b>'+tx('Não foi possível abrir o motor do Tangram.','Could not open the Tangram engine.')+'</b><small>'+tx('Falha na integração da Arena. Reabra a sala.','Arena integration failed. Reopen the room.')+'</small>'}}
- };
- attempt();
-}
 async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole'),native=$('#nativeArena');
  stopArenaObserver();arenaFinished=false;
