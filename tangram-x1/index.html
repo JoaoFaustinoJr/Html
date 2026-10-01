@@ -56,7 +56,7 @@
 
     <p class="portal-note">⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.</p>
     <button class="pilot-home-link" id="pilotHomeLink">📝 Participou do piloto? Avalie o X1</button>
-    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior • X1 v2.0.191 • equipes restauradas</small><em>Com carinho: JFJr</em></div>
+    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior • X1 v2.0.192 • seleção de equipe</small><em>Com carinho: JFJr</em></div>
   </section>
 
   <section id="gamerSetup" class="view">
@@ -82,7 +82,7 @@
       <label class="toggle"><input id="gamerTeams" type="checkbox"><span>👥 Jogar em equipes</span></label>
       <div id="gamerTeamSetup" hidden>
         <p class="server-note">Cada jogador monta individualmente. Todos precisam concluir e a classificação usa a média dos tempos.</p>
-        <label class="host-team-label">Sua equipe<select id="hostTeamNo"><option value="1">Equipe 1</option><option value="2">Equipe 2</option><option value="3">Equipe 3</option><option value="4">Equipe 4</option></select></label>
+        <div class="host-team-label"><b>Sua equipe</b><div id="hostTeamChoices" class="host-team-choices"><button type="button" class="team-choice active" data-host-team="1">Equipe 1</button><button type="button" class="team-choice" data-host-team="2">Equipe 2</button><button type="button" class="team-choice" data-host-team="3">Equipe 3</button><button type="button" class="team-choice" data-host-team="4">Equipe 4</button></div><input id="hostTeamNo" type="hidden" value="1"></div>
         <div class="team-name-grid">
           <label>Equipe 1<input id="teamName1" maxlength="18" value="Equipe 1"></label>
           <label>Equipe 2<input id="teamName2" maxlength="18" value="Equipe 2"></label>
@@ -388,6 +388,12 @@ document.addEventListener('DOMContentLoaded',function(){
   teamsToggle.addEventListener('change',syncTeams);syncTeams();
  }
  if(!btn)return;
+ const hostChoices=document.getElementById('hostTeamChoices');
+ if(hostChoices)hostChoices.addEventListener('click',function(e){
+  const b=e.target.closest('[data-host-team]');if(!b)return;
+  const n=Number(b.dataset.hostTeam);document.getElementById('hostTeamNo').value=String(n);
+  hostChoices.querySelectorAll('[data-host-team]').forEach(x=>x.classList.toggle('active',x===b));
+ });
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  btn.addEventListener('click',async function x1CoreCreateFallback(){
   if(window.__x1CoreCreating)return;
@@ -460,6 +466,6 @@ document.addEventListener('DOMContentLoaded',function(){
  },true);
 })();
 </script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=reports-consolidated-20261001k"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=reports-consolidated-20261001l"></script>
 </body>
 </html>
