@@ -368,7 +368,7 @@ function applyRoomState(nextStatus){
     return
   }
   startArena().catch(e=>console.warn('X1 arena',e));return
-}
+ }
  if(nextStatus==='results'){countdownBusy=false;renderResults().catch(e=>console.warn('X1 results',e));return}
  if(nextStatus==='closed'){disconnectRoom();show('home');return}
  console.warn('X1 estado desconhecido',nextStatus,'anterior',previous)
