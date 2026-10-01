@@ -467,6 +467,9 @@ async function renderTeacherDashboard(){
  const pct=ps.length?Math.round(done.length*100/ps.length):0,bar=$('#tdProgress');if(bar)bar.style.width=pct+'%';put('#tdProgressText',done.length+'/'+ps.length+' '+tx('concluíram • ','finished • ')+pct+'%');
  const overview=$('#teacherOverview');if(overview){const active=arena.length,waiting=lesson.length;overview.innerHTML='<div class="teacher-overview-title"><b>'+tx('Visão da turma','Class overview')+'</b><span>'+tx('Atualização em tempo real','Live update')+'</span></div><div class="teacher-overview-grid">'+ps.map(p=>{const cls=p.tangram_finished_at?'done':p.quiz_finished_at?'arena':'lesson',state=p.tangram_finished_at?tx('Concluiu','Finished'):p.quiz_finished_at?tx('Na Arena','In Arena'):tx('Aula / questões','Lesson / questions');return '<div class="teacher-overview-student '+cls+'"><b>'+esc(p.nickname)+'</b><small>'+state+'</small></div>'}).join('')+'</div>'}
  const list=$('#teacherStudentList');if(list)list.innerHTML=ps.map(p=>{const state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?tx('⚔️ Na Arena','⚔️ In Arena'):tx('📘 Aula / desafios','📘 Lesson / challenges');return '<div class="teacher-student"><b>'+esc(p.nickname)+'</b><span>'+state+'</span></div>'}).join('')||'<small>'+tx('Aguardando alunos…','Waiting for students…')+'</small>';
+ const times=done.map(p=>room.startedAt?Math.max(0,new Date(p.tangram_finished_at)-new Date(room.startedAt)):0).filter(Boolean),avg=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
+ put('#trParticipation',ps.length+tx(' alunos',' students'));put('#trPedagogy',arena.length+done.length+'/'+ps.length);put('#trCompletion',done.length+'/'+ps.length);put('#trTime',avg?tx('média ','average ')+fmtMs(avg):'—');
+ room.teacherReport={total:ps.length,pedagogy:arena.length+done.length,done:done.length,avg};
 }
 async function updateRaceFeed(){
  const feed=$('#raceFeed');if(!feed||!room.id)return;
@@ -785,3 +788,5 @@ $('#studentRestart')?.addEventListener('click',()=>{try{window.__x1NativeGame?.d
 })();
 
 addEventListener('DOMContentLoaded',()=>{document.querySelector('#openX1Reports')?.addEventListener('click',openX1TeacherReports);if(new URLSearchParams(location.search).get('teacher')==='1'){setTimeout(()=>document.querySelector('#createRoom')?.click(),120)}});
+
+$('#copyTeacherReport')?.addEventListener('click',async()=>{const r=room.teacherReport||{},txt='X1 – Arena Tangram\nSala: '+(room.code||'—')+'\nAlunos: '+(r.total||0)+'\nEtapa pedagógica concluída: '+(r.pedagogy||0)+'/'+(r.total||0)+'\nArena concluída: '+(r.done||0)+'/'+(r.total||0)+'\nTempo médio: '+(r.avg?fmtMs(r.avg):'—');try{await navigator.clipboard.writeText(txt);const b=$('#copyTeacherReport');b.textContent=tx('✓ Resumo copiado','✓ Summary copied');setTimeout(()=>b.textContent=tx('Copiar resumo','Copy summary'),1400)}catch(e){}});
