@@ -252,21 +252,3 @@ body{background:radial-gradient(circle at 50% -10%,#0a4b63 0,#052d40 28%,#031923
 .teacher-report{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1)}.teacher-report-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.teacher-report-grid>div{padding:10px;border-radius:12px;background:rgba(255,255,255,.05)}.teacher-report-grid small,.teacher-report-grid b{display:block}.teacher-report-grid small{opacity:.7;margin-bottom:4px}.teacher-report-grid b{font-size:1.05rem}@media(max-width:620px){.teacher-report-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .x1-room-report{margin-top:14px}.report-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.report-head span{display:block;font-size:.72rem;letter-spacing:.12em;opacity:.7}.report-details{display:grid;gap:7px;margin-top:12px}.report-details>div{display:flex;justify-content:space-between;gap:12px;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.04)}.report-details span{text-align:right;opacity:.82}@media(max-width:520px){.report-head,.report-details>div{align-items:flex-start;flex-direction:column}.report-details span{text-align:left}}
-
-.teacher-control{display:grid;gap:7px;margin:14px 0}.teacher-control small{text-align:center;opacity:.78}.teacher-control .primary:disabled{opacity:.55;cursor:not-allowed}
-
-
-/* X1 v2.0.180 — hotfix mobile/navigation */
-html,body{max-width:100%;overflow-x:hidden}
-.shell{width:min(100%,1180px);max-width:100%;box-sizing:border-box}
-.view,.card,.form-card,.choice-grid,.x1-home-grid,.x1-hero-card{min-width:0;max-width:100%;box-sizing:border-box}
-button,input,select,textarea{max-width:100%;box-sizing:border-box}
-@media(max-width:680px){
- .shell{width:100%;padding-left:12px!important;padding-right:12px!important;margin:0 auto!important}
- .view{width:100%;overflow-x:hidden}
- .x1-hero-card{grid-template-columns:minmax(0,1fr)!important}
- .x1-hero-copy,.x1-hero-copy h2,.x1-hero-copy p{min-width:0;max-width:100%;overflow-wrap:anywhere}
- .x1-home-grid,.choice-grid{grid-template-columns:1fr!important;width:100%}
- .choice{width:100%;min-width:0}
- .section-head,.room-top,.arena-head{min-width:0;max-width:100%}
-}
