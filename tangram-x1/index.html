@@ -7,10 +7,7 @@
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
 <link rel="stylesheet" href="style.css?v=169">
-<link rel="stylesheet" href="native-arena.css?v=9"><!-- Google Analytics 4 • joaofaustinojr apps -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KXDY9J9N3V"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-KXDY9J9N3V',{send_page_view:true});</script>
-</head>
+<link rel="stylesheet" href="native-arena.css?v=9"></head>
 <body>
 <main class="shell">
   <header class="hero">
@@ -18,7 +15,7 @@
       <span class="main-project-arrow">←</span>
       <span class="main-project-copy"><b>Tangram Educativo</b><small>Projeto principal</small></span>
     </a>
-    <div class="brand"><div class="x1-brand-mark"><span>TANGRAM</span><b>EDUCATIVO</b><small>X1 • ARENA</small></div></div><div class="header-actions"><span class="badge">TANGRAM EDUCATIVO • X1</span></div>
+    <div class="brand"><div class="x1-brand-mark"><span>TANGRAM</span><b>EDUCATIVO</b><small>X1 • ARENA</small></div></div><div class="header-actions"><button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">EN</button><span class="badge">TANGRAM EDUCATIVO • X1</span></div>
   </header>
 
   <section id="home" class="view show">
@@ -209,23 +206,9 @@
       <div id="teacherOverview" class="teacher-overview"></div>
       <div class="spectator-card teacher-dashboard" id="spectatorCard" hidden>
         <div class="teacher-dash-head"><img src="https://joaofaustinojr.github.io/Tangram-Educativo-2.0/app-icon.svg?v=310" alt="R.A.I."><div><h3>Painel do professor</h3><p>Acompanhe a turma em tempo real sem interferir na disputa.</p></div></div>
-        <div class="teacher-metrics"><div><b id="tdTotal">0</b><small>Alunos</small></div><div><b id="tdLesson">0</b><small>Aula / questões</small></div><div><b id="tdArena">0</b><small>Prontos / Arena</small></div><div><b id="tdDone">0</b><small>Concluíram</small></div></div>
-        <div class="teacher-control">
-          <button class="primary big" id="releaseArena" disabled>⚔️ Liberar Arena para a turma</button>
-          <small id="releaseArenaNote">Aguardando os alunos concluírem a etapa pedagógica.</small>
-        </div>
+        <div class="teacher-metrics"><div><b id="tdTotal">0</b><small>Alunos</small></div><div><b id="tdLesson">0</b><small>Na etapa pedagógica</small></div><div><b id="tdArena">0</b><small>Na Arena</small></div><div><b id="tdDone">0</b><small>Concluíram</small></div></div>
         <div class="teacher-progress"><span><i id="tdProgress" style="width:0%"></i></span><small id="tdProgressText">Aguardando progresso da turma</small></div>
         <div id="teacherStudentList" class="teacher-student-list"></div>
-        <div class="teacher-report">
-          <div class="teacher-overview-title"><b>Relatório da turma</b><span>Resumo da atividade</span></div>
-          <div class="teacher-report-grid">
-            <div><small>Participação</small><b id="trParticipation">—</b></div>
-            <div><small>Etapa pedagógica</small><b id="trPedagogy">—</b></div>
-            <div><small>Concluíram Arena</small><b id="trCompletion">—</b></div>
-            <div><small>Tempo da turma</small><b id="trTime">—</b></div>
-          </div>
-          <button class="secondary" id="copyTeacherReport">Copiar resumo</button>
-        </div>
       </div>
     </div>
     <div class="race-feed" id="raceFeed"><span>🏁 Todos começaram juntos.</span></div>
@@ -243,17 +226,7 @@
       <div><b id="metricErrorsLabel">Erros pedagógicos</b><span id="metricErrors">—</span></div>
       <div><b>Tempo Arena</b><span id="totalTime">—</span></div>
     </div>
-    <div class="card" id="fullRanking"><b>Classificação da turma</b><div id="fullRankingList"></div></div>
-    <div class="card x1-room-report" id="roomReportCard" hidden>
-      <div class="report-head"><div><span>RELATÓRIO DA ATIVIDADE</span><b id="rrTitle">Resumo da sala</b></div><button class="secondary" id="copyRoomReport">Copiar resumo</button></div>
-      <div class="teacher-report-grid">
-        <div><small>Participantes</small><b id="rrParticipants">—</b></div>
-        <div><small>Concluíram</small><b id="rrCompleted">—</b></div>
-        <div><small>Conclusão</small><b id="rrRate">—</b></div>
-        <div><small>Modalidade</small><b id="rrMode">—</b></div>
-      </div>
-      <div id="rrDetails" class="report-details"></div>
-    </div>\n    <button class="primary big" id="rematch">Revanche</button>
+    <div class="card" id="fullRanking"><b>Classificação da turma</b><div id="fullRankingList"></div></div>\n    <button class="primary big" id="rematch">Revanche</button>
     <button class="pilot-cta big" id="openPilotForm">📝 Avaliar o piloto X1</button>\n    <button class="primary big" id="studentRestart">↻ Voltar ao início do X1</button>
     <button class="secondary big" id="newMatch">↻ Nova partida</button><button class="secondary big" data-home>⌂ Voltar ao início do X1</button>
   </section>
@@ -370,6 +343,6 @@
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=restore174-balanced-20261001"></script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=stable170-restore-20261001"></script>
 </body>
 </html>
