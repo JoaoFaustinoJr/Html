@@ -5,7 +5,9 @@ const SUPABASE_URL='https://hfryzntefzjlqitpxbxw.supabase.co';
 const SUPABASE_KEY='sb_publishable_WmUv7bOqiavIoXYdtKBZKg__hpnqaZq';
 const sb=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY,{realtime:{params:{eventsPerSecond:30}}});
 
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)];
+// X1 v2.0.194: boot guard — um elemento opcional nunca deve derrubar todo o controlador.
+const on=(sel,event,handler)=>{const el=$(sel);if(el)el.addEventListener(event,handler);return el};
 const views=$$('.view');
 const PACKS_PT={pp9:'Prova Paraná • Matemática • 9º ano',prog8:'Programação • 8º ano',logic7:'Pensamento Computacional • 7º ano',geo6:'Matemática & Geometria • 6º ano'};
 const PACKS_EN={pp9:'Prova Paraná • Mathematics • Grade 9',prog8:'Programming • Grade 8',logic7:'Computational Thinking • Grade 7',geo6:'Mathematics & Geometry • Grade 6'};
@@ -134,9 +136,9 @@ function updateSelectLabels(){
 
 $('#langToggle')?.addEventListener('click',()=>{lang=lang==='pt'?'en':'pt';localStorage.setItem('tangramX1Lang',lang);applyLanguage()});
 $$('[data-home]').forEach(b=>b.addEventListener('click',()=>{disconnectRoom();show('home')}));
-$('#createGamerRoom').addEventListener('click',()=>show('gamerSetup'));
-$('#createRoom').addEventListener('click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
-$('#unlockTeacher').addEventListener('click',async()=>{
+on('#createGamerRoom','click',()=>show('gamerSetup'));
+on('#createRoom','click',()=>{teacherPassword='';$('#teacherPassword').value='';$('#teacherGateStatus').textContent='';show('teacherGate')});
+on('#unlockTeacher','click',async()=>{
  const pw=$('#teacherPassword').value;
  const btn=$('#unlockTeacher');const status=$('#teacherGateStatus');
  if(!pw){status.textContent=tx('Digite a senha do professor.','Enter the teacher password.');status.style.color='#ff9cab';return}
@@ -149,8 +151,8 @@ $('#unlockTeacher').addEventListener('click',async()=>{
  }catch(e){status.textContent=tx('Não foi possível validar a senha.','Could not validate the password.');status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Entrar no modo professor','Enter teacher mode')}
 });
-$('#teacherPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#unlockTeacher').click()});
-$('#joinRoom').addEventListener('click',()=>show('join'));
+on('#teacherPassword','keydown',e=>{if(e.key==='Enter')$('#unlockTeacher')?.click()});
+on('#joinRoom','click',()=>show('join'));
 
 async function createRoom(){
  if(!sb)return alert(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'));
@@ -199,11 +201,11 @@ async function createGamerRoom(){
  }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
-$('#createGamerOnline').addEventListener('click',createGamerRoom);
-$('#gamerNickname').addEventListener('keydown',e=>{if(e.key==='Enter')createGamerRoom()});
+on('#createGamerOnline','click',createGamerRoom);
+on('#gamerNickname','keydown',e=>{if(e.key==='Enter')createGamerRoom()});
 $('#gamerTeams')?.addEventListener('change',e=>{const h=$('#gamerTeamSetup');if(h)h.hidden=!e.target.checked});
 
-$('#createDemoRoom').addEventListener('click',createRoom);
+on('#createDemoRoom','click',createRoom);
 
 let pendingJoinTeam=null;
 async function inspectJoinTeams(){
