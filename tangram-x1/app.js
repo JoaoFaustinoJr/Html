@@ -152,6 +152,12 @@ $('#unlockTeacher').addEventListener('click',async()=>{
 $('#teacherPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#unlockTeacher').click()});
 $('#joinRoom').addEventListener('click',()=>show('join'));
 
+/* X1 v2.0.180 — navegação resiliente: a troca de telas não depende da leitura
+   complementar do Realtime. O RPC de criar/entrar define a sessão e o lobby
+   abre imediatamente; atualizações de estado são sincronizadas em seguida. */
+addEventListener('error',e=>console.warn('X1 runtime',e.error||e.message));
+addEventListener('unhandledrejection',e=>console.warn('X1 async',e.reason));
+
 async function createRoom(){
  if(!sb)return alert(tx('Realtime indisponível neste navegador.','Realtime is unavailable in this browser.'));
  const btn=$('#createDemoRoom');btn.disabled=true;btn.textContent=tx('Criando sala…','Creating room…');
@@ -173,7 +179,7 @@ async function createRoom(){
   room={id:x.room_id,code:x.code,teacher:true,isHost:true,pack:args.p_content_pack,mode:'pedagogico',nickname:'Professor',className:args.p_class_name,hostToken:x.host_token,playerId:'',playerToken:'',status:'lobby'};
   sessionStorage.setItem('tangramX1Host',JSON.stringify(room));
   await subscribeRoom();
-  await fetchRoom();
+  try{await fetchRoom()}catch(e){console.warn('X1 host state refresh',e)}
   await openLobby();
  }catch(e){alert(tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e))}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala','Create room')}
@@ -195,7 +201,7 @@ async function createGamerRoom(){
   room={id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'};
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   sessionStorage.removeItem('tangramX1Host');
-  await subscribeRoom();await fetchRoom();gaEvent('x1_room_created',{game_mode:teamMode?'teams':'individual',rounds,challenge});if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo;gaEvent('x1_team_room_created',{team_count:Object.keys(names).length,rounds,challenge})}catch(e){console.warn('X1 teams',e)}}await openLobby();
+  await subscribeRoom();try{await fetchRoom()}catch(e){console.warn('X1 gamer host state refresh',e)}gaEvent('x1_room_created',{game_mode:teamMode?'teams':'individual',rounds,challenge});if(teamMode){try{const names={};for(let i=1;i<=4;i++){const v=$('#teamName'+i)?.value.trim();if(v)names[i]=v}const res=await sb.rpc('x1_configure_teams',{p_code:room.code,p_host_token:room.hostToken,p_team_names:names});if(res.error)throw res.error;const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:hostTeamNo});if(tr.error||!tr.data)throw tr.error||new Error('team');room.teamMode=true;room.teamNames=names;room.teamNo=hostTeamNo;gaEvent('x1_team_room_created',{team_count:Object.keys(names).length,rounds,challenge})}catch(e){console.warn('X1 teams',e)}}await openLobby();
  }catch(e){status.textContent=tx('Não foi possível criar a sala: ','Could not create the room: ')+(e.message||e);status.style.color='#ff9cab'}
  finally{btn.disabled=false;btn.textContent=tx('Criar sala Gamer','Create Gamer room')}
 }
@@ -226,7 +232,7 @@ async function joinRoom(){
   if(pendingJoinTeam){const tr=await sb.rpc('x1_set_player_team',{p_player_id:room.playerId,p_player_token:room.playerToken,p_team_no:pendingJoinTeam});if(tr.error||!tr.data)throw tr.error||new Error(tx('Não foi possível entrar na equipe.','Could not join the team.'));room.teamNo=pendingJoinTeam;gaEvent('x1_team_join',{team_no:pendingJoinTeam});dbEvent('team_join',{team_no:pendingJoinTeam})}
   sessionStorage.setItem('tangramX1Player',JSON.stringify(room));
   await subscribeRoom();
-  await fetchRoom();
+  try{await fetchRoom()}catch(e){console.warn('X1 player state refresh',e)}
   await openLobby();
   gaEvent('x1_room_join',{game_mode:room.teamMode?'teams':room.mode,team_no:room.teamNo||0});dbEvent('room_join',{team_no:room.teamNo||0});
   applyRoomState(room.status);
@@ -272,7 +278,7 @@ async function openLobby(){
  const challengeLabel=room.challenge==='random'?tx('🎲 Desafio surpresa • igual para todos','🎲 Surprise challenge • same for everyone'):(challengeLabelByIndex(Number(room.challenge))||tx('Desafio selecionado','Selected challenge'));
  $('#lobbyPack').textContent=pedagogico?packLabel(room.pack)+' • '+challengeLabel:challengeLabel;
  $('#lobbyModeText').textContent=pedagogico?tx('Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.','Lesson and questions come first. Then every player unlocks the same Tangram challenge.'):tx('Sem etapa didática: contagem regressiva, Tangram e ranking.','No lesson stage: countdown, Tangram and ranking.');
- $('#startMatch').style.display=room.isHost?'block':'none';if(room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;$('#startMatch').disabled=competitors.length<minPlayers;$('#startMatch').textContent=competitors.length<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}
+ $('#startMatch').style.display=room.isHost?'block':'none';if(room.isHost){let ps=[];try{ps=await fetchPlayers()}catch(e){console.warn('X1 lobby players',e)}const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;$('#startMatch').disabled=competitors.length<minPlayers;$('#startMatch').textContent=competitors.length<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}
  const lobbyNote=document.querySelector('.lobby-title small');if(lobbyNote)lobbyNote.textContent=room.isHost?tx('Você controla o início da partida','You control the match start'):tx('Aguardando o anfitrião iniciar','Waiting for the host to start');
  await renderPlayers();
  show('lobby');
