@@ -260,3 +260,14 @@ body{background:radial-gradient(circle at 50% -10%,#0a4b63 0,#052d40 28%,#031923
  body.printing-x1-report .x1-report-item{break-inside:avoid;background:#fff!important;color:#111!important;border-color:#bbb!important}
  @page{margin:14mm}
 }
+
+/* v1.0.7 — identidade do Desafio Pedagógico + painel docente sempre legível */
+body.x1-teacher-live #arena .arena-head{border:1px solid rgba(255,215,94,.28);background:linear-gradient(135deg,rgba(255,215,94,.08),rgba(0,210,220,.06));border-radius:16px;padding:14px 16px;margin-bottom:12px}
+body.x1-teacher-live #arena .arena-head span{color:var(--gold);font-weight:900;letter-spacing:.06em}
+body.x1-teacher-live #arena .arena-stage{border-color:rgba(255,215,94,.26)}
+body.x1-teacher-live #teacherOverview{display:block!important}
+body.x1-teacher-live #spectatorCard{display:block!important}
+body.x1-teacher-live #arenaLoader,body.x1-teacher-live #nativeArena,body.x1-teacher-live #tangramArenaFrame{display:none!important}
+body.x1-teacher-live .teacher-overview{min-height:auto!important;padding:18px 20px;background:linear-gradient(160deg,rgba(8,35,50,.96),rgba(5,22,34,.99));border-bottom:1px solid rgba(130,215,240,.18)}
+body.x1-teacher-live .spectator-card{margin:0;border-radius:0;border-left:0;border-right:0}
+@media(max-width:620px){body.x1-teacher-live #arena .arena-head{align-items:flex-start;gap:8px}}
