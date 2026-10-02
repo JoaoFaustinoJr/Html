@@ -334,6 +334,7 @@ function applyRoomState(nextStatus){
  if(nextStatus==='lesson'){
   countdownBusy=false;
   if(room.mode!=='pedagogico'){startArena();return}
+  if(room.isHost){startArena().catch(e=>console.warn('X1 painel docente',e));return}
   const l=selectedEduLesson();
   if(l){renderPedagogicalContent();show('lesson')}
   else{quizQuestions=[];quizIndex=0;quizWrong=0;quizCorrect=0;show('lesson')}
@@ -341,6 +342,7 @@ function applyRoomState(nextStatus){
  }
  if(nextStatus==='quiz'){
   countdownBusy=false;
+  if(room.mode==='pedagogico'&&room.isHost){startArena().catch(e=>console.warn('X1 painel docente',e));return}
   /* v2.0.170: o estado global da sala não pode devolver um aluno que já
      concluiu a etapa pedagógica para as questões. Cada aluno progride
      individualmente pelo quiz antes de entrar na Arena. */
@@ -421,7 +423,12 @@ async function finishPedagogicalQuiz(){
  if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizCorrect,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){if(fb)fb.textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
  setTimeout(()=>{countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e))},650);
 }
-$('#lessonDone').addEventListener('click',()=>{quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();show('quiz')});
+$('#lessonDone').addEventListener('click',async()=>{
+ if(room.mode==='pedagogico'&&!room.isHost&&room.playerId){
+  try{const {data}=await sb.from('x1_players').select('quiz_finished_at').eq('id',room.playerId).maybeSingle();if(data?.quiz_finished_at){room.status='playing';startArena().catch(e=>console.warn('X1 arena',e));return}}catch(e){}
+ }
+ quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();show('quiz')
+});
 $('#quiz').addEventListener('click',async e=>{
  const finish=e.target.closest('[data-quiz-finish]');if(finish){await finishPedagogicalQuiz();return}
  const b=e.target.closest('[data-answer]');if(!b||quizAnswered)return;quizAnswered=true;
@@ -451,7 +458,7 @@ async function renderTeacherDashboard(){
  const done=ps.filter(p=>p.tangram_finished_at),arena=ps.filter(p=>p.quiz_finished_at&&!p.tangram_finished_at),lesson=ps.filter(p=>!p.quiz_finished_at);
  const put=(id,v)=>{const el=$(id);if(el)el.textContent=v};put('#tdTotal',ps.length);put('#tdLesson',lesson.length);put('#tdArena',arena.length);put('#tdDone',done.length);
  const pct=ps.length?Math.round(done.length*100/ps.length):0,bar=$('#tdProgress');if(bar)bar.style.width=pct+'%';put('#tdProgressText',done.length+'/'+ps.length+' '+tx('concluíram • ','finished • ')+pct+'%');
- const overview=$('#teacherOverview');if(overview){const active=arena.length,waiting=lesson.length;overview.innerHTML='<div class="teacher-overview-title"><b>'+tx('Visão da turma','Class overview')+'</b><span>'+tx('Atualização em tempo real','Live update')+'</span></div><div class="teacher-overview-grid">'+ps.map(p=>{const cls=p.tangram_finished_at?'done':p.quiz_finished_at?'arena':'lesson',state=p.tangram_finished_at?tx('Concluiu','Finished'):p.quiz_finished_at?tx('Na Arena','In Arena'):tx('Aula / questões','Lesson / questions');return '<div class="teacher-overview-student '+cls+'"><b>'+esc(p.nickname)+'</b><small>'+state+'</small></div>'}).join('')+'</div>'}
+ const overview=$('#teacherOverview');if(overview){const active=arena.length,waiting=lesson.length;overview.innerHTML='<div class="teacher-overview-title"><div><strong>🎓 '+tx('DESAFIO PEDAGÓGICO','LEARNING CHALLENGE')+'</strong><b>'+tx('Painel do professor • acompanhamento da turma','Teacher dashboard • class monitoring')+'</b></div><span>'+tx('● AO VIVO','● LIVE')+'</span></div><div class="teacher-overview-grid">'+ps.map(p=>{const cls=p.tangram_finished_at?'done':p.quiz_finished_at?'arena':'lesson',state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?tx('⚔️ No Tangram','⚔️ In Tangram'):tx('📘 Aula / questões','📘 Lesson / questions'),answered=Number(p.quiz_correct||0)+Number(p.quiz_wrong||0),score=answered?(' • '+Number(p.quiz_correct||0)+' ✓ / '+Number(p.quiz_wrong||0)+' ✕'):'';return '<div class="teacher-overview-student '+cls+'"><b>'+esc(p.nickname)+'</b><small>'+state+score+'</small></div>'}).join('')+'</div>'}
  const list=$('#teacherStudentList');if(list)list.innerHTML=ps.map(p=>{const state=p.tangram_finished_at?tx('🏁 Concluiu','🏁 Finished'):p.quiz_finished_at?tx('⚔️ Na Arena','⚔️ In Arena'):tx('📘 Aula / desafios','📘 Lesson / challenges');return '<div class="teacher-student"><b>'+esc(p.nickname)+'</b><span>'+state+'</span></div>'}).join('')||'<small>'+tx('Aguardando alunos…','Waiting for students…')+'</small>';
 }
 async function updateRaceFeed(){
