@@ -335,6 +335,8 @@ function applyRoomState(nextStatus){
   countdownBusy=false;
   if(room.mode!=='pedagogico'){startArena();return}
   if(room.isHost){startArena().catch(e=>console.warn('X1 painel docente',e));return}
+  /* Não regredir um aluno que já avançou da aula para questões/Arena por atualizações repetidas da sala. */
+  if($('#quiz').classList.contains('show')||$('#arena').classList.contains('show'))return;
   const l=selectedEduLesson();
   if(l){renderPedagogicalContent();show('lesson')}
   else{quizQuestions=[];quizIndex=0;quizWrong=0;quizCorrect=0;show('lesson')}
@@ -393,9 +395,13 @@ function renderPedagogicalContent(){
  if(title)title.textContent=l.topic||l.title||'Aula R.A.I.';
  if(rai)rai.innerHTML='<b>'+esc(l.objective||'Vamos aprender.')+'</b> '+esc(l.concept||l.keyDefinition||'');
  if(example)example.textContent=l.example||l.representation||l.use||'Observe o conceito e aplique-o no desafio.';
- quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a).slice(0,Math.max(1,Number(room.questionCount)||3)):[];quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();
+ quizQuestions=Array.isArray(l.fixation)?l.fixation.filter(x=>x&&x.q&&x.a).slice(0,Math.max(1,Number(room.questionCount)||3)):[];quizIndex=0;quizWrong=0;quizCorrect=0;restorePedagogicalProgress();renderQuizQuestion();
 }
 let quizReadTimer=null,quizCorrect=0,quizAnswered=false;
+function pedagogicalProgressKey(){return 'x1PedFlow|'+(room.id||room.code||'room')+'|'+(room.playerId||'player')+'|'+(room.currentRound||1)}
+function savePedagogicalProgress(){if(room.teacher||!room.playerId)return;try{sessionStorage.setItem(pedagogicalProgressKey(),JSON.stringify({index:quizIndex,correct:quizCorrect,wrong:quizWrong,done:false}))}catch(e){}}
+function restorePedagogicalProgress(){if(room.teacher||!room.playerId)return false;try{const x=JSON.parse(sessionStorage.getItem(pedagogicalProgressKey())||'null');if(!x||x.done)return false;quizIndex=Math.max(0,Math.min(Number(x.index)||0,quizQuestions.length));quizCorrect=Math.max(0,Number(x.correct)||0);quizWrong=Math.max(0,Number(x.wrong)||0);return quizIndex>0||quizCorrect>0||quizWrong>0}catch(e){return false}}
+function finishPedagogicalProgress(){try{sessionStorage.setItem(pedagogicalProgressKey(),JSON.stringify({index:quizQuestions.length,correct:quizCorrect,wrong:quizWrong,done:true}))}catch(e){}}
 function quizChoices(q){
  if(Array.isArray(q.options)&&q.options.length>=2){const answerIndex=Number.isInteger(q.correct)?q.correct:q.options.findIndex(x=>String(x).trim().toLowerCase()===String(q.a).trim().toLowerCase());return {options:q.options,answerIndex:answerIndex>=0?answerIndex:0}}
  const l=selectedEduLesson()||{},correct=String(q.a||''),pool=[l.keyDefinition,l.use,l.observe,l.example,l.concept,...quizQuestions.map(x=>x.a)].filter(x=>x&&String(x).trim()!==correct.trim());
@@ -419,6 +425,7 @@ function renderQuizQuestion(){
  }
 }
 async function finishPedagogicalQuiz(){
+ finishPedagogicalProgress();
  const fb=$('#quizFeedback');if(fb)fb.textContent=tx('✓ Questões concluídas. Arena liberada!','✓ Questions complete. Arena unlocked!');
  if(room.playerId&&room.playerToken){try{const {data,error}=await sb.rpc('x1_submit_quiz',{p_player_id:room.playerId,p_player_token:room.playerToken,p_correct:quizCorrect,p_wrong:quizWrong});if(error)throw error;if(!data)throw new Error('quiz');room.status='playing'}catch(e){if(fb)fb.textContent=tx('Não foi possível liberar a Arena. Verifique a conexão e tente novamente.','Could not unlock the Arena. Check the connection and try again.');return}}
  setTimeout(()=>{countdownBusy=false;startArena().catch(e=>console.warn('X1 arena',e))},650);
@@ -427,7 +434,7 @@ $('#lessonDone').addEventListener('click',async()=>{
  if(room.mode==='pedagogico'&&!room.isHost&&room.playerId){
   try{const {data}=await sb.from('x1_players').select('quiz_finished_at').eq('id',room.playerId).maybeSingle();if(data?.quiz_finished_at){room.status='playing';startArena().catch(e=>console.warn('X1 arena',e));return}}catch(e){}
  }
- quizIndex=0;quizWrong=0;quizCorrect=0;renderQuizQuestion();show('quiz')
+ quizIndex=0;quizWrong=0;quizCorrect=0;restorePedagogicalProgress();renderQuizQuestion();show('quiz')
 });
 $('#quiz').addEventListener('click',async e=>{
  const finish=e.target.closest('[data-quiz-finish]');if(finish){await finishPedagogicalQuiz();return}
@@ -448,7 +455,7 @@ $('#quiz').addEventListener('click',async e=>{
   }catch(err){console.warn('X1 pedagogical answer save',err)}
  }
  const fb=$('#quizFeedback');if(fb)fb.textContent=ok?tx('✓ Correto!','✓ Correct!'):tx('Resposta incorreta. A alternativa correta foi destacada.','Incorrect. The correct answer is highlighted.');
- setTimeout(async()=>{quizIndex++;if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},1100);
+ setTimeout(async()=>{quizIndex++;savePedagogicalProgress();if(quizIndex<quizQuestions.length)renderQuizQuestion();else await finishPedagogicalQuiz()},1100);
 });
 
 async function renderTeacherDashboard(){
@@ -539,7 +546,7 @@ async function prepareTangramArena(){
  const frame=$('#tangramArenaFrame'),loader=$('#arenaLoader'),spectator=$('#spectatorCard'),role=$('#arenaRole'),native=$('#nativeArena');
  stopArenaObserver();arenaFinished=false;
  frame.style.display='none';frame.src='about:blank';
- if(room.teacher&&room.mode==='pedagogico'){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('Professor • acompanhamento','Teacher • monitoring');await renderTeacherDashboard();await updateRaceFeed();return}
+ if(room.teacher&&room.mode==='pedagogico'){native.hidden=true;loader.hidden=true;spectator.hidden=false;role.textContent=tx('🎓 Desafio Pedagógico • Professor • acompanhamento ao vivo','🎓 Learning Challenge • Teacher • live monitoring');document.body.classList.add('x1-teacher-live');await renderTeacherDashboard();await updateRaceFeed();return} document.body.classList.remove('x1-teacher-live');
  spectator.hidden=true;loader.hidden=true;native.hidden=false;role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
  if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}
  if(!window.X1NativeArena){native.innerHTML='<p class="x1n-msg">Arena nativa indisponível.</p>';return}
@@ -571,7 +578,7 @@ async function startArena(){
   const s=(performance.now()-startedAt)/1000,m=Math.floor(s/60),sec=s-m*60;
   $('#timer').textContent=String(m).padStart(2,'0')+':'+sec.toFixed(1).padStart(4,'0');
  },100);
- const roundLabel=document.querySelector('#arena .arena-head span');if(roundLabel)roundLabel.textContent='⚔️ '+tx('RODADA ','ROUND ')+(room.currentRound||1)+'/'+(room.roundCount||1);const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent=tx('Figura: ','Figure: ')+arenaChallengeLabel();
+ const roundLabel=document.querySelector('#arena .arena-head span');if(roundLabel)roundLabel.textContent=(room.mode==='pedagogico'?'🎓 '+tx('DESAFIO PEDAGÓGICO','LEARNING CHALLENGE')+' • ':'⚔️ ')+tx('RODADA ','ROUND ')+(room.currentRound||1)+'/'+(room.roundCount||1);const h2=document.querySelector('#arena .arena-head h2');if(h2)h2.textContent=room.teacher&&room.mode==='pedagogico'?tx('Acompanhamento da turma em tempo real','Live class monitoring'):tx('Figura: ','Figure: ')+arenaChallengeLabel();
  $('#raceFeed').innerHTML='<span>'+tx(room.mode==='pedagogico'?'🏁 Etapa pedagógica concluída. Agora é Arena!':'🏁 Todos receberam o mesmo desafio.','🏁 Learning stage complete. Now it is Arena!')+'</span>';
  await prepareTangramArena();
 }
