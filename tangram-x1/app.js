@@ -326,10 +326,17 @@ $('#startMatch').addEventListener('click',async()=>{
  }catch(e){b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(tx('Não foi possível sincronizar o início. Tente novamente. ','Could not synchronize the start. Try again. ')+(e.message||''))}
 });
 
+function resetClientForLobby(){
+ countdownBusy=false;arenaFinished=false;quizAnswered=false;quizIndex=0;quizWrong=0;quizCorrect=0;quizQuestions=[];startedAt=0;
+ clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);tick=null;quizReadTimer=null;roomStateTimer=null;
+ resetArenaFrame();
+ /* Uma nova ida ao lobby é uma nova rodada/revanche: não reutilizar estado pedagógico da rodada anterior. */
+ try{const prefix='x1PedFlow|'+(room.id||room.code||'room')+'|';for(let i=sessionStorage.length-1;i>=0;i--){const k=sessionStorage.key(i);if(k&&k.startsWith(prefix))sessionStorage.removeItem(k)}}catch(e){}
+}
 function applyRoomState(nextStatus){
  if(!nextStatus)return;
  const previous=room.status;room.status=nextStatus;
- if(nextStatus==='lobby'){countdownBusy=false;openLobby().catch(e=>console.warn('X1 lobby',e));return}
+ if(nextStatus==='lobby'){resetClientForLobby();openLobby().catch(e=>console.warn('X1 lobby',e));return}
  if(nextStatus==='countdown'){if(!countdownBusy)runCountdown(false);return}
  if(nextStatus==='lesson'){
   countdownBusy=false;
@@ -612,7 +619,7 @@ $('#rematch').addEventListener('click',async()=>{
  try{
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  quizWrong=0;quizIndex=0;quizQuestions=[];arenaFinished=false;countdownBusy=false;startedAt=0;clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);tick=null;quizReadTimer=null;roomStateTimer=null;resetArenaFrame();await fetchRoom();room.status='lobby';await openLobby();
+  resetClientForLobby();await fetchRoom();room.status='lobby';await openLobby();
  }catch(e){alert(e.message||e)}
  finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
 });
