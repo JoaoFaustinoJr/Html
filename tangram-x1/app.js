@@ -613,15 +613,25 @@ async function renderResults(){
  const rematch=$('#rematch');if(room.isHost){rematch.disabled=false;rematch.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada • ','Next round • ')+(Number(room.currentRound||1)+1)+'/'+(room.roundCount||1):tx('Revanche • reiniciar partida','Rematch • restart match')}else{rematch.disabled=true;rematch.textContent=tx('Aguardando revanche do anfitrião','Waiting for host rematch')}show('results');
 }
 $('#newMatch')?.addEventListener('click',()=>{disconnectRoom();arenaFinished=false;quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
+let rematchBusy=false;
 $('#rematch').addEventListener('click',async()=>{
- if(!room.isHost||!room.hostToken)return;
- const b=$('#rematch');b.disabled=true;b.textContent=tx('Preparando nova rodada…','Preparing new round…');
+ if(!room.isHost||!room.hostToken||rematchBusy)return;
+ rematchBusy=true;
+ const b=$('#rematch');b.disabled=true;b.textContent=tx('Sincronizando revanche…','Syncing rematch…');
  try{
+  clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);clearTimeout(playerRefreshTimer);
+  tick=null;quizReadTimer=null;roomStateTimer=null;playerRefreshTimer=null;countdownBusy=false;arenaFinished=false;resetArenaFrame();
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  resetClientForLobby();await fetchRoom();room.status='lobby';await openLobby();
+  const fresh=await fetchRoom();
+  if(!fresh||fresh.status!=='lobby')throw new Error(tx('A revanche ainda não foi confirmada pelo servidor. Tente novamente.','The rematch was not confirmed by the server yet. Try again.'));
+  room.status='lobby';quizWrong=0;quizCorrect=0;quizIndex=0;quizQuestions=[];quizAnswered=false;startedAt=0;
+  await openLobby();
  }catch(e){alert(e.message||e)}
- finally{b.disabled=false;b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match')}
+ finally{
+  rematchBusy=false;b.disabled=false;
+  b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match');
+ }
 });
 
 const pilotRatings={access:5,visual:5,competition:5,learning:5,concentration:5,again:5};
