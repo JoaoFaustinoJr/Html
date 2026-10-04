@@ -285,11 +285,11 @@ function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshT
 
 async function subscribeRoom(){
  disconnectSubscriptions();
- clearInterval(roomWatchTimer);roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{const before=room.status,fresh=await fetchRoom();if(!fresh)return;const serverStatus=fresh.status;if(serverStatus!==before)applyRoomState(serverStatus);if($('#lobby').classList.contains('show'))schedulePlayerRefresh()}catch(e){console.warn('X1 room watchdog',e)}},1200);
+ clearInterval(roomWatchTimer);roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{const before=room.status,fresh=await fetchRoom();if(!fresh)return;const serverStatus=fresh.status;if(before==='results'&&serverStatus!=='results'&&serverStatus!=='lobby')resetClientForLobby();if(serverStatus!==before)applyRoomState(serverStatus);if($('#lobby').classList.contains('show'))schedulePlayerRefresh()}catch(e){console.warn('X1 room watchdog',e)}},900);
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
-    if(payload.new){room.status=payload.new.status;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';clearTimeout(roomStateTimer);roomStateTimer=setTimeout(()=>applyRoomState(payload.new.status),90)}
+    if(payload.new){const before=room.status,next=payload.new.status;if(before==='results'&&next!=='results'&&next!=='lobby')resetClientForLobby();room.status=next;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';clearTimeout(roomStateTimer);roomStateTimer=setTimeout(()=>applyRoomState(next),90)}
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
@@ -317,6 +317,7 @@ $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.
 
 $('#startMatch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken)return;
+ if(Date.now()<rematchStabilizingUntil){const wait=Math.max(1,Math.ceil((rematchStabilizingUntil-Date.now())/1000));const b=$('#startMatch');b.disabled=true;b.textContent=tx('Sincronizando jogadores…','Syncing players…');setTimeout(()=>{if($('#lobby').classList.contains('show')){b.disabled=false;b.textContent=tx('Começar partida','Start match')}},wait*1000+150);return;}
  const readyPlayers=await fetchPlayers(),competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
  const b=$('#startMatch');b.disabled=true;b.textContent=tx('Sincronizando turma…','Syncing class…');
  try{
