@@ -614,36 +614,39 @@ async function renderResults(){
 }
 $('#newMatch')?.addEventListener('click',()=>{disconnectRoom();arenaFinished=false;quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 let rematchBusy=false;
+const sleepX1=ms=>new Promise(r=>setTimeout(r,ms));
+async function confirmRematchLobby(){
+ let last=null;
+ for(let attempt=0;attempt<8;attempt++){
+  try{last=await fetchRoom();if(last?.status==='lobby')return last}catch(e){console.warn('X1 rematch confirm',e)}
+  await sleepX1(350+attempt*120);
+ }
+ return last;
+}
 $('#rematch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken||rematchBusy)return;
  rematchBusy=true;
- const b=$('#rematch');b.disabled=true;b.textContent=tx('Sincronizando revanche…','Syncing rematch…');
+ const b=$('#rematch');b.disabled=true;b.textContent=tx('Preparando nova partida…','Preparing new match…');
  try{
   clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);clearTimeout(playerRefreshTimer);
-  tick=null;quizReadTimer=null;roomStateTimer=null;playerRefreshTimer=null;countdownBusy=false;arenaFinished=false;resetArenaFrame();
-  const previousRound=Number(room.currentRound||1);
+  tick=null;quizReadTimer=null;roomStateTimer=null;playerRefreshTimer=null;
+  countdownBusy=false;arenaFinished=false;resetArenaFrame();
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
-  if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  /* A confirmação da revanche não pode depender de uma única leitura imediata:
-     Realtime/REST podem entregar por alguns instantes o estado anterior. */
-  let fresh=null;
-  for(let attempt=0;attempt<8;attempt++){
-    fresh=await fetchRoom();
-    if(fresh?.status==='lobby')break;
-    await new Promise(resolve=>setTimeout(resolve,250+attempt*100));
-  }
-  if(!fresh||fresh.status!=='lobby')throw new Error(tx('A revanche foi enviada, mas a sala ainda não sincronizou. Aguarde um instante e tente novamente.','The rematch was sent, but the room has not synchronized yet. Wait a moment and try again.'));
-  room.status='lobby';room.currentRound=Number(fresh.current_round||room.currentRound||previousRound);
-  quizWrong=0;quizCorrect=0;quizIndex=0;quizQuestions=[];quizAnswered=false;startedAt=0;
+  if(error)throw error;
+  if(!data)throw new Error(tx('Não foi possível preparar a nova partida.','Could not prepare the new match.'));
+  const fresh=await confirmRematchLobby();
+  if(!fresh||fresh.status!=='lobby')throw new Error(tx('O servidor não confirmou a nova partida. Tente novamente.','The server did not confirm the new match. Try again.'));
   resetClientForLobby();
-  /* Mantém watchdog/realtime ativos; todos os clientes recebem lobby e limpam
-     seu estado local antes da próxima largada. */
+  room.status='lobby';
+  sessionStorage.setItem(room.isHost&&room.teacher?'tangramX1Host':'tangramX1Player',JSON.stringify(room));
   await openLobby();
-  schedulePlayerRefresh();
- }catch(e){alert(e.message||e)}
- finally{
+  if(!roomChannel||!playerChannel)await subscribeRoom();
+ }catch(e){
+  console.warn('X1 rematch',e);alert((e&&e.message)||e);
+  try{await fetchRoom();applyRoomState(room.status)}catch(_){}
+ }finally{
   rematchBusy=false;b.disabled=false;
-  b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada','Next round'):tx('Revanche • reiniciar partida','Rematch • restart match');
+  b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada • ','Next round • ')+(Number(room.currentRound||1)+1)+'/'+(room.roundCount||1):tx('Revanche • reiniciar partida','Rematch • restart match');
  }
 });
 
