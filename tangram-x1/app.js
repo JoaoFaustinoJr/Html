@@ -285,11 +285,18 @@ function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshT
 
 async function subscribeRoom(){
  disconnectSubscriptions();
- clearInterval(roomWatchTimer);roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{const before=room.status,fresh=await fetchRoom();if(!fresh)return;const serverStatus=fresh.status;if(before==='results'&&serverStatus!=='results'&&serverStatus!=='lobby')resetClientForLobby();if(serverStatus!==before)applyRoomState(serverStatus);if($('#lobby').classList.contains('show'))schedulePlayerRefresh()}catch(e){console.warn('X1 room watchdog',e)}},900);
+ clearInterval(roomWatchTimer);roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{
+  const before=room.status,fresh=await fetchRoom();if(!fresh)return;const serverStatus=fresh.status;
+  const expectedView=serverStatus==='countdown'?'countdown':serverStatus==='lesson'?'lesson':serverStatus==='quiz'?'quiz':serverStatus==='playing'?'arena':serverStatus==='results'?'results':serverStatus==='lobby'?'lobby':serverStatus==='closed'?'home':'';
+  const viewOutOfSync=expectedView&&!$('#'+expectedView)?.classList.contains('show');
+  if(before==='results'&&serverStatus!=='results'&&serverStatus!=='lobby')resetClientForLobby();
+  if(serverStatus!==before||viewOutOfSync)applyRoomState(serverStatus);
+  if($('#lobby').classList.contains('show'))schedulePlayerRefresh()
+ }catch(e){console.warn('X1 room watchdog',e)}},900);
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
-    if(payload.new){const before=room.status,next=payload.new.status;if(before==='results'&&next!=='results'&&next!=='lobby')resetClientForLobby();room.status=next;room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';clearTimeout(roomStateTimer);roomStateTimer=setTimeout(()=>applyRoomState(next),90)}
+    if(payload.new){const before=room.status,next=payload.new.status;if(before==='results'&&next!=='results'&&next!=='lobby')resetClientForLobby();room.mode=payload.new.mode;room.pack=payload.new.content_pack;room.startedAt=payload.new.started_at||null;room.currentRound=payload.new.current_round||1;room.roundCount=payload.new.round_count||1;room.questionCount=payload.new.question_count||3;room.challenge=payload.new.challenge||'random';clearTimeout(roomStateTimer);roomStateTimer=setTimeout(()=>applyRoomState(next),60)}
   })
   .subscribe();
  playerChannel=sb.channel('x1-players-'+room.id)
