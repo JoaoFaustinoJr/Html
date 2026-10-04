@@ -621,12 +621,25 @@ $('#rematch').addEventListener('click',async()=>{
  try{
   clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);clearTimeout(playerRefreshTimer);
   tick=null;quizReadTimer=null;roomStateTimer=null;playerRefreshTimer=null;countdownBusy=false;arenaFinished=false;resetArenaFrame();
+  const previousRound=Number(room.currentRound||1);
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
-  const fresh=await fetchRoom();
-  if(!fresh||fresh.status!=='lobby')throw new Error(tx('A revanche ainda não foi confirmada pelo servidor. Tente novamente.','The rematch was not confirmed by the server yet. Try again.'));
-  room.status='lobby';quizWrong=0;quizCorrect=0;quizIndex=0;quizQuestions=[];quizAnswered=false;startedAt=0;
+  /* A confirmação da revanche não pode depender de uma única leitura imediata:
+     Realtime/REST podem entregar por alguns instantes o estado anterior. */
+  let fresh=null;
+  for(let attempt=0;attempt<8;attempt++){
+    fresh=await fetchRoom();
+    if(fresh?.status==='lobby')break;
+    await new Promise(resolve=>setTimeout(resolve,250+attempt*100));
+  }
+  if(!fresh||fresh.status!=='lobby')throw new Error(tx('A revanche foi enviada, mas a sala ainda não sincronizou. Aguarde um instante e tente novamente.','The rematch was sent, but the room has not synchronized yet. Wait a moment and try again.'));
+  room.status='lobby';room.currentRound=Number(fresh.current_round||room.currentRound||previousRound);
+  quizWrong=0;quizCorrect=0;quizIndex=0;quizQuestions=[];quizAnswered=false;startedAt=0;
+  resetClientForLobby();
+  /* Mantém watchdog/realtime ativos; todos os clientes recebem lobby e limpam
+     seu estado local antes da próxima largada. */
   await openLobby();
+  schedulePlayerRefresh();
  }catch(e){alert(e.message||e)}
  finally{
   rematchBusy=false;b.disabled=false;
