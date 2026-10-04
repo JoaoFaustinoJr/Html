@@ -614,36 +614,47 @@ async function renderResults(){
 }
 $('#newMatch')?.addEventListener('click',()=>{disconnectRoom();arenaFinished=false;quizWrong=0;countdownBusy=false;clearInterval(tick);clearTimeout(roomStateTimer);tick=null;roomStateTimer=null;resetArenaFrame();room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};show('home')});
 let rematchBusy=false;
-const sleepX1=ms=>new Promise(r=>setTimeout(r,ms));
-async function confirmRematchLobby(){
+async function waitForRematchLobby(previousRound){
  let last=null;
- for(let attempt=0;attempt<8;attempt++){
-  try{last=await fetchRoom();if(last?.status==='lobby')return last}catch(e){console.warn('X1 rematch confirm',e)}
-  await sleepX1(350+attempt*120);
+ for(let attempt=0;attempt<12;attempt++){
+  try{
+   last=await fetchRoom();
+   if(last&&last.status==='lobby'){
+    const serverRound=Number(last.current_round||room.currentRound||1);
+    const rounds=Number(last.round_count||room.roundCount||1);
+    const expected=previousRound<rounds?previousRound+1:1;
+    if(serverRound===expected||rounds===1)return last;
+   }
+  }catch(e){console.warn('X1 rematch confirmation',e)}
+  await new Promise(resolve=>setTimeout(resolve,350));
  }
  return last;
 }
 $('#rematch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken||rematchBusy)return;
  rematchBusy=true;
- const b=$('#rematch');b.disabled=true;b.textContent=tx('Preparando nova partida…','Preparing new match…');
+ const b=$('#rematch'),previousRound=Number(room.currentRound||1);
+ b.disabled=true;b.textContent=tx('Preparando nova rodada…','Preparing new round…');
  try{
   clearInterval(tick);clearInterval(quizReadTimer);clearTimeout(roomStateTimer);clearTimeout(playerRefreshTimer);
-  tick=null;quizReadTimer=null;roomStateTimer=null;playerRefreshTimer=null;
-  countdownBusy=false;arenaFinished=false;resetArenaFrame();
+  tick=null;quizReadTimer=null;roomStateTimer=null;playerRefreshTimer=null;countdownBusy=false;arenaFinished=false;resetArenaFrame();
   const {data,error}=await sb.rpc('x1_reset_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;
-  if(!data)throw new Error(tx('Não foi possível preparar a nova partida.','Could not prepare the new match.'));
-  const fresh=await confirmRematchLobby();
-  if(!fresh||fresh.status!=='lobby')throw new Error(tx('O servidor não confirmou a nova partida. Tente novamente.','The server did not confirm the new match. Try again.'));
+  if(!data)throw new Error(tx('Não foi possível reiniciar a sala.','Could not reset the room.'));
+  const fresh=await waitForRematchLobby(previousRound);
+  if(!fresh||fresh.status!=='lobby')throw new Error(tx('O servidor ainda não confirmou a nova rodada. Tente novamente.','The server has not confirmed the new round yet. Try again.'));
   resetClientForLobby();
   room.status='lobby';
-  sessionStorage.setItem(room.isHost&&room.teacher?'tangramX1Host':'tangramX1Player',JSON.stringify(room));
+  await subscribeRoom();
   await openLobby();
-  if(!roomChannel||!playerChannel)await subscribeRoom();
  }catch(e){
-  console.warn('X1 rematch',e);alert((e&&e.message)||e);
-  try{await fetchRoom();applyRoomState(room.status)}catch(_){}
+  console.warn('X1 rematch',e);
+  try{
+   await subscribeRoom();
+   const fresh=await fetchRoom();
+   if(fresh?.status==='lobby'){resetClientForLobby();await openLobby();return}
+  }catch(recovery){console.warn('X1 rematch recovery',recovery)}
+  alert(e.message||e);
  }finally{
   rematchBusy=false;b.disabled=false;
   b.textContent=(room.currentRound||1)<(room.roundCount||1)?tx('Próxima rodada • ','Next round • ')+(Number(room.currentRound||1)+1)+'/'+(room.roundCount||1):tx('Revanche • reiniciar partida','Rematch • restart match');
