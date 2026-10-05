@@ -39,9 +39,9 @@ window.openX1TeacherReports=openX1TeacherReports;
 const show=id=>{x1MusicView(id);views.forEach(v=>v.classList.toggle('show',v.id===id));document.body.classList.toggle('x1-internal',id!=='home');document.body.classList.toggle('x1-arena-full',id==='arena'&&!room.teacher);ensureHostCloseControl(id);try{scrollTo({top:0,behavior:'smooth'})}catch(e){}};
 function ensureHostCloseControl(viewId){
  let b=document.querySelector('#x1ForceCloseRoom');
- const visible=!!(room.isHost&&room.hostToken&&room.id&&viewId!=='home'&&room.status!=='closed');
+ const visible=!!(room.isHost&&room.hostToken&&room.id&&room.status!=='closed');
  if(!visible){b?.remove();return}
- if(!b){b=document.createElement('button');b.id='x1ForceCloseRoom';b.type='button';b.textContent=tx('Encerrar sala','Close room');b.setAttribute('aria-label',tx('Encerrar esta sala para todos','Close this room for everyone'));Object.assign(b.style,{padding:'11px 16px',borderRadius:'12px',border:'1px solid rgba(255,130,145,.55)',background:'rgba(80,20,28,.82)',color:'#fff',fontWeight:'700',width:'100%',marginTop:'10px'});b.addEventListener('click',forceCloseRoom);const start=document.querySelector('#startMatch');if(start?.parentNode)start.insertAdjacentElement('afterend',b);else document.body.appendChild(b)}
+ if(!b){b=document.createElement('button');b.id='x1ForceCloseRoom';b.type='button';b.textContent=tx('Encerrar sala','Close room');b.setAttribute('aria-label',tx('Encerrar esta sala para todos','Close this room for everyone'));Object.assign(b.style,{position:'fixed',right:'16px',bottom:'16px',zIndex:'10000',padding:'11px 16px',borderRadius:'12px',border:'1px solid rgba(255,130,145,.55)',background:'rgba(80,20,28,.90)',color:'#fff',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.28)'});b.addEventListener('click',forceCloseRoom);document.body.appendChild(b)}
 }
 async function forceCloseRoom(){
  if(!room.isHost||!room.hostToken||!room.id)return;
