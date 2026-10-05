@@ -292,7 +292,7 @@ async function subscribeRoom(){
   if(before==='results'&&serverStatus!=='results'&&serverStatus!=='lobby')resetClientForLobby();
   if(serverStatus!==before||viewOutOfSync)applyRoomState(serverStatus);
   if($('#lobby').classList.contains('show'))schedulePlayerRefresh()
- }catch(e){console.warn('X1 room watchdog',e)}},900);
+ }catch(e){console.warn('X1 room watchdog',e)}},5000);
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
@@ -323,10 +323,11 @@ $('#leaveLobby')?.addEventListener('click',()=>{if(!confirm(tx('Sair desta sala 
 $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(room.code);$('#copyCode').textContent=tx('Copiado ✓','Copied ✓');setTimeout(()=>$('#copyCode').textContent=tx('Copiar código','Copy code'),1300)}catch(e){}});
 
 $('#startMatch').addEventListener('click',async()=>{
- if(!room.isHost||!room.hostToken)return;
+ if(!room.isHost||!room.hostToken){alert(tx('A sessão do anfitrião perdeu a autorização. Volte ao início e recrie a sala.','The host session lost authorization. Return home and recreate the room.'));return;}
  if(Date.now()<rematchStabilizingUntil){const wait=Math.max(1,Math.ceil((rematchStabilizingUntil-Date.now())/1000));const b=$('#startMatch');b.disabled=true;b.textContent=tx('Sincronizando jogadores…','Syncing players…');setTimeout(()=>{if($('#lobby').classList.contains('show')){b.disabled=false;b.textContent=tx('Começar partida','Start match')}},wait*1000+150);return;}
- const readyPlayers=await fetchPlayers(),competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
- const b=$('#startMatch');b.disabled=true;b.textContent=tx('Sincronizando turma…','Syncing class…');
+ const b=$('#startMatch');b.disabled=true;b.textContent=tx('Iniciando…','Starting…');
+ let readyPlayers;try{readyPlayers=await fetchPlayers()}catch(e){readyPlayers=[]}const competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
+ b.textContent=tx('Sincronizando turma…','Syncing class…');
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
   if(error)throw error;if(!data)throw new Error(tx('A sala não pôde ser iniciada.','The room could not be started.'));
