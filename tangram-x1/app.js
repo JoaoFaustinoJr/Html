@@ -341,22 +341,32 @@ $('#copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.
 
 $('#startMatch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken){alert(tx('A sessão do anfitrião perdeu a autorização. Volte ao início e recrie a sala.','The host session lost authorization. Return home and recreate the room.'));return;}
- if(Date.now()<rematchStabilizingUntil){const wait=Math.max(1,Math.ceil((rematchStabilizingUntil-Date.now())/1000));const b=$('#startMatch');b.disabled=true;b.textContent=tx('Sincronizando jogadores…','Syncing players…');setTimeout(()=>{if($('#lobby').classList.contains('show')){b.disabled=false;b.textContent=tx('Começar partida','Start match')}},wait*1000+150);return;}
  const b=$('#startMatch');b.disabled=true;b.textContent=tx('Iniciando…','Starting…');
- let readyPlayers=[];let rosterReadOk=false;try{readyPlayers=await fetchPlayers();rosterReadOk=true}catch(e){console.warn('X1 pre-start players',e)}
+ let readyPlayers=[];try{readyPlayers=await fetchPlayers()}catch(e){console.warn('X1 pre-start players',e)}
  const competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;
- /* v1.0.6: não bloquear uma sala cheia por leitura transitória/inconsistente do roster.
-    O RPC de início continua sendo a autoridade final. A interface visível serve apenas
-    como fallback quando a consulta retorna menos jogadores do que o lobby já exibe. */
- const visiblePlayers=document.querySelectorAll('#players .player').length;
- const effectiveCount=Math.max(competitors.length,visiblePlayers);
- if(rosterReadOk&&effectiveCount<minPlayers){b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
+ /* A autoridade é o servidor. Nunca bloquear uma turma real por leitura atrasada
+    do roster, DOM ou janela de estabilização do cliente. */
+ if(competitors.length<minPlayers){
+   try{const fresh=await fetchRoom();if(!fresh)throw new Error('room')}catch(e){b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(tx('Não foi possível confirmar a sala no servidor. Atualize e tente novamente.','Could not confirm the room on the server. Refresh and try again.'));return}
+ }
  b.textContent=tx('Sincronizando turma…','Syncing class…');
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
-  if(error)throw error;if(!data)throw new Error(tx('A sala não pôde ser iniciada.','The room could not be started.'));
-  room.status='countdown';runCountdown(true);
- }catch(e){b.disabled=false;b.textContent=tx('Começar partida','Start match');alert(tx('Não foi possível sincronizar o início. Tente novamente. ','Could not synchronize the start. Try again. ')+(e.message||''))}
+  if(error)throw error;
+  let started=data===true;
+  if(!started){
+    /* Recuperação: confirma o estado real antes de declarar falha. */
+    const fresh=await fetchRoom().catch(()=>null);
+    started=!!fresh&&['countdown','lesson','quiz','playing'].includes(fresh.status);
+  }
+  if(!started)throw new Error(tx('O servidor não confirmou o início.','The server did not confirm the start.'));
+  room.status='countdown';
+  runCountdown(true);
+ }catch(e){
+   console.error('X1 start room',e);
+   b.disabled=false;b.textContent=tx('Começar partida','Start match');
+   alert(tx('A disputa não iniciou. A sala continua aberta; tente novamente. ','The match did not start. The room remains open; try again. ')+(e.message||''))
+ }
 });
 
 function resetClientForLobby(){
