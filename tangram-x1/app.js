@@ -397,17 +397,41 @@ function applyRoomState(nextStatus){
  console.warn('X1 estado desconhecido',nextStatus,'anterior',previous)
 }
 function runCountdown(hostAdvances=false){
- if(countdownBusy)return;countdownBusy=true;show('countdown');
- let n=3;$('#countNum').textContent=n;
- const t=setInterval(async()=>{
-  n--;
-  if(n>0){$('#countNum').textContent=n;return}
-  clearInterval(t);$('#countNum').textContent=tx('VALENDO!','GO!');
+ /* v1.0.7: countdown é apenas uma transição visual. O servidor continua sendo
+    a autoridade, mas cada cliente avança localmente UMA vez ao final para não
+    ficar preso/repetindo 3-2-1 quando eventos realtime chegam atrasados. */
+ if(countdownBusy)return;
+ countdownBusy=true;show('countdown');
+ let n=3,finished=false;$('#countNum').textContent=n;
+ const finishCountdown=async()=>{
+  if(finished)return;finished=true;clearInterval(t);
+  $('#countNum').textContent=tx('VALENDO!','GO!');
+  const next=room.mode==='pedagogico'?'lesson':'playing';
   if(hostAdvances&&room.isHost){
-   const next=room.mode==='pedagogico'?'lesson':'playing';
-   try{const {data,error}=await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next});if(error)throw error;if(!data)throw new Error('status');room.status=next;countdownBusy=false;applyRoomState(next)}catch(e){countdownBusy=false;$('#countNum').textContent=tx('Falha de sincronização','Sync failed');const back=document.querySelector('#countdown [data-lobby]');if(back)back.style.display='block';console.warn('X1 status sync',e)}
-  }else setTimeout(()=>{countdownBusy=false;const next=room.mode==='pedagogico'?'lesson':'playing';if(room.status==='countdown'||room.status==='lobby'){fetchRoom().then(fresh=>{if(fresh)applyRoomState(fresh.status)}).catch(()=>{})}},900);
- },700);
+   try{
+    const {data,error}=await sb.rpc('x1_set_room_status',{p_code:room.code,p_host_token:room.hostToken,p_status:next});
+    if(error)throw error;if(!data)throw new Error('status');
+    room.status=next;
+   }catch(e){
+    countdownBusy=false;$('#countNum').textContent=tx('Falha de sincronização','Sync failed');
+    const back=document.querySelector('#countdown [data-lobby]');if(back)back.style.display='block';
+    console.warn('X1 status sync',e);return;
+   }
+  }
+  setTimeout(()=>{
+   countdownBusy=false;
+   /* Nunca reaplicar countdown/lobby depois de VALENDO. */
+   if(room.status==='countdown'||room.status==='lobby')room.status=next;
+   applyRoomState(next);
+   /* Reconciliação posterior, sem regredir a interface. */
+   setTimeout(()=>fetchRoom().then(fresh=>{
+    if(!fresh)return;
+    if(fresh.status==='results'||fresh.status==='closed')applyRoomState(fresh.status);
+    else if(fresh.status===next)room.status=next;
+   }).catch(()=>{}),700);
+  },260);
+ };
+ const t=setInterval(()=>{n--;if(n>0){$('#countNum').textContent=n;return}finishCountdown()},700);
 }
 function selectedEduLesson(){if(!String(room.pack||'').startsWith('edu:'))return null;return EDU_LESSONS.find(x=>'edu:'+x.id===room.pack)||null}
 function lessonBits(l){return [l.objective,l.concept,l.keyDefinition,l.example,l.formula,l.representation,l.use,l.observe,l.guided].filter(Boolean)}
