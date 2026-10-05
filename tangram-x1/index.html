@@ -6,8 +6,11 @@
 <meta name="theme-color" content="#07131f">
 <title>Tangram X1 — Arena</title>
 <meta name="description" content="Tangram X1 — Arena pedagógica em tempo real. Aprenda, responda e dispute o mesmo desafio.">
-<link rel="stylesheet" href="style.css?v=1.0.7-pedagogico-estavel">
-<link rel="stylesheet" href="native-arena.css?v=9"></head>
+<link rel="stylesheet" href="style.css?v=180">
+<link rel="stylesheet" href="native-arena.css?v=9"><!-- Google Analytics 4 • joaofaustinojr apps -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KXDY9J9N3V"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-KXDY9J9N3V',{send_page_view:true});</script>
+</head>
 <body>
 <main class="shell">
   <header class="hero">
@@ -53,7 +56,7 @@
 
     <p class="portal-note">⚡ Gamer é livre para os alunos. 🎓 Pedagógico exige senha do professor.</p>
     <button class="pilot-home-link" id="pilotHomeLink">📝 Participou do piloto? Avalie o X1</button>
-    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior</small><em>Com carinho: JFJr</em></div>
+    <div class="x1-authorship" aria-label="Autoria"><b>Produto digital educacional</b><small>© 2026 João Faustino Júnior • X1 v1.0.12 • base funcional restaurada</small><em>Com carinho: JFJr</em></div>
   </section>
 
   <section id="gamerSetup" class="view">
@@ -129,7 +132,7 @@
         <label>Rodadas<select id="roundCount"><option>1</option><option>3</option><option>5</option></select></label>
       </div>
       <label class="toggle"><input id="penalty" type="checkbox" checked><span>Aplicar penalidade leve por resposta incorreta</span></label>
-      <div class="teacher-report-entry"><b>📊 Relatórios X1</b><p>Acompanhe resultados da turma, precisão, erros pedagógicos e tempos das partidas.</p><button class="secondary big" type="button" id="openX1Reports" onclick="openX1TeacherReports()">Ver relatórios das partidas</button><small>Os resultados da sala atual aparecem após as rodadas. O histórico deste aparelho fica disponível aqui.</small></div><button class="primary big" id="createDemoRoom">Criar sala</button>
+      <div class="teacher-report-entry"><b>📊 Relatórios X1</b><p>Acompanhe resultados da turma, precisão, erros pedagógicos e tempos das partidas.</p><button class="secondary big" type="button" id="openX1Reports">Ver relatórios das partidas</button><small>Os resultados da sala atual aparecem após as rodadas. O histórico deste aparelho fica disponível aqui.</small></div><button class="primary big" id="createDemoRoom">Criar sala</button>
       <p class="server-note online-note">● Realtime conectado. A sala criada aqui pode ser acessada por outros computadores usando o código.</p>
     </div>
   </section>
@@ -151,7 +154,7 @@
       <div class="room-actions"><button id="copyCode">Copiar código</button><button class="secondary" id="leaveLobby">← Sair da sala</button></div>
     </div>
     <div class="card">
-      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">4 jogadores prontos</b></div><small>Aguardando o anfitrião iniciar</small></div>
+      <div class="lobby-title"><div><span class="dot"></span><b id="lobbyCount">Aguardando jogadores…</b></div><small>Aguardando o anfitrião iniciar</small></div>
       <div class="players" id="players"></div>
     </div>
     <div class="card compact-panel">
@@ -206,9 +209,23 @@
       <div id="teacherOverview" class="teacher-overview"></div>
       <div class="spectator-card teacher-dashboard" id="spectatorCard" hidden>
         <div class="teacher-dash-head"><img src="https://joaofaustinojr.github.io/Tangram-Educativo-2.0/app-icon.svg?v=310" alt="R.A.I."><div><h3>Painel do professor</h3><p>Acompanhe a turma em tempo real sem interferir na disputa.</p></div></div>
-        <div class="teacher-metrics"><div><b id="tdTotal">0</b><small>Alunos</small></div><div><b id="tdLesson">0</b><small>Na etapa pedagógica</small></div><div><b id="tdArena">0</b><small>Na Arena</small></div><div><b id="tdDone">0</b><small>Concluíram</small></div></div>
+        <div class="teacher-metrics"><div><b id="tdTotal">0</b><small>Alunos</small></div><div><b id="tdLesson">0</b><small>Aula / questões</small></div><div><b id="tdArena">0</b><small>Prontos / Arena</small></div><div><b id="tdDone">0</b><small>Concluíram</small></div></div>
+        <div class="teacher-control">
+          <button class="primary big" id="releaseArena" disabled>⚔️ Liberar Arena para a turma</button>
+          <small id="releaseArenaNote">Aguardando os alunos concluírem a etapa pedagógica.</small>
+        </div>
         <div class="teacher-progress"><span><i id="tdProgress" style="width:0%"></i></span><small id="tdProgressText">Aguardando progresso da turma</small></div>
         <div id="teacherStudentList" class="teacher-student-list"></div>
+        <div class="teacher-report">
+          <div class="teacher-overview-title"><b>Relatório da turma</b><span>Resumo da atividade</span></div>
+          <div class="teacher-report-grid">
+            <div><small>Participação</small><b id="trParticipation">—</b></div>
+            <div><small>Etapa pedagógica</small><b id="trPedagogy">—</b></div>
+            <div><small>Concluíram Arena</small><b id="trCompletion">—</b></div>
+            <div><small>Tempo da turma</small><b id="trTime">—</b></div>
+          </div>
+          <button class="secondary" id="copyTeacherReport">Copiar resumo</button>
+        </div>
       </div>
     </div>
     <div class="race-feed" id="raceFeed"><span>🏁 Todos começaram juntos.</span></div>
@@ -226,7 +243,17 @@
       <div><b id="metricErrorsLabel">Erros pedagógicos</b><span id="metricErrors">—</span></div>
       <div><b>Tempo Arena</b><span id="totalTime">—</span></div>
     </div>
-    <div class="card" id="fullRanking"><b>Classificação da turma</b><div id="fullRankingList"></div></div>\n    <button class="primary big" id="rematch">Revanche</button>
+    <div class="card" id="fullRanking"><b>Classificação da turma</b><div id="fullRankingList"></div></div>
+    <div class="card x1-room-report" id="roomReportCard" hidden>
+      <div class="report-head"><div><span>RELATÓRIO DA ATIVIDADE</span><b id="rrTitle">Resumo da sala</b></div><button class="secondary" id="copyRoomReport">Copiar resumo</button></div>
+      <div class="teacher-report-grid">
+        <div><small>Participantes</small><b id="rrParticipants">—</b></div>
+        <div><small>Concluíram</small><b id="rrCompleted">—</b></div>
+        <div><small>Conclusão</small><b id="rrRate">—</b></div>
+        <div><small>Modalidade</small><b id="rrMode">—</b></div>
+      </div>
+      <div id="rrDetails" class="report-details"></div>
+    </div>\n    <button class="primary big" id="rematch">Revanche</button>
     <button class="pilot-cta big" id="openPilotForm">📝 Avaliar o piloto X1</button>\n    <button class="primary big" id="studentRestart">↻ Voltar ao início do X1</button>
     <button class="secondary big" id="newMatch">↻ Nova partida</button><button class="secondary big" data-home>⌂ Voltar ao início do X1</button>
   </section>
@@ -342,8 +369,81 @@
     </div>
   </section>
 </main>
-<div class="footer-version" style="text-align:center;opacity:.55;font-size:.72rem;padding:10px 0 16px">X1 – ARENA TANGRAM · v1.0.11 · INÍCIO RESILIENTE</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=1.0.11-start-resilient"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ const showView=function(id){document.querySelectorAll('.view').forEach(function(v){v.classList.toggle('show',v.id===id)});document.body.classList.toggle('x1-internal',id!=='home');window.scrollTo(0,0)};
+ document.getElementById('createGamerRoom')?.addEventListener('click',function(){showView('gamerSetup')});
+ document.getElementById('joinRoom')?.addEventListener('click',function(){showView('join')});
+ document.getElementById('createRoom')?.addEventListener('click',function(){showView('teacherGate')});
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js'"></script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+ const btn=document.getElementById('createGamerOnline');
+ if(!btn)return;
+ btn.addEventListener('click',async function x1CoreCreateFallback(ev){
+  if(window.__x1CoreCreating)return;
+  const status=document.getElementById('gamerCreateStatus');
+  setTimeout(async function(){
+   if(document.getElementById('lobby')?.classList.contains('show'))return;
+   const nick=document.getElementById('gamerNickname')?.value.trim();
+   if(!nick)return;
+   const client=window.supabase?.createClient?.('https://hfryzntefzjlqitpxbxw.supabase.co','sb_publishable_WmUv7bOqiavIoXYdtKBZKg__hpnqaZq');
+   if(!client){if(status){status.textContent='Falha de conexão: biblioteca Supabase não carregou.';status.style.color='#ff9cab'}return}
+   window.__x1CoreCreating=true;
+   if(status){status.textContent='Criando sala online…';status.style.color=''}
+   try{
+    const rounds=Number(document.getElementById('gamerRounds')?.value)||1;
+    const challenge=document.getElementById('gamerChallenge')?.value||'random';
+    const {data,error}=await client.rpc('x1_create_gamer_room',{p_nickname:nick,p_round_count:rounds,p_challenge:challenge});
+    if(error)throw error;
+    const x=Array.isArray(data)?data[0]:data;
+    if(!x?.code)throw new Error('Sala não retornou código.');
+    sessionStorage.setItem('tangramX1Player',JSON.stringify({id:x.room_id,code:x.code,teacher:false,isHost:true,pack:'gamer',mode:'gamer',nickname:nick,hostToken:x.host_token,playerId:x.player_id,playerToken:x.player_token,status:'lobby'}));
+    document.getElementById('roomCode').textContent=x.code;
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='lobby'));
+    document.body.classList.add('x1-internal');
+    document.getElementById('lobbyModeLabel').textContent='MODO GAMER';
+    document.getElementById('lobbyPack').textContent=challenge==='random'?'🎲 Desafio surpresa • igual para todos':'Desafio '+challenge;
+    document.getElementById('lobbyModeText').textContent='Sala criada. Compartilhe o código com os outros jogadores.';
+    document.getElementById('lobbyCount').textContent='1 jogador pronto';
+    const playersBox=document.getElementById('players');
+    if(playersBox)playersBox.innerHTML='<div class="player"><div><b>'+nick+'</b><small>👑 Anfitrião • pronto</small></div></div>';
+    document.getElementById('startMatch').style.display='block';
+    if(status)status.textContent='Sala criada: '+x.code;
+    window.scrollTo(0,0);
+   }catch(err){if(status){status.textContent='Não foi possível criar a sala: '+(err?.message||err);status.style.color='#ff9cab'}}
+   finally{window.__x1CoreCreating=false}
+  },250);
+ },false);
+});
+
+// X1 emergency core: lobby controls independent from the legacy controller.
+(function(){
+ function saved(){try{return JSON.parse(sessionStorage.getItem('tangramX1Player')||'null')}catch(_){return null}}
+ function client(){return window.supabase?.createClient?.('https://hfryzntefzjlqitpxbxw.supabase.co','sb_publishable_WmUv7bOqiavIoXYdtKBZKg__hpnqaZq')}
+ function home(){sessionStorage.removeItem('tangramX1Player');sessionStorage.removeItem('tangramX1Host');document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='home'));document.body.classList.remove('x1-internal');window.scrollTo(0,0)}
+ document.getElementById('leaveLobby')?.addEventListener('click',function(e){const x=saved();if(!x?.id)return;e.stopImmediatePropagation();if(confirm('Sair desta sala e voltar ao menu do X1?'))home()},true);
+ document.getElementById('copyCode')?.addEventListener('click',async function(e){const x=saved();if(!x?.code)return;e.stopImmediatePropagation();try{await navigator.clipboard.writeText(x.code);this.textContent='Copiado ✓';setTimeout(()=>this.textContent='Copiar código',1200)}catch(_){}},true);
+ document.getElementById('startMatch')?.addEventListener('click',async function(e){
+  const x=saved();if(!x?.isHost||!x?.hostToken)return;
+  e.stopImmediatePropagation();
+  const c=client();if(!c){alert('Conexão da Arena indisponível.');return}
+  this.disabled=true;this.textContent='Sincronizando jogadores…';
+  try{
+   const {data:players,error:pe}=await c.from('x1_players').select('id,nickname,role,ready').eq('room_id',x.id);if(pe)throw pe;
+   const n=(players||[]).filter(p=>p.role!=='teacher').length;
+   if(n<2){alert('Aguarde pelo menos dois jogadores entrarem na sala.');this.disabled=false;this.textContent='Começar partida';return}
+   const {data,error}=await c.rpc('x1_start_room',{p_code:x.code,p_host_token:x.hostToken});if(error)throw error;if(!data)throw new Error('A sala não pôde ser iniciada.');
+   x.status='countdown';sessionStorage.setItem('tangramX1Player',JSON.stringify(x));
+   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='countdown'));document.body.classList.add('x1-internal');
+   let n3=3;const el=document.getElementById('countNum');if(el)el.textContent=n3;
+   const timer=setInterval(()=>{n3--;if(n3>0){if(el)el.textContent=n3;return}clearInterval(timer);if(el)el.textContent='JÁ!';setTimeout(()=>{location.reload()},450)},900);
+  }catch(err){alert('Não foi possível iniciar: '+(err?.message||err));this.disabled=false;this.textContent='Começar partida'}
+ },true);
+})();
+</script>
+<script src="native-levels.js?v=4"></script><script src="native-arena.js?v=23"></script><script src="app.js?v=core-lobby-20261001i"></script>
 </body>
 </html>
