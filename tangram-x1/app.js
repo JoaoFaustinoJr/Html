@@ -41,7 +41,7 @@ function ensureHostCloseControl(viewId){
  let b=document.querySelector('#x1ForceCloseRoom');
  const visible=!!(room.isHost&&room.hostToken&&room.id&&viewId!=='home'&&room.status!=='closed');
  if(!visible){b?.remove();return}
- if(!b){b=document.createElement('button');b.id='x1ForceCloseRoom';b.type='button';b.textContent=tx('Encerrar sala','Close room');b.setAttribute('aria-label',tx('Encerrar esta sala para todos','Close this room for everyone'));Object.assign(b.style,{position:'fixed',right:'14px',bottom:'14px',zIndex:'9999',padding:'10px 14px',borderRadius:'12px',border:'1px solid rgba(255,255,255,.22)',background:'rgba(80,20,28,.92)',color:'#fff',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.28)'});b.addEventListener('click',forceCloseRoom);document.body.appendChild(b)}
+ if(!b){b=document.createElement('button');b.id='x1ForceCloseRoom';b.type='button';b.textContent=tx('Encerrar sala','Close room');b.setAttribute('aria-label',tx('Encerrar esta sala para todos','Close this room for everyone'));Object.assign(b.style,{padding:'11px 16px',borderRadius:'12px',border:'1px solid rgba(255,130,145,.55)',background:'rgba(80,20,28,.82)',color:'#fff',fontWeight:'700',width:'100%',marginTop:'10px'});b.addEventListener('click',forceCloseRoom);const start=document.querySelector('#startMatch');if(start?.parentNode)start.insertAdjacentElement('afterend',b);else document.body.appendChild(b)}
 }
 async function forceCloseRoom(){
  if(!room.isHost||!room.hostToken||!room.id)return;
@@ -410,7 +410,7 @@ function applyRoomState(nextStatus){
   startArena().catch(e=>console.warn('X1 arena',e));return
 }
  if(nextStatus==='results'){countdownBusy=false;renderResults().catch(e=>console.warn('X1 results',e));return}
- if(nextStatus==='closed'){disconnectRoom();sessionStorage.removeItem('tangramX1Player');sessionStorage.removeItem('tangramX1Host');document.querySelector('#x1ForceCloseRoom')?.remove();if(!room.isHost)alert(tx('Esta sala foi encerrada pelo anfitrião. Você foi liberado para voltar ao X1.','This room was closed by the host. You can return to X1.'));show('home');return}
+ if(nextStatus==='closed'){disconnectRoom();sessionStorage.removeItem('tangramX1Player');sessionStorage.removeItem('tangramX1Host');document.querySelector('#x1ForceCloseRoom')?.remove();const wasHost=room.isHost;room={id:'',code:'',teacher:false,isHost:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};if(!wasHost)alert(tx('Esta sala foi encerrada pelo anfitrião. Você foi liberado para voltar ao X1.','This room was closed by the host. You can return to X1.'));show('home');return}
  console.warn('X1 estado desconhecido',nextStatus,'anterior',previous)
 }
 function runCountdown(hostAdvances=false){
