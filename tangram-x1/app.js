@@ -285,14 +285,14 @@ function schedulePlayerRefresh(){clearTimeout(playerRefreshTimer);playerRefreshT
 
 async function subscribeRoom(){
  disconnectSubscriptions();
- clearInterval(roomWatchTimer);roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{
+ clearInterval(roomWatchTimer);if(!room.isHost)roomWatchTimer=setInterval(async()=>{if(!room.id)return;try{
   const before=room.status,fresh=await fetchRoom();if(!fresh)return;const serverStatus=fresh.status;
   const expectedView=serverStatus==='countdown'?'countdown':serverStatus==='lesson'?'lesson':serverStatus==='quiz'?'quiz':serverStatus==='playing'?'arena':serverStatus==='results'?'results':serverStatus==='lobby'?'lobby':serverStatus==='closed'?'home':'';
   const viewOutOfSync=expectedView&&!$('#'+expectedView)?.classList.contains('show');
   if(before==='results'&&serverStatus!=='results'&&serverStatus!=='lobby')resetClientForLobby();
   if(serverStatus!==before||viewOutOfSync)applyRoomState(serverStatus);
   if($('#lobby').classList.contains('show'))schedulePlayerRefresh()
- }catch(e){console.warn('X1 room watchdog',e)}},5000);
+ }catch(e){console.warn('X1 room watchdog',e)}},12000);
  const roomFilter='id=eq.'+room.id,playerFilter='room_id=eq.'+room.id;
  roomChannel=sb.channel('x1-room-'+room.id)
   .on('postgres_changes',{event:'UPDATE',schema:'public',table:'x1_rooms',filter:roomFilter},payload=>{
@@ -326,7 +326,7 @@ $('#startMatch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken){alert(tx('A sessão do anfitrião perdeu a autorização. Volte ao início e recrie a sala.','The host session lost authorization. Return home and recreate the room.'));return;}
  if(Date.now()<rematchStabilizingUntil){const wait=Math.max(1,Math.ceil((rematchStabilizingUntil-Date.now())/1000));const b=$('#startMatch');b.disabled=true;b.textContent=tx('Sincronizando jogadores…','Syncing players…');setTimeout(()=>{if($('#lobby').classList.contains('show')){b.disabled=false;b.textContent=tx('Começar partida','Start match')}},wait*1000+150);return;}
  const b=$('#startMatch');b.disabled=true;b.textContent=tx('Iniciando…','Starting…');
- let readyPlayers;try{readyPlayers=await fetchPlayers()}catch(e){readyPlayers=[]}const competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
+ let readyPlayers=[];try{readyPlayers=await fetchPlayers()}catch(e){console.warn('X1 pre-start players',e)}const competitors=readyPlayers.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;if(competitors.length<minPlayers){alert(tx(room.mode==='pedagogico'?'Aguarde pelo menos um aluno entrar na sala.':'Aguarde pelo menos dois jogadores entrarem na sala.',room.mode==='pedagogico'?'Wait for at least one student to join the room.':'Wait for at least two players to join the room.'));return}
  b.textContent=tx('Sincronizando turma…','Syncing class…');
  try{
   const {data,error}=await sb.rpc('x1_start_room',{p_code:room.code,p_host_token:room.hostToken});
