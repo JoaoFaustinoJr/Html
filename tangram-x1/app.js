@@ -144,7 +144,7 @@ function applyLanguage(){
 function updateSelectLabels(){
  const go=$('#gamerChallenge'),to=$('#teacherChallenge');
  const labels=lang==='en'?['🎲 Random • surprise each round','6. Angular Cat','7. Runner','8. Swan','9. Rocket','10. R.A.I. Dragon','11. Mirrored Cat 🎯','12. Reversed Runner 🎯','13. Reflected Swan 🎯','14. Reverse Rocket 🎯']:['🎲 Aleatório • surpresa a cada rodada','6. Gato Angular','7. Corredor','8. Cisne','9. Foguete','10. Dragão R.A.I.','11. Gato Espelhado 🎯','12. Corredor Invertido 🎯','13. Cisne Reflexo 🎯','14. Foguete Reverso 🎯'];
- [go,to].forEach(sel=>{if(!sel)return;[...sel.options].forEach((o,i)=>{if(labels[i])o.textContent=labels[i]})});
+ [go,to].forEach(sel=>{if(!sel)return;[...sel.options].filter(o=>!String(o.value).startsWith('hanoi:')).forEach((o,i)=>{if(labels[i])o.textContent=labels[i]})});
  if(to?.options[0])to.options[0].textContent=tx('🤖 Recomendado pela R.A.I. • surpresa','🤖 R.A.I. recommended • surprise');
  const po=$('#contentPack');if(po){[...po.options].forEach(o=>o.textContent=packLabel(o.value))}
 }
@@ -285,7 +285,7 @@ async function openLobby(){
  $('#roomCode').textContent=room.code;
  const pedagogico=room.mode==='pedagogico';
  $('#lobbyModeLabel').textContent=pedagogico?tx('MODO PEDAGÓGICO','LEARNING MODE'):tx('MODO GAMER','GAMER MODE');
- const challengeLabel=room.challenge==='random'?tx('🎲 Desafio surpresa • igual para todos','🎲 Surprise challenge • same for everyone'):(challengeLabelByIndex(Number(room.challenge))||tx('Desafio selecionado','Selected challenge'));
+ const challengeLabel=room.challenge==='random'?tx('🎲 Desafio surpresa • igual para todos','🎲 Surprise challenge • same for everyone'):(isHanoiChallenge(room.challenge)?hanoiChallengeMeta(room.challenge).label:(challengeLabelByIndex(Number(room.challenge))||tx('Desafio selecionado','Selected challenge')));
  $('#lobbyPack').textContent=pedagogico?packLabel(room.pack)+' • '+challengeLabel:challengeLabel;
  $('#lobbyModeText').textContent=pedagogico?tx('Aula e questões vêm primeiro. Depois, cada aluno libera o mesmo desafio de Tangram.','Lesson and questions come first. Then every player unlocks the same Tangram challenge.'):tx('Sem etapa didática: contagem regressiva, Tangram e ranking.','No lesson stage: countdown, Tangram and ranking.');
  $('#startMatch').style.display=room.isHost?'block':'none';if(room.isHost){const ps=await fetchPlayers();const competitors=ps.filter(p=>p.role!=='teacher'||room.mode==='gamer'),minPlayers=room.mode==='pedagogico'?1:2;const visibleCount=document.querySelectorAll('#players .player').length,effectiveCount=Math.max(competitors.length,visibleCount);$('#startMatch').disabled=effectiveCount<minPlayers;$('#startMatch').textContent=effectiveCount<minPlayers?tx(room.mode==='pedagogico'?'Aguardando aluno…':'Aguardando oponente…',room.mode==='pedagogico'?'Waiting for student…':'Waiting for opponent…'):tx('Começar partida','Start match')}
@@ -560,16 +560,37 @@ function roomHash(){
  for(let i=0;i<src.length;i++){h^=src.charCodeAt(i);h=Math.imul(h,16777619)}
  return Math.abs(h>>>0);
 }
+function isHanoiChallenge(v=room.challenge){return /^hanoi:(6|7|8|9):([3-5])$/.test(String(v||''))}
+function hanoiChallengeMeta(v=room.challenge){
+ const m=String(v||'').match(/^hanoi:(6|7|8|9):([3-5])$/);if(!m)return null;
+ const grade=Number(m[1]),disks=Number(m[2]);
+ const topic={6:'Lógica e decomposição',7:'Padrões e algoritmo',8:'Pseudocódigo e depuração',9:'Recursão'}[grade];
+ return {grade,disks,topic,label:'🗼 Hanói · '+grade+'º ano · '+topic+' · '+disks+' discos'};
+}
+function hanoiChallengeUrl(v=room.challenge){
+ const x=hanoiChallengeMeta(v);if(!x)return '';
+ return 'https://joaofaustinojr.github.io/Tangram-Educativo-2.0/hanoi/?grade='+x.grade+'&disks='+x.disks+'&x1=1&room='+encodeURIComponent(room.code||'')+'#classPanel';
+}
 function arenaChallengeIndex(){
  const fixed=Number(room.challenge);
  if(room.challenge!=='random'&&Number.isInteger(fixed)&&fixed>=0&&fixed<=13)return fixed;
  return 5+(roomHash()%9);
 }
 function arenaChallengeLabel(){
+ if(isHanoiChallenge(room.challenge))return hanoiChallengeMeta(room.challenge).label;
  const i=arenaChallengeIndex();
  return challengeLabelByIndex(i);
 }
 
+function showHanoiX1Launch(){
+ const host=document.querySelector('#arenaStage')||document.querySelector('#arena')||document.querySelector('.arena-card');
+ if(!host||!isHanoiChallenge(room.challenge))return false;
+ let box=document.querySelector('#x1HanoiLaunch');
+ if(!box){box=document.createElement('div');box.id='x1HanoiLaunch';box.className='card';box.style.cssText='margin:14px;padding:18px;text-align:center;border:1px solid rgba(73,228,244,.35);border-radius:18px;background:rgba(5,30,48,.94)';host.prepend(box)}
+ const x=hanoiChallengeMeta(room.challenge);
+ box.innerHTML='<div style="font-size:34px">🗼</div><h3>'+esc(x.label)+'</h3><p>'+tx('Todos recebem a mesma configuração. No Hanói, eficiência de movimentos vem antes do tempo.','Everyone receives the same setup. In Hanoi, move efficiency ranks before time.')+'</p><a href="'+hanoiChallengeUrl(room.challenge)+'" style="display:inline-block;padding:12px 18px;border-radius:12px;background:#19cfa8;color:#03131e;font-weight:800;text-decoration:none">'+tx('Abrir desafio Hanói','Open Hanoi challenge')+'</a>';
+ return true;
+}
 function styleArenaDocument(doc){
  if(doc.getElementById('x1ArenaStyle'))return;
  const s=doc.createElement('style');s.id='x1ArenaStyle';
@@ -624,6 +645,7 @@ async function prepareTangramArena(){
  spectator.hidden=true;loader.hidden=true;native.hidden=false;role.textContent=(room.nickname||tx('Jogador','Player'))+tx(' • competidor',' • competitor');
  if(window.__x1NativeGame?.destroy)try{window.__x1NativeGame.destroy()}catch(e){}
  if(!window.X1NativeArena){native.innerHTML='<p class="x1n-msg">Arena nativa indisponível.</p>';return}
+ if(showHanoiX1Launch())return;
  window.__x1NativeGame=window.X1NativeArena.create(native,{challenge:arenaChallengeIndex(),seed:(room.code||room.id)+'|'+(room.currentRound||1),roomCode:room.code,onComplete:()=>onTangramComplete('native')});
 }
 async function onTangramComplete(message){
