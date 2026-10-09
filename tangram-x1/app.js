@@ -181,7 +181,7 @@ async function createRoom(){
    p_mode:'pedagogico',
    p_content_pack:$('#contentPack').value,
    p_question_count:Number($('#questionCount').value)||3,
-   p_round_count:Number($('#roundCount').value)||1,
+   p_round_count:1, // modo estável experimental: apenas uma rodada por sala
    p_penalty_enabled:!!$('#penalty').checked,
    p_challenge:$('#teacherChallenge').value
   };
@@ -699,7 +699,7 @@ async function renderResults(){
  else if(teamMode){const myTeam=teams.find(t=>t.n===me?.team_no),pos=myTeam?.complete?teams.filter(t=>t.complete).findIndex(t=>t.n===myTeam.n)+1:0;$('#metricPrecision').textContent=myTeam?.name||'—';$('#metricErrors').textContent=pos>0?pos+tx('º lugar',' place'):tx('aguardando equipe','waiting for team')}
  else{$('#metricPrecision').textContent='Gamer';const pos=me?ranked.findIndex(p=>p.id===me.id)+1:0;$('#metricErrors').textContent=pos>0?pos+tx('º lugar',' place'):'—'}
  $('#totalTime').textContent=teamMode?(teams.find(t=>t.n===me?.team_no)?.complete?fmtMs(teams.find(t=>t.n===me?.team_no).avg):'—'):(me?.tangram_finished_at?elapsedFromArenaStart(me.tangram_finished_at):(ranked[0]?.tangram_finished_at?elapsedFromArenaStart(ranked[0].tangram_finished_at):'—'));
- const rematch=$('#rematch'),hasNext=Number(room.currentRound||1)<Number(room.roundCount||1);
+ const rematch=$('#rematch'),hasNext=false; // modo estável experimental: finalizar sem revanche
  if(room.isHost){
   rematch.disabled=false;
   rematch.dataset.action=hasNext?'next-round':'finish-match';
@@ -733,7 +733,7 @@ $('#rematch').addEventListener('click',async()=>{
  if(!room.isHost||!room.hostToken||rematchBusy)return;
  rematchBusy=true;
  const b=$('#rematch'),previousRound=Number(room.currentRound||1),totalRounds=Number(room.roundCount||1);
- const hasNext=previousRound<totalRounds;
+ const hasNext=false; // evita x1_reset_room; a partida é encerrada pelo anfitrião
  b.disabled=true;
  if(!hasNext){
   b.textContent=tx('Encerrando partida…','Finishing match…');
