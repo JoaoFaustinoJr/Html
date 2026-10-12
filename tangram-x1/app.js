@@ -14,6 +14,7 @@ const CHALLENGES_EN={0:'Challenge 1',1:'Challenge 2',2:'Challenge 3',3:'Challeng
 let lang=localStorage.getItem('tangramX1Lang')==='en'?'en':'pt';
 let teacherPassword='';
 let room={id:'',code:'',teacher:false,pack:'pp9',mode:'pedagogico',nickname:'Você',hostToken:'',playerId:'',playerToken:'',status:'lobby'};
+window.__x1RoomChat={context:()=>({...room,visible:!document.querySelector('#home.show')}),rpc:(name,args)=>sb.rpc(name,args)};
 let roomChannel=null,playerChannel=null,startedAt=0,tick=null,countdownBusy=false,quizWrong=0,quizIndex=0,quizQuestions=[],arenaObserver=null,arenaFinished=false,arenaLoadToken=0,playerRefreshTimer=null,roomStateTimer=null,roomWatchTimer=null;
 
 const x1AudioPrefs=()=>{try{return {...{music:false,volume:.18},...JSON.parse(localStorage.getItem('tangram2Audio')||'{}')}}catch(_){return {music:false,volume:.18}}};
