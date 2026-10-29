@@ -649,8 +649,21 @@ async function prepareTangramArena(){
  if(showHanoiX1Launch())return;
  window.__x1NativeGame=window.X1NativeArena.create(native,{challenge:arenaChallengeIndex(),seed:(room.code||room.id)+'|'+(room.currentRound||1),roomCode:room.code,onComplete:()=>onTangramComplete('native')});
 }
+/* Proteção por jogador e rodada contra reabertura de montagem concluída. */
+const x1FinishKey=()=>room.playerId&&room.id?'x1-finished:'+room.id+':'+room.playerId+':'+(room.currentRound||1):'';
+const x1HasFinished=()=>{try{return !!sessionStorage.getItem(x1FinishKey())}catch(e){return false}};
+const x1MarkFinished=()=>{try{const k=x1FinishKey();if(k)sessionStorage.setItem(k,String(Date.now()))}catch(e){}};
+async function x1RestoreFinish(){
+ if(room.isHost||!room.playerId)return false;
+ if(x1HasFinished()){arenaFinished=true;clearInterval(tick);tick=null;await renderResults();return true}
+ try{
+  const {data,error}=await sb.from('x1_players').select('tangram_finished_at').eq('id',room.playerId).maybeSingle();
+  if(!error&&data?.tangram_finished_at){x1MarkFinished();arenaFinished=true;clearInterval(tick);tick=null;await renderResults();return true}
+ }catch(e){}
+ return false;
+}
 async function onTangramComplete(message){
- if(arenaFinished||(room.teacher&&room.mode==='pedagogico'))return;
+ if(arenaFinished||x1HasFinished()||(room.teacher&&room.mode==='pedagogico'))return;
  /* Nunca aceite uma conclusão disparada enquanto a amostra de solução estiver visível. */
  if(message!=='native'){try{const w=$('#tangramArenaFrame')?.contentWindow;if(w?.__raiTangramBonusBridge?.isSampleActive?.())return}catch(e){}}
  arenaFinished=true;stopArenaObserver();clearInterval(tick);tick=null;
@@ -658,7 +671,7 @@ async function onTangramComplete(message){
  try{
   if(room.playerId&&room.playerToken){
    const {data,error}=await sb.rpc('x1_finish_tangram',{p_player_id:room.playerId,p_player_token:room.playerToken});
-   if(error)throw error;if(!data)throw new Error(tx('Resultado não registrado.','Result was not recorded.'));
+   if(error)throw error;if(!data)throw new Error(tx('Resultado não registrado.','Result was not recorded.'));x1MarkFinished();
   }
   await updateRaceFeed();
   setTimeout(()=>renderResults(),700);
@@ -667,6 +680,7 @@ async function onTangramComplete(message){
 
 async function startArena(){
  if($('#arena').classList.contains('show')&&tick)return;
+ if(await x1RestoreFinish())return;
  show('arena');
  const base=room.startedAt?new Date(room.startedAt).getTime():Date.now();
  startedAt=performance.now()-Math.max(0,Date.now()-base);
